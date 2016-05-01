@@ -1,0 +1,35 @@
+{
+    "name": "ニコ生ウォッチャー",
+	"manifest_version": 2,
+    "version": "1.3",
+     "browser_action": {
+	      "default_icon": "image/icon.png",
+	      "default_title": "放送中の番組を確認する",
+          "default_popup": "html/livestreams.html"
+	 },
+    "description": "ニコニコ生放送でコミュニティ登録している放送中の番組をポップアップ表示します．", 
+    "icons": {
+        "16": "image/icon.png", 
+        "32": "image/icon.png", 
+        "64": "image/icon.png"
+    }, 
+    "permissions": [
+        "storage",
+        "unlimitedStorage", 
+        "notifications", 
+        "tabs",
+        "background",
+        "alarms",
+        "notifications",
+        "https://secure.nicovideo.jp/",
+        "http://live.nicovideo.jp/",
+        "http://api.ce.nicovideo.jp/"
+    ],
+    "background": {
+        "persistent": true,
+	    "scripts": ["js/jquery-2.1.4.min.js", "js/background.js", "js/nicovideo.js"]
+	},
+    "web_accessible_resources": [
+        "image/icon.png"
+    ]
+}
