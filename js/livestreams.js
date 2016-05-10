@@ -1,7 +1,7 @@
 const bg = chrome.extension.getBackgroundPage();
 
-$(function() {
-
+$(function()
+{
 	Promise.resolve()
 	.then(Loading.start)
 	.then(bg.loadLiveStreams)
@@ -23,15 +23,13 @@ $(function() {
 	.then(Loading.done);
 });
 
-function show($doms) {
-
-	return new Promise(function(resolve, reject) {
-
+function show($doms)
+{
+	return new Promise(function(resolve, reject)
+	{
 		var length = $doms.length;
-
 		$doms.each(function(index) {
 			append($('#communities'), $(this));
-
 			if (index == length - 1) {
 				resolve();
 			}
@@ -39,24 +37,24 @@ function show($doms) {
 	});
 }
 
-function showErrorMessage() {
-
+function showErrorMessage()
+{
 	var $message = $('<div class="message"></div>');
 	$message.text('セッション情報を取得できませんでした．ニコニコ動画にログインしてください．');
 
 	$('#communities').append($message);
 }
 
-function showZeroMessage() {
-
+function showZeroMessage()
+{
 	var $message = $('<div class="message"></div>');
 	$message.text('放送中の番組がありません．');
 
 	$('#communities').append($message);
 }
 
-function append($dom, $videoInfo) {
-
+function append($dom, $videoInfo)
+{
 	var thumbnail	= $videoInfo.find('community thumbnail').text();
 	var title		= $videoInfo.find('video title').text();
 	var id			= $videoInfo.find('video id').text();
@@ -80,14 +78,14 @@ function append($dom, $videoInfo) {
 	$dom.append($community);
 }
 
-function wordWrap(text, length){
-
+function wordWrap(text, length)
+{
     reg = new RegExp("(.{" + parseInt(length) + "})", "g");
     return text.replace(/[\r|\r\n|\n]/g, "").replace(reg, "$1" + "<br>");
 }
 
-class Loading {
-
+class Loading
+{
 	static start() {
 		$('#communities').addClass('nowloading');
 	}

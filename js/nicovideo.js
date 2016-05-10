@@ -27,7 +27,8 @@ function getSessionId() {
 	return promise;
 }
 
-function getSubscribe(sessionId) {
+function getSubscribe(sessionId)
+{
 	// TODO: validate 'sessionId'
 
 	var promise = new Promise(function(resolve, reject) {
