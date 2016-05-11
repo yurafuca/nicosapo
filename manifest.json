@@ -5,7 +5,7 @@
      "browser_action": {
 	      "default_icon": "image/icon.png",
 	      "default_title": "放送中の番組を確認する",
-          "default_popup": "html/livestreams.html"
+          "default_popup": "html/popup.html"
 	 },
     "description": "ニコニコ生放送でコミュニティ登録している放送中の番組をポップアップ表示します．", 
     "icons": {
@@ -27,7 +27,7 @@
     ],
     "background": {
         "persistent": true,
-	    "scripts": ["js/jquery-2.1.4.min.js", "js/arrivalMan.js", "js/background.js", "js/nicovideo.js"]
+	    "scripts": ["js/jquery-2.1.4.min.js", "js/arrivalMan.js", "js/nicovideo.js", "js/background.js"]
 	},
     "web_accessible_resources": [
         "image/icon.png"
