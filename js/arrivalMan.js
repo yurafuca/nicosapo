@@ -1,4 +1,4 @@
-class ArrivalMan
+class Arrivan
 {
     constructor(initial = null) {
         this.source = initial;
@@ -18,7 +18,7 @@ class ArrivalMan
 
         $.each(this.source, function(index, item) {
             sourceTimes.push($(item).find('video start_time').text());
-        })
+        });
 
         $.each(infos, function(index, info) {
             let targetTime = $(info).find('video start_time').text();
