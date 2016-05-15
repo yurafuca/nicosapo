@@ -4,6 +4,7 @@ class Arrivan
         this.source = initial;
     }
 
+    // TODO: validation.
     setSource(infos) {
         this.source = infos;
     }
