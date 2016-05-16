@@ -3,24 +3,24 @@ const bg = chrome.extension.getBackgroundPage();
 $(function()
 {
 	Promise.resolve()
-	.then(Loading.start)
-	.then(bg.loadLiveStreams)
-	.catch(function(e) {
-		Loading.done();
-		showErrorMessage();
-	})
-	.then(function($videoInfos) {
-		return new Promise(function(resolve, reject) {
-			if ($videoInfos.length === 0) {
-				Loading.done();
-				showZeroMessage();
-				reject();
-			}
-			resolve($videoInfos);
-		});
-	})
-	.then(show)
-	.then(Loading.done);
+		.then(Loading.start)
+		.then(bg.loadLiveStreams)
+		.catch(function(e) {
+			Loading.done();
+			showErrorMessage();
+		})
+		.then(function($videoInfos) {
+			return new Promise(function(resolve, reject) {
+				if ($videoInfos.length === 0) {
+					Loading.done();
+					showZeroMessage();
+					reject();
+				}
+				resolve($videoInfos);
+			});
+		})
+		.then(show)
+		.then(Loading.done);
 });
 
 function show($doms)
