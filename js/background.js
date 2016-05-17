@@ -29,7 +29,7 @@ function refresh()
 		  iconUrl: thumbnail
 		};
 		chrome.notifications.create(options);
-		// below function must be exe finally.
+		// the following must be executed in the last.
 		arrivalMan.setSource(videoInfos);
 	});
 }
