@@ -93,8 +93,6 @@ a:hover .screen_name {
 	height: 37px;
 	width: 40px;
 	margin-left: 2px;
-	/*border-right: solid 1px #ddd;*/
-	/*border-radius: 3px 0 0 0;*/
 	border-radius: 3px 0 0 0;
 }
 .username {
