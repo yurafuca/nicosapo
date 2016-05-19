@@ -14,10 +14,6 @@
         "64": "image/icon.png"
     }, 
     "permissions": [
-        "storage",
-        "unlimitedStorage", 
-        "notifications", 
-        "tabs",
         "background",
         "alarms",
         "notifications",
