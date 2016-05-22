@@ -2,6 +2,7 @@ const bg = chrome.extension.getBackgroundPage();
 
 $(function()
 {
+	// replace promise to async/await
 	Promise.resolve()
 		.then(Loading.start)
 		.then(bg.loadLiveStreams)
