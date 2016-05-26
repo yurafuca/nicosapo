@@ -19,9 +19,10 @@ function refresh()
 	.then(function(videoInfos) {
 		setBadgeText(count(videoInfos));
 		let newArrivals = arrivalMan.getArrivals(videoInfos);
-		console.log(newArrivals);
 
-		let thumbnail = $(newArrivals).first().find('community thumbnail').text();
+		// Make and show a notification.
+		// let thumbnail = $(newArrivals).first().find('community thumbnail').text();
+		let thumbnail = "image/icon.png";
 		let options = {
 		  type: "basic",
 		  title: "ニコ生ウォッチャー",
@@ -29,7 +30,8 @@ function refresh()
 		  iconUrl: thumbnail
 		};
 		chrome.notifications.create(options);
-		// the following must be executed in the last.
+
+		// The following must be executed in the last.
 		arrivalMan.setSource(videoInfos);
 	});
 }

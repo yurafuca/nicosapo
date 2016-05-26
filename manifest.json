@@ -26,6 +26,7 @@
 	    "scripts": ["js/jquery-2.1.4.min.js", "js/arrivalMan.js", "js/nicovideo.js", "js/background.js"]
 	},
     "web_accessible_resources": [
-        "image/icon.png"
+        "image/icon.png",
+        "http://icon.nimg.jp/community/"
     ]
 }

@@ -1,4 +1,4 @@
-class Arrivan
+class ArrivalMan
 {
     constructor(initial = null) {
         this.source = initial;
