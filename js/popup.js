@@ -66,7 +66,7 @@ function append($dom, $videoInfo)
 	$('a', $community).attr('href', "http://live.nicovideo.jp/watch/" + id);
 
 	$community.data('powertip', wordWrap(title, 16));
-	// $.fn.powerTip.smartPlacementLists.n = ['n', 'ne', 'nw', 'e', 'w'];
+	
 	$.fn.powerTip.smartPlacementLists.n = ['n', 's', 'ne', 'nw', 'e', 'w', 'n'];
 	$community.powerTip({
 		smartPlacement: true,
