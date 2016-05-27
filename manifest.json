@@ -19,14 +19,14 @@
         "notifications",
         "https://secure.nicovideo.jp/",
         "http://live.nicovideo.jp/",
-        "http://api.ce.nicovideo.jp/"
+        "http://api.ce.nicovideo.jp/",
+        "http://icon.nimg.jp/community/"
     ],
     "background": {
         "persistent": true,
-	    "scripts": ["js/jquery-2.1.4.min.js", "js/arrivalMan.js", "js/nicovideo.js", "js/background.js"]
+	    "scripts": ["js/jquery-2.1.4.min.js", "js/newArrival.js", "js/nicovideo.js", "js/background.js"]
 	},
     "web_accessible_resources": [
-        "image/icon.png",
-        "http://icon.nimg.jp/community/"
+        "image/icon.png"
     ]
 }

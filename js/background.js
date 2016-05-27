@@ -1,4 +1,4 @@
-const arrivalMan = new ArrivalMan();
+const newArrival = new NewArrival();
 
 $(function()
 {
@@ -18,22 +18,29 @@ function refresh()
 	})
 	.then(function(videoInfos) {
 		setBadgeText(count(videoInfos));
-		let newArrivals = arrivalMan.getArrivals(videoInfos);
-
-		// Make and show a notification.
-		// let thumbnail = $(newArrivals).first().find('community thumbnail').text();
-		let thumbnail = "image/icon.png";
-		let options = {
-		  type: "basic",
-		  title: "ニコ生ウォッチャー",
-		  message: $(newArrivals).first().find('video title').text(),
-		  iconUrl: thumbnail
-		};
-		chrome.notifications.create(options);
+		let newInfos = newArrival.get(videoInfos);
+		if (newInfos.length >= 1) {
+			showNotification(newInfos);
+		}
 
 		// The following must be executed in the last.
-		arrivalMan.setSource(videoInfos);
+		newArrival.setSource(videoInfos);
 	});
+}
+
+function showNotification(newInfos)
+{
+	let thumbnail = $(newInfos).first().find('community thumbnail').text();
+	// let thumbnail = "http://pixeljoint.com/files/icons/full/android.png";
+	// let thumbnail = "image/icon.png";
+	console.log(thumbnail);
+	let options = {
+	  type: "basic",
+	  title: "ニコ生ウォッチャー",
+	  message: $(newInfos).first().find('video title').text(),
+	  iconUrl: thumbnail
+	};
+	chrome.notifications.create(options);
 }
 
 function loadLiveStreams()

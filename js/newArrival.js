@@ -1,4 +1,4 @@
-class ArrivalMan
+class NewArrival
 {
     constructor(initial = null) {
         this.source = initial;
@@ -9,7 +9,7 @@ class ArrivalMan
         this.source = infos;
     }
 
-    getArrivals(infos) {
+    get(infos) {
         if (this.source == null) {
             return infos;
         }
