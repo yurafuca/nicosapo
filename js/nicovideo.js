@@ -55,3 +55,34 @@ function getSubscribe(sessionId)
 	// Return the promise
 	return promise;
 }
+
+function getCheckList()
+{
+
+	var promise = new Promise(function(resolve, reject) {
+
+		var posting = $.get("http://flapi.nicovideo.jp/api/getchecklist",
+		{}
+		);
+
+		// I dont know why "posting" calls fail(), not done().
+		posting.fail(function(data) {
+
+			let text = $.parseJSON(data.responseText);
+			var status = text.status;
+
+			switch (status) {
+				case "OK":
+					var checkList = text.community_id;
+					console.info('checkList: ' + checkList);
+					resolve(checkList);
+					break;
+				default:
+					reject(new Error('Request failed: status is "fail".'));
+					break;
+			}
+		});
+	});
+
+	return promise;
+}

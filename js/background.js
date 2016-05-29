@@ -1,44 +1,47 @@
+const comuHolder = new ComuHolder();
 const newArrival = new NewArrival();
 
 $(function()
 {
 	chrome.browserAction.setBadgeBackgroundColor({
-		color: "#ff6200"
+		// color: "#ff6200"
+		color: "#000000"
 	});
 
 	refresh();
-	setInterval(refresh, 1000 * 20);
+	setInterval(refresh, 1000 * 10);
 });
 
 function refresh()
 {
 	loadLiveStreams()
-	.catch(function(e) {
-		setBadgeText('x');
-	})
-	.then(function(videoInfos) {
-		setBadgeText(count(videoInfos));
-		let newInfos = newArrival.get(videoInfos);
-		if (newInfos.length >= 1) {
-			showNotification(newInfos);
-		}
+		.catch(function(e) {
+			setBadgeText('x');
+		})
+		.then(function(videoInfos) {
+			count(videoInfos).then(setBadgeText);
+			$.each(newArrival.get(videoInfos), function(index, infos) {
+				if (comuHolder.isNew($(infos).find('community'))) {
+					// do nothing.
+				} else {
+					showNotification(infos);
+				}
+			});
+			newArrival.setSource(videoInfos);
+		});
 
-		// The following must be executed in the last.
-		newArrival.setSource(videoInfos);
-	});
+	getCheckList()
+		.then(comuHolder.setSource);
 }
 
 function showNotification(newInfos)
 {
-	let thumbnail = $(newInfos).first().find('community thumbnail').text();
-	// let thumbnail = "http://pixeljoint.com/files/icons/full/android.png";
-	// let thumbnail = "image/icon.png";
-	console.log(thumbnail);
+	console.log(newInfos);
 	let options = {
 	  type: "basic",
-	  title: "ニコ生ウォッチャー",
+	  title: "放送開始のお知らせ",
 	  message: $(newInfos).first().find('video title').text(),
-	  iconUrl: thumbnail
+	  iconUrl: $(newInfos).first().find('community thumbnail').text()
 	};
 	chrome.notifications.create(options);
 }

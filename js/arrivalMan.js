@@ -1,4 +1,4 @@
-class NewArrival
+class ArrivalMan
 {
     constructor(initial = null) {
         this.source = initial;
@@ -9,10 +9,9 @@ class NewArrival
         this.source = infos;
     }
 
-    get(infos) {
+    getArrivals(infos) {
         if (this.source == null) {
-            // return infos;
-            return [];
+            return infos;
         }
 
         let newArrives  = $.makeArray();

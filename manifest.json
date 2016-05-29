@@ -17,14 +17,16 @@
         "background",
         "alarms",
         "notifications",
+        "http://www.nicovideo.jp/",
         "https://secure.nicovideo.jp/",
         "http://live.nicovideo.jp/",
         "http://api.ce.nicovideo.jp/",
-        "http://icon.nimg.jp/community/"
+        "http://icon.nimg.jp/community/",
+        "http://flapi.nicovideo.jp/api/"
     ],
     "background": {
         "persistent": true,
-	    "scripts": ["js/jquery-2.1.4.min.js", "js/newArrival.js", "js/nicovideo.js", "js/background.js"]
+	    "scripts": ["js/jquery-2.1.4.min.js", "js/newArrival.js", "js/comuHolder.js", "js/nicovideo.js", "js/background.js"]
 	},
     "web_accessible_resources": [
         "image/icon.png"
