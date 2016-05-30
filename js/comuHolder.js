@@ -6,6 +6,7 @@ class ComuHolder
 
     // TODO: validation.
     setSource(idList) {
+        // TODO: type error.
         this.source = idList.concat();
     }
 
