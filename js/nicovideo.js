@@ -75,7 +75,7 @@ function getCheckList()
 				case "OK":
 					var checkList = text.community_id;
 					console.info('checkList: ' + checkList);
-					resolve(checkList);
+					resolve($(checkList));
 					break;
 				default:
 					reject(new Error('Request failed: status is "fail".'));

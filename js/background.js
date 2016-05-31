@@ -1,5 +1,5 @@
-const comuHolder = new ComuHolder();
-const newArrival = new NewArrival();
+let comuHolder = new ComuHolder();
+let newArrival = new NewArrival();
 
 $(function()
 {
@@ -23,6 +23,7 @@ function refresh()
 			$.each(newArrival.get(videoInfos), function(index, infos) {
 				if (comuHolder.isNew($(infos).find('community'))) {
 					// do nothing.
+					alert($(infos).find('community'));
 				} else {
 					showNotification(infos);
 				}
@@ -30,8 +31,9 @@ function refresh()
 			newArrival.setSource(videoInfos);
 		});
 
-	getCheckList()
-		.then(comuHolder.setSource);
+	getCheckList().then(function(idList) {
+			comuHolder.setSource(idList);
+		});
 }
 
 function showNotification(newInfos)

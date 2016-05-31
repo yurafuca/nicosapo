@@ -1,13 +1,12 @@
 class ComuHolder
 {
-    constructor(initial = []) {
+    constructor(initial = null) {
         this.source = initial;
     }
 
     // TODO: validation.
     setSource(idList) {
-        // TODO: type error.
-        this.source = idList.concat();
+        this.source = idList;
     }
 
     isNew(community) {
@@ -15,8 +14,14 @@ class ComuHolder
             // dont show notification.
             return true;
         }
-        let id = $(community).find(id).text();
+        let id = $(community).find("community id").text();
         let inarray = $.inArray(id, this.souce);
-        return !inarray;
+        return !this.toBool(inarray);
+    }
+
+    toBool(value) {
+        if (value == -1) return false;
+        return true;
     }
 }
+
