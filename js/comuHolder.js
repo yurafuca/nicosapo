@@ -12,10 +12,13 @@ class ComuHolder
     isNew(community) {
         if (this.source == null) {
             // dont show notification.
-            return true;
+            return false;
         }
-        let id = $(community).find("community id").text();
-        let inarray = $.inArray(id, this.souce);
+        // alert("hoge");
+        let id = $(community).find('id').text();
+        let inarray = $.inArray(parseInt(id), this.source);
+        // console.log(this.toBool(1));
+        // console.log(this.toBool(inarray));
         return !this.toBool(inarray);
     }
 

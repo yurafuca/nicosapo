@@ -34,7 +34,8 @@ function getSubscribe(sessionId)
 	var promise = new Promise(function(resolve, reject) {
 		
 		var request = $.ajax({
-			url: "http://api.ce.nicovideo.jp/liveapi/v1/user.subscribe?__format=xml",
+			url: "http://api.ce.nicovideo.jp/liveapi/v1/user.subscribe",
+			// url: "http://api.ce.nicovideo.jp/liveapi/v1/user.subscribe?__format=xml",
 			method: "POST",
 			dataType: "xml",
 			headers: {
