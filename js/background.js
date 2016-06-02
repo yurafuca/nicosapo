@@ -23,7 +23,7 @@ function refresh()
 			$.each(newArrival.get(videoInfos), function(index, infos) {
 				if (comuHolder.isNew($(infos).find('community'))) {
 					// do nothing.
-					(new Audio("sound/famima.mp3")).play();
+					(new Audio("sound/pinpon.mp3")).play();
 				} else {
 					showNotification(infos);
 				}
@@ -38,7 +38,7 @@ function refresh()
 
 function showNotification(newInfos)
 {
-	(new Audio("sound/famima.mp3")).play();
+	(new Audio("sound/pinpon.mp3")).play();
 	let options = {
 	  type: "basic",
 	  title: "放送開始のお知らせ",

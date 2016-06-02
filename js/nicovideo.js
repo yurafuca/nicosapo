@@ -33,9 +33,10 @@ function getSubscribe(sessionId)
 
 	var promise = new Promise(function(resolve, reject) {
 		
+		var dummy = Math.floor(Math.random () * 1000);
 		var request = $.ajax({
-			url: "http://api.ce.nicovideo.jp/liveapi/v1/user.subscribe",
-			// url: "http://api.ce.nicovideo.jp/liveapi/v1/user.subscribe?__format=xml",
+			// url: "http://api.ce.nicovideo.jp/liveapi/v1/user.subscribe",
+			url: "http://api.ce.nicovideo.jp/liveapi/v1/user.subscribe?__context=" + Math.floor(Math.random () * 1000),
 			method: "POST",
 			dataType: "xml",
 			headers: {
@@ -43,18 +44,37 @@ function getSubscribe(sessionId)
 			}
 		});
 
+		// test(sessionId);
+
 		request.done(function (videoInfos) {
-			console.log(videoInfos);
+			console.log("cache: " + $(videoInfos).find('total_count').text());
 			resolve(videoInfos);
 		});
 
 		request.fail(function( jqXHR, textStatus ) {
 			reject(new Error('Request failed: ' + textStatus ));
 		});
+
+
 	});
 
 	// Return the promise
 	return promise;
+}
+
+function test(sessionId) {
+	var request2 = $.ajax({
+		url: "http://api.ce.nicovideo.jp/liveapi/v1/user.subscribe?__content=" + Date().getMilliseconds(),
+		method: "POST",
+		dataType: "xml",
+		headers: {
+			"x-nicovita-session": sessionId
+		}
+	});
+
+	// request2.done(function (Infos) {
+	// 	console.log("nocache: " + $(Infos).find('total_count').text());
+	// });
 }
 
 function getCheckList()
@@ -75,7 +95,7 @@ function getCheckList()
 			switch (status) {
 				case "OK":
 					var checkList = text.community_id;
-					console.info('checkList: ' + checkList);
+					// console.info('checkList: ' + checkList);
 					resolve($(checkList));
 					break;
 				default:
