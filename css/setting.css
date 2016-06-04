@@ -1,0 +1,127 @@
+
+/*
+ */
+body {
+  font-family: Helvetica, Arial, sans-serif;
+  margin: 0px;
+  padding: 0;
+  font-size: 90%;
+  width: 100%;
+}
+
+h1 {
+  margin: 0;
+  padding: 0;
+  font-size: 160%;
+  background: 
+  padding-left: 37px;
+  height: 40px;
+  line-height: 40px;
+  color: #fff;
+    /* Chrome 10 ä»¥é™ã§ä½¿ãˆã‚‹ */
+    background: -webkit-linear-gradient( top, #427DC4, #427DC4 50%, #2C6EBD 50%, #2C6EBD );
+    /* current standard; but unimplimented yet (chrome 19) */
+    background: linear-gradient( to bottom, #427DC4, #427DC4 50%, #2C6EBD 50%, #2C6EBD );
+    border-bottom: 1px solid #bbb;
+    box-shadow: 0px 1px 2px rgba(0,0,0,0.2); /* Chrome 10 ä»¥é™ã§ä½¿ãˆã‚‹ */
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+    padding: 5px;
+}
+
+
+fieldset {
+  margin-top: 20px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+h2 {
+  font-size: 100%;
+  margin-left: 1em;
+}
+
+table {
+  margin: 0 20px;
+  padding: 5px;
+  border-collapse: collapse;
+  border-top:  1px solid #D6E0F2;
+  margin-bottom: 20px;
+}
+
+tr {
+}
+
+th,td {
+  padding: 10px 5px;
+  border-bottom: 1px solid #D6E0F2;
+  vertical-align: top;
+}
+
+th {
+  text-align: left;
+  font-weight: bold;
+  background: #F7F9FD;
+  white-space: nowrap;
+  width: 1%;
+  min-width: 150px;
+}
+
+td {
+}
+
+div.notice {
+  text-align: left;
+  font-size: 90%;
+  color: #777;
+  padding: 5px;
+}
+
+p.notice {
+  margin: 0px;
+  text-align: left;
+  font-size: 80%;
+  color: #555;
+  padding: 3px;
+}
+
+
+input[type='text'] {
+  width: 2em;
+  text-align: right;
+}
+
+
+#eula {
+  max-width: 800px;
+  min-width: 400px;
+  margin: 10px;
+}
+
+#eula p {
+  padding: 5px 5px 0 5px;
+}
+
+.eula-accept {
+  padding: 4px 4px 4px 10px;
+  text-align: center;
+}
+
+.eula-accept input {
+  padding-left: 10px;
+  padding-right: 10px;
+  margin-right: 10px;
+}
+
+#eula blockquote {
+  margin: 20px 20px 5px 20px;
+  overflow: auto;
+  height: 15em;
+  border: 1px solid #999;
+}
+
+#eula pre {
+  white-space: pre-wrap;
+  line-height: 1.7;
+  padding: 1em;
+}

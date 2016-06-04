@@ -23,7 +23,7 @@ function refresh()
 			$.each(newArrival.get(videoInfos), function(index, infos) {
 				if (comuHolder.isNew($(infos).find('community'))) {
 					// do nothing.
-					(new Audio("sound/pinpon.mp3")).play();
+					(new Audio("sound/piroron.mp3")).play();
 				} else {
 					showNotification(infos);
 				}
@@ -38,15 +38,24 @@ function refresh()
 
 function showNotification(newInfos)
 {
-	(new Audio("sound/pinpon.mp3")).play();
+	(new Audio("sound/piroron.mp3")).play();
 	let options = {
 	  type: "basic",
 	  title: "放送開始のお知らせ",
 	  message: $(newInfos).first().find('video title').text(),
 	  iconUrl: $(newInfos).first().find('community thumbnail').text()
 	};
-	chrome.notifications.create(options);
+	console.log(newInfos);
+	let id = $(newInfos).first().find('video id').text();
+	chrome.notifications.create(id, options);
 }
+
+chrome.notifications.onClicked.addListener(function(id) {
+	chrome.tabs.create({
+		url: 'http://live.nicovideo.jp/watch/' + id,
+		active: true
+	});
+});
 
 function loadLiveStreams()
 {
