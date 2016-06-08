@@ -62,21 +62,6 @@ function getSubscribe(sessionId)
 	return promise;
 }
 
-function test(sessionId) {
-	var request2 = $.ajax({
-		url: "http://api.ce.nicovideo.jp/liveapi/v1/user.subscribe?__content=" + Date().getMilliseconds(),
-		method: "POST",
-		dataType: "xml",
-		headers: {
-			"x-nicovita-session": sessionId
-		}
-	});
-
-	// request2.done(function (Infos) {
-	// 	console.log("nocache: " + $(Infos).find('total_count').text());
-	// });
-}
-
 function getCheckList()
 {
 
