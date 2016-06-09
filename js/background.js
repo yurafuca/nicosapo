@@ -4,8 +4,8 @@ let newArrival = new NewArrival();
 $(function()
 {
 	chrome.browserAction.setBadgeBackgroundColor({
-		// color: "#ff6200"
-		color: "#000000"
+		color: "#ff6200"
+		// color: "#000000"
 	});
 
 	refresh();
@@ -23,7 +23,7 @@ function refresh()
 			$.each(newArrival.get(videoInfos), function(index, infos) {
 				if (comuHolder.isNew($(infos).find('community'))) {
 					// do nothing.
-					(new Audio("sound/piroron.mp3")).play();
+					(new Audio("sound/tada.mp3")).play();
 				} else {
 					showNotification(infos);
 				}
@@ -38,7 +38,7 @@ function refresh()
 
 function showNotification(newInfos)
 {
-	(new Audio("sound/piroron.mp3")).play();
+	(new Audio("sound/tada.mp3")).play();
 	let options = {
 	  type: "basic",
 	  title: "放送開始のお知らせ",
