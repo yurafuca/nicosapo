@@ -9,7 +9,7 @@ $(function()
 		.catch(function(e) {
 			Loading.done();
 			showErrorMessage();
-		})
+		})fff
 		.then(function($videoInfos) {
 			return new Promise(function(resolve, reject) {
 				if ($videoInfos.length === 0) {
