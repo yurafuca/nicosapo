@@ -9,7 +9,7 @@ $(function()
 		.catch(function(e) {
 			Loading.done();
 			showErrorMessage();
-		})fff
+		})
 		.then(function($videoInfos) {
 			return new Promise(function(resolve, reject) {
 				if ($videoInfos.length === 0) {
@@ -26,8 +26,7 @@ $(function()
 
 function show($doms)
 {
-	return new Promise(function(resolve, reject)
-	{
+	return new Promise(function(resolve, reject) {
 		var length = $doms.length;
 		$doms.each(function(index) {
 			append($('#communities'), $(this));
