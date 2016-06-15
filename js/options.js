@@ -12,6 +12,16 @@ class SettingPage
         console.log(settings);
         return settings;
     }
+
+    static setAllSettings() {
+        let setting = '';
+        setting  = localStorage.getItem('options.popup.enable');
+        if (setting != null) $('[name=options-popup-enable]').val([setting]);
+        setting  = localStorage.getItem('options.playsound.enable');
+        if (setting != null) $('[name=options-playsound-enable]').val([setting]);
+        setting  = localStorage.getItem('options.soundfile');
+        if (setting != null) $('#options-soundfile').val([setting]);
+    }
 }
 
 class ResultMessage
@@ -34,6 +44,8 @@ class ResultMessage
 
 $(function()
 {
+    SettingPage.setAllSettings();
+
     $(document).on('click','#saveAll',function() {
         const settings = SettingPage.getAllSettings();
         for (key in settings) {

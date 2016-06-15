@@ -25,8 +25,12 @@ function refresh()
 					// do nothing.
 					// (new Audio("sound/tada.mp3")).play();
 				} else {
-					if (localStorage.getItem('options.popup.enable') === 'enable')
-					showNotification(infos);
+					if (localStorage.getItem('options.playsound.enable') === 'enable') {
+						(new Audio('sound/' + localStorage.getItem('options.soundfile'))).play();
+					}
+					if (localStorage.getItem('options.popup.enable') === 'enable') {
+						showNotification(infos);
+					}
 				}
 			});
 			newArrival.setSource(videoInfos);
@@ -39,9 +43,6 @@ function refresh()
 
 function showNotification(newInfos)
 {
-	if (localStorage.getItem('options.playsound.enable') === 'enable') {
-		(new Audio('sound/' + localStorage.getItem('options.soundfile'))).play();
-	}
 	let options = {
 	  type: "basic",
 	  title: "放送開始のお知らせ",
