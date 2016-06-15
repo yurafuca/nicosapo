@@ -25,10 +25,12 @@ function refresh()
 					// do nothing.
 					// (new Audio("sound/tada.mp3")).play();
 				} else {
-					if (localStorage.getItem('options.playsound.enable') === 'enable') {
-						(new Audio('sound/' + localStorage.getItem('options.soundfile'))).play();
+					console.log('hoge');
+					if (enableOrNull(localStorage.getItem('options.playsound.enable'))) {
+						const soundfile = localStorage.getItem('options.soundfile') || 'ta-da.mp3';
+						(new Audio('sound/' + soundfile)).play();
 					}
-					if (localStorage.getItem('options.popup.enable') === 'enable') {
+					if (enableOrNull(localStorage.getItem('options.popup.enable'))) {
 						showNotification(infos);
 					}
 				}
@@ -39,6 +41,10 @@ function refresh()
 	getCheckList().then(function(idList) {
 			comuHolder.setSource(idList);
 		});
+}
+
+function enableOrNull(value) {
+	return (value === 'enable') || value == null;
 }
 
 function showNotification(newInfos)
