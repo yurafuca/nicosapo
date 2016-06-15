@@ -1,0 +1,34 @@
+<html>
+    <head>
+        <script src="../js/jquery-2.1.4.min.js"></script>
+        <script src="../js/options.js"></script>
+        <link rel="stylesheet" href="../css/options.css">
+    </head>
+    <body>
+        <div id="wrapper">
+            <h1>ニコ生チェッカー 設定</h1>
+            <div id="items">
+                <h3>放送開始時に通知を表示する</h3>
+                <input type="radio" name="options-popup-enable" value="enable" checked="checked"> 有効
+                <input type="radio" name="options-popup-enable" value="disable"> 無効
+                <h3>放送開始時に音を鳴らす</h3>
+                <input type="radio" name="options-playsound-enable" value="enable" checked="checked"> 有効
+                <input type="radio" name="options-playsound-enable" value="disable"> 無効
+                <h3>通知音</h3>
+                <select id="options-soundfile">
+                    <option value="ta-da.mp3" selected="selected">Ta-da!</option>
+                    <option value="ding.mp3">Ding</option>
+                    <option value="shupopo.mp3">シュポポ</option>
+                    <option value="piroron.mp3">ピロロン</option>
+                    <option value="pinpon.mp3">ピンポン</option>
+                    <option value="famima.mp3">ファミマ</option>
+                </select>
+                <p class='note'>選択するとサンプル音が鳴ります</p>
+            </div>
+            <div id="buttons">
+                 <input id="saveAll" type="submit" value="設定を保存する" />
+                 <p id="console" style="color: #228b22;"></p>
+            </div>
+        </div>
+    </body>
+</html>

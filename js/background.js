@@ -23,8 +23,9 @@ function refresh()
 			$.each(newArrival.get(videoInfos), function(index, infos) {
 				if (comuHolder.isNew($(infos).find('community'))) {
 					// do nothing.
-					(new Audio("sound/tada.mp3")).play();
+					// (new Audio("sound/tada.mp3")).play();
 				} else {
+					if (localStorage.getItem('options.popup.enable') === 'enable')
 					showNotification(infos);
 				}
 			});
@@ -38,7 +39,9 @@ function refresh()
 
 function showNotification(newInfos)
 {
-	(new Audio("sound/tada.mp3")).play();
+	if (localStorage.getItem('options.playsound.enable') === 'enable') {
+		(new Audio('sound/' + localStorage.getItem('options.soundfile'))).play();
+	}
 	let options = {
 	  type: "basic",
 	  title: "放送開始のお知らせ",

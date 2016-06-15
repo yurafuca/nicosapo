@@ -28,6 +28,7 @@
         "persistent": true,
 	    "scripts": ["js/jquery-2.1.4.min.js", "js/newArrival.js", "js/comuHolder.js", "js/nicovideo.js", "js/background.js"]
 	},
+    "options_page": "html/options.html",
     "web_accessible_resources": [
         "image/icon.png"
     ]
