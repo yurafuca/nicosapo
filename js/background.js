@@ -16,6 +16,10 @@ function refresh()
 {
 	Promise.resolve()
 		.then(isLogined)
+			.catch(function(e) {
+				setBadgeText('x');
+				reject();
+			})
 		.then(loadLiveStreams)
 		.then(function(videoInfos) {
 			count(videoInfos).then(setBadgeText);
@@ -36,9 +40,6 @@ function refresh()
 			});
 			newArrival.setSource(videoInfos);
 		})
-		.catch(function(e) {
-			setBadgeText('x');
-		});
 
 	getCheckList().then(function(idList) {
 			comuHolder.setSource(idList);
