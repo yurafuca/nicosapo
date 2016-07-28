@@ -1,15 +1,21 @@
 function isLogined()
 {
-    return new Promise(function(resolve, reject) {
-        $.post('http://www.nicovideo.jp/api/mylistgroup/list')
-        	.done(function(resoponse) {
-        		resolve(true);
-        	})
-        	.fail(function(resoponse) {
-        		console.log(resoponse);
-        		reject(new Error('Not Logined.'));
-        	});
-    });
+	var promise = new Promise(function(resolve, reject) {
+		var posting = $.post("http://www.nicovideo.jp/api/mylistgroup/list", function(response) {
+            var status = $(response).attr('status');
+			console.log(status);
+            switch (status) {
+                case 'ok':
+                    resolve(true);
+                    break;
+                case 'fail':
+                    reject(false);
+                    break;
+            }
+		}, 'json');
+	});
+
+	return promise;
 }
 
 function getSessionId() {
