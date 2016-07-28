@@ -5,6 +5,11 @@ $(function()
 	Promise.resolve()
 		.then(Loading.start)
 		.then(isLogined)
+			.catch(function(e) {
+				Loading.done();
+				showErrorMessage();
+				reject();
+			})
 		.then(bg.loadLiveStreams)
 		.then(function($videoInfos) {
 			return new Promise(function(resolve, reject) {
@@ -17,12 +22,7 @@ $(function()
 			});
 		})
 		.then(show)
-		.then(Loading.done)
-		.catch(function(e) {
-			Loading.done();
-			showErrorMessage();
-			Promise.reject(e);
-		});
+		.then(Loading.done);
 });
 
 function show($doms)
