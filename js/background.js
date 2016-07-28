@@ -14,10 +14,9 @@ $(function()
 
 function refresh()
 {
-	loadLiveStreams()
-		.catch(function(e) {
-			setBadgeText('x');
-		})
+	Promise.resolve()
+		.then(isLogined)
+		.then(loadLiveStreams)
 		.then(function(videoInfos) {
 			count(videoInfos).then(setBadgeText);
 			$.each(newArrival.get(videoInfos), function(index, infos) {
@@ -36,6 +35,9 @@ function refresh()
 				}
 			});
 			newArrival.setSource(videoInfos);
+		})
+		.catch(function(e) {
+			setBadgeText('x');
 		});
 
 	getCheckList().then(function(idList) {

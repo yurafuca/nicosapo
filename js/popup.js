@@ -4,11 +4,8 @@ $(function()
 {
 	Promise.resolve()
 		.then(Loading.start)
+		.then(isLogined)
 		.then(bg.loadLiveStreams)
-		.catch(function(e) {
-			Loading.done();
-			showErrorMessage();
-		})
 		.then(function($videoInfos) {
 			return new Promise(function(resolve, reject) {
 				if ($videoInfos.length === 0) {
@@ -20,7 +17,12 @@ $(function()
 			});
 		})
 		.then(show)
-		.then(Loading.done);
+		.then(Loading.done)
+		.catch(function(e) {
+			Loading.done();
+			showErrorMessage();
+			Promise.reject(e);
+		});
 });
 
 function show($doms)
@@ -39,9 +41,9 @@ function show($doms)
 function showErrorMessage()
 {
 	var $message = $('<div class="message"></div>');
-	$message.text('セッション情報を取得できませんでした．ニコニコ動画にログインしてください．');
+	$message.text('ニコニコ動画にログインしていません．ログインしてから再度試してください．');
 
-	$('#communities').append($message);
+	$('#communities').html($message);
 }
 
 function showZeroMessage()
@@ -49,7 +51,7 @@ function showZeroMessage()
 	var $message = $('<div class="message"></div>');
 	$message.text('放送中の番組がありません．');
 
-	$('#communities').append($message);
+	$('#communities').html($message);
 }
 
 function append($dom, $videoInfo)

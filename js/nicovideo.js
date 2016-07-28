@@ -1,3 +1,17 @@
+function isLogined()
+{
+    return new Promise(function(resolve, reject) {
+        $.post('http://www.nicovideo.jp/api/mylistgroup/list')
+        	.done(function(resoponse) {
+        		resolve(true);
+        	})
+        	.fail(function(resoponse) {
+        		console.log(resoponse);
+        		reject(new Error('Not Logined.'));
+        	});
+    });
+}
+
 function getSessionId() {
 	
 	var promise = new Promise(function(resolve, reject) {
