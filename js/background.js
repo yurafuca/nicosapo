@@ -39,7 +39,7 @@ function refresh()
 				}
 			});
 			newArrival.setSource(videoInfos);
-		})
+		});
 
 	getCheckList().then(function(idList) {
 			comuHolder.setSource(idList);
