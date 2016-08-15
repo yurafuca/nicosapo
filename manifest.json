@@ -7,7 +7,7 @@
 	      "default_title": "放送中の番組を確認する",
           "default_popup": "html/popup.html"
 	 },
-    "description": "ニコニコ生放送でコミュニティ登録している放送中の番組をポップアップ表示します．", 
+    "description": "参加中のコミュニティ/チャンネルの放送番組を一覧表示します．", 
     "icons": {
         "16": "image/icon.png", 
         "32": "image/icon.png", 
