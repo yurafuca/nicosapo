@@ -11,4 +11,4 @@ imanani popup programs on the air quickly as Browser Action of Chrome API.
 
 ##Demo
 
-![Alt Text](http://s2.gazo.cc/up/38254.png)
+![Alt Text](https://tsuyuno.github.io/resources/imanani.png)
