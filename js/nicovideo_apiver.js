@@ -43,15 +43,19 @@ function getSessionId() {
 		});
 	});
 
+	// Return the promise
 	return promise;
 }
 
 function getSubscribe(sessionId)
 {
+	// TODO: validate 'sessionId'
+
 	var promise = new Promise(function(resolve, reject) {
 		
 		var dummy = Math.floor(Math.random () * 1000);
 		var request = $.ajax({
+			// url: "http://api.ce.nicovideo.jp/liveapi/v1/user.subscribe",
 			url: "http://api.ce.nicovideo.jp/liveapi/v1/user.subscribe?__context=" + Math.floor(Math.random () * 1000),
 			method: "POST",
 			dataType: "xml",
@@ -59,6 +63,8 @@ function getSubscribe(sessionId)
 				"x-nicovita-session": sessionId
 			}
 		});
+
+		// test(sessionId);
 
 		request.done(function (videoInfos) {
 			console.log("cache: " + $(videoInfos).find('total_count').text());
@@ -94,6 +100,7 @@ function getCheckList()
 			switch (status) {
 				case "OK":
 					var checkList = text.community_id;
+					// console.info('checkList: ' + checkList);
 					resolve($(checkList));
 					break;
 				default:
