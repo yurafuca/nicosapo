@@ -72,7 +72,6 @@ function getSubscribe(sessionId)
 
 	});
 
-	// Return the promise
 	return promise;
 }
 
@@ -105,3 +104,58 @@ function getCheckList()
 
 	return promise;
 }
+
+function getStatusOfBroadcast(broadcastId)
+{
+	console.log('broadcastId: ' + broadcastId);
+	return new Promise(function(resolve, reject) {
+		var endpoint = "http://watch.live.nicovideo.jp/api/getplayerstatus?v=" + broadcastId;
+		var posting  = $.get(endpoint);
+
+		posting.done(function(response) {
+			console.info(response);
+			let status = $(response).find('getplayerstatus').attr('status');
+			console.info(status);
+
+			if (status == 'ok') {
+				resolve('ONAIR');
+			}
+			if (status == 'fail') {
+				let errorCode = $(response).find('error code').text();
+				console.info(errorCode);
+				if (errorCode == 'error') {
+					resolve('ENDED');
+				}
+			}
+
+			reject(new Error('Illegal status.'));
+		});
+	});
+}
+
+
+function getBroadcastInformations(communityId)
+{
+	return new Promise(function(resolve, reject) {
+		var endpoint = "http://watch.live.nicovideo.jp/api/getplayerstatus?v=" + communityId;
+		var posting  = $.get(endpoint);
+
+		posting.done(function(response) {
+			console.info(response);
+			let status = $(response).find('getplayerstatus').attr('status');
+			console.info(status);
+			
+			if (status == 'fail') {
+				let errorCode = $(response).find('error code').text();
+				console.info(errorCode);
+				if (errorCode == 'error') {
+					resolve(null);
+				}
+			}
+
+			let informationsOfBroadcast = $(response).find('stream');
+			resolve(informationsOfBroadcast);
+		});
+	});
+}
+

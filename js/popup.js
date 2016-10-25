@@ -1,7 +1,15 @@
 const bg = chrome.extension.getBackgroundPage();
 
+// nicolive.jpを開いたときにtabのidを保持する
+// idと放送idを結びつける
+// nicolive.jpを閉じたときにtabのidを破棄する
+// 10秒おきに保持しているidで放送が終了していないか確認する
+// 放送が終了している場合は新しく放送が始まっていないか確認する
+// 放送が始まった場合はページ遷移をする．放送idを更新する．
+
 $(function()
 {
+	getStatusOfBroadcast('lv279993567');
 	Promise.resolve()
 		.then(Loading.start)
 		.then(isLogined)

@@ -1,16 +1,55 @@
 let comuHolder = new ComuHolder();
 let newArrival = new NewArrival();
+let broadcastTabs = [];
 
 $(function()
 {
 	chrome.browserAction.setBadgeBackgroundColor({
 		color: "#ff6200"
-		// color: "#000000"
 	});
 
+	let broadcastTab = new BroadcastTab( 
+		'111',
+		'co1103047',
+		'lv279993567',
+		1477382621,
+		1477391417
+	);
+
+	broadcastTabs.push(broadcastTab);
+
 	refresh();
+	autoRedirect();
 	setInterval(refresh, 1000 * 10);
+	setInterval(autoRedirect, 1000 * 10);
 });
+
+function autoRedirect()
+{
+	// if (options.autoRedirect == 'disable') {
+	// 	return;
+	// }
+	$.each(broadcastTabs, function(index, broadcastTab) {
+		console.info(broadcastTab);
+		if (broadcastTab.isEnded()) {
+			let communityId = broadcastTab.getCommunityId();
+			let broadcastInformations = getBroadcastInformations(communityId);
+			if (broadcastInformations == null) {
+				// Failed to get a new broadcast url.
+				return;
+			}
+			let broadcastId = $(broadcastInformations).find('id');
+			let beginTime = $(broadcastInformations).find('start_time');
+			let endTime = $(broadcastInformations).find('end_time');
+			broadcastTab.goToBroadCastPage(broadcastId);
+			broadcastTab.setBroadcastId(broadcastId);
+			broadcastTab.setBeginTime(beginTime);
+			broadcastTab.setEndTIme(endTime);
+		} else {
+
+		}
+	});
+}
 
 function refresh()
 {
