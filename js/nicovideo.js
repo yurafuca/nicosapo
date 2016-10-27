@@ -62,6 +62,7 @@ function getSubscribe(sessionId)
 
 		request.done(function (videoInfos) {
 			console.log("cache: " + $(videoInfos).find('total_count').text());
+			console.info(videoInfos);
 			resolve(videoInfos);
 		});
 
@@ -107,34 +108,46 @@ function getCheckList()
 
 function getStatusOfBroadcast(broadcastId)
 {
-	console.log('broadcastId: ' + broadcastId);
 	return new Promise(function(resolve, reject) {
 		var endpoint = "http://watch.live.nicovideo.jp/api/getplayerstatus?v=" + broadcastId;
 		var posting  = $.get(endpoint);
 
 		posting.done(function(response) {
-			console.info(response);
 			let status = $(response).find('getplayerstatus').attr('status');
-			console.info(status);
 
-			if (status == 'ok') {
-				resolve('ONAIR');
+			switch(status) {
+				case 'ok':
+					console.log(broadcastId + ' is ONAIR.');
+					resolve('ONAIR');
+					break;
+				case 'fail':
+					let errorCode = $(response).find('error code').text();
+					switch(errorCode) {
+						case 'closed':
+							console.log(broadcastId + 'is ENDED.');
+							resolve('ENDED');
+							break;
+						case 'error':
+							console.log(broadcastId + 'is ERROR.');
+							resolve('ERROR');
+							break;
+					}
+					break;
+				default:
+					reject(new Error('Illegal status.'));
+					break;
 			}
-			if (status == 'fail') {
-				let errorCode = $(response).find('error code').text();
-				console.info(errorCode);
-				if (errorCode == 'error') {
-					resolve('ENDED');
-				}
-			}
-
-			reject(new Error('Illegal status.'));
+				// let endTime = $(response).find('end_time').text();
+				// if (Date.now() >= (endTime + '000')) {
+				// 	console.log(broadcastId + ' is CLOSED.');
+				// 	resolve('ENDED');
+				// }
 		});
 	});
 }
 
 
-function getBroadcastInformations(communityId)
+function getOnairBroadcastInformations(communityId)
 {
 	return new Promise(function(resolve, reject) {
 		var endpoint = "http://watch.live.nicovideo.jp/api/getplayerstatus?v=" + communityId;
@@ -144,18 +157,47 @@ function getBroadcastInformations(communityId)
 			console.info(response);
 			let status = $(response).find('getplayerstatus').attr('status');
 			console.info(status);
-			
-			if (status == 'fail') {
-				let errorCode = $(response).find('error code').text();
-				console.info(errorCode);
-				if (errorCode == 'error') {
-					resolve(null);
-				}
-			}
 
-			let informationsOfBroadcast = $(response).find('stream');
-			resolve(informationsOfBroadcast);
+			switch(status) {
+				case 'ok':
+					let endTime = $(response).find('end_time').text();
+					if (Date.now() < (endTime + '000')) {
+						console.log(communityId + ' is active.');
+						let informationsOfBroadcast = $(response).find('stream');
+						resolve(informationsOfBroadcast);
+					} else {
+						console.log(communityId + ' is passive.');
+						resolve(null);
+					}
+					break;
+				case 'fail':
+					let errorCode = $(response).find('error code').text();
+					switch(errorCode) {
+						case 'closed':
+						case 'error':
+							console.log(communityId + ' is passive.');
+							resolve(null);
+							break;
+					}
+					break;
+				default:
+					reject(new Error('Illegal status.'));
+					break;
+			}
+			// console.info(response);
+			// let status = $(response).find('getplayerstatus').attr('status');
+			// console.info(status);
+			
+			// if (status == 'fail') {
+			// 	let errorCode = $(response).find('error code').text();
+			// 	console.info(errorCode);
+			// 	if (errorCode == 'error') {
+			// 		resolve(null);
+			// 	}
+			// }
+
+			
 		});
 	});
 }
-
+ 

@@ -8,20 +8,39 @@ $(function()
 		color: "#ff6200"
 	});
 
-	let broadcastTab = new BroadcastTab( 
-		'111',
-		'co1103047',
-		'lv279993567',
-		1477382621,
-		1477391417
-	);
-
-	broadcastTabs.push(broadcastTab);
-
 	refresh();
 	autoRedirect();
 	setInterval(refresh, 1000 * 10);
 	setInterval(autoRedirect, 1000 * 10);
+});
+
+chrome.runtime.onMessage.addListener(
+  function(request, sender, sendResponse) {
+  	console.log("background: received");
+  if (request.purpose == 'requestChromeTab') {
+  	 console.log('purpose: requestChromeTab');
+  		chrome.tabs.query({url: request.url}, function(tabs) {
+  			console.info(tabs);
+  			chrome.tabs.sendMessage(
+  				tabs[0].id,
+  				{
+  					purpose: 'sendChromeTab',
+  					tab: tabs[0]
+  				}
+  			);
+  		});
+    	return;
+    }
+    if (request.purpose == 'sendInformationOfBroadcastTab') {
+    	const broadcastTab = new BroadcastTab(
+    		request.tabId,
+    		request.communityId,
+    		request.broadcastId
+    	);
+    	broadcastTabs.push(broadcastTab);
+    	return;
+    }
+    console.log('??');
 });
 
 function autoRedirect()
@@ -29,25 +48,39 @@ function autoRedirect()
 	// if (options.autoRedirect == 'disable') {
 	// 	return;
 	// }
+	console.log("BroadcastTabs: ");
+	console.info(broadcastTabs);
+
 	$.each(broadcastTabs, function(index, broadcastTab) {
 		console.info(broadcastTab);
-		if (broadcastTab.isEnded()) {
-			let communityId = broadcastTab.getCommunityId();
-			let broadcastInformations = getBroadcastInformations(communityId);
-			if (broadcastInformations == null) {
-				// Failed to get a new broadcast url.
-				return;
-			}
-			let broadcastId = $(broadcastInformations).find('id');
-			let beginTime = $(broadcastInformations).find('start_time');
-			let endTime = $(broadcastInformations).find('end_time');
-			broadcastTab.goToBroadCastPage(broadcastId);
-			broadcastTab.setBroadcastId(broadcastId);
-			broadcastTab.setBeginTime(beginTime);
-			broadcastTab.setEndTIme(endTime);
-		} else {
+		broadcastTab.isEnded().then(function(isEnded) {
+			console.info(isEnded);
+			if (isEnded) {
+				console.log("---------------" + broadcastTab.getBroadcastId() + "---------------");
+				let communityId = broadcastTab.getCommunityId();
+				getOnairBroadcastInformations(communityId)
+					.then(function(informations) {
+						console.log(informations);
+						if (informations == null) {
+							// Failed to get a new broadcast url.
+							return;
+						}
 
-		}
+						let broadcastId = $(informations).find('stream id').text();
+
+						// broadcastTab.goToBroadCastPage(broadcastId);
+						broadcastTab.setBroadcastId(broadcastId);
+						chrome.tabs.update(
+							broadcastTab.getTabId(),
+							{
+								url: 'http://live.nicovideo.jp/watch/' + broadcastId
+							}
+						);
+					});
+				
+
+			}
+		});
 	});
 }
 
@@ -115,6 +148,7 @@ function loadLiveStreams()
 		getSessionId().then(getSubscribe).then(normalize).then(
 			function($videoInfos) {
 				var $videoInfosNow = removeReservation($videoInfos);
+				console.info($videoInfosNow);
 				resolve($videoInfosNow);
 			}
 		).catch(reject);

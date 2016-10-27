@@ -34,7 +34,8 @@ $(function()
 });
 
 function show($doms)
-{
+{	
+	console.info($doms);
 	return new Promise(function(resolve, reject) {
 		var length = $doms.length;
 		$doms.each(function(index) {

@@ -16,6 +16,7 @@
     "permissions": [
         "alarms",
         "notifications",
+        "tabs",
         "http://www.nicovideo.jp/",
         "https://secure.nicovideo.jp/",
         "http://live.nicovideo.jp/",
@@ -25,8 +26,24 @@
         "http://watch.live.nicovideo.jp/"
     ],
     "background": {
-	    "scripts": ["js/jquery-2.1.4.min.js", "js/newArrival.js", "js/comuHolder.js", "js/nicovideo.js", "js/tab.js", "js/background.js"]
+	    "scripts": [
+            "js/jquery-2.1.4.min.js",
+            "js/newArrival.js",
+            "js/comuHolder.js",
+            "js/nicovideo.js",
+            "js/tab.js",
+            "js/background.js"
+        ]
 	},
+    "content_scripts": [
+        {
+          "matches": ["http://live.nicovideo.jp/watch/*"],
+          "js": [
+                "js/jquery-2.1.4.min.js",
+                "js/content.js"
+            ]
+        }
+    ],
     "options_page": "html/options.html",
     "web_accessible_resources": [
         "image/icon.png"

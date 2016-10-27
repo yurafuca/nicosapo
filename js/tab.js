@@ -1,11 +1,9 @@
 class BroadcastTab
 {
-    constructor(tabId, communityId, broadcastId, beginTime, endTime) {
+    constructor(tabId, communityId, broadcastId) {
         this._tabId = tabId;
         this._communityId = communityId;
-        this.broadcastId = broadcastId;
-        this._beginTime = beginTime;
-        this._endTime = endTime;
+        this._broadcastId = broadcastId;
     }
 
     getTabId() {
@@ -18,14 +16,6 @@ class BroadcastTab
 
     getBroadcastId() {
         return this._broadcastId;
-    }
-
-    getBeginTime() {
-        return this._beginTime;
-    }
-
-    getEndTime() {
-        return this._endTime;
     }
 
     setTabId(tabId) {
@@ -43,20 +33,12 @@ class BroadcastTab
         return this;
     }
 
-    setBeginTime(beginTime) {
-        this._beginTime = beginTime;
-        return this;
-    }
-
-    setEndTime(endTime) {
-        this._endTime = endTime;
-        return this;
-    }
-
     isEnded() {
+        const thisClass = this;
         return new Promise(function(resolve, reject) {
-            getStatusOfBroadcast(this.broadcastId).then(function(broadCastStatus) {
-                console.log('broadCastStatus :' + broadCastStatus);
+            console.info(thisClass);
+            getStatusOfBroadcast(thisClass._broadcastId).then(function(broadCastStatus) {
+                console.log('broadCastStatus: ' + broadCastStatus);
                 if (broadCastStatus == 'ONAIR') {
                     resolve(false);
                 }
