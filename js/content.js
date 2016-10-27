@@ -8,11 +8,83 @@
 
 $(function()
 {
+    let switch_button = $(`
+        <span clas="switch_button">
+            <a class="favorite_link switch_link"></a>
+        </span>
+    `);
+
+    $('.meta').append(switch_button);
+
+    switchOn();
+
     chrome.runtime.sendMessage({
         purpose: 'requestChromeTab',
         url: window.location.href
     });
 });
+
+
+$(function()
+{
+    $(document).on('click','.switch_link',function() {
+        if ($(this).hasClass('switch_is_on'))
+            switchOff();
+        else
+            switchOn();
+    });
+});
+
+function switchOn()
+{   
+    let switch_link = $('.switch_link');
+
+    $(switch_link).addClass('switch_is_on');
+    $(switch_link).removeClass('switch_is_off');
+
+    $(switch_link).text('自動次枠移動ON');
+    $(switch_link).css('background-image', 'linear-gradient(to bottom,#DC7519,#C63D1B)');
+    $(switch_link).css('border-color', '#A71903'); //F5C63C
+
+    $(switch_link).hover(
+        function() {
+            $(switch_link).css('background-image', 'linear-gradient(to bottom,#FE8900,#FF6101)');
+            $(switch_link).css('cursor', 'pointer');
+        },
+        function() {
+            $(switch_link).css('background-image', 'linear-gradient(to bottom,#DC7519,#C63D1B)');
+            $(switch_link).css('cursor', 'auto');
+        }
+    );
+
+    removeFromLocalStorage(getCommunityId());
+}
+
+function switchOff()
+{
+    let switch_link = $('.switch_link');
+
+    $(switch_link).addClass('switch_is_off');
+    $(switch_link).removeClass('switch_is_on');
+
+    $(switch_link).text('自動次枠移動OFF');
+    $(switch_link).css('background-image', 'linear-gradient(to bottom,#444,#222)');
+    $(switch_link).css('border-color', '#000'); //F5C63C
+    $(switch_link).hover(
+        function() {
+            $(switch_link).css('background-image', 'linear-gradient(to bottom,#666,#444)');
+            $(switch_link).css('cursor', 'pointer');
+        },
+        function() {
+            $(switch_link).css('background-image', 'linear-gradient(to bottom,#444,#222)');
+            $(switch_link).css('cursor', 'auto');
+        }
+    );
+
+    const data = {enabledAutoRedirect: false};
+    saveToLocalstorage(getCommunityId(), JSON.stringify(data));
+}
+
 
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
@@ -49,7 +121,19 @@ function getCommunityId()
     return communityId;
 }
 
-function saveToLocalstorage(communityId, boolean)
+function saveToLocalstorage(key, value)
 {
-    localStorge[communityId] = boolean;
+    chrome.runtime.sendMessage({
+        purpose: 'saveToLocalstorage',
+        key: key,
+        value: value
+    });
+}
+
+function removeFromLocalStorage(key)
+{
+    chrome.runtime.sendMessage({
+        purpose: 'removeFromLocalStorage',
+        key: key,
+    });
 }

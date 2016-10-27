@@ -16,7 +16,9 @@ $(function()
 
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
-  	console.log("background: received");
+  console.log("background: received");
+
+  // requestChromeTab
   if (request.purpose == 'requestChromeTab') {
   	 console.log('purpose: requestChromeTab');
   		chrome.tabs.query({url: request.url}, function(tabs) {
@@ -31,6 +33,8 @@ chrome.runtime.onMessage.addListener(
   		});
     	return;
     }
+
+    // sendInformationOfBroadcastTab
     if (request.purpose == 'sendInformationOfBroadcastTab') {
     	const broadcastTab = new BroadcastTab(
     		request.tabId,
@@ -40,7 +44,27 @@ chrome.runtime.onMessage.addListener(
     	broadcastTabs.push(broadcastTab);
     	return;
     }
-    console.log('??');
+
+    // saveToLocalstorage
+    if (request.purpose == 'saveToLocalstorage') {
+    	localStorage[request.key] = request.value;
+    	return;
+    }
+
+    // removeFromLocalStorage
+    if (request.purpose == 'removeFromLocalStorage') {
+    	localStorage.removeItem(request.key);
+    	return;
+    }
+});
+
+chrome.tabs.onRemoved.addListener(function(tabId, info) {
+	console.log('tabid: ' + tabId);
+    $.each(broadcastTabs, function(index, broadcastTab) {
+    	if (broadcastTabs[index].getTabId() == tabId) {
+    		broadcastTabs.splice(index, 1); // Delete broadcastTabs[index];
+    	}
+    });
 });
 
 function autoRedirect()
