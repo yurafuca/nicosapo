@@ -18,6 +18,7 @@ $(function()
 
     switchOn();
 
+    // 1. 自分自身の Tab.id を background.js にリクエストする．
     chrome.runtime.sendMessage({
         purpose: 'requestChromeTab',
         url: window.location.href
@@ -86,10 +87,12 @@ function switchOff()
 }
 
 
+// 2. background.js から Tab.id が返却される．
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
-        console.log('content: received');
+    console.log('content: received');
 
+    // sendChromeTab
     if (request.purpose == 'sendChromeTab') {
         const re = /http:\/\/live\.nicovideo\.jp\/watch\/lv([0-9]+)/;
         console.info(re.exec(request.tab.url)[1]);
@@ -99,6 +102,7 @@ chrome.runtime.onMessage.addListener(
         console.log('tabId: ' + tabId);
         console.log('communityId: ' + communityId);
         console.log('broadcastIdId: ' + broadcastId);
+        // 3. communityId，broadcastId を tab.id に紐付けて background.js に渡す．
         chrome.runtime.sendMessage({
             purpose: 'sendInformationOfBroadcastTab',
             tabId: tabId,
@@ -106,7 +110,33 @@ chrome.runtime.onMessage.addListener(
             broadcastId: broadcastId
         });
     }
-  });
+
+    // InformationOfBroadcastTab
+    if (request.purpose == 'requestInformationOfBroadcastTab') {
+        const informations = getInformationOfBroadcastTab(request.tab);
+        chrome.runtime.sendMessage({informations});
+    }
+});
+
+function getInformationOfBroadcastTab(tab)
+{
+    const re = /http:\/\/live\.nicovideo\.jp\/watch\/lv([0-9]+)/;
+
+    const tabId = tab.id;
+    const broadcastId = 'lv' + re.exec(request.tab.url)[1];
+    const communityId = getCommunityId();
+
+    const informations = {
+        purpose: 'sendInformationOfBroadcastTab',
+        tabId: tabId,
+        communityId: communityId,
+        broadcastId: broadcastId
+    };
+
+    alert('hote');
+
+    return informations;
+}
 
 function getCommunityId()
 {

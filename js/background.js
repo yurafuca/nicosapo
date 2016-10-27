@@ -4,12 +4,13 @@ let broadcastTabs = [];
 
 $(function()
 {
-	chrome.browserAction.setBadgeBackgroundColor({
-		color: "#ff6200"
-	});
+	chrome.browserAction.setBadgeBackgroundColor({color: "#ff6200"});
+
+	scanAllTabs();
 
 	refresh();
 	autoRedirect();
+	
 	setInterval(refresh, 1000 * 10);
 	setInterval(autoRedirect, 1000 * 10);
 });
@@ -67,6 +68,25 @@ chrome.tabs.onRemoved.addListener(function(tabId, info) {
     });
 });
 
+function scanAllTabs()
+{
+	chrome.tabs.query({}, function(tabs) {
+		$.each(tabs, function(item, tab) {
+			const re = /http:\/\/live\.nicovideo\.jp\/watch\/lv([0-9]+)/;
+
+			if (tab.url.match(re)) { // 放送用ページである
+				console.log(tab.id);
+				chrome.tabs.sendMessage(tab.id,
+					{
+						purpose: 'requestInformationOfBroadcastTab',
+						tab: tab
+					}
+				);
+			}
+		});
+	});
+}
+
 function autoRedirect()
 {
 	// if (options.autoRedirect == 'disable') {
@@ -77,34 +97,31 @@ function autoRedirect()
 
 	$.each(broadcastTabs, function(index, broadcastTab) {
 		console.info(broadcastTab);
-		broadcastTab.isEnded().then(function(isEnded) {
-			console.info(isEnded);
-			if (isEnded) {
-				console.log("---------------" + broadcastTab.getBroadcastId() + "---------------");
-				let communityId = broadcastTab.getCommunityId();
-				getOnairBroadcastInformations(communityId)
-					.then(function(informations) {
-						console.log(informations);
-						if (informations == null) {
-							// Failed to get a new broadcast url.
-							return;
-						}
-
-						let broadcastId = $(informations).find('stream id').text();
-
-						// broadcastTab.goToBroadCastPage(broadcastId);
-						broadcastTab.setBroadcastId(broadcastId);
-						chrome.tabs.update(
-							broadcastTab.getTabId(),
-							{
-								url: 'http://live.nicovideo.jp/watch/' + broadcastId
+		if (broadcastTab.isEnabledAutoRedirect()) {
+			console.log(broadcastTab.getCommunityId() + ' is enabled auto redirect.');
+			broadcastTab.isEnded().then(function(isEnded) {
+				console.info(isEnded);
+				if (isEnded) {
+					console.log("---------------" + broadcastTab.getBroadcastId() + "---------------");
+					let communityId = broadcastTab.getCommunityId();
+					getOnairBroadcastInformations(communityId)
+						.then(function(informations) {
+							console.log(informations);
+							if (informations == null) {
+								// Failed to get a new broadcast url.
+								return;
 							}
-						);
-					});
-				
 
-			}
-		});
+							let broadcastId = $(informations).find('stream id').text();
+
+							broadcastTab.redirectBroadcastPage(broadcastId);
+							broadcastTab.setBroadcastId(broadcastId);
+						});
+				}
+			});
+		} else {
+			console.log(broadcastTab.getCommunityId() + ' is disabled auto redirect.');
+		}
 	});
 }
 

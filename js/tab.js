@@ -49,21 +49,13 @@ class BroadcastTab
         });
     }
 
-    // getStatusOfBroadcast(broadcastId) {
-    //     let date = new Date();
-    //     let currentTime = date.getTime();
-    //     if (currentTime >= this._endTime) {
-    //         return 'ENDED';
-    //     }
-    //     // api叩く
-    //     // if (nicolive.getStatus(broadcastId)) {
-    //     //     return 'ENDED';
-    //     // }
-    //     return 'ONAIR';
-    // }
-
-    goToBroadcastPage(broadcastUrl) {
-        // chrome.open(broadcastUrl);
+    redirectBroadcastPage(broadcastId) {
+        chrome.tabs.update(
+            this._tabId,
+            {
+                url: 'http://live.nicovideo.jp/watch/' + broadcastId
+            }
+        );
     }
 
     getNewBroadCastUrl() {
@@ -74,11 +66,16 @@ class BroadcastTab
         return broadcastUrl;
     }
 
-    enableAutoRedirect() {
+    isEnabledAutoRedirect() {
+        const data = localStorage[this._communityId];
 
-    }
+        if (data == undefined) {
+            return true;
+        }
 
-    disableAutoRedirect() {
+        const parsedData = JSON.parse(data);
 
+        if (parsedData.enabledAutoRedirect == 'false')
+            return false;
     }
 }
