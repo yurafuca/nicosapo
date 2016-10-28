@@ -67,7 +67,7 @@ class BroadcastTab
     }
 
     isEnabledAutoRedirect() {
-        const data = localStorage[this._communityId];
+        const data = sessionStorage[this._communityId];
 
         if (data == undefined) {
             return true;

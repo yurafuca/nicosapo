@@ -1,14 +1,59 @@
-imanani
+imanani（ニコ生チェッカー）
 ====
 
-A Google Chrome extension popup programs of live.nicovideo.jp you subscribing.
+『ニコ生チェッカー』は，ニコニコ生放送の「自動次枠移動」「放送中の番組一覧を表示」「デスクトップ通知」の機能を Google Chrome へ追加します．
 
 ## Description
 
-If you want to check programs on the air you subscribing, click "favorites" displayd on header. However, "favorites" is total bullshit. Why only display 5 items per click? Open live.nicovideo.jp just for checking broadcasted programs is real pain in the arse as well.
+「枠が終了したら次の枠へ自動的に移動してほしい！」
+「お気に入りのコミュニティが放送しているか簡単に確認したい！」
+「放送が始まったら音や通知で知らせてほしい！」
 
-imanani popup programs on the air quickly as Browser Action of Chrome API.
+そんな要望に答えるために開発したのが imanani（ニコ生チェッカー） です．
 
-##Demo
+ニコ生チェッカーは以下の機能に対応しています．
 
-![Alt Text](https://tsuyuno.github.io/resources/imanani.png)
+1. 自動次枠移動
+2. 放送中の番組一覧を表示
+    + コミュニティ登録している**ユーザー**コミュニティの放送番組の一覧表示
+    + コミュニティ登録している**ユーザー**コミュニティの放送番組数をバッジに表示
+3. デスクトップ通知
+
+デスクトップ通知の有効/無効は設定画面にて設定できます．
+
+## 自動次枠移動
+
+![Alt Text](https://tsuyuno.github.io/resources/imanani_auto_redirect.png)
+
+放送用ページ（http://live.nicovideo.jp/watch/lv*）を開き続けておくと，その間ニコ生チェッカーは当該コミュニティが新しく放送を開始していないかを一定時間ごとに確認します．新しく放送が開始されたことを検知すると，ニコ生チェッカーはその放送ページを自動的に同じタブで開きます．
+
+新しく放送が開始されているかを確認するのに時間制限はありません．放送用ページを開いている間は確認を続けます．
+
+自動枠移動は1秒から10秒程度のラグが発生します．
+
+# 放送中の番組一覧を表示
+
+![Alt Text](https://tsuyuno.github.io/resources/imanani_popup.png)
+
+インストール後にツールバーに追加されるアイコンをクリックすると，コミュニティ登録している**ユーザー**コミュニティの放送番組を一覧表示します．コミュニティアイコンにマウスオーバーすると，放送の説明が表示されます．
+
+アイコンには放送番組の数がバッジとして表示されます（図中の「10」のように）．バッジに表示される値とその説明は次のとおりです．
+
+| 表示される値 | 説明 |
+| 数字 | 放送中の番組数です |
+| 何も表示されない | 放送中の番組数が0です |
+| x | ニコニコ動画にログインしていないか，それ以外のエラーが発生しています |
+
+# デスクトップ通知
+
+コミュニティ登録している**ユーザー**コミュニティが新しく放送を開始すると通知を表示します．さらに，通知に合わせて音を表示することもできます．これら機能は設定画面にて無効にできます．
+
+通知が表示されるまでに最大1分程度のラグが発生します．
+
+![Alt Text](https://tsuyuno.github.io/resources/imanani_notification.png)
+
+# 設定画面
+
+インストール後にツールバーに追加されるアイコンを右クリック->設定 から，imanani（ニコ生チェッカー）の設定をおこなえます．
+
+![Alt Text](https://tsuyuno.github.io/resources/imanani_setting.png)

@@ -48,13 +48,13 @@ chrome.runtime.onMessage.addListener(
 
     // saveToLocalstorage
     if (request.purpose == 'saveToLocalstorage') {
-    	localStorage[request.key] = request.value;
+    	sessionStorage[request.key] = request.value;
     	return;
     }
 
     // removeFromLocalStorage
     if (request.purpose == 'removeFromLocalStorage') {
-    	localStorage.removeItem(request.key);
+    	sessionStorage.removeItem(request.key);
     	return;
     }
 });
