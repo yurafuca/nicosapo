@@ -50,12 +50,17 @@ class BroadcastTab
     }
 
     redirectBroadcastPage(broadcastId) {
-        chrome.tabs.update(
-            this._tabId,
-            {
-                url: 'http://live.nicovideo.jp/watch/' + broadcastId
-            }
-        );
+        // chrome.tabs.update(
+        //     this._tabId,
+        //     {
+        //         url: 'http://live.nicovideo.jp/watch/' + broadcastId
+        //     }
+        // );
+		// var code = 'window.location.reload();';
+		const endpoint = 'http://live.nicovideo.jp/watch/';
+		const broadcastUrl = endpoint + broadcastId;
+		const code = 'window.location.replace("' + broadcastUrl + '")';
+		chrome.tabs.executeScript(this._tabId, {code: code});
     }
 
     getNewBroadCastUrl() {
