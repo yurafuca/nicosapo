@@ -103,3 +103,43 @@ function getCheckList()
 
 	return promise;
 }
+
+function getStatusOfBroadcast(broadcastId)
+{
+	return new Promise(function(resolve, reject) {
+		var endpoint = "http://watch.live.nicovideo.jp/api/getplayerstatus?v=" + broadcastId;
+		var posting  = $.get(endpoint);
+
+		posting.done(function(response) {
+			let status = $(response).find('getplayerstatus').attr('status');
+
+			switch(status) {
+				case 'ok':
+					console.log(broadcastId + ' is ONAIR.');
+					resolve('ONAIR');
+					break;
+				case 'fail':
+					let errorCode = $(response).find('error code').text();
+					switch(errorCode) {
+						case 'closed':
+							console.log(broadcastId + 'is ENDED.');
+							resolve('ENDED');
+							break;
+						case 'error':
+							console.log(broadcastId + 'is ERROR.');
+							resolve('ERROR');
+							break;
+					}
+					break;
+				default:
+					reject(new Error('Illegal status.'));
+					break;
+			}
+				// let endTime = $(response).find('end_time').text();
+				// if (Date.now() >= (endTime + '000')) {
+				// 	console.log(broadcastId + ' is CLOSED.');
+				// 	resolve('ENDED');
+				// }
+		});
+	});
+}
