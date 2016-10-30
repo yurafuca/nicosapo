@@ -1,42 +1,64 @@
-// $(document).ready(function() {
-//     $("#testFrame").load(function() {
-//         var doc = this.contentDocument || this.contentWindow.document;
-//         var target = doc.getElementById("target");
-//         target.innerHTML = "Found It!";
-//     });
-// });
+let _communityId;
+let _broadcastId;
 
 $(function()
-{
-    let switch_button = $(`
-        <span clas="switch_button">
-            <a class="favorite_link switch_link"></a>
-        </span>
-    `);
+{ 
+  initialize();
 
-    $('.meta').append(switch_button);
+  let switch_button = $(`
+      <span clas="switch_button">
+          <a class="favorite_link switch_link"></a>
+      </span>
+  `);
 
-    switchOn();
+  $('.meta').append(switch_button);
 
-    // 1. 自分自身の Tab.id を background.js にリクエストする．
-    chrome.runtime.sendMessage({
-        purpose: 'requestChromeTab',
-        url: window.location.href
-    });
+  toggleOn();
+
+  setInterval(autoRedirect, 1000 * 20);
 });
-
 
 $(function()
 {
     $(document).on('click','.switch_link',function() {
         if ($(this).hasClass('switch_is_on'))
-            switchOff();
+            toggleOff();
         else
-            switchOn();
+            toggleOn();
     });
 });
 
-function switchOn()
+function initialize()
+{
+  _communityId = getCommunityId();
+  _broadcastId = getBroadcastId();
+}
+
+// TODO: Rename.
+function autoRedirect()
+{
+  if (isToggledOn()) {
+    console.log(_broadcastId + ' is enabled auto redirect.');
+
+    isOffAir(_broadcastId).then(function(isOffAir) {
+      // ONAIR.
+      if (!isOffAir) return;
+
+      // OFFAIR.
+      isStartedBroadcast(_communityId).then(function(response) {
+        console.info('[imanani][isStartedBroadcast] = ', response);
+        if (response.isStarted) {
+          _broadcastId = response.nextBroadcastId;
+          redirectBroadcastPage(response.nextBroadcastId);
+        }
+      });
+    });
+  } else {
+      console.log(getBroadcastId() + ' is disabled auto redirect.');
+  }
+}
+
+function toggleOn()
 {   
     let switch_link = $('.switch_link');
 
@@ -57,11 +79,9 @@ function switchOn()
             $(switch_link).css('cursor', 'auto');
         }
     );
-
-    removeFromLocalStorage(getCommunityId());
 }
 
-function switchOff()
+function toggleOff()
 {
     let switch_link = $('.switch_link');
 
@@ -81,61 +101,95 @@ function switchOff()
             $(switch_link).css('cursor', 'auto');
         }
     );
-
-    const data = {enabledAutoRedirect: false};
-    saveToLocalstorage(getCommunityId(), JSON.stringify(data));
 }
 
-
-// 2. background.js から Tab.id が返却される．
-chrome.runtime.onMessage.addListener(
-  function(request, sender, sendResponse) {
-    console.log('content: received');
-
-    // sendChromeTab
-    if (request.purpose == 'sendChromeTab') {
-        const re = /http:\/\/live\.nicovideo\.jp\/watch\/lv([0-9]+)/;
-        console.info(re.exec(request.tab.url)[1]);
-        let tabId = request.tab.id;
-        let broadcastId = 'lv' + re.exec(request.tab.url)[1];
-        let communityId = getCommunityId();
-        console.log('tabId: ' + tabId);
-        console.log('communityId: ' + communityId);
-        console.log('broadcastIdId: ' + broadcastId);
-        // 3. communityId，broadcastId を tab.id に紐付けて background.js に渡す．
-        chrome.runtime.sendMessage({
-            purpose: 'sendInformationOfBroadcastTab',
-            tabId: tabId,
-            communityId: communityId,
-            broadcastId: broadcastId
-        });
-    }
-
-    // InformationOfBroadcastTab
-    if (request.purpose == 'requestInformationOfBroadcastTab') {
-        const informations = getInformationOfBroadcastTab(request.tab);
-        chrome.runtime.sendMessage({informations});
-    }
-});
-
-function getInformationOfBroadcastTab(tab)
+function isToggledOn()
 {
-    const re = /http:\/\/live\.nicovideo\.jp\/watch\/lv([0-9]+)/;
+  const isToggledOn = $('.switch_link').hasClass('switch_is_on');
+  
+  return isToggledOn;
+}
 
-    const tabId = tab.id;
-    const broadcastId = 'lv' + re.exec(request.tab.url)[1];
-    const communityId = getCommunityId();
+function isOffAir(broadcastId)
+{
+  return new Promise(function(resolve, reject) {
+    getStatusByBroadcast(broadcastId).then(function(response) {
+      const errorCode = $(response).find('error code').text();
 
-    const informations = {
-        purpose: 'sendInformationOfBroadcastTab',
-        tabId: tabId,
-        communityId: communityId,
-        broadcastId: broadcastId
-    };
+      // OFFAIR or ERROR.
+      if (errorCode) {
+         switch(errorCode) {
+           case 'closed':
+             console.log(_broadcastId + ' is OFFAIR');
+             resolve(true);
+             return;
+           case 'error':
+             console.log(_broadcastId + ' is ERROR.');
+             reject();
+             return;
+         }
+      }
 
-    alert('hote');
+      // ONAIR
+      const broadcastId = $(response).find('stream id').text();
+      console.log(broadcastId + ' is ONAIR');
+      resolve(false);
+    });
+  });
+}
 
-    return informations;
+function isStartedBroadcast(communityId)
+{
+  return new Promise(function(resolve, reject) {
+    getStatusByCommunity(communityId).then(function(response) {
+      const errorCode = $(response).find('error code').text();
+      const result = {
+        isStarted: undefined,
+        nextBroadcastId: undefined
+      };
+
+      // OFFAIR or ERROR.
+      if (errorCode) {
+         switch(errorCode) {
+           case 'closed':
+             console.log(_communityId + ' is NOT_READY');
+             result.isStarted = false;
+             resolve(result);
+             return;
+           case 'error':
+             console.log(_communityId + ' is ERROR.');
+             reject();
+             return;
+         }
+      }
+
+      // OFFAIR or ONAIR.
+      const endTime = $(response).find('end_time').text();
+
+      if (Date.now() < (endTime + '000')) {
+        console.log($(response).find('stream id').text() + ' is NOW_OPEND.');
+        result.isStarted = true;
+        result.nextBroadcastId = $(response).find('stream id').text();
+      } else {
+        console.log('foobar');
+        console.log('[imanani][isStartedBroadcast] Date.now = ' + Date.now());
+        console.log('[imanani][isStartedBroadcast] endTime = ' + endTime + '000');
+        console.log(_communityId + ' is NOT_READY.');
+        result.isStarted = false;
+      }
+
+      resolve(result);
+    });
+  });
+}
+
+function getBroadcastId()
+{
+  const re = /http:\/\/live\.nicovideo\.jp\/watch\/lv([0-9]+)/;
+  const url = window.location.href;
+  const broadcastId = 'lv' + re.exec(url)[1];
+
+  return broadcastId;
 }
 
 function getCommunityId()
@@ -148,22 +202,66 @@ function getCommunityId()
     let communityId = re.exec(communityUrl)[1];
     console.info(communityInfos);
     console.info(communityId);
+
     return communityId;
 }
 
-function saveToLocalstorage(key, value)
+function redirectBroadcastPage(broadcastId)
 {
-    chrome.runtime.sendMessage({
-        purpose: 'saveToLocalstorage',
-        key: key,
-        value: value
-    });
+  const endpoint = 'http://live.nicovideo.jp/watch/';
+  const broadcastUrl = endpoint + broadcastId;
+  window.location.replace(broadcastUrl);
 }
 
-function removeFromLocalStorage(key)
+function isEnabledAutoRedirect()
 {
-    chrome.runtime.sendMessage({
-        purpose: 'removeFromLocalStorage',
-        key: key,
+    const data = sessionStorage[this._communityId];
+
+    if (data == undefined) {
+        return true;
+    }
+
+    const parsedData = JSON.parse(data);
+
+    if (parsedData.enabledAutoRedirect == 'false')
+        return false;
+}
+
+function getStatusByBroadcast(broadcastId)
+{
+  return new Promise(function(resolve, reject) {
+    getStatus(broadcastId).then(function(response) {
+      if(response)
+        resolve(response);
+      else
+        reject();
+    }); 
+  });
+}
+
+
+function getStatusByCommunity(communityId)
+{
+  return new Promise(function(resolve, reject) {
+    getStatus(communityId).then(function(response) {
+      if(response)
+        resolve(response);
+      else
+        reject();
+    }); 
+  });
+}
+
+function getStatus(param)
+{
+  return new Promise(function(resolve, reject) {
+    const endpoint = "http://watch.live.nicovideo.jp/api/getplayerstatus?v=";
+    const posting  = $.get(endpoint + param);
+
+    posting.done(function(response) {
+      let status = $(response).find('getplayerstatus').attr('status');
+      console.info('[imanani][getStatus] response = ', response);
+      resolve(response);
     });
+  });
 }

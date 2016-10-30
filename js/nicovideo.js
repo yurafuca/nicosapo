@@ -78,12 +78,10 @@ function getSubscribe(sessionId)
 
 function getCheckList()
 {
-
 	var promise = new Promise(function(resolve, reject) {
 
-		var posting = $.get("http://flapi.nicovideo.jp/api/getchecklist",
-		{}
-		);
+		let endpoint = "http://flapi.nicovideo.jp/api/getchecklist";
+		let posting = $.get(endpoint);
 
 		// I dont know why "posting" calls fail(), not done().
 		posting.fail(function(data) {
@@ -105,99 +103,3 @@ function getCheckList()
 
 	return promise;
 }
-
-function getStatusOfBroadcast(broadcastId)
-{
-	return new Promise(function(resolve, reject) {
-		var endpoint = "http://watch.live.nicovideo.jp/api/getplayerstatus?v=" + broadcastId;
-		var posting  = $.get(endpoint);
-
-		posting.done(function(response) {
-			let status = $(response).find('getplayerstatus').attr('status');
-
-			switch(status) {
-				case 'ok':
-					console.log(broadcastId + ' is ONAIR.');
-					resolve('ONAIR');
-					break;
-				case 'fail':
-					let errorCode = $(response).find('error code').text();
-					switch(errorCode) {
-						case 'closed':
-							console.log(broadcastId + 'is ENDED.');
-							resolve('ENDED');
-							break;
-						case 'error':
-							console.log(broadcastId + 'is ERROR.');
-							resolve('ERROR');
-							break;
-					}
-					break;
-				default:
-					reject(new Error('Illegal status.'));
-					break;
-			}
-				// let endTime = $(response).find('end_time').text();
-				// if (Date.now() >= (endTime + '000')) {
-				// 	console.log(broadcastId + ' is CLOSED.');
-				// 	resolve('ENDED');
-				// }
-		});
-	});
-}
-
-
-function getOnairBroadcastInformations(communityId)
-{
-	return new Promise(function(resolve, reject) {
-		var endpoint = "http://watch.live.nicovideo.jp/api/getplayerstatus?v=" + communityId;
-		var posting  = $.get(endpoint);
-
-		posting.done(function(response) {
-			console.info(response);
-			let status = $(response).find('getplayerstatus').attr('status');
-			console.info(status);
-
-			switch(status) {
-				case 'ok':
-					let endTime = $(response).find('end_time').text();
-					if (Date.now() < (endTime + '000')) {
-						console.log(communityId + ' is active.');
-						let informationsOfBroadcast = $(response).find('stream');
-						resolve(informationsOfBroadcast);
-					} else {
-						console.log(communityId + ' is passive.');
-						resolve(null);
-					}
-					break;
-				case 'fail':
-					let errorCode = $(response).find('error code').text();
-					switch(errorCode) {
-						case 'closed':
-						case 'error':
-							console.log(communityId + ' is passive.');
-							resolve(null);
-							break;
-					}
-					break;
-				default:
-					reject(new Error('Illegal status.'));
-					break;
-			}
-			// console.info(response);
-			// let status = $(response).find('getplayerstatus').attr('status');
-			// console.info(status);
-			
-			// if (status == 'fail') {
-			// 	let errorCode = $(response).find('error code').text();
-			// 	console.info(errorCode);
-			// 	if (errorCode == 'error') {
-			// 		resolve(null);
-			// 	}
-			// }
-
-			
-		});
-	});
-}
- 
