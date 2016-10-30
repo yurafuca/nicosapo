@@ -6,21 +6,32 @@ class SettingPage
 
     static getAllSettings() {
         var settings = new Object();
-        settings['options.popup.enable']        = $('input[name=options-popup-enable]:checked').val();
-        settings['options.playsound.enable']    = $('input[name=options-playsound-enable]:checked').val();
-        settings['options.soundfile']           = $('#options-soundfile :selected').val();
-        console.log(settings);
+        settings['options.popup.enable']           = $('input[name=options-popup-enable]:checked').val();
+        settings['options.playsound.enable']       = $('input[name=options-playsound-enable]:checked').val();
+        settings['options.soundfile']              = $('#options-soundfile :selected').val();
+        settings['options.autoJump.enable'] = $('input[name=options-autoJump-enable]:checked').val();
+        console.info('[imanani][getAllSettings] settings = ', settings);
         return settings;
     }
 
     static setAllSettings() {
         let setting = '';
+
         setting  = localStorage.getItem('options.popup.enable');
-        if (setting != null) $('[name=options-popup-enable]').val([setting]);
+        if (setting != null)
+            $('[name=options-popup-enable]').val([setting]);
+
         setting  = localStorage.getItem('options.playsound.enable');
-        if (setting != null) $('[name=options-playsound-enable]').val([setting]);
+        if (setting != null)
+            $('[name=options-playsound-enable]').val([setting]);
+
         setting  = localStorage.getItem('options.soundfile');
-        if (setting != null) $('#options-soundfile').val([setting]);
+        if (setting != null)
+            $('#options-soundfile').val([setting]);
+
+        setting  = localStorage.getItem('options.autoJump.enable');
+        if (setting != null)
+            $('[name=options-autoJump-enable]').val([setting]);
     }
 }
 

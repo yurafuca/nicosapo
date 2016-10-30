@@ -13,7 +13,18 @@ $(function()
 
   $('.meta').append(switch_button);
 
-  toggleOn();
+  chrome.runtime.sendMessage(
+  {
+    purpose: 'getFromLocalStorage',
+    key: 'options.autoJump.enable'
+  },
+  function(response)
+  {
+    if (response === 'enable')
+      toggleOn();
+    else
+      toggleOff();
+  });
 
   setInterval(autoRedirect, 1000 * 20);
 });

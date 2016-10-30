@@ -44,6 +44,26 @@ function refresh()
 		});
 }
 
+chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+	// getFromLocalStorage
+    if (request.purpose == 'getFromLocalStorage') {
+    	sendResponse(localStorage[request.key]);
+    	return;
+    }
+
+    // saveToLocalstorage
+    if (request.purpose == 'saveToLocalstorage') {
+    	sessionStorage[request.key] = request.value;
+    	return;
+    }
+
+    // removeFromLocalStorage
+    if (request.purpose == 'removeFromLocalStorage') {
+    	sessionStorage.removeItem(request.key);
+    	return;
+    }
+});
+
 function enableOrNull(value) {
 	return (value === 'enable') || value == null;
 }
