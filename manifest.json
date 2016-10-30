@@ -1,7 +1,7 @@
 {
     "name": "ニコ生チェッカー",
 	"manifest_version": 2,
-    "version": "1.6.1",
+    "version": "1.6.2",
      "browser_action": {
 	      "default_icon": "image/icon.png",
 	      "default_title": "放送中の番組を確認する",
@@ -31,7 +31,6 @@
             "js/newArrival.js",
             "js/comuHolder.js",
             "js/nicovideo.js",
-            "js/tab.js",
             "js/background.js"
         ]
 	},
