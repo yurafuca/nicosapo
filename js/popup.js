@@ -1,15 +1,7 @@
 const bg = chrome.extension.getBackgroundPage();
 
-// nicolive.jpを開いたときにtabのidを保持する
-// idと放送idを結びつける
-// nicolive.jpを閉じたときにtabのidを破棄する
-// 10秒おきに保持しているidで放送が終了していないか確認する
-// 放送が終了している場合は新しく放送が始まっていないか確認する
-// 放送が始まった場合はページ遷移をする．放送idを更新する．
-
 $(function()
 {
-	getStatusOfBroadcast('lv279993567');
 	Promise.resolve()
 		.then(Loading.start)
 		.then(isLogined)
@@ -39,7 +31,8 @@ function show($doms)
 	return new Promise(function(resolve, reject) {
 		var length = $doms.length;
 		$doms.each(function(index) {
-			append($('#communities'), $(this));
+			append($('#communities'), $(this), index);
+			resolve();
 			if (index == length - 1) {
 				resolve();
 			}
@@ -63,18 +56,38 @@ function showZeroMessage()
 	$('#communities').html($message);
 }
 
-function append($dom, $videoInfo)
+function append($dom, $videoInfo, positionNumber)
 {
 	var thumbnail	= $videoInfo.find('community thumbnail').text();
 	var title		= $videoInfo.find('video title').text();
 	var id			= $videoInfo.find('video id').text();
 
-	var $community = $('<div class="community"><a href="" target="_blank"><span class="thumbnail"></span></a></div>');
+	var $community = $(`
+		<div class="community">
+			<a href="" target="_blank">
+				<span class="thumbnail"></span>
+			</a>
+		</div>
+	`);
 
 	$('.thumbnail', $community).css('background-image', 'url(' + thumbnail + ')');
 	$('a', $community).attr('href', "http://live.nicovideo.jp/watch/" + id);
 
-	$community.data('powertip', wordWrap(title, 16));
+	let hasManyChar = title.length > 16;
+	let isTopRaw    = positionNumber < 5;
+	let isCenter    = positionNumber % 5 == 2;
+	let isBothEnds  = positionNumber % 5 == 0 || positionNumber % 5 == 4;
+	let offset      = 10;
+	let charPerLine = 16;
+
+	if (hasManyChar && isTopRaw && !isBothEnds) {
+		if (isCenter)
+			offset = -3;
+		else
+			charPerLine = 15;
+	}
+
+	$community.data('powertip', wordWrap(title, charPerLine));
 	
 	$.fn.powerTip.smartPlacementLists.n = ['n', 's', 'ne', 'nw', 'e', 'w', 'n'];
 	$community.powerTip({
@@ -82,7 +95,8 @@ function append($dom, $videoInfo)
 		fadeInTime: 30,
 		fadeOutTime: 30,
 		closeDelay: 0,
-		intentPollInterval: 0
+		intentPollInterval: 0,
+		offset: offset
 	});
 
 	$dom.append($community);

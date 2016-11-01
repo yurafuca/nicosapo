@@ -28,6 +28,7 @@ a:hover .screen_name {
 	border-bottom: 1px solid #d8d8d8;
 }
 #communities {
+	padding-bottom: 5px;
 }
 .nowloading {
 	width: auto;
@@ -104,8 +105,8 @@ a:hover .screen_name {
 	text-shadow: 0 1px 0 #fff;
 }
 .community {
-	float: left;
-	margin: 5px 0 5px 5px;
+	display: -webkit-inline-flex;
+	margin: 5px 0 0 5px;
 	border-radius: 3px;
 }
 .community:hover {
