@@ -1,13 +1,13 @@
 {
     "name": "ニコ生チェッカー",
 	"manifest_version": 2,
-    "version": "1.6.4",
+    "version": "1.6.5",
      "browser_action": {
 	      "default_icon": "image/icon.png",
 	      "default_title": "放送中の番組を確認する",
           "default_popup": "html/popup.html"
 	 },
-    "description": "自動次枠移動 / 放送中の番組を一覧表示 / デスクトップ通知 をサポートします．", 
+    "description": "自動枠移動 / 放送中の番組を一覧表示 / デスクトップ通知 をサポートします．", 
     "icons": {
         "16": "image/icon.png", 
         "32": "image/icon.png", 
