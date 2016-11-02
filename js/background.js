@@ -2,6 +2,54 @@ let comuHolder = new ComuHolder();
 let newArrival = new NewArrival();
 let broadcastTabs = [];
 
+class Account {
+
+	constructor()
+	{
+		// Do nothing.
+	}
+
+	static isLogined()
+	{
+		return isLogined();
+	}
+}
+
+
+
+function loadUserCasts()
+{
+	return loadAnyCasts('user');
+}
+
+function loadOfficialCasts()
+{
+	return loadAnyCasts('official');
+}
+
+function loadAnyCasts(liveType)
+{
+	return new Promise(function(resolve, reject) {
+		console.info('[imanani][Broadcasts.loadAnyBroadcasts] liveType = ', liveType);
+		if (liveType == 'user') {
+			getSessionId().then(getSubscribe).then(normalize).then(
+				function($videoInfos) {
+					var $videoInfosNow = removeReservation($videoInfos);
+					console.info($videoInfosNow);
+					resolve($videoInfosNow);
+				}
+			).catch(reject);
+		}
+		if (liveType == 'official') {
+			// return getOfficialOnair();
+			getOfficialOnair().then(function(official_lives) {
+				console.info(official_lives);
+				resolve(official_lives);
+			});
+		}
+	});
+}
+
 $(function()
 {
 	chrome.browserAction.setBadgeBackgroundColor({color: "#ff6200"});
@@ -13,13 +61,16 @@ $(function()
 function refresh()
 {
 	Promise.resolve()
-		.then(isLogined)
+		.then(Account.isLogined)
 			.catch(function(e) {
 				setBadgeText('x');
 				reject();
 			})
-		.then(loadLiveStreams)
+		.then(function() {
+			return loadUserCasts();
+		})
 		.then(function(videoInfos) {
+			console.info('[imanani] videoInfos = ', videoInfos);
 			count(videoInfos).then(setBadgeText);
 			$.each(newArrival.get(videoInfos), function(index, infos) {
 				if (comuHolder.isNew($(infos).find('community'))) {
@@ -88,16 +139,22 @@ chrome.notifications.onClicked.addListener(function(id) {
 	});
 });
 
-function loadLiveStreams()
+function loadLiveStreams(liveType)
 {
 	return new Promise(function(resolve, reject) {
-		getSessionId().then(getSubscribe).then(normalize).then(
-			function($videoInfos) {
-				var $videoInfosNow = removeReservation($videoInfos);
-				console.info($videoInfosNow);
-				resolve($videoInfosNow);
-			}
-		).catch(reject);
+		console.log(liveType);
+		if (liveType == 'user') {
+			getSessionId().then(getSubscribe).then(normalize).then(
+				function($videoInfos) {
+					var $videoInfosNow = removeReservation($videoInfos);
+					console.info($videoInfosNow);
+					resolve($videoInfosNow);
+				}
+			).catch(reject);			
+		}
+		if (liveType == 'official') {
+			console.log('official');
+		}
 	});
 }
 

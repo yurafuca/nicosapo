@@ -20,7 +20,7 @@ $(function()
   },
   function(response)
   {
-    if (response === 'enable')
+    if (enabledOrNull(response))
       toggleOn();
     else
       toggleOff();
@@ -38,6 +38,10 @@ $(function()
             toggleOn();
     });
 });
+
+function enabledOrNull(value) {
+  return (value === 'enable') || value == null;
+}
 
 function initialize()
 {

@@ -103,3 +103,21 @@ function getCheckList()
 
 	return promise;
 }
+
+function getOfficialOnair()
+{
+	var promise = new Promise(function(resolve, reject) {
+
+		let endpoint = "http://live.nicovideo.jp/ranking?type=onair&main_provider_type=official";
+		let posting = $.get(endpoint);
+
+		posting.done(function(response) {
+			let official_lives = $(response).find('.ranking_video');
+			console.info('[imanani][getOfficialOnair] official_lives = ', official_lives);
+
+			resolve(official_lives);
+		});
+	});
+
+	return promise;
+}

@@ -2,6 +2,26 @@ const bg = chrome.extension.getBackgroundPage();
 
 $(function()
 {
+	loadBroadcasts('user');
+});
+
+$(function()
+{
+    $(document).on('click','.tab.non-selected',function() {
+        $('.tab').removeClass('selected non-selected');
+        $('.tab').not(this).addClass('non-selected');
+        $(this).addClass('selected');
+
+        if ($(this).is('#user-lives')) {
+        	loadBroadcasts('user');
+        } else {
+        	loadBroadcasts('official');
+        }
+    });
+});
+
+function loadBroadcasts(liveType)
+{
 	Promise.resolve()
 		.then(Loading.start)
 		.then(isLogined)
@@ -10,20 +30,76 @@ $(function()
 				showErrorMessage();
 				reject();
 			})
-		.then(bg.loadLiveStreams)
-		.then(function($videoInfos) {
-			return new Promise(function(resolve, reject) {
-				if ($videoInfos.length === 0) {
-					Loading.done();
-					showZeroMessage();
-					reject();
-				}
-				resolve($videoInfos);
-			});
-		})
-		.then(show)
-		.then(Loading.done);
-});
+		.then(function() {
+			if (liveType == 'user') {
+				Promise.resolve().then(function()
+				{
+					return bg.loadUserCasts();
+				})
+					.then(function($videoInfos) {
+						return new Promise(function(resolve, reject) {
+							if ($videoInfos.length === 0) {
+								Loading.done();
+								showZeroMessage();
+								reject();
+							}
+							resolve($videoInfos);
+						});
+					})
+					.then(show)
+					.then(Loading.done);
+			}
+			if (liveType == 'official') {
+				Promise.resolve().then(function()
+				{
+					return bg.loadOfficialCasts();
+				})
+				.then(function(official_casts) {
+					console.info(official_casts);
+						$.each(official_casts, function(index, cast) {
+							const title     = $(cast).find('.video_title').text();
+							const id        = 'lv' + $(cast).find('.video_id').text();
+							const commu_id  = $(cast).find('.video_text a').attr('href');
+							const regexp    = /http\:\/\/ch.nicovideo.jp\/channel\/(.+)/;
+							const resultarr = regexp.exec(commu_id);
+							let thumbnail   = undefined;
+
+							if (resultarr != null)
+								thumbnail = 'http://icon.nimg.jp/channel/' + resultarr[1] + '.jpg';
+							else 
+								thumbnail = $(cast).find('.info a img').attr('src');
+
+							var $community = $(`
+								<div class="community">
+									<a href="" target="_blank">
+										<span class="thumbnail"></span>
+									</a>
+								</div>
+							`);
+
+							$('.thumbnail', $community).css('background-image', 'url(' + thumbnail + ')');
+							$('a', $community).attr('href', "http://live.nicovideo.jp/watch/" + id);
+
+							const charPerLine = 16;
+							$community.data('powertip', wordWrap(title, charPerLine));
+							
+							$.fn.powerTip.smartPlacementLists.n = ['n', 's', 'ne', 'nw', 'e', 'w', 'n'];
+							$community.powerTip({
+								smartPlacement: true,
+								fadeInTime: 30,
+								fadeOutTime: 30,
+								closeDelay: 0,
+								intentPollInterval: 0
+							});
+
+							// console.info($community);
+							$('#communities').append($community);
+						});
+					});
+			}
+		});
+
+}
 
 function show($doms)
 {	
@@ -31,8 +107,7 @@ function show($doms)
 	return new Promise(function(resolve, reject) {
 		var length = $doms.length;
 		$doms.each(function(index) {
-			append($('#communities'), $(this), index);
-			resolve();
+			append($('#communities'), $(this));
 			if (index == length - 1) {
 				resolve();
 			}
@@ -56,7 +131,7 @@ function showZeroMessage()
 	$('#communities').html($message);
 }
 
-function append($dom, $videoInfo, positionNumber)
+function append($dom, $videoInfo)
 {
 	var thumbnail	= $videoInfo.find('community thumbnail').text();
 	var title		= $videoInfo.find('video title').text();
@@ -73,20 +148,7 @@ function append($dom, $videoInfo, positionNumber)
 	$('.thumbnail', $community).css('background-image', 'url(' + thumbnail + ')');
 	$('a', $community).attr('href', "http://live.nicovideo.jp/watch/" + id);
 
-	let hasManyChar = title.length > 16;
-	let isTopRaw    = positionNumber < 5;
-	let isCenter    = positionNumber % 5 == 2;
-	let isBothEnds  = positionNumber % 5 == 0 || positionNumber % 5 == 4;
-	let offset      = 10;
-	let charPerLine = 16;
-
-	if (hasManyChar && isTopRaw && !isBothEnds) {
-		if (isCenter)
-			offset = -3;
-		else
-			charPerLine = 15;
-	}
-
+	const charPerLine = 16;
 	$community.data('powertip', wordWrap(title, charPerLine));
 	
 	$.fn.powerTip.smartPlacementLists.n = ['n', 's', 'ne', 'nw', 'e', 'w', 'n'];
@@ -95,8 +157,7 @@ function append($dom, $videoInfo, positionNumber)
 		fadeInTime: 30,
 		fadeOutTime: 30,
 		closeDelay: 0,
-		intentPollInterval: 0,
-		offset: offset
+		intentPollInterval: 0
 	});
 
 	$dom.append($community);
@@ -111,6 +172,7 @@ function wordWrap(text, length)
 class Loading
 {
 	static start() {
+		$('#communities').empty();
 		$('#communities').addClass('nowloading');
 	}
 
