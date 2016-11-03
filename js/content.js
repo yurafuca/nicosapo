@@ -10,10 +10,13 @@ $(function()
           <a class="switch_link"></a>
       </span>
   `);
-  $(switch_button).find('.switch_link').css('color', 'white');
-  $(switch_button).find('.switch_link').css('border-radius', '2px');
-  $(switch_button).find('.switch_link').css('font-size', '12px');
-  $(switch_button).find('.switch_link').css('padding', '1px 10px');
+
+  let switch_link = $(switch_button).find('.switch_link');
+      switch_link.css('color', 'white');
+      switch_link.css('border-radius', '2px');
+      switch_link.css('font-size', '12px');
+      switch_link.css('padding', '1px 10px');
+      switch_link.css('text-decoration', 'none');
 
   console.info('[imanani] isModernCast = ', isModernCast());
   console.info('[imanani] div', $('.program-detail div').last());

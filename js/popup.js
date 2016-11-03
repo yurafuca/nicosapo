@@ -84,9 +84,9 @@ function loadBroadcasts(liveType)
 							$community.data('powertip', wordWrap(title, charPerLine));
 
 							// TODO: Fix.
-							const hasManyCasts = official_casts.length > 30;
+							const hasManyCasts = official_casts.length > 35;
 							const isTopRow = index < 5;
-							let offset = (hasManyCasts && !isTopRow) ? -219 : 10;
+							const offset = (hasManyCasts && !isTopRow) ? -219 : 10;
 							const smartPlacement = index < 5 ? false : true;
 
 							// TODO: Fix.
