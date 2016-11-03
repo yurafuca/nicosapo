@@ -57,7 +57,7 @@ function loadBroadcasts(liveType)
 				.then(function(official_casts) {
 					console.info(official_casts);
 						$.each(official_casts, function(index, cast) {
-							const title     = $(cast).find('.video_title').text();
+							let title     = $(cast).find('.video_title').text();
 							const id        = 'lv' + $(cast).find('.video_id').text();
 							const commu_id  = $(cast).find('.video_text a').attr('href');
 							const regexp    = /http\:\/\/ch.nicovideo.jp\/channel\/(.+)/;
@@ -82,18 +82,37 @@ function loadBroadcasts(liveType)
 
 							const charPerLine = 16;
 							$community.data('powertip', wordWrap(title, charPerLine));
-							
+
+							// TODO: Fix.
+							const hasManyCasts = official_casts.length > 30;
+							const isTopRow = index < 5;
+							let offset = (hasManyCasts && !isTopRow) ? -219 : 10;
+							const smartPlacement = index < 5 ? false : true;
+
+							// TODO: Fix.
+							const manualPositions = ['se', 's', 's', 's', 'sw'];
+							const placement = (index < 5) ? manualPositions[index] : 'n';
+							console.log(offset);
+
+							// TODO: Fix.
 							$.fn.powerTip.smartPlacementLists.n = ['n', 's', 'ne', 'nw', 'e', 'w', 'n'];
+
+							// TODO: Fix.
 							$community.powerTip({
-								smartPlacement: true,
+								smartPlacement: smartPlacement,
+								placement: placement,
 								fadeInTime: 30,
 								fadeOutTime: 30,
 								closeDelay: 0,
-								intentPollInterval: 0
+								intentPollInterval: 0,
+								offset: offset
 							});
 
 							// console.info($community);
 							$('#communities').append($community);
+							if (index == official_casts.length - 1) {
+								Loading.done();
+							}
 						});
 					});
 			}

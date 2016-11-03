@@ -1,5 +1,5 @@
 {
-    "name": "ニコ生チェッカー",
+    "name": "ニコ生アシスト",
 	"manifest_version": 2,
     "version": "1.6.5",
      "browser_action": {
@@ -7,7 +7,7 @@
 	      "default_title": "放送中の番組を確認する",
           "default_popup": "html/popup.html"
 	 },
-    "description": "自動枠移動 / 放送中の番組を一覧表示 / デスクトップ通知 をサポートします．", 
+    "description": "自動枠移動（新配信β対応） / 放送中の番組を一覧表示 / デスクトップ通知 をサポートします．", 
     "icons": {
         "16": "image/icon.png", 
         "32": "image/icon.png", 
@@ -23,7 +23,8 @@
         "http://api.ce.nicovideo.jp/",
         "http://icon.nimg.jp/community/",
         "http://flapi.nicovideo.jp/api/",
-        "http://watch.live.nicovideo.jp/"
+        "http://watch.live.nicovideo.jp/",
+        "http://live2.nicovideo.jp/"
     ],
     "background": {
 	    "scripts": [
@@ -36,7 +37,7 @@
 	},
     "content_scripts": [
         {
-          "matches": ["http://live.nicovideo.jp/watch/*"],
+          "matches": ["http://live.nicovideo.jp/watch/*", "http://live2.nicovideo.jp/watch/*"],
           "js": [
                 "js/jquery-2.1.4.min.js",
                 "js/content.js"

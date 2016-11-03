@@ -13,6 +13,11 @@ body {
 	font: 13px / 1.4 Helvetica, Meiryo, arial, nimbussansl, liberationsans, freesans, clean, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
 
+#powerTip {
+	position: absolute;
+	display: none;
+}
+
 a {
 	text-decoration: none;
 }

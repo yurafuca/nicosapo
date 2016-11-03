@@ -7,11 +7,21 @@ $(function()
 
   let switch_button = $(`
       <span clas="switch_button">
-          <a class="favorite_link switch_link"></a>
+          <a class="switch_link"></a>
       </span>
   `);
+  $(switch_button).find('.switch_link').css('color', 'white');
+  $(switch_button).find('.switch_link').css('border-radius', '2px');
+  $(switch_button).find('.switch_link').css('font-size', '12px');
+  $(switch_button).find('.switch_link').css('padding', '1px 10px');
 
-  $('.meta').append(switch_button);
+  console.info('[imanani] isModernCast = ', isModernCast());
+  console.info('[imanani] div', $('.program-detail div').last());
+
+  if (isModernCast())
+    $('.program-detail div').last().append(switch_button);
+  else
+    $('.meta').append(switch_button);
 
   chrome.runtime.sendMessage(
   {
@@ -47,6 +57,14 @@ function initialize()
 {
   _communityId = getCommunityId();
   _broadcastId = getBroadcastId();
+}
+
+function isModernCast()
+{
+  const re = /http:\/\/live2\.nicovideo\.jp\/watch\/lv([0-9]+)/;
+  const url = window.location.href;
+
+  return url.match(re);
 }
 
 // TODO: Rename.
@@ -201,8 +219,10 @@ function isStartedBroadcast(communityId)
 function getBroadcastId()
 {
   const re = /http:\/\/live\.nicovideo\.jp\/watch\/lv([0-9]+)/;
-  const url = window.location.href;
+  // const url = window.location.href;
+  const url = $('meta[property="og:url"]').attr('content');
   const broadcastId = 'lv' + re.exec(url)[1];
+    console.info('[imanani][getBroadcastId] broadcastId = ', broadcastId);
 
   return broadcastId;
 }
@@ -211,12 +231,14 @@ function getCommunityId()
 {
     // For some reason, this selecter gets two of communityInfo.
     // Maibe, commynityInfos[0] is most is much the same as communityInfos[1].
-    let communityInfos = $('.meta a.commu_name');
-    let communityUrl = communityInfos.attr('href');
-    let re = /http:\/\/com\.nicovideo\.jp\/community\/([\x21-\x7e]+)/;
-    let communityId = re.exec(communityUrl)[1];
-    console.info(communityInfos);
-    console.info(communityId);
+    // let communityInfos = $('.meta a.commu_name');
+    // let communityUrl = communityInfos.attr('href');
+    // let re = /http:\/\/com\.nicovideo\.jp\/community\/([\x21-\x7e]+)/;
+    // let communityId = re.exec(communityUrl)[1];
+    const communityUrl = $('meta[property="og:image"]').attr('content');
+    const re = /http:\/\/icon\.nimg\.jp\/community\/[0-9]+\/([\x21-\x7e]+)\.jpg.*/;
+    const communityId = re.exec(communityUrl)[1];
+    console.info('[imanani][getCommunityId] communityId = ', communityId);
 
     return communityId;
 }
