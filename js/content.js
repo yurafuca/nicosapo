@@ -15,16 +15,30 @@ $(function()
       switch_link.css('color', 'white');
       switch_link.css('border-radius', '2px');
       switch_link.css('font-size', '12px');
-      switch_link.css('padding', '1px 10px');
+      switch_link.css('padding', '2px 10px');
       switch_link.css('text-decoration', 'none');
+  $(switch_button).css('display', 'inline-block');
+  $(switch_button).css('text-align', 'center');
+
 
   console.info('[imanani] isModernCast = ', isModernCast());
   console.info('[imanani] div', $('.program-detail div').last());
 
-  if (isModernCast())
+  if (isGatePage()) {
+    switch_link.css('display', 'block');
+    switch_link.css('padding', '10px');
+    switch_button.css('display', 'block');
+    $('.program-title').css('display', 'inline');
+    // $('.gate_title').prepend(switch_button);
+    $('.infobox').prepend(switch_button);
+  }
+  else if (isModernCast()) {
     $('.program-detail div').last().append(switch_button);
-  else
+  }
+  else {
     $('.meta').append(switch_button);
+    // $('.livetag_box').after(switch_button);
+  }
 
   chrome.runtime.sendMessage(
   {
@@ -39,7 +53,7 @@ $(function()
       toggleOff();
   });
 
-  setInterval(autoRedirect, 1000 * 20);
+  // setInterval(autoRedirect, 1000 * 15);
 });
 
 $(function()
@@ -68,6 +82,12 @@ function isModernCast()
   const url = window.location.href;
 
   return url.match(re);
+}
+
+function isGatePage()
+{
+  console.info('[imamani][isGatePage] isGatePage = ', $('.gate_title').length);
+  return $('.gate_title').length;
 }
 
 // TODO: Rename.
