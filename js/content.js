@@ -26,8 +26,9 @@ $(function()
 
   if (isGatePage()) {
     switch_link.css('display', 'block');
-    switch_link.css('padding', '10px');
+    switch_link.css('padding', '6px');
     switch_button.css('display', 'block');
+    switch_link.css('font-size', '15px');
     $('.program-title').css('display', 'inline');
     // $('.gate_title').prepend(switch_button);
     $('.infobox').prepend(switch_button);
