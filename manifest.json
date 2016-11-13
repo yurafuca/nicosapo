@@ -24,7 +24,8 @@
         "http://icon.nimg.jp/community/",
         "http://flapi.nicovideo.jp/api/",
         "http://watch.live.nicovideo.jp/",
-        "http://live2.nicovideo.jp/"
+        "http://live2.nicovideo.jp/",
+        "http://live.nicovideo.jp/gate/"
     ],
     "background": {
 	    "scripts": [
@@ -37,10 +38,14 @@
 	},
     "content_scripts": [
         {
-          "matches": ["http://live.nicovideo.jp/watch/*", "http://live2.nicovideo.jp/watch/*"],
+          "matches": ["http://live.nicovideo.jp/watch/*", "http://live2.nicovideo.jp/watch/*", "http://live.nicovideo.jp/gate/*"],
           "js": [
                 "js/jquery-2.1.4.min.js",
+                "js/jquery.powertip.min.js",
                 "js/content.js"
+            ],
+          "css": [
+            "css/balloon.css"
             ]
         }
     ],

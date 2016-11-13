@@ -103,7 +103,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     }
 
     // saveToLocalstorage
-    if (request.purpose == 'saveToLocalstorage') {
+    if (request.purpose == 'saveToLocalStorage') {
     	localStorage[request.key] = request.value;
     	return;
     }
@@ -111,6 +111,44 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     // removeFromLocalStorage
     if (request.purpose == 'removeFromLocalStorage') {
     	localStorage.removeItem(request.key);
+    	return;
+    }
+
+    // getFromNestedLocalStorage
+    if (request.purpose == 'getFromNestedLocalStorage') {
+    	let storagedData;
+    	if (localStorage[request.key])
+    		storagedData = JSON.parse(localStorage[request.key]);
+    	else
+    		storagedData = [];
+    	sendResponse(storagedData);
+    }
+
+    // saveToNestedLocalStorage
+    if (request.purpose == 'saveToNestedLocalStorage') {
+    	let storagedData;
+    	if (localStorage[request.key])
+    		storagedData = JSON.parse(localStorage[request.key]);
+    	else
+    		storagedData = [];
+    	let newData = {key: request.innerKey, value: request.innerValue};
+    	// storagedData[request.innerKey] = request.innerValue;
+    	storagedData.push(newData);
+    	localStorage[request.key] = JSON.stringify(storagedData);
+    	return;
+    }
+
+    // removeFromNestedLocalStorage
+    if (request.purpose == 'removeFromNestedLocalStorage') {
+    	let storagedData = JSON.parse(localStorage[request.key]);
+    	for (let i = 0; i < storagedData.length; i++) {
+    		if (storagedData[i]['key'] == request.innerKey) {
+    			console.info('[imanani][removeFromNestedLocalStorage] deleted ', storagedData[i]);
+    			storagedData.splice(i, 1);
+    			// break; // Do not break.
+    		}
+    	}
+    	localStorage[request.key] = JSON.stringify(storagedData);
     	return;
     }
 });

@@ -1,3 +1,5 @@
+const bg = chrome.extension.getBackgroundPage();
+
 class SettingPage
 {
     constructor() {
@@ -69,5 +71,26 @@ $(function()
       $("#options-soundfile option:selected").each(function() {
             new Audio('../sound/' + $(this).val()).play();
       });
+    });
+
+    chrome.runtime.sendMessage(
+    {
+        purpose: 'getFromNestedLocalStorage',
+        key: 'autoEnterCommunityList'
+    },
+    function(response)
+    {
+        console.info('[imanani][getFromNestedLocalStorage] response = ', response);
+        for (let i = 0; i < response.length; i++) {
+            let subscribe = $(`<div class="subscribe"><span class="id"></span><span class="name"></span><div class="thumbnail"></div></div>`);
+            $(subscribe).find('.id').text(response[i]['key']);
+            $(subscribe).find('.name').text("名前");
+            $(subscribe).find('.thumbnail').css('background-image', 'url(http://icon.nimg.jp/community/' + response[i]['key'] +'.jpg' + ')');
+            $(subscribe).find('.thumbnail').css('background-size', '60px');
+            $(subscribe).find('.thumbnail').css('width', '60px');
+            $(subscribe).find('.thumbnail').css('height', '60px');
+            $('#items2').append(subscribe);
+        }
+
     });
 });
