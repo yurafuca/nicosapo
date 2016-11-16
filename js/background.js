@@ -96,7 +96,7 @@ $(function()
 
 	refresh();
     setInterval(refresh, 1000 * 20);
-	setInterval(autoEnterProgramRoutine, 1000 * 10);
+	setInterval(autoEnterProgramRoutine, 1000 * 20);
 });
 
 function refresh()
