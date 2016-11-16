@@ -48,6 +48,19 @@ class Buttons
         };
 
         $(link).text(labels[buttonType] + 'ON');
+        $(link).css('background-image', 'linear-gradient(to bottom,#DC7519,#C63D1B)');
+        $(link).css('border-color', '#A71903'); //F5C63C
+
+        $(link).hover(
+            function() {
+                $(link).css('background-image', 'linear-gradient(to bottom,#FE8900,#FF6101)');
+                $(link).css('cursor', 'pointer');
+            },
+            function() {
+                $(link).css('background-image', 'linear-gradient(to bottom,#DC7519,#C63D1B)');
+                $(link).css('cursor', 'auto');
+            }
+        );
     }
 
     static toggleOff(buttonType)
@@ -72,6 +85,26 @@ class Buttons
         };
 
         $(link).text(labels[buttonType] + 'OFF');
+        $(link).css('background-image', 'linear-gradient(to bottom,#444,#222)');
+        $(link).css('border-color', '#000'); //F5C63C
+
+        if (buttonType == 'autoEnterProgram') {
+            link.css('background-image', 'linear-gradient(#fcfcfc, #eee)');
+            link.css('color', '#111');
+            link.css('font-weight', 'bold');
+            // link.css('text-shadow', '0 1px 0 white');
+        }
+
+        $(link).hover(
+            function() {
+                $(link).css('background-image', 'linear-gradient(to bottom,#666,#444)');
+                $(link).css('cursor', 'pointer');
+            },
+            function() {
+                $(link).css('background-image', 'linear-gradient(to bottom,#444,#222)');
+                $(link).css('cursor', 'auto');
+            }
+        );
     }
 
     static isToggledOn(buttonType)
@@ -201,11 +234,11 @@ $(function()
   }
   else if (PageType.isModernCast()) {
     $('.program-detail div').last().append(autoRedirectButton);
-    // $('.program-detail div').last().append(autoEnterCommunityButton);
+    $('.program-detail div').last().append(autoEnterCommunityButton);
   }
   else {
     $('.meta').append(autoRedirectButton);
-    // $('.meta').append(autoEnterCommunityButton);
+    $('.meta').append(autoEnterCommunityButton);
   }
 
   chrome.runtime.sendMessage(
@@ -217,26 +250,15 @@ $(function()
   {
     if (enabledOrNull(response)) {
         Buttons.toggleOn('autoRedirect');
+        Buttons.toggleOff('autoEnterCommunity');
+        Buttons.toggleOff('autoEnterProgram');
     }
     else {
       Buttons.toggleOff('autoRedirect');
-    }
-  });
-
-  chrome.runtime.sendMessage(
-  {
-    purpose: 'getFromNestedLocalStorage',
-    key: 'autoEnterProgramList'
-  },
-  function(response)
-  {
-    if (response[getBroadcastId()]) {
-        Buttons.toggleOn('autoEnterProgram');
-    }
-    else {
+      Buttons.toggleOff('autoEnterCommunity');
       Buttons.toggleOff('autoEnterProgram');
     }
-});
+  });
 
   setInterval(autoRedirect, 1000 * 15);
 });
@@ -303,9 +325,33 @@ function makeButton(buttonType)
   };
 
   const button = buttons[buttonType];
+        $(button).css('display', 'inline-block');
+        $(button).css('text-align', 'center');
+
+  const link = $(button).find('.link');
+        link.css('color', 'white');
+        link.css('border-radius', '2px');
+        link.css('font-size', '12px');
+        link.css('padding', '2px 10px');
+        link.css('margin-right', '5px');
+        link.css('text-decoration', 'none');
+
+    // button.data('powertip', tips[buttonType]);
+    // button.powerTip({
+    //     fadeInTime: 30,
+    //     fadeOutTime: 30,
+    //     closeDelay: 0,
+    //     intentPollInterval: 0
+    // });
 
     $('#watch_title_box .meta').css('overflow', 'visible');
 
+    // $(button).data('balloon', 'tips[buttonType]');
+    // $(button).data('balloon-pos', 'up');
+    // $('span').data('balloon', 'tips[buttonType]');
+    // $('span').data('balloon-pos', 'up');
+    // $('button[data-balloon]').css('z-index', '9999');
+    // $('button[data-balloon]').css('position', 'absolute');
     return button;
 }
 

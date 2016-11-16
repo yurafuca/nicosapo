@@ -121,3 +121,128 @@ function getOfficialOnair()
 
 	return promise;
 }
+
+function getStatusByBroadcast(broadcastId)
+{
+  return new Promise(function(resolve, reject) {
+    getStatus(broadcastId).then(function(response) {
+      if(response)
+        resolve(response);
+      else
+        reject();
+    }); 
+  });
+}
+
+function getStatusByCommunity(communityId)
+{
+  return new Promise(function(resolve, reject) {
+    getStatus(communityId).then(function(response) {
+      if(response)
+        resolve(response);
+      else
+        reject();
+    }); 
+  });
+}
+
+function getStatus(param)
+{
+  return new Promise(function(resolve, reject) {
+    const endpoint = "http://watch.live.nicovideo.jp/api/getplayerstatus?v=";
+    const posting  = $.get(endpoint + param);
+
+    posting.done(function(response) {
+      let status = $(response).find('getplayerstatus').attr('status');
+      console.info('[imanani][getStatus] response = ', response);
+      resolve(response);
+    });
+  });
+}
+
+function isOffAir(broadcastId)
+{
+	const theBroadcastId = broadcastId;
+  return new Promise(function(resolve, reject) {
+    getStatusByBroadcast(broadcastId).then(function(response) {
+      const errorCode = $(response).find('error code').text();
+
+      // OFFAIR or ERROR.
+      if (errorCode) {
+         switch(errorCode) {
+         	case 'comingsoon':
+             	console.log(theBroadcastId + ' is COMINGSOON');
+             	resolve(true);
+             	return;
+             case 'premium_only':
+             	console.log(theBroadcastId + ' is PREMIUMONLY');
+             	resolve(true);
+             	return;
+           	case 'closed':
+	             console.log(theBroadcastId + ' is OFFAIR');
+	             resolve(true);
+	             return;
+           case 'error':
+	             console.log(theBroadcastId + ' is ERROR.');
+	             reject();
+	             return;
+         }
+      }
+
+      // ONAIR
+      const broadcastId = $(response).find('stream id').text();
+      console.log(broadcastId + ' is ONAIR');
+      resolve(false);
+    });
+  });
+}
+
+function isStartedBroadcast(communityId)
+{
+	const theCommunityId = communityId;
+  return new Promise(function(resolve, reject) {
+    getStatusByCommunity(communityId).then(function(response) {
+      const errorCode = $(response).find('error code').text();
+      const result = {
+        isStarted: undefined,
+        nextBroadcastId: undefined
+      };
+
+      // OFFAIR or ERROR.
+      if (errorCode) {
+         switch(errorCode) {
+         	case 'comingsoon':
+             	console.log(theCommunityId + ' is COMINGSOON');
+             	resolve(true);
+             	return;
+           case 'closed':
+             console.log(theCommunityId + ' is NOT_READY');
+             result.isStarted = false;
+             resolve(result);
+             return;
+           case 'error':
+             console.log(theCommunityId + ' is ERROR.');
+             reject();
+             return;
+         }
+      }
+
+      // OFFAIR or ONAIR.
+      const endTime = $(response).find('end_time').text();
+
+      if (Date.now() < (endTime + '000')) {
+        console.log($(response).find('stream id').text() + ' is NOW_OPEND.');
+        result.isStarted = true;
+        result.nextBroadcastId = $(response).find('stream id').text();
+      } else {
+        console.log('foobar');
+        console.log('[imanani][isStartedBroadcast] Date.now = ' + Date.now());
+        console.log('[imanani][isStartedBroadcast] endTime = ' + endTime + '000');
+        console.log(_communityId + ' is NOT_READY.');
+        result.isStarted = false;
+      }
+
+      resolve(result);
+    });
+  });
+}

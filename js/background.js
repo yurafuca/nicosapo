@@ -15,6 +15,46 @@ class Account {
 	}
 }
 
+class Api
+ {
+    static getStatusByBroadcast(broadcastId)
+    {
+      return new Promise(function(resolve, reject) {
+        Api.getStatus(broadcastId).then(function(response) {
+          if(response)
+            resolve(response);
+          else
+            reject();
+        }); 
+      });
+    }
+
+    static getStatusByCommunity(communityId)
+    {
+      return new Promise(function(resolve, reject) {
+        Api.getStatus(communityId).then(function(response) {
+          if(response)
+            resolve(response);
+          else
+            reject();
+        }); 
+      });
+    }
+
+    static getStatus(param)
+    {
+      return new Promise(function(resolve, reject) {
+        const endpoint = "http://watch.live.nicovideo.jp/api/getplayerstatus?v=";
+        const posting  = $.get(endpoint + param);
+
+        posting.done(function(response) {
+          let status = $(response).find('getplayerstatus').attr('status');
+          console.info('[imanani][getStatus] response = ', response);
+          resolve(response);
+        });
+      });
+    }
+}
 
 
 function loadUserCasts()
@@ -55,7 +95,8 @@ $(function()
 	chrome.browserAction.setBadgeBackgroundColor({color: "#ff6200"});
 
 	refresh();
-	setInterval(refresh, 1000 * 20);
+    setInterval(refresh, 1000 * 20);
+	setInterval(autoEnterProgramRoutine, 1000 * 10);
 });
 
 function refresh()
@@ -120,20 +161,28 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     	if (localStorage[request.key])
     		storagedData = JSON.parse(localStorage[request.key]);
     	else
-    		storagedData = [];
+    		storagedData = {};
     	sendResponse(storagedData);
     }
 
     // saveToNestedLocalStorage
-    if (request.purpose == 'saveToNestedLocalStorage') {
-    	let storagedData;
-    	if (localStorage[request.key])
+    // localStorage->{id->{state, test, ...}, id->{state, test, ...}}
+    if (request.purpose == 'saveToNestedLocalStorage') 
+{    	let storagedData;
+
+    	if (localStorage[request.key]) {
     		storagedData = JSON.parse(localStorage[request.key]);
-    	else
-    		storagedData = [];
-    	let newData = {key: request.innerKey, value: request.innerValue};
-    	// storagedData[request.innerKey] = request.innerValue;
-    	storagedData.push(newData);
+        }
+    	else {
+    		storagedData = {};
+        }
+
+        storagedData[request.innerKey] = {};
+        storagedData[request.innerKey]['state'] = request.innerValue.state;
+        storagedData[request.innerKey]['thumbnail'] = request.innerValue.thumbnail;
+        storagedData[request.innerKey]['title'] = request.innerValue.title;
+        storagedData[request.innerKey]['openDate'] = request.innerValue.openDate;
+    	// storagedData[request.innerKey]['test'] = 'testvalue';
     	localStorage[request.key] = JSON.stringify(storagedData);
     	return;
     }
@@ -141,13 +190,8 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     // removeFromNestedLocalStorage
     if (request.purpose == 'removeFromNestedLocalStorage') {
     	let storagedData = JSON.parse(localStorage[request.key]);
-    	for (let i = 0; i < storagedData.length; i++) {
-    		if (storagedData[i]['key'] == request.innerKey) {
-    			console.info('[imanani][removeFromNestedLocalStorage] deleted ', storagedData[i]);
-    			storagedData.splice(i, 1);
-    			// break; // Do not break.
-    		}
-    	}
+        console.info('[imanani] Delete storagedData[innerKey] ', storagedData[request.innerKey]);
+        delete storagedData[request.innerKey];
     	localStorage[request.key] = JSON.stringify(storagedData);
     	return;
     }
@@ -156,6 +200,87 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 function enableOrNull(value) {
 	return (value === 'enable') || value == null;
 }
+
+
+function autoEnterProgramRoutine()
+{
+    let storagedData;
+
+    // TODO: Fix.
+    if (localStorage['autoEnterProgramList']) {
+        storagedData = JSON.parse(localStorage['autoEnterProgramList']);
+    }
+    else {
+        storagedData = {};
+    }
+
+    console.log("");
+    console.log("");
+    console.log("");
+
+    let races = [];
+
+    for (id in storagedData) {
+        races.push(test.bind(null, id, storagedData));
+    }
+
+    console.info(races);
+
+    for (let i = 0; i < races.length; i++) {
+        races[i].call(null);
+    }
+
+}
+
+function test(id, storagedData)
+{
+    return new Promise(function(resolve) {
+        console.info('[imanani][●autoEnterProgram] id = ', id);
+        isOffAir(id).then(function(result) {
+            // ONAIR
+            if (result == false) {
+                console.info('[imanani][○autoEnterProgram] id = ', id);
+                chrome.tabs.create({url: 'http://live.nicovideo.jp/watch/' + id}, function() {
+                    // Remove.
+                    console.info('[imanani] Delete storagedData[' + id + '] ', storagedData[id]);
+                    delete storagedData[id];
+                    localStorage['autoEnterProgramList'] = JSON.stringify(storagedData);
+                    resolve();
+                });
+            }
+            resolve();
+        });
+    });
+}
+
+// function autoEnterCommunityRoutine()
+// {
+// 	let storagedData;
+
+// 	// TODO: Fix.
+// 	if (localStorage['autoCommunityProgram']) {
+// 		storagedData = JSON.parse(localStorage[request.key]);
+// 	}
+// 	else {
+// 		storagedData = {};
+// 	}
+
+// 	// TODO: foreach.
+// 	for (id in storagedData) {
+// 		isStartedBroadcast(id).then(function(result) {
+// 			if (result == true) {
+//                 let lastState = storagedData[i]['value'];
+//                 if (lastState = 'offair' || lastState == 'initialized') {
+//                     // openNewtab;
+//                 }
+//                 storagedData[i]['value'] = 'onair';
+// 			}
+//             else {
+//                 storagedData[i]['value'] = 'offair';
+//             }
+// 		});
+// 	}
+// }
 
 function showNotification(newInfos)
 {

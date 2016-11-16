@@ -12,8 +12,8 @@ button[data-balloon] {
   -moz-opacity: 0;
   opacity: 0;
   pointer-events: none;
-  -webkit-transition: all 0.01s ease-out 0.01s;
-  transition: all 0.01s ease-out 0.01s;
+  -webkit-transition: all 0.01s ease-out 0.00s;
+  transition: all 0.00s ease-out 0.00s;
   bottom: 100%;
   left: 50%;
   position: absolute;
@@ -50,10 +50,16 @@ button[data-balloon] {
 [data-balloon]:hover:after,
 [data-balloon][data-balloon-visible]:after {
   -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
-  filter: alpha(opacity=100);
+
+/*  filter: alpha(opacity=100);
   -khtml-opacity: 1;
   -moz-opacity: 1;
-  opacity: 1;
+  opacity: 1;*/
+  filter: alpha(opacity=91);
+  -khtml-opacity: 0.91;
+  -moz-opacity: 0.91;
+  opacity: 0.91;
+
   pointer-events: auto;
   -webkit-transform: translate(-50%, 0);
   -ms-transform: translate(-50%, 0);
