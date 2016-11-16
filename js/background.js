@@ -241,6 +241,13 @@ function test(id, storagedData)
             if (result == false) {
                 console.info('[imanani][○autoEnterProgram] id = ', id);
                 chrome.tabs.create({url: 'http://live.nicovideo.jp/watch/' + id}, function() {
+                    let options = {
+                      type: "basic",
+                      title: "自動入場",
+                      message: storagedData[id]['title'],
+                      iconUrl: storagedData[id]['thumbnail']
+                    };
+                    chrome.notifications.create(id, options);
                     // Remove.
                     console.info('[imanani] Delete storagedData[' + id + '] ', storagedData[id]);
                     delete storagedData[id];
