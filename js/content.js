@@ -13,7 +13,7 @@ class PageType
 
     static isStandByPage()
     {
-      return ($('#gates').length === 0) && ($('.gate_title') > 0);
+      return ($('#gates').length === 0) && ($('.gate_title').length > 0);
     }
 
     static isGatePage()
@@ -173,8 +173,8 @@ $(function()
 { 
   initialize();
 
-  let autoRedirectButton = makeButton('autoRedirect');
-  let autoEnterProgramButton = makeButton('autoEnterProgram');
+  let autoRedirectButton       = makeButton('autoRedirect');
+  let autoEnterProgramButton   = makeButton('autoEnterProgram');
   let autoEnterCommunityButton = makeButton('autoEnterCommunity');
 
   console.info('[imanani] isModernCast = ', PageType.isModernCast());

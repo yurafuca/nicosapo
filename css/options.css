@@ -24,6 +24,8 @@ body {
     line-height: 38px;
     font-weight: bold;
     /*text-shadow: 0 1px 0 #fff;*/
+
+    margin-bottom: 30px;
 }
 .content {
     padding-bottom: 100px;
@@ -36,7 +38,7 @@ body {
 }
 .wrapper {
     width:700px;
-    margin-top: 70px;
+    margin-bottom: 30px;
     margin-right: auto;
     margin-left : auto;
     border-radius: 3px;
@@ -90,6 +92,10 @@ h1 {
 h3 {
     font-size: 13px;
     color: #333;
+}
+.ended {
+    color: #911;
+    font-weight: bold;
 }
 
 

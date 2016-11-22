@@ -182,7 +182,6 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
         storagedData[request.innerKey]['thumbnail'] = request.innerValue.thumbnail;
         storagedData[request.innerKey]['title'] = request.innerValue.title;
         storagedData[request.innerKey]['openDate'] = request.innerValue.openDate;
-    	// storagedData[request.innerKey]['test'] = 'testvalue';
     	localStorage[request.key] = JSON.stringify(storagedData);
     	return;
     }

@@ -55,6 +55,30 @@ class ResultMessage
     }
 }
 
+class Time
+{
+    static toJpnString(milisec)
+    {
+        const date = new Date(milisec);
+        const days = {
+            0: '日',
+            1: '月',
+            2: '火',
+            3: '水',
+            4: '木',
+            5: '金',
+            6: '土'
+        };
+        return [
+            date.getFullYear(),
+            date.getMonth() + 1,
+            date.getDate()
+        ].join( '/' ) + ' '
+        + '(' + days[date.getDay()] + ') '
+        + date.toLocaleTimeString();
+    }
+}
+
 $(function()
 {
     SettingPage.setAllSettings();
@@ -100,6 +124,7 @@ $(function()
             `);
             $('.listgroup').append(subscribe);
         }
+        // alert((Date.parse(response[id]['openDate'])));
         for (id in response) {
             let subscribe = $(`
                 <div class="listgroup-item clearfix">
@@ -121,7 +146,10 @@ $(function()
             $(subscribe).find('.developer-app-name').text(response[id]['title']);
             $(subscribe).find('.developer-app-name').attr({href: 'http://live.nicovideo.jp/gate/' + id});
             $(subscribe).find('.list-group-text-block img').attr({src: response[id]['thumbnail']});
-            $(subscribe).find('.meta-description').text('openDate: ' + response[id]['openDate']);
+            $(subscribe).find('.meta-description').html(
+                'openDate: ' + Time.toJpnString(Date.parse(response[id]['openDate'])) + 
+                ((Date.parse(response[id]['openDate']) < Date.now()) ? '<span class="ended"> ⛔ この番組は終了しました</span>' : '')
+            );
             $(subscribe).find('.btn-danger').attr('data-id', id);
             // $(subscribe).find('.meta-description').html(response[id]['openDate'] + ' · Owned by <a href="' + response[id]['communityId'] + '">' + response[id]['communityName'] + '</a>');
             $('.listgroup').append(subscribe);
