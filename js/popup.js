@@ -1,5 +1,34 @@
 const bg = chrome.extension.getBackgroundPage();
 
+class Massages
+{
+	static show(type)
+	{
+		const messages = {
+			NOT_LOGINED: 'ニコニコ動画にログインしていません．ログインしてから再度試してください．',
+			ITEM_IS_ZERO: '放送中の番組がありません．'
+		};
+
+		const message = $('<div class="message"></div>');
+			  message.text(messages[type]);
+
+		const communities = $('#communities');
+			  communities.html(message);
+	}
+}
+
+class Loading
+{
+	static start() {
+		$('#communities').empty();
+		$('#communities').addClass('nowloading');
+	}
+
+	static done() {
+		$('#communities').removeClass('nowloading');
+	}
+}
+
 $(function()
 {
 	loadBroadcasts('user');
@@ -27,7 +56,7 @@ function loadBroadcasts(liveType)
 		.then(isLogined)
 			.catch(function(e) {
 				Loading.done();
-				showErrorMessage();
+				Massages.show('NOT_LOGINED');
 				reject();
 			})
 		.then(function() {
@@ -40,7 +69,7 @@ function loadBroadcasts(liveType)
 						return new Promise(function(resolve, reject) {
 							if ($videoInfos.length === 0) {
 								Loading.done();
-								showZeroMessage();
+								Massages.show('ITEM_IS_ZERO');
 								reject();
 							}
 							resolve($videoInfos);
@@ -134,29 +163,13 @@ function show($doms)
 	});
 }
 
-function showErrorMessage()
-{
-	var $message = $('<div class="message"></div>');
-	$message.text('ニコニコ動画にログインしていません．ログインしてから再度試してください．');
-
-	$('#communities').html($message);
-}
-
-function showZeroMessage()
-{
-	var $message = $('<div class="message"></div>');
-	$message.text('放送中の番組がありません．');
-
-	$('#communities').html($message);
-}
-
 function append($dom, $videoInfo)
 {
 	var thumbnail	= $videoInfo.find('community thumbnail').text();
 	var title		= $videoInfo.find('video title').text();
 	var id			= $videoInfo.find('video id').text();
 
-	var $community = $(`
+	var community = $(`
 		<div class="community">
 			<a href="" target="_blank">
 				<span class="thumbnail"></span>
@@ -164,14 +177,19 @@ function append($dom, $videoInfo)
 		</div>
 	`);
 
-	$('.thumbnail', $community).css('background-image', 'url(' + thumbnail + ')');
-	$('a', $community).attr('href', "http://live.nicovideo.jp/watch/" + id);
+	const thumbnailProp = 'url(' + thumbnail + ')';
+	const livePageUrl   = 'http://live.nicovideo.jp/watch/' + id;
+
+	community.find('.thumbnail').css('background-image', thumbnailProp);
+	community.find('a').attr('href', livePageUrl);
 
 	const charPerLine = 16;
-	$community.data('powertip', wordWrap(title, charPerLine));
+	const formattedTitle = wordWrap(title, charPerLine);
+	
+	community.data('powertip', formattedTitle);
 	
 	$.fn.powerTip.smartPlacementLists.n = ['n', 's', 'ne', 'nw', 'e', 'w', 'n'];
-	$community.powerTip({
+	community.powerTip({
 		smartPlacement: true,
 		fadeInTime: 30,
 		fadeOutTime: 30,
@@ -179,7 +197,7 @@ function append($dom, $videoInfo)
 		intentPollInterval: 0
 	});
 
-	$dom.append($community);
+	$dom.append(community);
 }
 
 function wordWrap(text, length)
@@ -188,14 +206,3 @@ function wordWrap(text, length)
     return text.replace(/[\r|\r\n|\n]/g, "").replace(reg, "$1" + "<br>");
 }
 
-class Loading
-{
-	static start() {
-		$('#communities').empty();
-		$('#communities').addClass('nowloading');
-	}
-
-	static done() {
-		$('#communities').removeClass('nowloading');
-	}
-}
