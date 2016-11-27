@@ -8,10 +8,11 @@ class SettingPage
 
     static getAllSettings() {
         var settings = new Object();
-        settings['options.popup.enable']           = $('input[name=options-popup-enable]:checked').val();
-        settings['options.playsound.enable']       = $('input[name=options-playsound-enable]:checked').val();
-        settings['options.soundfile']              = $('#options-soundfile :selected').val();
-        settings['options.autoJump.enable'] = $('input[name=options-autoJump-enable]:checked').val();
+        settings['options.popup.enable']     = $('input[name=options-popup-enable]:checked').val();
+        settings['options.playsound.enable'] = $('input[name=options-playsound-enable]:checked').val();
+        settings['options.soundfile']        = $('#options-soundfile :selected').val();
+        settings['options.playsound.volume'] = $("input[name=options-playsound-volume]").val();
+        settings['options.autoJump.enable']  = $('input[name=options-autoJump-enable]:checked').val();
         console.info('[imanani][getAllSettings] settings = ', settings);
         return settings;
     }
@@ -26,6 +27,10 @@ class SettingPage
         setting  = localStorage.getItem('options.playsound.enable');
         if (setting != null)
             $('[name=options-playsound-enable]').val([setting]);
+
+        setting  = localStorage.getItem('options.playsound.volume');
+        if (setting != null)
+            $('[name=options-playsound-volume]').val([setting]);
 
         setting  = localStorage.getItem('options.soundfile');
         if (setting != null)
@@ -106,6 +111,14 @@ $(function()
             innerKey: id
         });
         $(this).closest('.listgroup-item').remove();
+    });
+
+    $(document).on('click','.soundtest',function() {
+        const soundfile = $('#options-soundfile :selected').val();
+        const volume    = $("input[name=options-playsound-volume]").val();
+        const audio     = new Audio('../sound/' + soundfile);
+        audio.volume    = volume;
+        audio.play();
     });
 
     chrome.runtime.sendMessage(

@@ -121,7 +121,10 @@ function refresh()
 					console.log('hoge');
 					if (enableOrNull(localStorage.getItem('options.playsound.enable'))) {
 						const soundfile = localStorage.getItem('options.soundfile') || 'ta-da.mp3';
-						(new Audio('sound/' + soundfile)).play();
+                        const volume    = localStorage.getItem('options.playsound.volume') || 1.0;
+                        const audio     = new Audio('sound/' + soundfile);
+                        audio.volume    = volume;
+						audio.play();
 					}
 					if (enableOrNull(localStorage.getItem('options.popup.enable'))) {
 						showNotification(infos);

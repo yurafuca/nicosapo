@@ -13,11 +13,12 @@
     font-size: 12px;
     padding: 2px 10px;
     margin-right: 5px;
+    margin-left: 5px;
 }
 
 .on_off_button > .link.switch_is_on {
     background-image: linear-gradient(to bottom,#DC7519,#C63D1B);
-    border-color: #A71903;
+    border: solid 1px #A71903;
 }
 
 .on_off_button > .link.switch_is_on:hover {
@@ -27,7 +28,6 @@
 
 .on_off_button > .link.switch_is_off {
     background-image: linear-gradient(to bottom,#444,#222);
-    border-color: #A71903;
 }
 
 .on_off_button > .link.switch_is_off:hover {
