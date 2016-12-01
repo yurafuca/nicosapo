@@ -2,13 +2,8 @@ let comuHolder = new ComuHolder();
 let newArrival = new NewArrival();
 let broadcastTabs = [];
 
-class Account {
-
-	constructor()
-	{
-		// Do nothing.
-	}
-
+class Account
+{
 	static isLogined()
 	{
 		return isLogined();
@@ -139,7 +134,8 @@ function refresh()
 		});
 }
 
-chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+chrome.runtime.onMessage.addListener(function(request, sender, sendResponse)
+{
 	// getFromLocalStorage
     if (request.purpose == 'getFromLocalStorage') {
     	sendResponse(localStorage[request.key]);
