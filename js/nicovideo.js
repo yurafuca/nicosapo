@@ -104,6 +104,30 @@ function getCheckList()
 	return promise;
 }
 
+function getFutureOnair(index)
+{
+    console.log(index);
+
+  var promise = new Promise(function(resolve, reject) {
+
+    let endpoint = "http://live.nicovideo.jp/api/getindexzerostreamlist?status=comingsoon&sort=timeshift_reserved_count&zpage=";
+    console.log(index);
+    let posting = $.get(endpoint + index);
+
+    posting.done(function(response) {
+      // const theResponse = $.parseJSON(response);
+      // console.info(response);
+      const feature_lives = response['reserved_stream_list'];
+      if (feature_lives) {
+        console.info('[imanani][getOfficialOnair] feature_lives = ', feature_lives);
+        resolve(feature_lives);
+      }
+    });
+  });
+
+  return promise;
+}
+
 function getOfficialOnair()
 {
 	var promise = new Promise(function(resolve, reject) {

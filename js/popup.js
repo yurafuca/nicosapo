@@ -99,12 +99,20 @@ function loadBroadcasts(liveType)
 								thumbnail = $(cast).find('.info a img').attr('src');
 
 							var $community = $(`
-								<div class="community">
-									<a href="" target="_blank">
-										<span class="thumbnail"></span>
-									</a>
+								<div class="community-hover-wrapper">
+									<div class="side-corner-tag enabled">
+										<div class="community">
+											<a href="" target="_blank">
+												<span class="thumbnail"></span>
+											</a>
+										</div>
+										<p><span class="reserved-message">予約枠</span></p>
+									</div>
 								</div>
 							`);
+
+							$community.find('.side-corner-tag').removeClass('side-corner-tag');
+							$community.find('p').remove();
 
 							$('.thumbnail', $community).css('background-image', 'url(' + thumbnail + ')');
 							$('a', $community).attr('href', "http://live.nicovideo.jp/watch/" + id);
@@ -155,7 +163,7 @@ function show($doms)
 	return new Promise(function(resolve, reject) {
 		var length = $doms.length;
 		$doms.each(function(index) {
-			append($('#communities'), $(this));
+			append($(this));
 			if (index == length - 1) {
 				resolve();
 			}
@@ -163,17 +171,25 @@ function show($doms)
 	});
 }
 
-function append($dom, $videoInfo)
+function append($videoInfo)
 {
 	var thumbnail	= $videoInfo.find('community thumbnail').text();
 	var title		= $videoInfo.find('video title').text();
 	var id			= $videoInfo.find('video id').text();
 
+	var startTime   = Date.parse($videoInfo.find('open_time').text());
+	var isReserved  = (Date.now() < startTime);
+
 	var community = $(`
-		<div class="community">
-			<a href="" target="_blank">
-				<span class="thumbnail"></span>
-			</a>
+		<div class="community-hover-wrapper">
+			<div class="side-corner-tag enabled">
+				<div class="community">
+					<a href="" target="_blank">
+						<span class="thumbnail"></span>
+					</a>
+				</div>
+				<p><span class="reserved-message">予約枠</span></p>
+			</div>
 		</div>
 	`);
 
@@ -183,12 +199,29 @@ function append($dom, $videoInfo)
 	community.find('.thumbnail').css('background-image', thumbnailProp);
 	community.find('a').attr('href', livePageUrl);
 
-	const charPerLine = 16;
-	const formattedTitle = wordWrap(title, charPerLine);
+	const charPerLine   = 16;
+	const wrappedTitle  = wordWrap(title, charPerLine);
+	let   tooltipText   = wrappedTitle;
+
+	if (isReserved == true) {
+		const startTimeInfo = '<span style="color:#adff2f">' + $videoInfo.find('open_time').text() + ' に開始 ' + '</span><br>';
+		        tooltipText = startTimeInfo + tooltipText;
+		community.find('.side-corner-tag').removeClass('disabled');
+		community.find('.side-corner-tag').addClass('enabled');
+		const startDate = new Date(startTime).getDate();
+		const startDay  = Time.toJpnDay(startTime);
+		community.find('.reserved-message').text(startDate + '(' + startDay + ')');
+	} else {
+		community.find('.side-corner-tag').removeClass('side-corner-tag');
+		community.find('p').remove();
+	}
+
+	console.log(tooltipText);
 	
-	community.data('powertip', formattedTitle);
+	community.data('powertip', tooltipText);
 	
 	$.fn.powerTip.smartPlacementLists.n = ['n', 's', 'ne', 'nw', 'e', 'w', 'n'];
+
 	community.powerTip({
 		smartPlacement: true,
 		fadeInTime: 30,
@@ -197,7 +230,7 @@ function append($dom, $videoInfo)
 		intentPollInterval: 0
 	});
 
-	$dom.append(community);
+	$('#communities').append(community);
 }
 
 function wordWrap(text, length)
@@ -206,3 +239,41 @@ function wordWrap(text, length)
     return text.replace(/[\r|\r\n|\n]/g, "").replace(reg, "$1" + "<br>");
 }
 
+class Time
+{
+    static toJpnString(milisec)
+    {
+        const date = new Date(milisec);
+        const days = {
+            0: '日',
+            1: '月',
+            2: '火',
+            3: '水',
+            4: '木',
+            5: '金',
+            6: '土'
+        };
+        return [
+            date.getFullYear(),
+            date.getMonth() + 1,
+            date.getDate()
+        ].join( '/' ) + ' '
+        + '(' + days[date.getDay()] + ') '
+        + date.toLocaleTimeString();
+    }
+
+    static toJpnDay(milisec)
+    {
+    	const days = {
+            0: '日',
+            1: '月',
+            2: '火',
+            3: '水',
+            4: '木',
+            5: '金',
+            6: '土'
+        };
+
+        return days[new Date(milisec).getDay()];
+    }
+}

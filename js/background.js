@@ -62,6 +62,11 @@ function loadOfficialCasts()
 	return loadAnyCasts('official');
 }
 
+// function loadFutureCasts()
+// {
+//     return loadAnyCasts('future');
+// }
+
 function loadAnyCasts(liveType)
 {
 	return new Promise(function(resolve, reject) {
@@ -69,9 +74,10 @@ function loadAnyCasts(liveType)
 		if (liveType == 'user') {
 			getSessionId().then(getSubscribe).then(normalize).then(
 				function($videoInfos) {
-					var $videoInfosNow = removeReservation($videoInfos);
-					console.info($videoInfosNow);
-					resolve($videoInfosNow);
+					// var $videoInfosNow = removeReservation($videoInfos);
+					// console.info($videoInfosNow);
+					// resolve($videoInfosNow);
+                    resolve($videoInfos);
 				}
 			).catch(reject);
 		}
@@ -82,6 +88,12 @@ function loadAnyCasts(liveType)
 				resolve(official_lives);
 			});
 		}
+        // if (liveType == 'future') {
+        //     getFutureOnair().then(function(future_lives) {
+        //         console.info(future_lives);
+        //         resolve(future_lives);
+        //     });
+        // }
 	});
 }
 
@@ -107,7 +119,7 @@ function refresh()
 		})
 		.then(function(videoInfos) {
 			console.info('[imanani] videoInfos = ', videoInfos);
-			count(videoInfos).then(setBadgeText);
+			count(removeReservation(videoInfos)).then(setBadgeText);
 			$.each(newArrival.get(videoInfos), function(index, infos) {
 				if (comuHolder.isNew($(infos).find('community'))) {
 					// do nothing.
@@ -314,9 +326,10 @@ function loadLiveStreams(liveType)
 		if (liveType == 'user') {
 			getSessionId().then(getSubscribe).then(normalize).then(
 				function($videoInfos) {
-					var $videoInfosNow = removeReservation($videoInfos);
-					console.info($videoInfosNow);
-					resolve($videoInfosNow);
+                    // var $videoInfosNow = removeReservation($videoInfos);
+                    // console.info($videoInfosNow);
+                    // resolve($videoInfosNow);
+                    resolve($videoInfos);
 				}
 			).catch(reject);			
 		}
@@ -348,51 +361,72 @@ function setBadgeText(value)
 	});
 }
 
-function compareDate(first, second)
-{
-	var parsedFirst		= Date.parse(first);
-	var parsedSecond	= Date.parse(second);
-
-	if (first == 'now') {
-		parsedFirst = Date.now();
-	}
-	if (second == 'now') {
-		parsedSecond = Date.now();
-	}
-
-	if (parsedFirst == parsedSecond) {
-		return 0;
-	}
-	if (parsedFirst > parsedSecond) {
-		return 1;
-	}
-	if (parsedFirst < parsedSecond) {
-		return -1;
-	}
-
-	throw new Error("Couldn't compare date correctly");
-}
-
 function removeReservation($videoInfos)
 {
-	var arrayInfos = $videoInfos.get();
+    var infosArray = $videoInfos.get();
+    var result = [];
 
-	$(arrayInfos).each(function(index) {
-		var nowTime		= Date.now();
-		var startTime	= $(this).find('open_time').text();
-		if (compareDate('now', startTime) > 0) {
-			// do nothing.
-		} else {
-			delete arrayInfos[index];
-			// JavaScript dosen't adjust .length value when we delete array item(s).
-			arrayInfos.length--;
-		}
-	});
+    $(infosArray).each(function(index) {
+        var currentTime = Date.now();
+        var startTime   = Date.parse($(infosArray[index]).find('open_time').text());
+        if (currentTime > startTime) {
+            result.push(infosArray[index]);
+        } else {
+            // Do nothing (A reservation program).
+        }
+    });
 
-	var $videoInfosNow = $(arrayInfos);
-
-	return $videoInfosNow;
+    return $(result);
 }
+
+// function compareDate(first, second)
+// {
+// 	var parsedFirst		= Date.parse(first);
+// 	var parsedSecond	= Date.parse(second);
+
+// 	if (first == 'now') {
+// 		parsedFirst = Date.now();
+// 	}
+// 	if (second == 'now') {
+// 		parsedSecond = Date.now();
+// 	}
+
+// 	if (parsedFirst == parsedSecond) {
+// 		return 0;
+// 	}
+// 	if (parsedFirst > parsedSecond) {
+// 		return 1;
+// 	}
+// 	if (parsedFirst < parsedSecond) {
+// 		return -1;
+// 	}
+
+// 	throw new Error("Couldn't compare date correctly");
+// }
+
+// function filterPrograms($videoInfos, filterTarget)
+// {
+// 	var infosArray = $videoInfos.get();
+//     var result = [];
+
+
+
+// 	$(infosArray).each(function(index) {
+// 		var currentTime = Date.now();
+// 		var startTime	= Date.parse($(this).find('open_time').text());
+// 		if (currentTime.getTime() > startTime.getTime()) {
+// 			if (removeTarget === 'reservation') {
+//                 result.push(infosArray[index]);
+//             }
+// 		} else {
+//             if (removeTarget === 'onair') {
+//                 result.push(infosArray[index]);
+//             }
+// 		}
+// 	});
+
+// 	return $(result);
+// }
 
 function normalize(xml)
 {

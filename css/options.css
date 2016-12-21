@@ -242,9 +242,13 @@ img {
     font-weight: bold;
     color: #000;
 }
+.list-group-text-block .meta-title .short {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    width: 100px;
+}
 .list-group-text-block .meta-description {
     display: inline-block;
-    width: 560px;
 }
 .text-small {
     font-size: 12px !important;

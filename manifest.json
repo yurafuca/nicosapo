@@ -1,7 +1,7 @@
 {
     "name": "にこさぽ （ニコ生サポート）",
 	"manifest_version": 2,
-    "version": "1.7.1",
+    "version": "1.7.2",
      "browser_action": {
 	      "default_icon": "image/icon.png",
 	      "default_title": "放送中の番組を確認する",
@@ -29,7 +29,7 @@
     ],
     "background": {
 	    "scripts": [
-            "js/jquery-2.1.4.min.js",
+            "js/libs/jquery-2.1.4.min.js",
             "js/newArrival.js",
             "js/comuHolder.js",
             "js/nicovideo.js",
@@ -40,7 +40,7 @@
         {
           "matches": ["http://live.nicovideo.jp/watch/*", "http://live2.nicovideo.jp/watch/*", "http://live.nicovideo.jp/gate/*"],
           "js": [
-                "js/jquery-2.1.4.min.js",
+                "js/libs/jquery-2.1.4.min.js",
                 "js/nicovideo.js",
                 "js/content.js"
             ],
