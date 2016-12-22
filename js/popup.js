@@ -60,110 +60,34 @@ function loadBroadcasts(liveType)
 				reject();
 			})
 		.then(function() {
-			if (liveType == 'user') {
-				Promise.resolve().then(function()
-				{
-					return bg.loadUserCasts();
-				})
-					.then(function($videoInfos) {
-						return new Promise(function(resolve, reject) {
-							if ($videoInfos.length === 0) {
-								Loading.done();
-								Massages.show('ITEM_IS_ZERO');
-								reject();
-							}
-							resolve($videoInfos);
-						});
-					})
-					.then(show)
-					.then(Loading.done);
-			}
-			if (liveType == 'official') {
-				Promise.resolve().then(function()
-				{
-					return bg.loadOfficialCasts();
-				})
-				.then(function(official_casts) {
-					console.info(official_casts);
-						$.each(official_casts, function(index, cast) {
-							let title     = $(cast).find('.video_title').text();
-							const id        = 'lv' + $(cast).find('.video_id').text();
-							const commu_id  = $(cast).find('.video_text a').attr('href');
-							const regexp    = /http\:\/\/ch.nicovideo.jp\/channel\/(.+)/;
-							const resultarr = regexp.exec(commu_id);
-							let thumbnail   = undefined;
-
-							if (resultarr != null)
-								thumbnail = 'http://icon.nimg.jp/channel/' + resultarr[1] + '.jpg';
-							else 
-								thumbnail = $(cast).find('.info a img').attr('src');
-
-							var $community = $(`
-								<div class="community-hover-wrapper">
-									<div class="side-corner-tag enabled">
-										<div class="community">
-											<a href="" target="_blank">
-												<span class="thumbnail"></span>
-											</a>
-										</div>
-										<p><span class="reserved-message">予約枠</span></p>
-									</div>
-								</div>
-							`);
-
-							$community.find('.side-corner-tag').removeClass('side-corner-tag');
-							$community.find('p').remove();
-
-							$('.thumbnail', $community).css('background-image', 'url(' + thumbnail + ')');
-							$('a', $community).attr('href', "http://live.nicovideo.jp/watch/" + id);
-
-							const charPerLine = 16;
-							$community.data('powertip', wordWrap(title, charPerLine));
-
-							// TODO: Fix.
-							const hasManyCasts = official_casts.length > 35;
-							const isTopRow = index < 5;
-							const offset = (hasManyCasts && !isTopRow) ? -219 : 10;
-							const smartPlacement = index < 5 ? false : true;
-
-							// TODO: Fix.
-							const manualPositions = ['se', 's', 's', 's', 'sw'];
-							const placement = (index < 5) ? manualPositions[index] : 'n';
-							console.log(offset);
-
-							// TODO: Fix.
-							$.fn.powerTip.smartPlacementLists.n = ['n', 's', 'ne', 'nw', 'e', 'w', 'n'];
-
-							// TODO: Fix.
-							$community.powerTip({
-								smartPlacement: smartPlacement,
-								placement: placement,
-								fadeInTime: 30,
-								fadeOutTime: 30,
-								closeDelay: 0,
-								intentPollInterval: 0,
-								offset: offset
-							});
-
-							// console.info($community);
-							$('#communities').append($community);
-							if (index == official_casts.length - 1) {
-								Loading.done();
-							}
-						});
-					});
-			}
-		});
+			return bg.loadCasts(liveType);
+		})
+		.then(function(programs) {
+			console.info(programs);
+			return new Promise(function(resolve, reject) {
+				if (programs.length === 0) {
+					Loading.done();
+					Massages.show('ITEM_IS_ZERO');
+					reject();
+				}
+				resolve(programs);
+			});
+		})
+		.then(function(programs) {
+			return show(programs, liveType);
+		})
+		.then(Loading.done);
 
 }
 
-function show($doms)
+function show(programs, liveType)
 {	
-	console.info($doms);
+	console.info(programs);
 	return new Promise(function(resolve, reject) {
-		var length = $doms.length;
-		$doms.each(function(index) {
-			append($(this));
+		var length = programs.length;
+		$.each(programs, function(index, item) {
+			const program = createOneProgram($(item), liveType, programs.length, index);
+			$('#communities').append(program);
 			if (index == length - 1) {
 				resolve();
 			}
@@ -171,14 +95,22 @@ function show($doms)
 	});
 }
 
-function append($videoInfo)
+/**
+ * @param programs ユーザー放送の場合は videoInfo，公式放送の場合は official_casts
+ * @param programType 'user' または 'official'
+ * @param numOfPrograms 'official' の場合のみ必要
+ * @param currentIndex 'official' の場合のみ必要
+ */
+function createOneProgram(program, programType, numOfPrograms, currentIndex)
 {
-	var thumbnail	= $videoInfo.find('community thumbnail').text();
-	var title		= $videoInfo.find('video title').text();
-	var id			= $videoInfo.find('video id').text();
-
-	var startTime   = Date.parse($videoInfo.find('open_time').text());
-	var isReserved  = (Date.now() < startTime);
+	const attributes = {
+		thumbnailAsProp: null,
+		thumbnailUrl: null,
+		isReserved: null,
+		title: null,
+		url: null,
+		id: null
+	};
 
 	var community = $(`
 		<div class="community-hover-wrapper">
@@ -193,30 +125,60 @@ function append($videoInfo)
 		</div>
 	`);
 
-	const thumbnailProp = 'url(' + thumbnail + ')';
-	const livePageUrl   = 'http://live.nicovideo.jp/watch/' + id;
+	if (programType == 'user') {
+		const startTime = Date.parse(program.find('open_time').text());
 
-	community.find('.thumbnail').css('background-image', thumbnailProp);
-	community.find('a').attr('href', livePageUrl);
+		attributes.thumbnailUrl    = program.find('community thumbnail').text();
+		attributes.thumbnailAsProp = 'url(' + attributes.thumbnailUrl + ')';
+		attributes.title	       = program.find('video title').text();	
+		attributes.id		       = program.find('video id').text();
+		attributes.url             = 'http://live.nicovideo.jp/watch/' + attributes.id;	
+		attributes.isReserved      = (Date.now() < startTime);
+	}
+
+	if (programType == 'official') {
+		const communityId  = $(program).find('.video_text a').attr('href');
+		const regexp       = /http\:\/\/ch.nicovideo.jp\/channel\/(.+)/;
+		const resultarr    = regexp.exec(communityId);
+		let   thumbnailTmp = undefined;
+
+		if (resultarr != null) {
+			thumbnailTmp = 'http://icon.nimg.jp/channel/' + resultarr[1] + '.jpg';
+		} else {
+			thumbnailTmp = $(program).find('.info a img').attr('src');
+		}
+
+		attributes.thumbnailUrl    = thumbnailTmp
+		attributes.thumbnailAsProp = 'url(' + attributes.thumbnailUrl + ')';
+		attributes.title	       = $(program).find('.video_title').text();
+		attributes.id		       = 'lv' + $(program).find('.video_id').text();
+		attributes.url             = 'http://live.nicovideo.jp/watch/' + attributes.id;	
+		attributes.isReserved      = null;
+	}
+
+	community.find('.thumbnail').css('background-image', attributes.thumbnailAsProp);
+	community.find('a').attr('href', attributes.livePageUrl);
 
 	const charPerLine   = 16;
-	const wrappedTitle  = wordWrap(title, charPerLine);
+	const wrappedTitle  = wordWrap(attributes.title, charPerLine);
 	let   tooltipText   = wrappedTitle;
 
-	if (isReserved == true) {
-		const startTimeInfo = '<span style="color:#adff2f">' + $videoInfo.find('open_time').text() + ' に開始 ' + '</span><br>';
-		        tooltipText = startTimeInfo + tooltipText;
+	if (attributes.isReserved == true) {
 		community.find('.side-corner-tag').removeClass('disabled');
 		community.find('.side-corner-tag').addClass('enabled');
+
+		const startTimeInfo = '<span style="color:#adff2f">' + program.find('open_time').text() + ' に開場 ' + '</span><br>';
+		tooltipText = startTimeInfo + tooltipText;
+
+		const startTime = Date.parse(program.find('open_time').text());				
 		const startDate = new Date(startTime).getDate();
 		const startDay  = Time.toJpnDay(startTime);
+
 		community.find('.reserved-message').text(startDate + '(' + startDay + ')');
 	} else {
 		community.find('.side-corner-tag').removeClass('side-corner-tag');
 		community.find('p').remove();
 	}
-
-	console.log(tooltipText);
 	
 	community.data('powertip', tooltipText);
 	
@@ -230,7 +192,34 @@ function append($videoInfo)
 		intentPollInterval: 0
 	});
 
-	$('#communities').append(community);
+	if (programType == 'official') {
+		// TODO: Fix.
+		const hasManyCasts = numOfPrograms > 35;
+		const isTopRow = currentIndex < 5;
+		const offset = (hasManyCasts && !isTopRow) ? -219 : 10;
+		const smartPlacement = currentIndex < 5 ? false : true;
+
+		// TODO: Fix.
+		const manualPositions = ['se', 's', 's', 's', 'sw'];
+		const placement = (currentIndex < 5) ? manualPositions[currentIndex] : 'n';
+		console.log(offset);
+
+		// TODO: Fix.
+		$.fn.powerTip.smartPlacementLists.n = ['n', 's', 'ne', 'nw', 'e', 'w', 'n'];
+
+		// TODO: Fix.
+		community.powerTip({
+			smartPlacement: smartPlacement,
+			placement: placement,
+			fadeInTime: 30,
+			fadeOutTime: 30,
+			closeDelay: 0,
+			intentPollInterval: 0,
+			offset: offset
+		});
+	}
+
+	return community;
 }
 
 function wordWrap(text, length)
@@ -239,41 +228,3 @@ function wordWrap(text, length)
     return text.replace(/[\r|\r\n|\n]/g, "").replace(reg, "$1" + "<br>");
 }
 
-class Time
-{
-    static toJpnString(milisec)
-    {
-        const date = new Date(milisec);
-        const days = {
-            0: '日',
-            1: '月',
-            2: '火',
-            3: '水',
-            4: '木',
-            5: '金',
-            6: '土'
-        };
-        return [
-            date.getFullYear(),
-            date.getMonth() + 1,
-            date.getDate()
-        ].join( '/' ) + ' '
-        + '(' + days[date.getDay()] + ') '
-        + date.toLocaleTimeString();
-    }
-
-    static toJpnDay(milisec)
-    {
-    	const days = {
-            0: '日',
-            1: '月',
-            2: '火',
-            3: '水',
-            4: '木',
-            5: '金',
-            6: '土'
-        };
-
-        return days[new Date(milisec).getDay()];
-    }
-}

@@ -51,23 +51,7 @@ class Api
     }
 }
 
-
-function loadUserCasts()
-{
-	return loadAnyCasts('user');
-}
-
-function loadOfficialCasts()
-{
-	return loadAnyCasts('official');
-}
-
-// function loadFutureCasts()
-// {
-//     return loadAnyCasts('future');
-// }
-
-function loadAnyCasts(liveType)
+function loadCasts(liveType)
 {
 	return new Promise(function(resolve, reject) {
 		console.info('[imanani][Broadcasts.loadAnyBroadcasts] liveType = ', liveType);
@@ -115,7 +99,7 @@ function refresh()
 				reject();
 			})
 		.then(function() {
-			return loadUserCasts();
+			return loadCasts('user');
 		})
 		.then(function(videoInfos) {
 			console.info('[imanani] videoInfos = ', videoInfos);
@@ -319,26 +303,6 @@ chrome.notifications.onClicked.addListener(function(id) {
 	});
 });
 
-function loadLiveStreams(liveType)
-{
-	return new Promise(function(resolve, reject) {
-		console.log(liveType);
-		if (liveType == 'user') {
-			getSessionId().then(getSubscribe).then(normalize).then(
-				function($videoInfos) {
-                    // var $videoInfosNow = removeReservation($videoInfos);
-                    // console.info($videoInfosNow);
-                    // resolve($videoInfosNow);
-                    resolve($videoInfos);
-				}
-			).catch(reject);			
-		}
-		if (liveType == 'official') {
-			console.log('official');
-		}
-	});
-}
-
 function count(obj)
 {
 	return new Promise(function(resolve, reject) {
@@ -379,55 +343,6 @@ function removeReservation($videoInfos)
     return $(result);
 }
 
-// function compareDate(first, second)
-// {
-// 	var parsedFirst		= Date.parse(first);
-// 	var parsedSecond	= Date.parse(second);
-
-// 	if (first == 'now') {
-// 		parsedFirst = Date.now();
-// 	}
-// 	if (second == 'now') {
-// 		parsedSecond = Date.now();
-// 	}
-
-// 	if (parsedFirst == parsedSecond) {
-// 		return 0;
-// 	}
-// 	if (parsedFirst > parsedSecond) {
-// 		return 1;
-// 	}
-// 	if (parsedFirst < parsedSecond) {
-// 		return -1;
-// 	}
-
-// 	throw new Error("Couldn't compare date correctly");
-// }
-
-// function filterPrograms($videoInfos, filterTarget)
-// {
-// 	var infosArray = $videoInfos.get();
-//     var result = [];
-
-
-
-// 	$(infosArray).each(function(index) {
-// 		var currentTime = Date.now();
-// 		var startTime	= Date.parse($(this).find('open_time').text());
-// 		if (currentTime.getTime() > startTime.getTime()) {
-// 			if (removeTarget === 'reservation') {
-//                 result.push(infosArray[index]);
-//             }
-// 		} else {
-//             if (removeTarget === 'onair') {
-//                 result.push(infosArray[index]);
-//             }
-// 		}
-// 	});
-
-// 	return $(result);
-// }
-
 function normalize(xml)
 {
 	var promise = new Promise(function(resolve, reject) {
@@ -436,16 +351,4 @@ function normalize(xml)
 		resolve($videoInfos);
 	});
 	return promise;
-}
-
-
-function showStreamInfo($videoInfo)
-{
-	var name		= $videoInfo.find('community name').text();
-	var title		= $videoInfo.find('video title').text();
-	var startTime	= $videoInfo.find('video start_time').text();
-
-	console.log(name);
-	console.log(title);
-	console.log(startTime);
 }
