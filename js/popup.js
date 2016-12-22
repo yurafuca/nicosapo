@@ -157,7 +157,7 @@ function createOneProgram(program, programType, numOfPrograms, currentIndex)
 	}
 
 	community.find('.thumbnail').css('background-image', attributes.thumbnailAsProp);
-	community.find('a').attr('href', attributes.livePageUrl);
+	community.find('a').attr('href', attributes.url);
 
 	const charPerLine   = 16;
 	const wrappedTitle  = wordWrap(attributes.title, charPerLine);
