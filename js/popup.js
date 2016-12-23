@@ -84,8 +84,12 @@ function show(programs, liveType)
 {	
 	console.info(programs);
 	return new Promise(function(resolve, reject) {
-		var length = programs.length;
+		const length = programs.length;
+		const enableShowReservedProgram = localStorage.getItem('options.showReserved.enable');
 		$.each(programs, function(index, item) {
+			if (!enableOrNull(enableShowReservedProgram) && isReserved(item)) {
+				return;
+			}
 			const program = createOneProgram($(item), liveType, programs.length, index);
 			$('#communities').append(program);
 			if (index == length - 1) {
@@ -93,6 +97,12 @@ function show(programs, liveType)
 			}
 		});
 	});
+}
+
+function isReserved(program)
+{
+	const startTime = Date.parse($(program).find('open_time').text());
+	return Date.now() < startTime;
 }
 
 /**
@@ -106,7 +116,6 @@ function createOneProgram(program, programType, numOfPrograms, currentIndex)
 	const attributes = {
 		thumbnailAsProp: null,
 		thumbnailUrl: null,
-		isReserved: null,
 		title: null,
 		url: null,
 		id: null
@@ -126,14 +135,11 @@ function createOneProgram(program, programType, numOfPrograms, currentIndex)
 	`);
 
 	if (programType == 'user') {
-		const startTime = Date.parse(program.find('open_time').text());
-
 		attributes.thumbnailUrl    = program.find('community thumbnail').text();
 		attributes.thumbnailAsProp = 'url(' + attributes.thumbnailUrl + ')';
 		attributes.title	       = program.find('video title').text();	
 		attributes.id		       = program.find('video id').text();
 		attributes.url             = 'http://live.nicovideo.jp/watch/' + attributes.id;	
-		attributes.isReserved      = (Date.now() < startTime);
 	}
 
 	if (programType == 'official') {
@@ -152,8 +158,7 @@ function createOneProgram(program, programType, numOfPrograms, currentIndex)
 		attributes.thumbnailAsProp = 'url(' + attributes.thumbnailUrl + ')';
 		attributes.title	       = $(program).find('.video_title').text();
 		attributes.id		       = 'lv' + $(program).find('.video_id').text();
-		attributes.url             = 'http://live.nicovideo.jp/watch/' + attributes.id;	
-		attributes.isReserved      = null;
+		attributes.url             = 'http://live.nicovideo.jp/watch/' + attributes.id;
 	}
 
 	community.find('.thumbnail').css('background-image', attributes.thumbnailAsProp);
@@ -163,7 +168,7 @@ function createOneProgram(program, programType, numOfPrograms, currentIndex)
 	const wrappedTitle  = wordWrap(attributes.title, charPerLine);
 	let   tooltipText   = wrappedTitle;
 
-	if (attributes.isReserved == true) {
+	if (isReserved(program) == true) {
 		community.find('.side-corner-tag').removeClass('disabled');
 		community.find('.side-corner-tag').addClass('enabled');
 
@@ -226,5 +231,9 @@ function wordWrap(text, length)
 {
     reg = new RegExp("(.{" + parseInt(length) + "})", "g");
     return text.replace(/[\r|\r\n|\n]/g, "").replace(reg, "$1" + "<br>");
+}
+
+function enableOrNull(value) {
+	return (value === 'enable') || value == null;
 }
 
