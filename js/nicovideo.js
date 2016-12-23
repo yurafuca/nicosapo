@@ -19,7 +19,7 @@ function isLogined()
 }
 
 function getSessionId() {
-	
+
 	var promise = new Promise(function(resolve, reject) {
 
 		var posting = $.post("http://api.ce.nicovideo.jp/api/v1/session.create",
@@ -29,7 +29,7 @@ function getSessionId() {
 		posting.done(function(data) {
 
 			var status = $(data).find('nicovideo_user_response').attr('status');
-			
+
 			switch (status) {
 				case "ok":
 					var sessionId = $(data).find('session').text();
@@ -49,7 +49,7 @@ function getSessionId() {
 function getSubscribe(sessionId)
 {
 	var promise = new Promise(function(resolve, reject) {
-		
+
 		var dummy = Math.floor(Math.random () * 1000);
 		var request = $.ajax({
 			url: "http://api.ce.nicovideo.jp/liveapi/v1/user.subscribe?__context=" + Math.floor(Math.random () * 1000),
@@ -154,7 +154,7 @@ function getStatusByBroadcast(broadcastId)
         resolve(response);
       else
         reject();
-    }); 
+    });
   });
 }
 
@@ -166,7 +166,7 @@ function getStatusByCommunity(communityId)
         resolve(response);
       else
         reject();
-    }); 
+    });
   });
 }
 
@@ -229,8 +229,11 @@ function isStartedBroadcast(communityId)
       const errorCode = $(response).find('error code').text();
       const result = {
         isStarted: undefined,
-        nextBroadcastId: undefined
+        nextBroadcastId: undefined,
+				communityId: undefined
       };
+
+			result.communityId = theCommunityId;
 
       // OFFAIR or ERROR.
       if (errorCode) {

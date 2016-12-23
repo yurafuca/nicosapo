@@ -62,7 +62,7 @@ class Buttons {
 
         const tips = {
             'autoRedirect': 'このページを開いたままにしておくと，新しい枠で放送が始まったとき自動で枠へ移動します',
-            'autoEnterCommunity': 'このコミュニティ/このコミュニティ/チャンネルが放送を始めたとき自動で枠を新しいタブで開きます．',
+            'autoEnterCommunity': 'このコミュニティ/チャンネルが放送を始めたとき自動で枠を新しいタブで開きます（．',
             'autoEnterProgram': 'この番組が始まったとき自動で番組を新しいタブで開きます．/ 登録した番組は設定画面より設定できます．'
         };
 
@@ -136,7 +136,13 @@ class Buttons {
     }
 
     static isToggledOn(buttonType) {
-        const link = $('.on_off_button .link');
+      const classes = {
+          'autoRedirect': 'auto_redirect_button',
+          'autoEnterCommunity': 'auto_enter_community_button',
+          'autoEnterProgram': 'auto_enter_program_button'
+      };
+
+      const link = $('.' + classes[buttonType]).find('.link');
 
         let isToggledOn = $(link).hasClass('switch_is_on');
 
@@ -148,6 +154,7 @@ class Buttons {
         let thumbnail;
         let title;
         let openDate;
+        let owner;
 
         if (type == 'autoEnterCommunity') {
             id = IdGetter.community();
@@ -156,8 +163,15 @@ class Buttons {
         }
 
         thumbnail = $('meta[property="og:image"]').attr('content');
-        title = $('meta[property="og:title"]').attr('content');
-        openDate = $('.kaijo meta[itemprop="datePublished"]').attr("content");
+        if (type == 'autoEnterProgram') {
+          title = $('meta[property="og:title"]').attr('content');
+          openDate = $('.kaijo meta[itemprop="datePublished"]').attr("content");
+        }
+        if (type == 'autoEnterCommunity') {
+          title = $($('.commu_info').find('a').get(0)).html();
+          owner = $('.nicopedia_nushi').find('a').text();
+        }
+
 
         // console.info('object = ', object);
 
@@ -165,7 +179,8 @@ class Buttons {
             state: 'initialized',
             thumbnail: thumbnail,
             title: title,
-            openDate: openDate
+            openDate: openDate,
+            owner: owner
         });
     }
 

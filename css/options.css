@@ -35,6 +35,7 @@ body {
     background-size: 27px;
     background-repeat: no-repeat;
     background-position: left 10px center;
+    line-height: 30px;
 }
 .wrapper {
     width:700px;

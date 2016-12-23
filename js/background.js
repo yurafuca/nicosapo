@@ -93,7 +93,7 @@ $(function() {
 
     const storagedData = JSON.parse(localStorage['autoEnterCommunityList']);
     for (id in storagedData) {
-      storagedData[id].state = 'null';
+      storagedData[id].state = 'init';
     }
     localStorage['autoEnterCommunityList'] = JSON.stringify(storagedData);
 });
@@ -181,7 +181,15 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
         storagedData[request.innerKey]['state'] = request.innerValue.state;
         storagedData[request.innerKey]['thumbnail'] = request.innerValue.thumbnail;
         storagedData[request.innerKey]['title'] = request.innerValue.title;
-        storagedData[request.innerKey]['openDate'] = request.innerValue.openDate;
+
+        if (request.innerValue.openDate) {
+          storagedData[request.innerKey]['openDate'] = request.innerValue.openDate;
+        }
+
+        if (request.innerValue.owner) {
+          storagedData[request.innerKey]['owner'] = request.innerValue.owner;
+        }
+
         localStorage[request.key] = JSON.stringify(storagedData);
         return;
     }
@@ -274,16 +282,19 @@ function autoEnterCommunityRoutine() {
     for (id in storagedData) {
         isStartedBroadcast(id).then(function(result) {
             if (result.isStarted == true) {
-                let lastState = storagedData[id]['state'];
+                let lastState = storagedData[result.communityId]['state'];
                 if (lastState == 'offair') {
                     chrome.tabs.create({
                       url: 'http://live.nicovideo.jp/watch/' + result.nextBroadcastId
                     });
                 }
-                storagedData[id]['state'] = 'onair';
+                console.info('id = ', result.communityId);
+                storagedData[result.communityId]['state'] = 'onair';
             } else {
-                storagedData[id]['state'] = 'offair';
+              console.info('id = ', result.communityId);
+                storagedData[result.communityId]['state'] = 'offair';
             }
+            console.info('id = ', result.communityId);
             localStorage['autoEnterCommunityList'] = JSON.stringify(storagedData);
         });
     }
