@@ -1,10 +1,8 @@
 let _communityId;
 let _broadcastId;
 
-class PageType
-{
-    static get()
-    {
+class PageType {
+    static get() {
         if (this._isModernCast()) {
             return 'MODERN_CAST_PAGE';
         }
@@ -20,16 +18,14 @@ class PageType
         return 'NORMAL_CAST_PAGE';
     }
 
-    static _isModernCast()
-    {
+    static _isModernCast() {
         const re = /http:\/\/live2\.nicovideo\.jp\/watch\/lv([0-9]+)/;
         const url = window.location.href;
 
         return url.match(re);
     }
 
-    static _isStandByPage()
-    {   
+    static _isStandByPage() {
         const flag = ($('#gates').length === 0) && ($('.gate_title').length > 0);
 
         if (flag) {
@@ -39,8 +35,7 @@ class PageType
         return flag;
     }
 
-    static _isGatePage()
-    {
+    static _isGatePage() {
         const flag = $('#gates').length > 0;
 
         if (flag) {
@@ -51,10 +46,8 @@ class PageType
     }
 }
 
-class Buttons
-{
-    static make(buttonType)
-    {
+class Buttons {
+    static make(buttonType) {
         const button = $(`
             <span class="on_off_button">
                 <a class="link"></a>
@@ -94,53 +87,63 @@ class Buttons
         return button;
     }
 
-    static toggleOn(buttonType)
-    {   
+    static toggleOn(buttonType) {
         console.info('[imanani] buttonType = ', buttonType);
 
-        const link = $('.on_off_button').find('.link');
+        const classes = {
+            'autoRedirect': 'auto_redirect_button',
+            'autoEnterCommunity': 'auto_enter_community_button',
+            'autoEnterProgram': 'auto_enter_program_button'
+        };
+
+        const link = $('.' + classes[buttonType]).find('.link');
+
+        console.debug(classes[buttonType]);
 
         $(link).addClass('switch_is_on');
         $(link).removeClass('switch_is_off');
 
         let labels = {
             'autoRedirect': '自動次枠移動',
-            'autoEnterCommunity': '(このコミュニティで) 自動入場',
+            'autoEnterCommunity': '(このコミュニティに) 自動入場',
             'autoEnterProgram': '(この番組に) 自動入場',
         };
 
         $(link).text(labels[buttonType] + 'ON');
     }
 
-    static toggleOff(buttonType)
-    {
+    static toggleOff(buttonType) {
         console.info('[imanani] buttonType = ', buttonType);
 
-        const link = $('.on_off_button').find('.link');
+        const classes = {
+            'autoRedirect': 'auto_redirect_button',
+            'autoEnterCommunity': 'auto_enter_community_button',
+            'autoEnterProgram': 'auto_enter_program_button'
+        };
+
+        const link = $('.' + classes[buttonType]).find('.link');
 
         $(link).addClass('switch_is_off');
         $(link).removeClass('switch_is_on');
 
         let labels = {
             'autoRedirect': '自動次枠移動',
-            'autoEnterCommunity': '(このコミュニティで) 自動入場',
+            'autoEnterCommunity': '(このコミュニティに) 自動入場',
             'autoEnterProgram': '(この番組に) 自動入場',
         };
 
         $(link).text(labels[buttonType] + 'OFF');
     }
 
-    static isToggledOn(buttonType)
-    {
+    static isToggledOn(buttonType) {
         const link = $('.on_off_button .link');
 
         let isToggledOn = $(link).hasClass('switch_is_on');
-        
+
         return isToggledOn;
     }
 
-    static saveAsAutoEnter(type)
-    {   
+    static saveAsAutoEnter(type) {
         let id;
         let thumbnail;
         let title;
@@ -148,8 +151,7 @@ class Buttons
 
         if (type == 'autoEnterCommunity') {
             id = IdGetter.community();
-        }
-        else if (type == 'autoEnterProgram') {
+        } else if (type == 'autoEnterProgram') {
             id = IdGetter.livePage();
         }
 
@@ -159,17 +161,20 @@ class Buttons
 
         // console.info('object = ', object);
 
-        Storage.saveToNestedLocalStorage(type + 'List', id, {state: 'initialized', thumbnail: thumbnail, title: title, openDate: openDate});
+        Storage.saveToNestedLocalStorage(type + 'List', id, {
+            state: 'initialized',
+            thumbnail: thumbnail,
+            title: title,
+            openDate: openDate
+        });
     }
 
-    static removeAsAutoEnter(type)
-    {   
+    static removeAsAutoEnter(type) {
         let id;
 
         if (type == 'autoEnterCommunity') {
             id = IdGetter.community();
-        }
-        else if (type == 'autoEnterProgram') {
+        } else if (type == 'autoEnterProgram') {
             id = IdGetter.livePage();
         }
 
@@ -184,53 +189,43 @@ class Buttons
     }
 }
 
-class Storage
-{
-    static saveToNestedLocalStorage(key, innerKey, innerValue)
-    {
-        chrome.runtime.sendMessage(
-        {
-            purpose: 'saveToNestedLocalStorage',
-            key: key,
-            innerKey: innerKey,
-            innerValue: innerValue
-        },
-        function(response)
-        {
-            console.info('[imanani][saveToNestedLocalStorage] response = ', response);
-        });
+class Storage {
+    static saveToNestedLocalStorage(key, innerKey, innerValue) {
+        chrome.runtime.sendMessage({
+                purpose: 'saveToNestedLocalStorage',
+                key: key,
+                innerKey: innerKey,
+                innerValue: innerValue
+            },
+            function(response) {
+                console.info('[imanani][saveToNestedLocalStorage] response = ', response);
+            });
     }
 
-    static removeFromNestedLocalStorage(key, innerKey)
-    {
-        chrome.runtime.sendMessage(
-        {
-            purpose: 'removeFromNestedLocalStorage',
-            key: key,
-            innerKey: innerKey
-        },
-        function(response)
-        {
-            console.info('[imanani][removeFromNestedLocalStorage] response = ', response);
-        });
+    static removeFromNestedLocalStorage(key, innerKey) {
+        chrome.runtime.sendMessage({
+                purpose: 'removeFromNestedLocalStorage',
+                key: key,
+                innerKey: innerKey
+            },
+            function(response) {
+                console.info('[imanani][removeFromNestedLocalStorage] response = ', response);
+            });
     }
 }
 
-class IdGetter
-{
-    static livePage()
-    {
+class IdGetter {
+    static livePage() {
         const re = /http:\/\/live\.nicovideo\.jp\/watch\/lv([0-9]+)/;
         const url = $('meta[property="og:url"]').attr('content');
         const broadcastId = 'lv' + re.exec(url)[1];
-        
+
         console.info('[imanani][IdGetter.livePage] broadcastId = ', broadcastId);
 
         return broadcastId;
     }
 
-    static community()
-    {
+    static community() {
         let communityId;
 
         const communityUrl = $('meta[property="og:image"]').attr('content');
@@ -238,11 +233,10 @@ class IdGetter
 
         if (re1.exec(communityUrl)) {
             communityId = re1.exec(communityUrl)[1];
-        }
-        else {
+        } else {
             const communityUrl = $('.text .smn a').attr('href');
             const regexp = /http:\/\/(com|ch)\.nicovideo\.jp\/(community|channel)\/([\x21-\x7e]+)/;
-            communityId = regexp.exec(communityUrl)[3];        
+            communityId = regexp.exec(communityUrl)[3];
         }
 
         console.info('[imanani][IdGetter.community] communityId = ', communityId);
@@ -251,11 +245,9 @@ class IdGetter
     }
 }
 
-class FormatNicoPage
-{
-    static exec(pageType)
-    {
-        if(pageType == 'STAND_BY_PAGE') {
+class FormatNicoPage {
+    static exec(pageType) {
+        if (pageType == 'STAND_BY_PAGE') {
             $('.program-title').css('display', 'inline');
             return;
         }
@@ -278,8 +270,7 @@ class FormatNicoPage
     }
 }
 
-$(function()
-{ 
+$(function() {
     initialize();
 
     console.info('[imanani] pageType = ', PageType.get());
@@ -292,34 +283,32 @@ $(function()
         GATE_PAGE: 'autoEnterProgram'
     };
 
-    const pageType     = PageType.get();
-    const buttonType   = buttonTypes[pageType];
+    const pageType = PageType.get();
+    const buttonType = buttonTypes[pageType];
     const switchButton = Buttons.make(buttonType);
 
     FormatNicoPage.exec(pageType);
 
-    switch(pageType) {
+    switch (pageType) {
         case 'STAND_BY_PAGE':
             const link = $(switchButton).find('.link');
-                  link.css('display', 'block');
-                  link.css('padding', '6px');
-                  link.css('font-size', '15px');
+            link.css('display', 'block');
+            link.css('padding', '6px');
+            link.css('font-size', '15px');
             switchButton.css('display', 'block');
             $('.infobox').prepend(switchButton);
-            chrome.runtime.sendMessage(
-            {
-                purpose: 'getFromNestedLocalStorage',
-                key: 'autoEnterProgramList'
+            chrome.runtime.sendMessage({
+                    purpose: 'getFromNestedLocalStorage',
+                    key: 'autoEnterProgramList'
                 },
-                function(response)
-                {
-                if (response[IdGetter.livePage()]) {
-                    Buttons.toggleOn('autoEnterProgram');
+                function(response) {
+                    if (response[IdGetter.livePage()]) {
+                        Buttons.toggleOn('autoEnterProgram');
+                    } else {
+                        Buttons.toggleOff('autoEnterProgram');
+                    }
                 }
-                else {
-                    Buttons.toggleOff('autoEnterProgram');
-                }
-            });
+            );
             break;
         case 'GATE_PAGE':
             $('.gate_title').prepend(switchButton);
@@ -329,54 +318,73 @@ $(function()
             break;
         case 'NORMAL_CAST_PAGE':
             $('.meta').append(switchButton);
+            const switchButton2 = Buttons.make('autoEnterCommunity');
+            console.debug(switchButton2);
+            $('.meta').append(switchButton2);
             break;
         default:
             // Do nothing.
             break;
     }
 
-    switch(pageType) {
+    switch (pageType) {
         case 'NORMAL_CAST_PAGE':
+            chrome.runtime.sendMessage({
+                    purpose: 'getFromLocalStorage',
+                    key: 'options.autoJump.enable'
+                },
+                function(response) {
+                    if (enabledOrNull(response)) {
+                        Buttons.toggleOn('autoRedirect');
+                    } else {
+                        Buttons.toggleOff('autoRedirect');
+                    }
+                });
+            chrome.runtime.sendMessage({
+                    purpose: 'getFromNestedLocalStorage',
+                    key: 'autoEnterCommunityList'
+                },
+                function(response) {
+                    if (response[IdGetter.community()]) {
+                        Buttons.toggleOn('autoEnterCommunity');
+                    } else {
+                        Buttons.toggleOff('autoEnterCommunity');
+                    }
+                });
+            break;
         case 'MODERN_CAST_PAGE':
         case 'STAND_BY_PAGE':
-            chrome.runtime.sendMessage(
-            {
-                purpose: 'getFromLocalStorage',
-                key: 'options.autoJump.enable'
+            chrome.runtime.sendMessage({
+                    purpose: 'getFromLocalStorage',
+                    key: 'options.autoJump.enable'
                 },
-                function(response)
-                {
-                if (enabledOrNull(response)) {
-                    Buttons.toggleOn('autoRedirect');
-                }
-                else {
-                    Buttons.toggleOff('autoRedirect');
-                }
-            });
+                function(response) {
+                    if (enabledOrNull(response)) {
+                        Buttons.toggleOn('autoRedirect');
+                    } else {
+                        Buttons.toggleOff('autoRedirect');
+                    }
+                });
             break;
         case 'GATE_PAGE':
-            chrome.runtime.sendMessage(
-            {
-                purpose: 'getFromNestedLocalStorage',
-                key: 'autoEnterProgramList'
+            chrome.runtime.sendMessage({
+                    purpose: 'getFromNestedLocalStorage',
+                    key: 'autoEnterProgramList'
                 },
-                function(response)
-                {
-                if (response[IdGetter.livePage()]) {
-                    Buttons.toggleOn('autoEnterProgram');
-                }
-                else {
-                    Buttons.toggleOff('autoEnterProgram');
-                }
-            });
+                function(response) {
+                    if (response[IdGetter.livePage()]) {
+                        Buttons.toggleOn('autoEnterProgram');
+                    } else {
+                        Buttons.toggleOff('autoEnterProgram');
+                    }
+                });
             break;
     }
-    setInterval(autoRedirect, 1000 * 15);    
+    setInterval(autoRedirect, 1000 * 15);
 });
 
-$(function()
-{
-    $(document).on('click','.link',function() {
+$(function() {
+    $(document).on('click', '.link', function() {
         const parentNode = $(this).parent().get(0);
         const parentClass = parentNode.className.split(" ")[1];
         const buttonTypes = {
@@ -390,8 +398,7 @@ $(function()
             if (buttonType == 'autoEnterCommunity' || buttonType == 'autoEnterProgram') {
                 Buttons.removeAsAutoEnter(buttonType);
             }
-        }
-        else {
+        } else {
             Buttons.toggleOn(buttonType);
             if (buttonType == 'autoEnterCommunity' || buttonType == 'autoEnterProgram') {
                 Buttons.saveAsAutoEnter(buttonType);
@@ -400,21 +407,18 @@ $(function()
     });
 });
 
-function enabledOrNull(value)
-{
+function enabledOrNull(value) {
     return (value === 'enable') || value == null;
 }
 
-function initialize()
-{
+function initialize() {
     if (PageType.get() != 'GATE_PAGE')
         _communityId = IdGetter.community();
     _broadcastId = IdGetter.livePage();
 }
 
 // TODO: Rename.
-function autoRedirect()
-{
+function autoRedirect() {
     if (Buttons.isToggledOn('autoRedirect')) {
         console.log(_broadcastId + ' is enabled auto redirect.');
         isOffAir(_broadcastId).then(function(isOffAir) {
@@ -423,33 +427,29 @@ function autoRedirect()
 
             // OFFAIR.
             isStartedBroadcast(_communityId).then(function(response) {
-            console.info('[imanani][isStartedBroadcast] = ', response);
-            if (response.isStarted) {
-                _broadcastId = response.nextBroadcastId;
-                redirectBroadcastPage(response.nextBroadcastId);
-            }
+                console.info('[imanani][isStartedBroadcast] = ', response);
+                if (response.isStarted) {
+                    _broadcastId = response.nextBroadcastId;
+                    redirectBroadcastPage(response.nextBroadcastId);
+                }
             });
         });
-    }
-    else {
+    } else {
         console.log(IdGetter.livePage() + ' is disabled auto redirect.');
     }
 }
 
-function autoEnter()
-{
-    
+function autoEnter() {
+
 }
 
-function redirectBroadcastPage(broadcastId)
-{
-    const endpoint     = 'http://live.nicovideo.jp/watch/';
+function redirectBroadcastPage(broadcastId) {
+    const endpoint = 'http://live.nicovideo.jp/watch/';
     const broadcastUrl = endpoint + broadcastId;
     window.location.replace(broadcastUrl);
 }
 
-function isEnabledAutoRedirect()
-{
+function isEnabledAutoRedirect() {
     const data = sessionStorage[this._communityId];
 
     if (data == undefined) {

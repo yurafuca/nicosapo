@@ -191,11 +191,11 @@ a:hover .screen_name {
     overflow: hidden;
     font-family: Arial, sans-serif;
     font-weight: 900;
-        text-shadow: 0 -1px 0 rgba(0,0,0,0.15);
-} 
- 
+    text-shadow: 0 -1px 0 rgba(0,0,0,0.15);
+}
+
 .side-corner-tag.enabled p {
-    display: inline;    
+    display: inline;
 }
 
 .side-corner-tag.enabled p span {

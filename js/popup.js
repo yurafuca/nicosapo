@@ -92,10 +92,8 @@ function show(programs, liveType)
 			}
 			const program = createOneProgram($(item), liveType, programs.length, index);
 			$('#communities').append(program);
-			if (index == length - 1) {
-				resolve();
-			}
 		});
+		resolve();
 	});
 }
 
