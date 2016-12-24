@@ -1,18 +1,18 @@
 {
     "name": "にこさぽ （ニコ生サポート）",
 	"manifest_version": 2,
-    "version": "1.7.3.1",
+    "version": "1.7.4",
      "browser_action": {
 	      "default_icon": "image/icon.png",
 	      "default_title": "放送中の番組を確認する",
           "default_popup": "html/popup.html"
 	 },
-    "description": "自動枠移動（新配信（β）対応） / 自動入場 / 放送中の番組を一覧表示 / デスクトップ通知 をサポートします．", 
+    "description": "自動枠移動（新配信（β）対応） / 自動入場 / 放送中の番組を一覧表示 / デスクトップ通知 をサポートします．",
     "icons": {
-        "16": "image/icon.png", 
-        "32": "image/icon.png", 
+        "16": "image/icon.png",
+        "32": "image/icon.png",
         "64": "image/icon.png"
-    }, 
+    },
     "permissions": [
         "alarms",
         "notifications",

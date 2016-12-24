@@ -62,13 +62,13 @@ class Buttons {
 
         const tips = {
             'autoRedirect': 'このページを開いたままにしておくと，新しい枠で放送が始まったとき自動で枠へ移動します',
-            'autoEnterCommunity': 'このコミュニティ/チャンネルが放送を始めたとき自動で枠を新しいタブで開きます（．',
-            'autoEnterProgram': 'この番組が始まったとき自動で番組を新しいタブで開きます．/ 登録した番組は設定画面より設定できます．'
+            'autoEnterCommunity': 'このコミュニティ・チャンネルが放送を始めたとき自動で枠を新しいタブで開きます．[⚠️負荷軽減のため最大登録数は5を目安にしてください] [💡自動次枠移動が ON の状態でも移動先の枠が新しいタブで開かれます]',
+            'autoEnterProgram': 'この番組が始まったとき自動で番組を新しいタブで開きます．[⚠️負荷軽減のため最大登録数は5を目安にしてください] [💡登録した番組は設定画面より設定できます]'
         };
 
         const parms = {
             'data-balloon-pos': 'up',
-            'data-balloon-length': 'large',
+            'data-balloon-length': 'xlarge',
             'data-balloon': tips[buttonType]
         };
 
@@ -280,7 +280,7 @@ class FormatNicoPage {
         }
 
         if (pageType == 'NORMAL_CAST_PAGE') {
-            // Do nothing.
+            $('#watch_title_box .meta').css('width', '1000px');
         }
     }
 }

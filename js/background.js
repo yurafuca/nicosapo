@@ -81,14 +81,14 @@ $(function() {
 
     refresh();
 
-    setInterval(refresh, 1000 * 20);
+    setInterval(refresh, 1000 * 30);
 
     setTimeout(function() {
         setInterval(autoEnterProgramRoutine, 1000 * 20);
     }, 1000);
 
     setTimeout(function() {
-        setInterval(autoEnterCommunityRoutine, 1000 * 20)
+        setInterval(autoEnterCommunityRoutine, 1000 * 25)
     }, 1000);
 
     const storagedData = JSON.parse(localStorage['autoEnterCommunityList']);
@@ -278,26 +278,35 @@ function autoEnterCommunityRoutine() {
 
     console.debug('storagedData = ', storagedData);
 
-    // TODO: foreach.
+    let tasks = [];
     for (id in storagedData) {
-        isStartedBroadcast(id).then(function(result) {
-            if (result.isStarted == true) {
-                let lastState = storagedData[result.communityId]['state'];
-                if (lastState == 'offair') {
-                    chrome.tabs.create({
-                      url: 'http://live.nicovideo.jp/watch/' + result.nextBroadcastId
-                    });
-                }
-                console.info('id = ', result.communityId);
-                storagedData[result.communityId]['state'] = 'onair';
-            } else {
-              console.info('id = ', result.communityId);
-                storagedData[result.communityId]['state'] = 'offair';
-            }
-            console.info('id = ', result.communityId);
-            localStorage['autoEnterCommunityList'] = JSON.stringify(storagedData);
-        });
+        tasks.push(checkAndOpenFreshCast.bind(null, id, storagedData));
     }
+    for (let i = 0; i < tasks.length; i++) {
+      setTimeout(function() {
+        tasks[i].call(null);
+      }.bind(null, i), i * 1000); // 連続アクセスを避ける
+    }
+}
+
+function checkAndOpenFreshCast(id, storagedData) {
+  isStartedBroadcast(id).then(function(result) {
+      if (result.isStarted == true) {
+          let lastState = storagedData[result.communityId]['state'];
+          if (lastState == 'offair') {
+              chrome.tabs.create({
+                  url: 'http://live.nicovideo.jp/watch/' + result.nextBroadcastId
+              });
+          }
+          console.info('id = ', result.communityId);
+          storagedData[result.communityId]['state'] = 'onair';
+      } else {
+          console.info('id = ', result.communityId);
+          storagedData[result.communityId]['state'] = 'offair';
+      }
+      console.info('id = ', result.communityId);
+      localStorage['autoEnterCommunityList'] = JSON.stringify(storagedData);
+  });
 }
 
 function showNotification(newInfos) {
