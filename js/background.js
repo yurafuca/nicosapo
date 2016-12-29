@@ -49,8 +49,10 @@ function loadCasts(liveType) {
     return new Promise(function(resolve, reject) {
         console.info('[imanani][Broadcasts.loadAnyBroadcasts] liveType = ', liveType);
         if (liveType == 'user') {
-            getSessionId().then(getSubscribe).then(normalize).then(
+            // getSessionId().then(getSubscribe).then(normalize).then(
+            getSubscribe_2().then(
                 function($videoInfos) {
+                    console.info($videoInfos);
                     // var $videoInfosNow = removeReservation($videoInfos);
                     // console.info($videoInfosNow);
                     // resolve($videoInfosNow);
@@ -75,20 +77,23 @@ function loadCasts(liveType) {
 }
 
 $(function() {
+
+    getSubscribe_2();
+
     chrome.browserAction.setBadgeBackgroundColor({
         color: "#ff6200"
     });
 
     refresh();
 
-    setInterval(refresh, 1000 * 30);
+    setInterval(refresh, 1000 * 20);
 
     setTimeout(function() {
         setInterval(autoEnterProgramRoutine, 1000 * 20);
     }, 1000);
 
     setTimeout(function() {
-        setInterval(autoEnterCommunityRoutine, 1000 * 25)
+        setInterval(autoEnterCommunityRoutine, 1000 * 20)
     }, 1000);
 
     const storagedData = JSON.parse(localStorage['autoEnterCommunityList']);
@@ -285,7 +290,7 @@ function autoEnterCommunityRoutine() {
     for (let i = 0; i < tasks.length; i++) {
       setTimeout(function() {
         tasks[i].call(null);
-      }.bind(null, i), i * 1000); // 連続アクセスを避ける
+      }.bind(null, i), i * 2000); // 連続アクセスを避ける
     }
 }
 
@@ -350,28 +355,30 @@ function setBadgeText(value) {
     });
 }
 
-function removeReservation($videoInfos) {
-    var infosArray = $videoInfos.get();
+function removeReservation(videoInfos) {
     var result = [];
 
-    $(infosArray).each(function(index) {
-        var currentTime = Date.now();
-        var startTime = Date.parse($(infosArray[index]).find('open_time').text());
-        if (currentTime > startTime) {
-            result.push(infosArray[index]);
-        } else {
-            // Do nothing (A reservation program).
+    console.info(videoInfos);
+
+    $.each($(videoInfos), function(index, item) {
+        const is_reserved = $(item).find('video is_reserved').text();
+        console.info(is_reserved);
+        console.log(index);
+        if (is_reserved == 'false') {
+            result.push(item);
         }
     });
 
+    console.info(result);
     return $(result);
 }
 
-function normalize(xml) {
-    var promise = new Promise(function(resolve, reject) {
-        var normalized = '<documents>' + xml.documentElement.innerHTML + '</documents>';
-        var $videoInfos = $(normalized).find('video_info');
-        resolve($videoInfos);
-    });
-    return promise;
-}
+// function normalize(xml) {
+//     var promise = new Promise(function(resolve, reject) {
+//         console.info(xml);
+//         var normalized = '<documents>' + xml.documentElement.innerHTML + '</documents>';
+//         var $videoInfos = $(normalized).find('video_info');
+//         resolve($videoInfos);
+//     });
+//     return promise;
+// }

@@ -25,7 +25,8 @@
         "http://flapi.nicovideo.jp/api/",
         "http://watch.live.nicovideo.jp/",
         "http://live2.nicovideo.jp/",
-        "http://live.nicovideo.jp/gate/"
+        "http://live.nicovideo.jp/gate/",
+        "http://alert.nicovideo.jp/"
     ],
     "background": {
 	    "scripts": [
@@ -33,6 +34,7 @@
             "js/newArrival.js",
             "js/comuHolder.js",
             "js/nicovideo.js",
+            "js/nicolive.js",
             "js/background.js"
         ]
 	},

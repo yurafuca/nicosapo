@@ -72,6 +72,7 @@ function show(programs, liveType) {
             if (!enableOrNull(isEnableShowReservedProgram) && isReserved(item)) {
                 // Do nothing.
             } else {
+                        console.info(item);
 							const program = createOneProgram($(item), liveType, programs.length, index);
 							$('#communities').append(program);
 						}
@@ -86,8 +87,10 @@ function show(programs, liveType) {
 }
 
 function isReserved(program) {
-    const startTime = Date.parse($(program).find('open_time').text());
-    return Date.now() < startTime;
+    const is_reserved = $(program).find('video is_reserved').text();
+    return is_reserved == 'true';
+    // const startTime = Date.parse($(program).find('open_time').text());
+    // return Date.now() < startTime;
 }
 
 /**
@@ -156,14 +159,17 @@ function createOneProgram(program, programType, numOfPrograms, currentIndex) {
         community.find('.side-corner-tag').removeClass('disabled');
         community.find('.side-corner-tag').addClass('enabled');
 
-        const startTimeInfo = '<span style="color:#adff2f">' + program.find('open_time').text() + ' に開場 ' + '</span><br>';
+        const startTimeInfo = '<span style="color:#adff2f">' + program.find('video open_time_jpstr').text() + '</span><br>';
         tooltipText = startTimeInfo + tooltipText;
 
-        const startTime = Date.parse(program.find('open_time').text());
-        const startDate = new Date(startTime).getDate();
-        const startDay = Time.toJpnDay(startTime);
+        // const startTime = Date.parse(program.find('open_time').text());
+        // const startDate = new Date(startTime).getDate();
+        // const startDay = Time.toJpnDay(startTime);
 
-        community.find('.reserved-message').text(startDate + '(' + startDay + ')');
+        const startDayJpn = program.find('video open_time_jpstr').text().match(/\d+\/(\d+)/)[1]; // Month/Day(Date) ...
+        const startDateJpn = program.find('video open_time_jpstr').text().match(/\d+\/\d+\((.)\)/)[1];
+
+        community.find('.reserved-message').text(startDayJpn + '(' + startDateJpn + ')');
     } else {
         community.find('.side-corner-tag').removeClass('side-corner-tag');
         community.find('p').remove();

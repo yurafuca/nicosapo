@@ -43,6 +43,7 @@ function getSessionId() {
     return promise;
 }
 
+// 有料限定∧公式チャンネル の情報が含まれない
 function getSubscribe(sessionId) {
     var promise = new Promise((resolve, reject) => {
 
@@ -57,7 +58,6 @@ function getSubscribe(sessionId) {
         });
 
         request.done(function(videoInfos) {
-            console.log("cache: " + $(videoInfos).find('total_count').text());
             console.info(videoInfos);
             resolve(videoInfos);
         });
@@ -71,6 +71,121 @@ function getSubscribe(sessionId) {
 
     return promise;
 }
+
+// 有料限定∧公式チャンネル の情報が含まれない
+function getSubscribe_2() {
+    var promise = new Promise((resolve, reject) => {
+
+        // let videoInfos = $('<nicolive_video_response>');
+
+        // $(videoInfos).load("http://live.nicovideo.jp/my", function(responseText, status, xhr) {
+        //     console.info(responseText);
+        //     const subscribes  = $(responseText).find("[id$=subscribeItemsWrap] > .liveItems > [class^='liveItem']");
+        //     // const all_subscribes = $(responseText).find("#all_subscribeItemsWrap > .liveItems > [class^='liveItem']");
+        //     console.info(subscribes);
+        // });
+
+        var posting = $.post("http://live.nicovideo.jp/my");
+
+        posting.done(function(response) {
+            const htmlContent = $(response);
+            const subscribes  = htmlContent.find("[id$=subscribeItemsWrap] > .liveItems > [class^='liveItem']");
+            const reserved    = htmlContent.find("[id$=subscribeReservedItemsWrap] > .liveItems > [class^='liveItem']");
+
+            $.each($(reserved), function(index, item) {
+                item.is_reserved = true;
+            });
+
+            $.merge(subscribes, reserved);
+
+            let videoInfos = [];
+
+            console.info(subscribes);
+            console.info(reserved);
+
+            $.each($(subscribes), function(index, item) {
+
+                // console.log('index = ', $(item).html());
+
+                const video_title = $(item).find('a').first().attr('title');
+                const video_url = $(item).find('a').first().attr('href');
+                const video_id = video_url.match(/(lv\d+)/g)[0];
+
+                const img = $($(item).find('img')[0]);
+
+                if (img.attr('alt') == 'CLOSED') {
+                    return;
+                }
+
+                const community_thumbnail_base = img.attr('src').match(/http\:\/\/icon.nimg.jp\/(channel|community)\//)[0];
+                const community_id = img.attr('src').match(/(ch|co)\d+/)[0];
+                const community_thumbnail = community_thumbnail_base + community_id + '.jpg';
+
+                const video_open_time_jpstr = $(item).find('strong').first().text();
+
+                const videoInfo = $(`
+                    <video_info>
+                        <video>
+                            <id></id>
+                            <title></title>
+                            <open_time></open_time>
+                            <open_time_jpstr></open_time_jpstr>
+                            <start_time></start_time>
+                            <schedule_end_time/>
+                            <end_time></end_time>
+                            <provider_type>y</provider_type>
+                            <related_channel_id/>
+                            <hidescore_online></hidescore_online>
+                            <hidescore_comment></hidescore_comment>
+                            <community_only></community_only>
+                            <channel_only></channel_only>
+                            <view_counter></view_counter>
+                            <comment_count></comment_count>
+                            <is_panorama></is_panorama>
+                            <_ts_reserved_count></_ts_reserved_count>
+                            <timeshift_enabled></timeshift_enabled>
+                            <is_hq></is_hq>
+                            <is_reserved></is_reserved>
+                        </video>
+                        <community>
+                            <id></id>
+                            <name></name>
+                            <channel_id/>
+                            <global_id></global_id>
+                            <thumbnail></thumbnail>
+                            <thumbnail_small></thumbnail_small>
+                        </community>
+                    </video_info>
+                `);
+
+                videoInfo.find('community thumbnail').text(community_thumbnail);
+                videoInfo.find('video title').text(video_title);
+                videoInfo.find('video id').text(video_id);
+                videoInfo.find('video open_time_jpstr').text(video_open_time_jpstr);
+
+
+                // console.log(item.is_reserved);
+
+                if (item.is_reserved) {
+                    videoInfo.find('video is_reserved').text(true);
+                } else {
+                    videoInfo.find('video is_reserved').text(false);
+                }
+                
+                console.log('bbb');
+                videoInfos.push(videoInfo);
+            });
+            console.log('aaaaa');
+            // console.info(videoInfos.html());
+            console.info(videoInfos);
+            resolve(videoInfos);
+        });
+
+    });
+
+    return promise;
+}
+
 
 function getCheckList() {
     var promise = new Promise((resolve, reject) => {
@@ -154,11 +269,11 @@ function getStatusByCommunity(communityId) {
     return new Promise((resolve, reject) => {
         getStatus(communityId).then(function(response) {
             if (response) {
-							response.communityId = response.param;
-							resolve(response);
-						} else {
-							reject();
-						}
+				response.communityId = response.param;
+				resolve(response);
+			} else {
+				reject();
+			}
         });
     });
 }
@@ -177,9 +292,9 @@ function getStatus(param) {
         posting.done((response) => {
             let status = $(response).find('getplayerstatus').attr('status');
             console.info('[imanani][getStatus] response = ', response);
-						response.param = parameter;
-						console.debug('parameter = ', parameter);
-						console.debug('response.param = ', response.param);
+			response.param = parameter;
+			console.debug('parameter = ', parameter);
+			console.debug('response.param = ', response.param);
             resolve(response);
         });
     });
@@ -232,7 +347,7 @@ function isStartedBroadcast(communityId) {
                 communityId: undefined
             };
 
-						console.debug('theCommunityId = ', response.communityId);
+			console.debug('theCommunityId = ', response.communityId);
 
             result.communityId = response.communityId;
 
