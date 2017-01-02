@@ -4,18 +4,19 @@ class ComuHolder
         this.source = initial;
     }
 
-    // TODO: validation.
-    setSource(idList) {
-        this.source = idList;
+    setSource(videoInfos) {
+        this.source = videoInfos;
     }
 
-    isNew(community) {
+    isNew(info) {
         if (this.source == null) {
             // dont show notification.
             return false;
         }
         // alert("hoge");
-        let id = $(community).find('id').text();
+        console.info('[ComuHolder]', $(info));
+        console.info('[ComuHolder]', $(info).find('community id'));
+        let id = $(info).find('community id').text();
         let inarray = $.inArray(parseInt(id), this.source);
         // console.log(this.toBool(1));
         // console.log(this.toBool(inarray));

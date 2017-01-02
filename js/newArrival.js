@@ -9,6 +9,11 @@ class NewArrival
         this.source = infos;
     }
 
+    /*
+     * @param Array infos
+     * @return Array newArrives
+     * videoInfosを引数にとって新しく始まったと推定される放送のリストを返却する
+     */
     get(infos) {
         if (this.source == null) {
             // return infos;
@@ -19,11 +24,14 @@ class NewArrival
         let sourceTimes = $.makeArray();
 
         $.each(this.source, function(index, item) {
-            sourceTimes.push($(item).find('video start_time').text());
+            // 'id'（コミュニティID） ではなく 'open_time_jpstr' でユニーク判定している理由は 'id' ではユニーク判定できない場合があるから．
+            // 'id' でユニーク判定できない場合は，放送終了後即座に次の放送が始まった場合．
+            // sourceTimes には放送終了前の 'id' が，newArrives には放送終了後の 'id' が入る． 
+            sourceTimes.push($(item).find('video open_time_jpstr').text());
         });
 
         $.each(infos, function(index, info) {
-            let targetTime = $(info).find('video start_time').text();
+            let targetTime = $(info).find('video open_time_jpstr').text();
             let result = $.inArray(targetTime, sourceTimes);
             if (result === -1) {
                 newArrives.push(info);

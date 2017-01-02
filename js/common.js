@@ -21,6 +21,13 @@ class Time
         return days[new Date(milisec).getDay()];
     }
 
+    static toUnixTime(milisec)
+    {
+        const days = Time.days();
+
+        return days[new Date(milisec).getDay()];
+    }
+
     static days()
     {
     	const days = {

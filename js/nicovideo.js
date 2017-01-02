@@ -162,6 +162,7 @@ function getSubscribe_2() {
                 videoInfo.find('video title').text(video_title);
                 videoInfo.find('video id').text(video_id);
                 videoInfo.find('video open_time_jpstr').text(video_open_time_jpstr);
+                videoInfo.find('community id').text(community_id.replace(/(co|ch)/, ''));
 
 
                 // console.log(item.is_reserved);

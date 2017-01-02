@@ -93,7 +93,7 @@ $(function() {
     }, 1000);
 
     setTimeout(function() {
-        setInterval(autoEnterCommunityRoutine, 1000 * 20)
+        setInterval(autoEnterCommunityRoutine, 1000 * 20);
     }, 1000);
 
     const storagedData = JSON.parse(localStorage['autoEnterCommunityList']);
@@ -117,7 +117,7 @@ function refresh() {
             console.info('[imanani] videoInfos = ', videoInfos);
             count(removeReservation(videoInfos)).then(setBadgeText);
             $.each(newArrival.get(videoInfos), function(index, infos) {
-                if (comuHolder.isNew($(infos).find('community'))) {
+                if (comuHolder.isNew(infos)) {
                     // do nothing.
                     // (new Audio("sound/tada.mp3")).play();
                 } else {
