@@ -260,7 +260,7 @@ function autoEnterProgramRoutine() {
                 console.info('length = ', length);
                 if (i === length - 1) {
                     console.info('resolve');
-                    resolve();
+                    setTimeout(resolve, 2000);
                 }
             }.bind(null, i, length), i * 2000); // 連続アクセスを避ける
         }
