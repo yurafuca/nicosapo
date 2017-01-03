@@ -88,13 +88,22 @@ $(function() {
 
     setInterval(refresh, 1000 * 20);
 
-    setTimeout(function() {
-        setInterval(autoEnterProgramRoutine, 1000 * 20);
-    }, 1000);
+    // setTimeout(function() {
+    //     setInterval(autoEnterProgramRoutine, 1000 * 20);
+    // }, 1000);
+
+    // setTimeout(function() {
+    //     setInterval(autoEnterCommunityRoutine, 1000 * 20);
+    // }, 1000);
 
     setTimeout(function() {
-        setInterval(autoEnterCommunityRoutine, 1000 * 20);
-    }, 1000);
+        setInterval(function() {
+            Promise.resolve()
+                .then(autoEnterProgramRoutine)
+                .then(autoEnterCommunityRoutine);
+        }, 1000 * 20);
+    }, 1000 * 5);
+
 
     const storagedData = JSON.parse(localStorage['autoEnterCommunityList']);
     for (id in storagedData) {
@@ -215,31 +224,47 @@ function enableOrNull(value) {
 
 
 function autoEnterProgramRoutine() {
-    let storagedData;
+    return new Promise(function(resolve, reject) {
+        console.info('autoEnterProgramRoutine');
 
-    // TODO: Fix.
-    if (localStorage['autoEnterProgramList']) {
-        storagedData = JSON.parse(localStorage['autoEnterProgramList']);
-    } else {
-        storagedData = {};
-    }
+        let storagedData = localStorage['autoEnterProgramList'];
 
-    console.log("");
-    console.log("");
-    console.log("");
+        if (storagedData) {
+            storagedData = JSON.parse(storagedData);
+        } else {
+            storagedData = {};
+        }
 
-    let races = [];
+        console.log("");
+        console.log("");
+        console.log("");
 
-    for (id in storagedData) {
-        races.push(test.bind(null, id, storagedData));
-    }
+        let tasks = [];
 
-    console.info(races);
+        for (id in storagedData) {
+            tasks.push(test.bind(null, id, storagedData));
+        }
 
-    for (let i = 0; i < races.length; i++) {
-        races[i].call(null);
-    }
+        console.info(tasks);
 
+        const length = tasks.length;
+
+        if (tasks.length === 0) {
+            resolve();
+        }
+
+        for (let i = 0; i < tasks.length; i++) {
+            setTimeout(function() {
+                tasks[i].call(null);
+                console.info('i = ', i);
+                console.info('length = ', length);
+                if (i === length - 1) {
+                    console.info('resolve');
+                    resolve();
+                }
+            }.bind(null, i, length), i * 2000); // 連続アクセスを避ける
+        }
+    });
 }
 
 function test(id, storagedData) {
@@ -272,26 +297,43 @@ function test(id, storagedData) {
 }
 
 function autoEnterCommunityRoutine() {
-    let storagedData = localStorage['autoEnterCommunityList'];
+    return new Promise(function(resolve, reject) {
+        console.info('autoEnterCommunityRoutine');
 
-    // TODO: Fix.
-    if (storagedData) {
-        storagedData = JSON.parse(storagedData);
-    } else {
-        storagedData = {};
-    }
+        let storagedData = localStorage['autoEnterCommunityList'];
 
-    console.debug('storagedData = ', storagedData);
+        if (storagedData) {
+            storagedData = JSON.parse(storagedData);
+        } else {
+            storagedData = {};
+        }
 
-    let tasks = [];
-    for (id in storagedData) {
-        tasks.push(checkAndOpenFreshCast.bind(null, id, storagedData));
-    }
-    for (let i = 0; i < tasks.length; i++) {
-      setTimeout(function() {
-        tasks[i].call(null);
-      }.bind(null, i), i * 2000); // 連続アクセスを避ける
-    }
+        console.debug('storagedData = ', storagedData);
+
+        let tasks = [];
+
+        for (id in storagedData) {
+            tasks.push(checkAndOpenFreshCast.bind(null, id, storagedData));
+        }
+
+        const length = tasks.length;
+
+        if (tasks.length === 0) {
+            resolve();
+        }
+
+        for (let i = 0; i < tasks.length; i++) {
+            setTimeout(function() {
+                tasks[i].call(null);
+                console.info('i = ', i);
+                console.info('length = ', length);
+                if (i === length - 1) {
+                    console.info('resolve');
+                    resolve();
+                }
+            }.bind(null, i, length), i * 2000); // 連続アクセスを避ける
+        }
+    });
 }
 
 function checkAndOpenFreshCast(id, storagedData) {
@@ -362,8 +404,6 @@ function removeReservation(videoInfos) {
 
     $.each($(videoInfos), function(index, item) {
         const is_reserved = $(item).find('video is_reserved').text();
-        console.info(is_reserved);
-        console.log(index);
         if (is_reserved == 'false') {
             result.push(item);
         }

@@ -395,7 +395,7 @@ $(function() {
                 });
             break;
     }
-    setInterval(autoRedirect, 1000 * 15);
+    setInterval(autoRedirect, 1000 * 20);
 });
 
 $(function() {
