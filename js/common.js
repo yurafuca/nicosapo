@@ -42,5 +42,24 @@ class Time
 
         return days;
     }
-}
 
+    static secondDistance(src, dst)
+    {
+        console.info(src.getFullYear());
+        console.info(dst.getFullYear());
+        const deltaMillsecond = dst.getTime() - src.getTime();
+        return parseInt(deltaMillsecond / 1000);
+    }
+
+    static minuteDistanceOfSec(src, dst)
+    {
+        const secDist = Time.secondDistance(src, dst);
+        return parseInt(secDist % 60);
+    }
+
+    static minuteDistance(src, dst)
+    {
+        const deltaMillsecond = dst.getTime() - src.getTime();
+        return parseInt(deltaMillsecond / 1000 / 60);
+    }
+}

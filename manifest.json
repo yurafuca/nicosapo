@@ -38,10 +38,18 @@
 	},
     "content_scripts": [
         {
-          "matches": ["http://live.nicovideo.jp/watch/*", "http://live2.nicovideo.jp/watch/*", "http://live.nicovideo.jp/gate/*"],
+          "matches": [
+            "http://live.nicovideo.jp/watch/*",
+            "http://live2.nicovideo.jp/watch/*",
+            "http://live.nicovideo.jp/gate/*",
+            "http://com.nicovideo.jp/community/*",
+            "http://ch.nicovideo.jp/*"
+        ],
           "js": [
                 "js/libs/jquery-2.1.4.min.js",
                 "js/nicovideo.js",
+                "js/common.js",
+                "js/timecounter.js",
                 "js/content.js"
             ],
           "css": [
@@ -52,6 +60,7 @@
     ],
     "options_page": "html/options.html",
     "web_accessible_resources": [
-        "image/icon.png"
+        "image/icon.png",
+        "font/baseballpark.ttf"
     ]
 }

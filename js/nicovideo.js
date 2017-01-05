@@ -307,32 +307,37 @@ function isOffAir(broadcastId) {
         getStatusByBroadcast(broadcastId).then(function(response) {
             const errorCode = $(response).find('error code').text();
 
+            console.info(response);
+
             // OFFAIR or ERROR.
             if (errorCode) {
                 switch (errorCode) {
                     case 'comingsoon':
                         console.log(theBroadcastId + ' is COMINGSOON');
-                        resolve(true);
-                        return;
+                        response.isOffAir = true;
+                        break;
                     case 'premium_only':
                         console.log(theBroadcastId + ' is PREMIUMONLY');
-                        resolve(true);
-                        return;
+                        response.isOffAir = true;
+                        break;
                     case 'closed':
                         console.log(theBroadcastId + ' is OFFAIR');
-                        resolve(true);
-                        return;
+                        response.isOffAir = true;
+                        break;
                     case 'error':
                         console.log(theBroadcastId + ' is ERROR.');
                         reject();
                         return;
                 }
+            } else {
+                // ONAIR.
+                response.isOffAir = false;
+                const broadcastId = $(response).find('stream id').text();
+                console.log(broadcastId + ' is ONAIR');
             }
 
-            // ONAIR
-            const broadcastId = $(response).find('stream id').text();
-            console.log(broadcastId + ' is ONAIR');
-            resolve(false);
+
+            resolve(response);
         });
     });
 }

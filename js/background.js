@@ -49,13 +49,9 @@ function loadCasts(liveType) {
     return new Promise(function(resolve, reject) {
         console.info('[imanani][Broadcasts.loadAnyBroadcasts] liveType = ', liveType);
         if (liveType == 'user') {
-            // getSessionId().then(getSubscribe).then(normalize).then(
             getSubscribe_2().then(
                 function($videoInfos) {
                     console.info($videoInfos);
-                    // var $videoInfosNow = removeReservation($videoInfos);
-                    // console.info($videoInfosNow);
-                    // resolve($videoInfosNow);
                     resolve($videoInfos);
                 }
             ).catch(reject);
@@ -88,14 +84,6 @@ $(function() {
 
     setInterval(refresh, 1000 * 20);
 
-    // setTimeout(function() {
-    //     setInterval(autoEnterProgramRoutine, 1000 * 20);
-    // }, 1000);
-
-    // setTimeout(function() {
-    //     setInterval(autoEnterCommunityRoutine, 1000 * 20);
-    // }, 1000);
-
     setTimeout(function() {
         setInterval(function() {
             Promise.resolve()
@@ -127,10 +115,8 @@ function refresh() {
             count(removeReservation(videoInfos)).then(setBadgeText);
             $.each(newArrival.get(videoInfos), function(index, infos) {
                 if (comuHolder.isNew(infos)) {
-                    // do nothing.
-                    // (new Audio("sound/tada.mp3")).play();
+                    // Do nothing.
                 } else {
-                    console.log('hoge');
                     if (enableOrNull(localStorage.getItem('options.playsound.enable'))) {
                         const soundfile = localStorage.getItem('options.soundfile') || 'ta-da.mp3';
                         const volume = localStorage.getItem('options.playsound.volume') || 1.0;
@@ -234,10 +220,6 @@ function autoEnterProgramRoutine() {
         } else {
             storagedData = {};
         }
-
-        console.log("");
-        console.log("");
-        console.log("");
 
         let tasks = [];
 
@@ -344,6 +326,13 @@ function checkAndOpenFreshCast(id, storagedData) {
               chrome.tabs.create({
                   url: 'http://live.nicovideo.jp/watch/' + result.nextBroadcastId
               });
+              // let options = {
+              //     type: "basic",
+              //     title: "自動入場",
+              //     message: storagedData[result.communityId]['title'],
+              //     iconUrl: storagedData[result.communityId]['thumbnail'],
+              // };
+              // chrome.notifications.create(id, options);
           }
           console.info('id = ', result.communityId);
           storagedData[result.communityId]['state'] = 'onair';
@@ -412,13 +401,3 @@ function removeReservation(videoInfos) {
     console.info(result);
     return $(result);
 }
-
-// function normalize(xml) {
-//     var promise = new Promise(function(resolve, reject) {
-//         console.info(xml);
-//         var normalized = '<documents>' + xml.documentElement.innerHTML + '</documents>';
-//         var $videoInfos = $(normalized).find('video_info');
-//         resolve($videoInfos);
-//     });
-//     return promise;
-// }

@@ -1,5 +1,6 @@
 let _communityId;
 let _broadcastId;
+const timeCounter = new TimeCounter(new Date());
 
 class PageType {
     static get() {
@@ -13,6 +14,14 @@ class PageType {
 
         if (this._isGatePage()) {
             return 'GATE_PAGE';
+        }
+
+        if (this._isCommunityPage()) {
+            return 'COMMUNITY_PAGE';
+        }
+
+        if (this._isChannelPage()) {
+            return 'CHANNEL_PAGE';
         }
 
         return 'NORMAL_CAST_PAGE';
@@ -43,6 +52,24 @@ class PageType {
         }
 
         return flag;
+    }
+
+    static _isCommunityPage() {
+        const $targetDom = $('table.communityDetail');
+        if ($targetDom.length > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    static _isChannelPage() {
+        const $targetDom = $('body#channel_top');
+        if ($targetDom.length > 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
 
@@ -163,13 +190,24 @@ class Buttons {
         }
 
         thumbnail = $('meta[property="og:image"]').attr('content');
+
         if (type == 'autoEnterProgram') {
           title = $('meta[property="og:title"]').attr('content');
           openDate = $('.kaijo meta[itemprop="datePublished"]').attr("content");
         }
+
         if (type == 'autoEnterCommunity') {
-          title = $($('.commu_info').find('a').get(0)).html();
-          owner = $('.nicopedia_nushi').find('a').text();
+            const pageType = PageType.get();
+            if (pageType === 'COMMUNITY_PAGE') {
+                title = $('div.communityData > h2.title > a').text().replace(/[ ]/, '');
+                owner = $('div.communityData tr.row:first-child > td.content > a').text().replace(/[ ]/, '');
+            } else if (pageType === 'CHANNEL_PAGE') {
+                title = $('h3.cp_chname').text();
+                owner = $('p.cp_viewname').text();
+            } else {
+                title = $($('.commu_info').find('a').get(0)).html();
+                owner = $('.nicopedia_nushi').find('a').text();
+            }
         }
 
 
@@ -206,6 +244,7 @@ class Buttons {
 
 class Storage {
     static saveToNestedLocalStorage(key, innerKey, innerValue) {
+        console.debug(innerValue);
         chrome.runtime.sendMessage({
                 purpose: 'saveToNestedLocalStorage',
                 key: key,
@@ -244,14 +283,22 @@ class IdGetter {
         let communityId;
 
         const communityUrl = $('meta[property="og:image"]').attr('content');
-        const re1 = /http:\/\/icon\.nimg\.jp\/community\/[0-9]+\/([\x21-\x7e]+)\.jpg.*/;
+        const re1 = /http:\/\/icon\.nimg\.jp\/(community|channel).*((ch|co)[0-9]+)\.jpg.*/;
+
+        // http://icon.nimg.jp/channel/ch2624645.jpg?1471454763
+        // 
 
         if (re1.exec(communityUrl)) {
-            communityId = re1.exec(communityUrl)[1];
+            communityId = re1.exec(communityUrl)[2];
         } else {
-            const communityUrl = $('.text .smn a').attr('href');
+            // const communityUrl = $('.text .smn a').attr('href');
+            // const regexp = /http:\/\/(com|ch)\.nicovideo\.jp\/(community|channel)\/([\x21-\x7e]+)/;
+            // communityId = regexp.exec(communityUrl)[3];
+
+            const communityUrl = $('a.ch_name').attr('href');
             const regexp = /http:\/\/(com|ch)\.nicovideo\.jp\/(community|channel)\/([\x21-\x7e]+)/;
             communityId = regexp.exec(communityUrl)[3];
+
         }
 
         console.info('[imanani][IdGetter.community] communityId = ', communityId);
@@ -268,9 +315,11 @@ class FormatNicoPage {
         }
 
         if (pageType == 'GATE_PAGE') {
+            $('.program_icon').css('float', 'none');
+            $('.program_icon').css('display', 'inline-block');
             $('.program-title').css('display', 'inline-block');
-            $('.program-title').css('text-overflow', 'ellipsis');
-            $('.program-title').css('width', '754px');
+            // $('.program-title').css('text-overflow', 'ellipsis');
+            // $('.program-title').css('width', '754px');
             $('.program-title').attr('title', $('.program-title').text());
             return;
         }
@@ -281,6 +330,9 @@ class FormatNicoPage {
 
         if (pageType == 'NORMAL_CAST_PAGE') {
             $('#watch_title_box .meta').css('width', '1000px');
+
+            // For ExtendedBar
+            $('#slider_container').css('padding', '0');
         }
     }
 }
@@ -301,6 +353,8 @@ $(function() {
     const pageType = PageType.get();
     const buttonType = buttonTypes[pageType];
     const switchButton = Buttons.make(buttonType);
+
+    console.info(pageType);
 
     FormatNicoPage.exec(pageType);
 
@@ -334,16 +388,35 @@ $(function() {
         case 'NORMAL_CAST_PAGE':
             $('.meta').append(switchButton);
             const switchButton2 = Buttons.make('autoEnterCommunity');
-            console.debug(switchButton2);
             $('.meta').append(switchButton2);
+            break;
+        case 'COMMUNITY_PAGE':
+            const switchButton3 = Buttons.make('autoEnterCommunity');
+            $('a#comSetting_hide').after(switchButton3);
+            break;
+        case 'CHANNEL_PAGE':
+            const switchButton4 = Buttons.make('autoEnterCommunity');
+            $('div.join_leave').prepend(switchButton4);
             break;
         default:
             // Do nothing.
             break;
     }
 
+    const extendedBar = $(`
+            <div id="extended-bar">
+                <div class="time end-time"></div>
+                <div class="message">延長されていません</div>
+                <div class="time rest-time"></div>
+            </div>
+        `);
+
     switch (pageType) {
-        case 'NORMAL_CAST_PAGE':
+        case 'NORMAL_CAST_PAGE': // Fall Through.
+        case 'MODERN_CAST_PAGE':
+            $('#player').after(extendedBar);
+            $('#watch_player_top_box').after(extendedBar);
+            // $('#watch_player_box').after(extendedBar);
             chrome.runtime.sendMessage({
                     purpose: 'getFromLocalStorage',
                     key: 'options.autoJump.enable'
@@ -354,7 +427,8 @@ $(function() {
                     } else {
                         Buttons.toggleOff('autoRedirect');
                     }
-                });
+                }
+            );
             chrome.runtime.sendMessage({
                     purpose: 'getFromNestedLocalStorage',
                     key: 'autoEnterCommunityList'
@@ -365,9 +439,33 @@ $(function() {
                     } else {
                         Buttons.toggleOff('autoEnterCommunity');
                     }
-                });
+                }
+            );
+            getStatusByCommunity(_communityId).then(function(response) {
+
+                // Extended Bar.
+                const currentTime = Date.now();
+                const currentDate = new Date(currentTime);
+
+                // new Date() は引数にミリ秒を要求するので 1000 倍するために末尾に '000' を付加する．
+                const endTime = Number($(response).find('stream end_time').text() + '000');
+                const endDate = new Date(endTime)
+
+                const endTimeJpn = Time.toJpnString(endDate.getTime());
+
+                const restTime_Minute = Time.minuteDistance(currentDate, endDate);
+                let   restTime_Second = Time.minuteDistanceOfSec(currentDate, endDate);
+                      restTime_Second = ('0' + restTime_Second).slice(-2);
+
+                // タイマーを初期化
+                timeCounter.setHour(0);
+                timeCounter.setMinute(restTime_Minute);
+                timeCounter.setSecond(restTime_Second);
+
+                $('#extended-bar .end-time').text(`${endTimeJpn}`);
+                $('#extended-bar .rest-time').text(`${restTime_Minute}：${restTime_Second}`);
+            });
             break;
-        case 'MODERN_CAST_PAGE':
         case 'STAND_BY_PAGE':
             chrome.runtime.sendMessage({
                     purpose: 'getFromLocalStorage',
@@ -379,7 +477,8 @@ $(function() {
                     } else {
                         Buttons.toggleOff('autoRedirect');
                     }
-                });
+                }
+            );
             break;
         case 'GATE_PAGE':
             chrome.runtime.sendMessage({
@@ -394,8 +493,38 @@ $(function() {
                     }
                 });
             break;
+        case 'COMMUNITY_PAGE': // Fall Through.
+        case 'CHANNEL_PAGE':
+            chrome.runtime.sendMessage({
+                    purpose: 'getFromNestedLocalStorage',
+                    key: 'autoEnterCommunityList'
+                },
+                function(response) {
+                    if (response[IdGetter.community()]) {
+                        Buttons.toggleOn('autoEnterCommunity');
+                    } else {
+                        Buttons.toggleOff('autoEnterCommunity');
+                    }
+                });
+            break;
     }
-    setInterval(autoRedirect, 1000 * 20);
+
+    if ((pageType === 'NORMAL_CAST_PAGE') || (pageType === 'MODERN_CAST_PAGE')) {
+        setInterval(autoRedirect, 1000 * 20);
+    }
+
+    // TimeCounter.
+    setInterval(function() {
+        const $restTime = $('#extended-bar .rest-time');
+        if ($restTime.text() == '放送が終了しました') { // TODO: Too Ugly.
+            return;
+        }
+        const minute = timeCounter.getMinute();
+        let   second = timeCounter.getSecond();
+              second = ('0' + second).slice(-2);    
+        $restTime.text(`${minute}：${second}`);
+        timeCounter.subSecond(1);
+    }, 1000);
 });
 
 $(function() {
@@ -429,19 +558,65 @@ function enabledOrNull(value) {
 function initialize() {
     if (PageType.get() != 'GATE_PAGE')
         _communityId = IdGetter.community();
-    _broadcastId = IdGetter.livePage();
 }
 
 // TODO: Rename.
 function autoRedirect() {
+    _broadcastId = IdGetter.livePage(); // TODO
     if (Buttons.isToggledOn('autoRedirect')) {
         console.log(_broadcastId + ' is enabled auto redirect.');
-        isOffAir(_broadcastId).then(function(isOffAir) {
+        isOffAir(_broadcastId).then(function(response) {
+
             // ONAIR.
-            if (!isOffAir) return;
+            if (!response.isOffAir) {
+
+                // Extended Bar.
+                const currentTime = Date.now();
+                const currentDate = new Date(currentTime);
+
+                // new Date() は引数にミリ秒を要求するので 1000 倍するために末尾に '000' を付加する．
+                const endTime = Number($(response).find('stream end_time').text() + '000');
+                const endDate = new Date(endTime)
+
+                const endTimeJpn = Time.toJpnString(endDate.getTime());
+                const endTimeJpnLast = $('#extended-bar .end-time').text();
+
+                const restTime_Minute = Time.minuteDistance(currentDate, endDate);
+                let   restTime_Second = Time.minuteDistanceOfSec(currentDate, endDate);
+                      restTime_Second = ('0' + restTime_Second).slice(-2);
+
+                // 終了時刻が更新された場合はタイマーを更新
+                if (endTimeJpnLast !== endTimeJpn) {
+                    timeCounter.setHour(0); // TODO:
+                    timeCounter.setMinute(restTime_Minute);
+                    timeCounter.setSecond(restTime_Second);
+
+                    $('#extended-bar .end-time').text(`${endTimeJpn}`);
+                    $('#extended-bar .rest-time').text(`${restTime_Minute}：${restTime_Second}`);
+                    
+                    // 点滅処理 (奇数回繰り返してメッセージを残す)
+                    for (let i = 0; i < 9; i++) {
+                        let message = '';
+                        if (i % 2 === 0) {
+                            message = `${endTimeJpn} に放送が延長されました`;
+                        } else {
+                            message = ``;
+                        }
+                        setTimeout(function() {
+                            $('#extended-bar .message').text(message);
+                        }, i * 500);
+                    }
+                }
+
+                return;
+            }
 
             // OFFAIR.
             isStartedBroadcast(_communityId).then(function(response) {
+                // タイマーを無効化
+                $('#extended-bar .end-time').text(`放送が終了しました`);
+                $('#extended-bar .rest-time').text(`放送が終了しました`);
+
                 console.info('[imanani][isStartedBroadcast] = ', response);
                 if (response.isStarted) {
                     _broadcastId = response.nextBroadcastId;
