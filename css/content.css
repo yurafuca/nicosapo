@@ -87,6 +87,14 @@
     margin-right: 30px;
 }
 
+#extended-bar .time { /* For mac */
+    color: white;
+}
+
+#extended-bar .message { /* For mac */
+    color: white;
+}
+
 #extended-bar > .time:last-child {
     margin-right: 0px;
 }

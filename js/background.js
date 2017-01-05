@@ -82,14 +82,14 @@ $(function() {
 
     refresh();
 
-    setInterval(refresh, 1000 * 20);
+    setInterval(refresh, 1000 * 30);
 
     setTimeout(function() {
         setInterval(function() {
             Promise.resolve()
                 .then(autoEnterProgramRoutine)
                 .then(autoEnterCommunityRoutine);
-        }, 1000 * 20);
+        }, 1000 * 30);
     }, 1000 * 5);
 
 
@@ -242,9 +242,9 @@ function autoEnterProgramRoutine() {
                 console.info('length = ', length);
                 if (i === length - 1) {
                     console.info('resolve');
-                    setTimeout(resolve, 2000);
+                    setTimeout(resolve, 3000);
                 }
-            }.bind(null, i, length), i * 2000); // 連続アクセスを避ける
+            }.bind(null, i, length), i * 3000); // 連続アクセスを避ける
         }
     });
 }
