@@ -55,7 +55,7 @@
  */
 
 #extended-bar {
-    font-family: "Meiryo","Apple Color Emoji","Segoe UI Emoji","NotoColorEmoji","Segoe UI Symbol","Android Emoji","EmojiSymbols";
+    font-family: "Lucida Grande","Lucida Sans Unicode","Hiragino","Meiryo","Apple Color Emoji","Segoe UI Emoji","NotoColorEmoji","Segoe UI Symbol","Android Emoji","EmojiSymbols";
     width: 960px;
     text-align: right;
     background-color: #222;
@@ -64,7 +64,7 @@
     margin: 0px auto;
     box-sizing: border-box;
     margin-top: 10px;
-    padding: 11px 20px 3px; /* 下部を狭めに取る */
+    padding: 10px 20px 4px; /* 下部を狭めに取る */
     font-size: 12px;
 
 /*    margin: 0;
