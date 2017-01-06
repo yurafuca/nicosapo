@@ -5,6 +5,22 @@
 
 /*@font-face {font-family:"Score Board";src:url("scoreboard.eot?") format("eot"),url("scoreboard.woff") format("woff"),url("scoreboard.ttf") format("truetype"),url("scoreboard.svg#ScoreBoard") format("svg");font-weight:normal;font-style:normal;}*/
 
+/*
+// For Niconico
+*/
+
+/* ニコニコ動画のバグ．フォローすると class, id が空になってスタイルが適用されない */
+.icon_follow {
+    position: relative;
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    vertical-align: top;
+}
+
+/*
+// For Nicosapo
+*/
 
 .on_off_button {
     display: inline-block;
