@@ -50,6 +50,11 @@
                 "js/nicovideo.js",
                 "js/common.js",
                 "js/timecounter.js",
+                "js/formatNicoPage.js",
+                "js/idHolder.js",
+                "js/storage.js",
+                "js/buttons.js",
+                "js/pageType.js",
                 "js/content.js"
             ],
           "css": [
