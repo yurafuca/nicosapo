@@ -24,6 +24,10 @@ class PageType {
             return 'CHANNEL_PAGE';
         }
 
+        if (this._isOfficialCastPage()) {
+            return 'OFFICIAL_CAST_PAGE';
+        }
+
         return 'NORMAL_CAST_PAGE';
     }
 
@@ -65,6 +69,15 @@ class PageType {
 
     static _isChannelPage() {
         const $targetDom = $('body#channel_top');
+        if ($targetDom.length > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    static _isOfficialCastPage() {
+        const $targetDom = $('#page.official');
         if ($targetDom.length > 0) {
             return true;
         } else {
@@ -286,7 +299,7 @@ class IdGetter {
         const re1 = /http:\/\/icon\.nimg\.jp\/(community|channel).*((ch|co)[0-9]+)\.jpg.*/;
 
         // http://icon.nimg.jp/channel/ch2624645.jpg?1471454763
-        // 
+        //
 
         if (re1.exec(communityUrl)) {
             communityId = re1.exec(communityUrl)[2];
@@ -328,7 +341,7 @@ class FormatNicoPage {
             // Do nothing.
         }
 
-        if (pageType == 'NORMAL_CAST_PAGE') {
+        if (pageType == 'NORMAL_CAST_PAGE' || pageType == 'OFFICIAL_CAST_PAGE') {
             $('#watch_title_box .meta').css('width', '1000px');
 
             // For ExtendedBar
@@ -390,6 +403,10 @@ $(function() {
             const switchButton2 = Buttons.make('autoEnterCommunity');
             $('.meta').append(switchButton2);
             break;
+        case 'OFFICIAL_CAST_PAGE':
+            const noSupport = $('<span>　/* 公式番組では自動枠移動，コミュニティへの自動入場に対応していません */</span>')
+            $('.meta').append(noSupport);
+            break;
         case 'COMMUNITY_PAGE':
             const switchButton3 = Buttons.make('autoEnterCommunity');
             $('a#comSetting_hide').after(switchButton3);
@@ -412,7 +429,8 @@ $(function() {
         `);
 
     switch (pageType) {
-        case 'NORMAL_CAST_PAGE': // Fall Through.
+        case 'OFFICIAL_CAST_PAGE': // Fall Through.
+        case 'NORMAL_CAST_PAGE':   // Fall Through.
         case 'MODERN_CAST_PAGE':
             $('#player').after(extendedBar);
             $('#watch_player_top_box').after(extendedBar);
@@ -441,7 +459,7 @@ $(function() {
                     }
                 }
             );
-            getStatusByCommunity(_communityId).then(function(response) {
+            getStatusByBroadcast(IdGetter.livePage()).then(function(response) {
 
                 // Extended Bar.
                 const currentTime = Date.now();
@@ -521,7 +539,7 @@ $(function() {
         }
         const minute = timeCounter.getMinute();
         let   second = timeCounter.getSecond();
-              second = ('0' + second).slice(-2);    
+              second = ('0' + second).slice(-2);
         $restTime.text(`${minute}：${second}`);
         timeCounter.subSecond(1);
     }, 1000);
@@ -593,7 +611,7 @@ function autoRedirect() {
 
                     $('#extended-bar .end-time').text(`${endTimeJpn}`);
                     $('#extended-bar .rest-time').text(`${restTime_Minute}：${restTime_Second}`);
-                    
+
                     // 点滅処理 (奇数回繰り返してメッセージを残す)
                     for (let i = 0; i < 9; i++) {
                         let message = '';
