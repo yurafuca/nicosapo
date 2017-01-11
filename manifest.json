@@ -54,6 +54,9 @@
                 "js/idHolder.js",
                 "js/storage.js",
                 "js/buttons.js",
+                "js/autoRedirectButton.js",
+                "js/autoEnterProgramButton.js",
+                "js/autoEnterCommunityButton.js",
                 "js/pageType.js",
                 "js/content.js"
             ],

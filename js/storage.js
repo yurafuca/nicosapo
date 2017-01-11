@@ -2,6 +2,7 @@ class Storage
 {
     static saveToNestedLocalStorage(key, innerKey, innerValue) {
         console.debug(innerValue);
+        
         chrome.runtime.sendMessage({
                 purpose: 'saveToNestedLocalStorage',
                 key: key,

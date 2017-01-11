@@ -1,8 +1,13 @@
 let _communityId;
 let _broadcastId;
+
 const timeCounter = new TimeCounter(new Date());
 const formatNicoPage = new FormatNicoPage();
 const idHolder = new IdHolder();
+
+const autoRedirectButton = new AutoRedirectButton();
+const autoEnterCommunityButton = new AutoEnterCommunityButton();
+const autoEnterProgramButton = new AutoEnterProgramButton();
 
 $(function()
 {
@@ -19,7 +24,7 @@ $(function()
 
     const pageType = PageType.get();
     const buttonType = buttonTypes[pageType];
-    const switchButton = Buttons.make(buttonType);
+    // const switchButton = Buttons.make(buttonType);
 
     console.info(pageType);
 
@@ -27,6 +32,7 @@ $(function()
 
     switch (pageType) {
         case 'STAND_BY_PAGE':
+            // TODO:
             const link = $(switchButton).find('.link');
             link.css('display', 'block');
             link.css('padding', '6px');
@@ -39,35 +45,37 @@ $(function()
                 },
                 function(response) {
                     if (response[idHolder.liveId]) {
-                        Buttons.toggleOn('autoEnterProgram');
+                        // Buttons.toggleOn('autoEnterProgram');
+                        autoEnterProgramButton.toggleOn();
                     } else {
-                        Buttons.toggleOff('autoEnterProgram');
+                        // Buttons.toggleOff('autoEnterProgram');
+                        autoEnterProgramButton.toggleOff();
                     }
                 }
             );
             break;
         case 'GATE_PAGE':
-            $('.gate_title').prepend(switchButton);
+            $('.gate_title').prepend(autoEnterProgramButton.getDom());
             break;
         case 'MODERN_CAST_PAGE':
-            $('.program-detail div').last().append(switchButton);
+            $('.program-detail div').last().append(autoRedirectButton.getDom());
             break;
         case 'NORMAL_CAST_PAGE':
-            $('.meta').append(switchButton);
-            const switchButton2 = Buttons.make('autoEnterCommunity');
-            $('.meta').append(switchButton2);
+            $('.meta').append(autoRedirectButton.getDom());
+            $('.meta').append(autoEnterCommunityButton.getDom());
             break;
         case 'OFFICIAL_CAST_PAGE':
-            const noSupport = $('<span>　/* 公式番組では自動枠移動，コミュニティへの自動入場に対応していません */</span>')
+            const noSupport = $(`<span>　
+                                  /* 公式番組では自動枠移動，
+                                  コミュニティへの自動入場に対応していません */
+                                  </span>`)
             $('.meta').append(noSupport);
             break;
         case 'COMMUNITY_PAGE':
-            const switchButton3 = Buttons.make('autoEnterCommunity');
-            $('a#comSetting_hide').after(switchButton3);
+            $('a#comSetting_hide').after(autoEnterCommunityButton.getDom());
             break;
         case 'CHANNEL_PAGE':
-            const switchButton4 = Buttons.make('autoEnterCommunity');
-            $('div.join_leave').prepend(switchButton4);
+            $('div.join_leave').prepend(autoEnterCommunityButton.getDom());
             break;
         default:
             // Do nothing.
@@ -95,9 +103,9 @@ $(function()
                 },
                 function(response) {
                     if (enabledOrNull(response)) {
-                        Buttons.toggleOn('autoRedirect');
+                        autoRedirectButton.toggleOn();
                     } else {
-                        Buttons.toggleOff('autoRedirect');
+                        autoRedirectButton.toggleOff();
                     }
                 }
             );
@@ -107,9 +115,9 @@ $(function()
                 },
                 function(response) {
                     if (response[idHolder.communityId]) {
-                        Buttons.toggleOn('autoEnterCommunity');
+                        autoEnterCommunityButton.toggleOn();
                     } else {
-                        Buttons.toggleOff('autoEnterCommunity');
+                        autoEnterCommunityButton.toggleOff();
                     }
                 }
             );
@@ -121,7 +129,7 @@ $(function()
 
                 // new Date() は引数にミリ秒を要求するので 1000 倍するために末尾に '000' を付加する．
                 const endTime = Number($(response).find('stream end_time').text() + '000');
-                const endDate = new Date(endTime)
+                const endDate = new Date(endTime);
 
                 const endTimeJpn = Time.toJpnString(endDate.getTime());
 
@@ -145,9 +153,9 @@ $(function()
                 },
                 function(response) {
                     if (enabledOrNull(response)) {
-                        Buttons.toggleOn('autoRedirect');
+                        autoRedirectButton.toggleOn();
                     } else {
-                        Buttons.toggleOff('autoRedirect');
+                        autoRedirectButton.toggleOff();
                     }
                 }
             );
@@ -159,9 +167,9 @@ $(function()
                 },
                 function(response) {
                     if (response[idHolder.liveId]) {
-                        Buttons.toggleOn('autoEnterProgram');
+                        autoEnterProgramButton.toggleOn();
                     } else {
-                        Buttons.toggleOff('autoEnterProgram');
+                        autoEnterProgramButton.toggleOff();
                     }
                 });
             break;
@@ -173,9 +181,9 @@ $(function()
                 },
                 function(response) {
                     if (response[idHolder.communityId]) {
-                        Buttons.toggleOn('autoEnterCommunity');
+                        autoEnterCommunityButton.toggleOn();
                     } else {
-                        Buttons.toggleOff('autoEnterCommunity');
+                        autoEnterCommunityButton.toggleOff();
                     }
                 });
             break;
@@ -200,25 +208,29 @@ $(function()
 });
 
 $(function() {
-    $(document).on('click', '.link', function() {
-        const parentNode = $(this).parent().get(0);
-        const parentClass = parentNode.className.split(" ")[1];
-        const buttonTypes = {
-            'auto_redirect_button': 'autoRedirect',
-            'auto_enter_community_button': 'autoEnterCommunity',
-            'auto_enter_program_button': 'autoEnterProgram',
-        };
-        const buttonType = buttonTypes[parentClass];
-        if ($(this).hasClass('switch_is_on')) {
-            Buttons.toggleOff(buttonType);
-            if (buttonType == 'autoEnterCommunity' || buttonType == 'autoEnterProgram') {
-                Buttons.removeAsAutoEnter(buttonType);
-            }
+    $(document).on('click', '.auto_redirect_button', function() {
+        if (autoRedirectButton.isToggledOn()) {
+            autoRedirectButton.toggleOff();
         } else {
-            Buttons.toggleOn(buttonType);
-            if (buttonType == 'autoEnterCommunity' || buttonType == 'autoEnterProgram') {
-                Buttons.saveAsAutoEnter(buttonType);
-            }
+            autoRedirectButton.toggleOn();
+        }
+    });
+    $(document).on('click', '.auto_enter_program_button', function() {
+        if (autoEnterProgramButton.isToggledOn()) {
+            autoEnterProgramButton.toggleOff();
+            autoEnterProgramButton.removeAsAutoEnter();
+        } else {
+            autoEnterProgramButton.toggleOn();
+            autoEnterProgramButton.saveAsAutoEnter();
+        }
+    });
+    $(document).on('click', '.auto_enter_community_button', function() {
+        if (autoEnterCommunityButton.isToggledOn()) {
+            autoEnterCommunityButton.toggleOff();
+            autoEnterCommunityButton.removeAsAutoEnter();
+        } else {
+            autoEnterCommunityButton.toggleOn();
+            autoEnterCommunityButton.saveAsAutoEnter();
         }
     });
 });
@@ -235,7 +247,7 @@ function initialize() {
 // TODO: Rename.
 function autoRedirect() {
     _broadcastId = idHolder.liveId; // TODO
-    if (Buttons.isToggledOn('autoRedirect')) {
+    if (autoRedirectButton.isToggledOn()) {
         console.log(_broadcastId + ' is enabled auto redirect.');
         isOffAir(_broadcastId).then(function(response) {
 
