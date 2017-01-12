@@ -14,7 +14,7 @@ class AutoEnterCommunityButton extends Buttons
 
         this._body = this._make();
 
-        console.info('[nicosapo][AutoRedirectButton] this.body = ', this.body);
+        // console.info('[nicosapo][AutoEnterCommunityButton] this.body = ', this._body);
     }
 
     // @Override

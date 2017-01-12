@@ -27,7 +27,9 @@ class PageType
             pageType = 'OFFICIAL_CAST_PAGE';
         }
 
-        pageType = 'NORMAL_CAST_PAGE';
+        else {
+            pageType = 'NORMAL_CAST_PAGE';
+        }
 
         console.info('[nicosapo][PageType] pageType = ', pageType);
 

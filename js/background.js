@@ -252,9 +252,9 @@ function autoEnterProgramRoutine() {
 function test(id, storagedData) {
     return new Promise(function(resolve) {
         console.info('[imanani][●autoEnterProgram] id = ', id);
-        isOffAir(id).then(function(result) {
+        isOffAir(id).then(function(response) {
             // ONAIR
-            if (result == false) {
+            if (response.isOffAir == false) {
                 console.info('[imanani][○autoEnterProgram] id = ', id);
                 chrome.tabs.create({
                     url: 'http://live.nicovideo.jp/watch/' + id

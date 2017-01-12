@@ -14,7 +14,7 @@ class AutoEnterProgramButton extends Buttons
 
         this._body = this._make();
 
-        console.info('[nicosapo][AutoRedirectButton] this.body = ', this.body);
+        // console.info('[nicosapo][AutoEnterProgramButton] this.body = ', this._body);
     }
 
     // @Override
