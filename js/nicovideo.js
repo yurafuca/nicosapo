@@ -287,8 +287,8 @@ function getStatus(param) {
     return new Promise((resolve, reject) => {
         const endpoint = "http://watch.live.nicovideo.jp/api/getplayerstatus?v=";
         const posting = $.get(endpoint + param);
-				const parameter = parameter_nicovideojs.shift();
-				console.debug('parameter = ', parameter);
+		const parameter = parameter_nicovideojs.shift();
+		console.debug('parameter = ', parameter);
 
         posting.done((response) => {
             let status = $(response).find('getplayerstatus').attr('status');
@@ -310,7 +310,7 @@ function isOffAir(broadcastId) {
             console.info(response);
 
             // OFFAIR or ERROR.
-            if (errorCode) {
+            if (errorCode && (errorCode !== 'require_community_member')) {
                 switch (errorCode) {
                     case 'comingsoon':
                         console.log(theBroadcastId + ' is COMINGSOON');
@@ -335,7 +335,6 @@ function isOffAir(broadcastId) {
                 const broadcastId = $(response).find('stream id').text();
                 console.log(broadcastId + ' is ONAIR');
             }
-
 
             resolve(response);
         });

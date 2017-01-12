@@ -24,6 +24,7 @@ class IdHolder
         const communityUrl1 = $('meta[property="og:image"]').attr('content');
         const re1 = /http:\/\/icon\.nimg\.jp\/(community|channel).*((ch|co)[0-9]+)\.jpg.*/;
 
+        // ユーザ放送
         if (re1.exec(communityUrl1)) {
             const communityId = re1.exec(communityUrl1)[2];
             return communityId;
@@ -32,8 +33,9 @@ class IdHolder
         const communityUrl2 = $('a.ch_name').attr('href');
         const re2 = /http:\/\/(com|ch)\.nicovideo\.jp\/(community|channel)\/([\x21-\x7e]+)/;
 
+        // チャンネル放送/公式放送
         if (re2.exec(communityUrl2)) {
-            communityId = re2.exec(communityUrl2)[3];
+            const communityId = re2.exec(communityUrl2)[3];
             return communityId;
         }
 

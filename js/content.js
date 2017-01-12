@@ -11,20 +11,12 @@ const autoEnterProgramButton = new AutoEnterProgramButton();
 
 $(function()
 {
-    initialize();
-
     const pageType = PageType.get();
 
     formatNicoPage.exec(pageType);
 
     switch (pageType) {
         case 'STAND_BY_PAGE':
-            // TODO:
-            // const link = $(switchButton).find('.link');
-            // link.css('display', 'block');
-            // link.css('padding', '6px');
-            // link.css('font-size', '15px');
-            // switchButton.css('display', 'block');
             $('.infobox').prepend(autoRedirectButton.getDom());
             chrome.runtime.sendMessage({
                     purpose: 'getFromNestedLocalStorage',
@@ -176,8 +168,8 @@ $(function()
             break;
     }
 
-    if ((pageType === 'NORMAL_CAST_PAGE') || (pageType === 'MODERN_CAST_PAGE')) {
-        setInterval(autoRedirect, 1000 * 40);
+    if ((pageType === 'NORMAL_CAST_PAGE') || (pageType === 'MODERN_CAST_PAGE') || (pageType ==='STAND_BY_PAGE')) {
+        setInterval(autoRedirect, 1000 * 50);
     }
 
     // TimeCounter.
@@ -226,17 +218,11 @@ function enabledOrNull(value) {
     return (value === 'enable') || value == null;
 }
 
-function initialize() {
-    if (PageType.get() != 'GATE_PAGE')
-        _communityId = idHolder.communityId;
-}
-
 // TODO: Rename.
 function autoRedirect() {
-    _broadcastId = idHolder.liveId; // TODO
     if (autoRedirectButton.isToggledOn()) {
-        console.log(_broadcastId + ' is enabled auto redirect.');
-        isOffAir(_broadcastId).then(function(response) {
+        console.log(idHolder.liveId + ' is enabled auto redirect.');
+        isOffAir(idHolder.liveId).then(function(response) {
 
             // ONAIR.
             if (!response.isOffAir) {
@@ -283,14 +269,13 @@ function autoRedirect() {
             }
 
             // OFFAIR.
-            isStartedBroadcast(_communityId).then(function(response) {
+            isStartedBroadcast(idHolder.communityId).then(function(response) {
                 // タイマーを無効化
                 $('#extended-bar .end-time').text(`放送が終了しました`);
                 $('#extended-bar .rest-time').text(`放送が終了しました`);
 
                 console.info('[nicosapo][isStartedBroadcast] = ', response);
                 if (response.isStarted) {
-                    _broadcastId = response.nextBroadcastId;
                     redirectBroadcastPage(response.nextBroadcastId);
                 }
             });
@@ -311,7 +296,7 @@ function redirectBroadcastPage(broadcastId) {
 }
 
 function isEnabledAutoRedirect() {
-    const data = sessionStorage[this._communityId];
+    const data = sessionStorage[idHolder.communityId];
 
     if (data == undefined) {
         return true;

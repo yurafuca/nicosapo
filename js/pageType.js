@@ -46,25 +46,18 @@ class PageType
     static _isStandByPage() {
         const flag = ($('#gates').length === 0) && ($('.gate_title').length > 0);
 
-        if (flag) {
-            console.info('isStandByPage');
-        }
-
         return flag;
     }
 
     static _isGatePage() {
         const flag = $('#gates').length > 0;
 
-        if (flag) {
-            console.info('isGatePage');
-        }
-
         return flag;
     }
 
     static _isCommunityPage() {
         const $targetDom = $('table.communityDetail');
+
         if ($targetDom.length > 0) {
             return true;
         } else {
@@ -74,6 +67,7 @@ class PageType
 
     static _isChannelPage() {
         const $targetDom = $('body#channel_top');
+
         if ($targetDom.length > 0) {
             return true;
         } else {
@@ -83,6 +77,7 @@ class PageType
 
     static _isOfficialCastPage() {
         const $targetDom = $('#page.official');
+        
         if ($targetDom.length > 0) {
             return true;
         } else {
