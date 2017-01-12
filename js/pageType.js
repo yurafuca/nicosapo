@@ -1,31 +1,37 @@
 class PageType
 {
     static get() {
+        let pageType;
+
         if (this._isModernCast()) {
-            return 'MODERN_CAST_PAGE';
+            pageType = 'MODERN_CAST_PAGE';
+        }
+        
+        else if (this._isStandByPage()) {
+            pageType = 'STAND_BY_PAGE';
         }
 
-        if (this._isStandByPage()) {
-            return 'STAND_BY_PAGE';
+        else if (this._isGatePage()) {
+            pageType = 'GATE_PAGE';
         }
 
-        if (this._isGatePage()) {
-            return 'GATE_PAGE';
+        else if (this._isCommunityPage()) {
+            pageType = 'COMMUNITY_PAGE';
         }
 
-        if (this._isCommunityPage()) {
-            return 'COMMUNITY_PAGE';
+        else if (this._isChannelPage()) {
+            pageType = 'CHANNEL_PAGE';
         }
 
-        if (this._isChannelPage()) {
-            return 'CHANNEL_PAGE';
+        else if (this._isOfficialCastPage()) {
+            pageType = 'OFFICIAL_CAST_PAGE';
         }
 
-        if (this._isOfficialCastPage()) {
-            return 'OFFICIAL_CAST_PAGE';
-        }
+        pageType = 'NORMAL_CAST_PAGE';
 
-        return 'NORMAL_CAST_PAGE';
+        console.info('[nicosapo][PageType] pageType = ', pageType);
+
+        return pageType;
     }
 
     static _isModernCast() {

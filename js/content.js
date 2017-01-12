@@ -13,32 +13,19 @@ $(function()
 {
     initialize();
 
-    console.info('[nicosapo] pageType = ', PageType.get());
-
-    const buttonTypes = {
-        NORMAL_CAST_PAGE: 'autoRedirect',
-        MODERN_CAST_PAGE: 'autoRedirect',
-        STAND_BY_PAGE: 'autoRedirect',
-        GATE_PAGE: 'autoEnterProgram'
-    };
-
     const pageType = PageType.get();
-    const buttonType = buttonTypes[pageType];
-    // const switchButton = Buttons.make(buttonType);
-
-    console.info(pageType);
 
     formatNicoPage.exec(pageType);
 
     switch (pageType) {
         case 'STAND_BY_PAGE':
             // TODO:
-            const link = $(switchButton).find('.link');
-            link.css('display', 'block');
-            link.css('padding', '6px');
-            link.css('font-size', '15px');
-            switchButton.css('display', 'block');
-            $('.infobox').prepend(switchButton);
+            // const link = $(switchButton).find('.link');
+            // link.css('display', 'block');
+            // link.css('padding', '6px');
+            // link.css('font-size', '15px');
+            // switchButton.css('display', 'block');
+            $('.infobox').prepend(autoRedirectButton.getDom());
             chrome.runtime.sendMessage({
                     purpose: 'getFromNestedLocalStorage',
                     key: 'autoEnterProgramList'
@@ -190,7 +177,7 @@ $(function()
     }
 
     if ((pageType === 'NORMAL_CAST_PAGE') || (pageType === 'MODERN_CAST_PAGE')) {
-        setInterval(autoRedirect, 1000 * 20);
+        setInterval(autoRedirect, 1000 * 40);
     }
 
     // TimeCounter.
