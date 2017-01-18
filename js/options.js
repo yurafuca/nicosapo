@@ -24,7 +24,7 @@ class SettingPage
 
         setting  = localStorage.getItem('options.redirect.time');
         if (setting != null)
-            $('#options-redirect.time').val([setting]);
+            $('#options-redirect-time').val([setting]);
 
         setting  = localStorage.getItem('options.popup.enable');
         if (setting != null)
