@@ -4,8 +4,8 @@ class IdHolder
         this.liveId = this._getLiveId();
         this.communityId = this._getCommunityId();
 
-        console.info('[imanani][IdHolder] liveId = ', this.liveId);
-        console.info('[imanani][IdHolder] communityId = ', this.communityId);
+        Log.info(this.liveId, 'constructor');
+        Log.info(this.communityId, 'constructor');
     }
 
     _getLiveId() {

@@ -169,7 +169,17 @@ $(function()
     }
 
     if ((pageType === 'NORMAL_CAST_PAGE') || (pageType === 'MODERN_CAST_PAGE') || (pageType ==='STAND_BY_PAGE')) {
-        setInterval(autoRedirect, 1000 * 50);
+        // setInterval(autoRedirect, 1000 * 50);
+        chrome.runtime.sendMessage({
+                purpose: 'getFromLocalStorage',
+                key: 'options.redirect.time'
+            },
+            function(response) {
+                const intervalTime = response || '50';
+                console.info('[nicosapo]intervalTime = ', intervalTime);
+                setTimeout(autoRedirect, intervalTime * 1000);
+            }
+        );
     }
 
     // TimeCounter.
@@ -221,7 +231,9 @@ function enabledOrNull(value) {
 // TODO: Rename.
 function autoRedirect() {
     if (autoRedirectButton.isToggledOn()) {
-        console.log(idHolder.liveId + ' is enabled auto redirect.');
+
+        Log.out(idHolder.liveId + ' is enabled auto redirect.');
+
         isOffAir(idHolder.liveId).then(function(response) {
 
             // ONAIR.
@@ -274,15 +286,27 @@ function autoRedirect() {
                 $('#extended-bar .end-time').text(`放送が終了しました`);
                 $('#extended-bar .rest-time').text(`放送が終了しました`);
 
-                console.info('[nicosapo][isStartedBroadcast] = ', response);
+                Log.out('isStartedBroadcast', response);
+
                 if (response.isStarted) {
                     redirectBroadcastPage(response.nextBroadcastId);
                 }
             });
         });
     } else {
-        console.log(idHolder.liveId + ' is disabled auto redirect.');
+        Log.out(idHolder.liveId + ' is disabled auto redirect.');
     }
+
+    chrome.runtime.sendMessage({
+            purpose: 'getFromLocalStorage',
+            key: 'options.redirect.time'
+        },
+        function(response) {
+            const intervalTime = response || '50';
+            console.info('[nicosapo]intervalTime = ', intervalTime);
+            setTimeout(autoRedirect, intervalTime * 1000);
+        }
+    );
 }
 
 function autoEnter() {

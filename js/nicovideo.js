@@ -58,7 +58,6 @@ function getSubscribe(sessionId) {
         });
 
         request.done(function(videoInfos) {
-            console.info(videoInfos);
             resolve(videoInfos);
         });
 
@@ -76,15 +75,6 @@ function getSubscribe(sessionId) {
 function getSubscribe_2() {
     var promise = new Promise((resolve, reject) => {
 
-        // let videoInfos = $('<nicolive_video_response>');
-
-        // $(videoInfos).load("http://live.nicovideo.jp/my", function(responseText, status, xhr) {
-        //     console.info(responseText);
-        //     const subscribes  = $(responseText).find("[id$=subscribeItemsWrap] > .liveItems > [class^='liveItem']");
-        //     // const all_subscribes = $(responseText).find("#all_subscribeItemsWrap > .liveItems > [class^='liveItem']");
-        //     console.info(subscribes);
-        // });
-
         var posting = $.post("http://live.nicovideo.jp/my");
 
         posting.done(function(response) {
@@ -100,12 +90,7 @@ function getSubscribe_2() {
 
             let videoInfos = [];
 
-            console.info(subscribes);
-            console.info(reserved);
-
             $.each($(subscribes), function(index, item) {
-
-                // console.log('index = ', $(item).html());
 
                 const video_title = $(item).find('a').first().attr('title');
                 const video_url = $(item).find('a').first().attr('href');
@@ -164,21 +149,15 @@ function getSubscribe_2() {
                 videoInfo.find('video open_time_jpstr').text(video_open_time_jpstr);
                 videoInfo.find('community id').text(community_id.replace(/(co|ch)/, ''));
 
-
-                // console.log(item.is_reserved);
-
                 if (item.is_reserved) {
                     videoInfo.find('video is_reserved').text(true);
                 } else {
                     videoInfo.find('video is_reserved').text(false);
                 }
                 
-                console.log('bbb');
                 videoInfos.push(videoInfo);
             });
-            console.log('aaaaa');
-            // console.info(videoInfos.html());
-            console.info(videoInfos);
+
             resolve(videoInfos);
         });
 
@@ -216,20 +195,14 @@ function getCheckList() {
 }
 
 function getFutureOnair(index) {
-    console.log(index);
-
     var promise = new Promise((resolve, reject) => {
 
         let endpoint = "http://live.nicovideo.jp/api/getindexzerostreamlist?status=comingsoon&sort=timeshift_reserved_count&zpage=";
-        console.log(index);
         let posting = $.get(endpoint + index);
 
         posting.done(function(response) {
-            // const theResponse = $.parseJSON(response);
-            // console.info(response);
             const feature_lives = response['reserved_stream_list'];
             if (feature_lives) {
-                console.info('[imanani][getOfficialOnair] feature_lives = ', feature_lives);
                 resolve(feature_lives);
             }
         });
@@ -246,8 +219,6 @@ function getOfficialOnair() {
 
         posting.done(function(response) {
             let official_lives = $(response).find('.ranking_video');
-            console.info('[imanani][getOfficialOnair] official_lives = ', official_lives);
-
             resolve(official_lives);
         });
     });
@@ -288,14 +259,10 @@ function getStatus(param) {
         const endpoint = "http://watch.live.nicovideo.jp/api/getplayerstatus?v=";
         const posting = $.get(endpoint + param);
 		const parameter = parameter_nicovideojs.shift();
-		console.debug('parameter = ', parameter);
 
         posting.done((response) => {
             let status = $(response).find('getplayerstatus').attr('status');
-            console.info('[imanani][getStatus] response = ', response);
 			response.param = parameter;
-			console.debug('parameter = ', parameter);
-			console.debug('response.param = ', response.param);
             resolve(response);
         });
     });
@@ -307,25 +274,23 @@ function isOffAir(broadcastId) {
         getStatusByBroadcast(broadcastId).then(function(response) {
             const errorCode = $(response).find('error code').text();
 
-            console.info(response);
-
             // OFFAIR or ERROR.
             if (errorCode && (errorCode !== 'require_community_member')) {
                 switch (errorCode) {
                     case 'comingsoon':
-                        console.log(theBroadcastId + ' is COMINGSOON');
+                        Log.out(theBroadcastId + ' is COMINGSOON', 'isOffAir');
                         response.isOffAir = true;
                         break;
                     case 'premium_only':
-                        console.log(theBroadcastId + ' is PREMIUMONLY');
+                        Log.out(theBroadcastId + ' is PREMIUMONLY', 'isOffAir');
                         response.isOffAir = true;
                         break;
                     case 'closed':
-                        console.log(theBroadcastId + ' is OFFAIR');
+                        Log.out(theBroadcastId + ' is OFFAIR', 'isOffAir');
                         response.isOffAir = true;
                         break;
                     case 'error':
-                        console.log(theBroadcastId + ' is ERROR.');
+                        Log.out(theBroadcastId + ' is ERROR.', 'isOffAir');
                         reject();
                         return;
                 }
@@ -333,7 +298,7 @@ function isOffAir(broadcastId) {
                 // ONAIR.
                 response.isOffAir = false;
                 const broadcastId = $(response).find('stream id').text();
-                console.log(broadcastId + ' is ONAIR');
+                Log.out(broadcastId + ' is ONAIR');
             }
 
             resolve(response);
@@ -352,24 +317,22 @@ function isStartedBroadcast(communityId) {
                 communityId: undefined
             };
 
-			console.debug('theCommunityId = ', response.communityId);
-
             result.communityId = response.communityId;
 
             // OFFAIR or ERROR.
             if (errorCode) {
                 switch (errorCode) {
                     case 'comingsoon':
-                        console.log(result.communityId + ' is STATE==COMINGSOON');
+                        Log.out(result.communityId + ' is STATE==COMINGSOON', 'isStartedBroadcast');
                         resolve(true);
                         return;
                     case 'closed':
-                        console.log(result.communityId + ' is STATE==NOT_READY');
+                        Log.out(result.communityId + ' is STATE==NOT_READY', 'isStartedBroadcast');
                         result.isStarted = false;
                         resolve(result);
                         return;
                     case 'error':
-                        console.log(result.communityId + ' is STATE==ERROR.');
+                        Log.out(result.communityId + ' is STATE==ERROR.', 'isStartedBroadcast');
                         reject();
                         return;
                 }
@@ -379,14 +342,11 @@ function isStartedBroadcast(communityId) {
             const endTime = $(response).find('end_time').text();
 
             if (Date.now() < (endTime + '000')) {
-                console.log($(response).find('stream id').text() + ' is STATE==OPEN.');
+                Log.out($(response).find('stream id').text() + ' is STATE==OPEN.', 'isStartedBroadcast');
                 result.isStarted = true;
                 result.nextBroadcastId = $(response).find('stream id').text();
             } else {
-                console.log('foobar');
-                console.log('[imanani][isStartedBroadcast] Date.now = ' + Date.now());
-                console.log('[imanani][isStartedBroadcast] endTime = ' + endTime + '000');
-                console.log(result.communityId + ' is STATE==NOT_READY.');
+                Log.out(result.communityId + ' is STATE==NOT_READY.', 'isStartedBroadcast');
                 result.isStarted = false;
             }
 

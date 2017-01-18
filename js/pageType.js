@@ -31,7 +31,7 @@ class PageType
             pageType = 'NORMAL_CAST_PAGE';
         }
 
-        console.info('[nicosapo][PageType] pageType = ', pageType);
+        Log.info(pageType, 'constructor');
 
         return pageType;
     }

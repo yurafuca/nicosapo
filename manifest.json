@@ -30,6 +30,7 @@
     "background": {
 	    "scripts": [
             "js/libs/jquery-2.1.4.min.js",
+            "js/log.js",
             "js/newArrival.js",
             "js/comuHolder.js",
             "js/nicovideo.js",
@@ -47,6 +48,7 @@
         ],
           "js": [
                 "js/libs/jquery-2.1.4.min.js",
+                "js/log.js",
                 "js/nicovideo.js",
                 "js/common.js",
                 "js/timecounter.js",

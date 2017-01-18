@@ -8,6 +8,7 @@ class SettingPage
 
     static getAllSettings() {
         var settings = new Object();
+        settings['options.redirect.time']       = $('#options-redirect-time :selected').val();
         settings['options.popup.enable']        = $('input[name=options-popup-enable]:checked').val();
         settings['options.showReserved.enable'] = $('input[name=options-showReserved-enable]:checked').val();
         settings['options.playsound.enable']    = $('input[name=options-playsound-enable]:checked').val();
@@ -20,6 +21,10 @@ class SettingPage
 
     static setAllSettings() {
         let setting = '';
+
+        setting  = localStorage.getItem('options.redirect.time');
+        if (setting != null)
+            $('#options-redirect.time').val([setting]);
 
         setting  = localStorage.getItem('options.popup.enable');
         if (setting != null)

@@ -45,8 +45,6 @@ class Time
 
     static secondDistance(src, dst)
     {
-        console.info(src.getFullYear());
-        console.info(dst.getFullYear());
         const deltaMillsecond = dst.getTime() - src.getTime();
         return parseInt(deltaMillsecond / 1000);
     }
