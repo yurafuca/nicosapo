@@ -3,15 +3,15 @@
 	"manifest_version": 2,
     "version": "1.8.0",
      "browser_action": {
-	      "default_icon": "image/icon.png",
+	      "default_icon": "src/images/icon.png",
 	      "default_title": "放送中の番組を確認する",
-          "default_popup": "html/popup.html"
+          "default_popup": "src/html/popup.html"
 	 },
     "description": "自動枠移動（新配信（β）対応） / 自動入場 / 放送中の番組を一覧表示 / デスクトップ通知 / 延長通知 / 番組の残り時間を表示 をサポートします．",
     "icons": {
-        "16": "image/icon.png",
-        "32": "image/icon.png",
-        "64": "image/icon.png"
+        "16": "src/images/icon.png",
+        "32": "src/images/icon.png",
+        "64": "src/images/icon.png"
     },
     "permissions": [
         "alarms",
@@ -29,12 +29,12 @@
     ],
     "background": {
 	    "scripts": [
-            "js/libs/jquery-2.1.4.min.js",
-            "js/log.js",
-            "js/newArrival.js",
-            "js/comuHolder.js",
-            "js/nicovideo.js",
-            "js/background.js"
+            "src/javascripts/libs/jquery-2.1.4.min.js",
+            "src/javascripts/log.js",
+            "src/javascripts/newArrival.js",
+            "src/javascripts/comuHolder.js",
+            "src/javascripts/nicovideo.js",
+            "src/javascripts/background.js"
         ]
 	},
     "content_scripts": [
@@ -47,28 +47,15 @@
             "http://ch.nicovideo.jp/*"
         ],
           "js": [
-                "js/libs/jquery-2.1.4.min.js",
-                "js/log.js",
-                "js/nicovideo.js",
-                "js/common.js",
-                "js/timecounter.js",
-                "js/formatNicoPage.js",
-                "js/idHolder.js",
-                "js/storage.js",
-                "js/buttons.js",
-                "js/autoRedirectButton.js",
-                "js/autoEnterProgramButton.js",
-                "js/autoEnterCommunityButton.js",
-                "js/pageType.js",
-                "js/content.js"
+                "src/javascripts/content.js"
             ],
           "css": [
-            "css/content.css",
-            "css/balloon.css"
+            "src/stylesheets/content.css",
+            "src/stylesheets/balloon.css"
             ]
         }
     ],
-    "options_page": "html/options.html",
+    "options_page": "src/html/options.html",
     "web_accessible_resources": [
         "image/icon.png",
         "font/baseballpark.ttf"

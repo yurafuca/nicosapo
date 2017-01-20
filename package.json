@@ -4,31 +4,29 @@
   "description": "nicosapo - niconama supporter",
   "main": "index.js",
   "scripts": {
-    "production": "webpack -p",
-    "develop": "webpack -d",
-    "watch": "webpack -d --watch",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "webpack --config webpack.config.js --display-error-details"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/amagomori/nicosapo.git"
-  },
-  "author": "",
+  "repository": "git+https://github.com/tsuyuknow/nicosapo.git",
+  "author": "tsuyuknow <tsuyuknow@gmail.com>",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/amagomori/nicosapo/issues"
+    "url": "https://github.com/tsuyuknow/nicosapo/issues"
   },
-  "homepage": "https://github.com/amagomori/nicosapo#readme",
+  "homepage": "https://github.com/tsuyuknow/nicosapo#readme",
   "dependencies": {
+    "jquery": "^3.1.1",
     "ract": "0.0.1",
     "react": "^15.4.1",
     "react-dom": "^15.4.1"
   },
   "devDependencies": {
-    "babel-core": "^6.18.2",
-    "babel-loader": "^6.2.8",
+    "babel-core": "^6.22.1",
+    "babel-loader": "^6.2.10",
     "babel-preset-es2015": "^6.18.0",
     "babel-preset-react": "^6.16.0",
-    "webpack": "^1.13.3"
+    "jquery": "^3.1.1",
+    "regexpu-core": "^4.0.2",
+    "webpack": "^1.14.0",
+    "webpack-dev-server": "^1.16.2"
   }
 }
