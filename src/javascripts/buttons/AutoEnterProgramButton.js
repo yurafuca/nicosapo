@@ -1,5 +1,8 @@
 import $ from 'jquery'
 import Buttons from "../buttons/Buttons"
+import IdHolder from "../modules/IdHolder";
+import PageType from "../modules/PageType";
+import Storage from "../modules/Storage";
 
 export default class AutoEnterProgramButton extends Buttons
 {

@@ -82,11 +82,11 @@
 	
 	var _AutoRedirectButton2 = _interopRequireDefault(_AutoRedirectButton);
 	
-	var _AutoEnterCommunityButton = __webpack_require__(13);
+	var _AutoEnterCommunityButton = __webpack_require__(14);
 	
 	var _AutoEnterCommunityButton2 = _interopRequireDefault(_AutoEnterCommunityButton);
 	
-	var _AutoEnterProgramButton = __webpack_require__(14);
+	var _AutoEnterProgramButton = __webpack_require__(15);
 	
 	var _AutoEnterProgramButton2 = _interopRequireDefault(_AutoEnterProgramButton);
 	
@@ -307,7 +307,7 @@
 	        _Api2.default.isOffAir(idHolder.liveId).then(function (response) {
 	
 	            // ONAIR.
-	            if (!response.Napi.isOffAir) {
+	            if (!response.isOffAir) {
 	
 	                // Extended Bar.
 	                var currentTime = Date.now();
@@ -10646,9 +10646,15 @@
 	
 	var _jquery2 = _interopRequireDefault(_jquery);
 	
+	var _Log = __webpack_require__(5);
+	
+	var _Log2 = _interopRequireDefault(_Log);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	var parameter_nicovideojs = [];
 	
 	var Napi = function () {
 	    function Napi() {
@@ -10865,7 +10871,7 @@
 	        key: 'getStatusByBroadcast',
 	        value: function getStatusByBroadcast(broadcastId) {
 	            return new Promise(function (resolve, reject) {
-	                getStatus(broadcastId).then(function (response) {
+	                Napi.getStatus(broadcastId).then(function (response) {
 	                    if (response) resolve(response);else reject();
 	                });
 	            });
@@ -10874,7 +10880,7 @@
 	        key: 'getStatusByCommunity',
 	        value: function getStatusByCommunity(communityId) {
 	            return new Promise(function (resolve, reject) {
-	                getStatus(communityId).then(function (response) {
+	                Napi.getStatus(communityId).then(function (response) {
 	                    if (response) {
 	                        response.communityId = response.param;
 	                        resolve(response);
@@ -10904,25 +10910,25 @@
 	        value: function isOffAir(broadcastId) {
 	            var theBroadcastId = broadcastId;
 	            return new Promise(function (resolve, reject) {
-	                getStatusByBroadcast(broadcastId).then(function (response) {
+	                Napi.getStatusByBroadcast(broadcastId).then(function (response) {
 	                    var errorCode = (0, _jquery2.default)(response).find('error code').text();
 	                    // OFFAIR or ERROR.
 	                    if (errorCode && errorCode !== 'require_community_member') {
 	                        switch (errorCode) {
 	                            case 'comingsoon':
-	                                Log.out(theBroadcastId + ' is COMINGSOON', 'isOffAir');
+	                                _Log2.default.out(theBroadcastId + ' is COMINGSOON', 'isOffAir');
 	                                response.isOffAir = true;
 	                                break;
 	                            case 'premium_only':
-	                                Log.out(theBroadcastId + ' is PREMIUMONLY', 'isOffAir');
+	                                _Log2.default.out(theBroadcastId + ' is PREMIUMONLY', 'isOffAir');
 	                                response.isOffAir = true;
 	                                break;
 	                            case 'closed':
-	                                Log.out(theBroadcastId + ' is OFFAIR', 'isOffAir');
+	                                _Log2.default.out(theBroadcastId + ' is OFFAIR', 'isOffAir');
 	                                response.isOffAir = true;
 	                                break;
 	                            case 'error':
-	                                Log.out(theBroadcastId + ' is ERROR.', 'isOffAir');
+	                                _Log2.default.out(theBroadcastId + ' is ERROR.', 'isOffAir');
 	                                reject();
 	                                return;
 	                        }
@@ -10930,7 +10936,7 @@
 	                        // ONAIR.
 	                        response.isOffAir = false;
 	                        var _broadcastId = (0, _jquery2.default)(response).find('stream id').text();
-	                        Log.out(_broadcastId + ' is ONAIR');
+	                        _Log2.default.out(_broadcastId + ' is ONAIR');
 	                    }
 	                    resolve(response);
 	                });
@@ -10941,7 +10947,7 @@
 	        value: function isStartedBroadcast(communityId) {
 	            var theCommunityId = communityId;
 	            return new Promise(function (resolve, reject) {
-	                getStatusByCommunity(theCommunityId).then(function (response) {
+	                Napi.getStatusByCommunity(theCommunityId).then(function (response) {
 	                    var errorCode = (0, _jquery2.default)(response).find('error code').text();
 	                    var result = {
 	                        isStarted: undefined,
@@ -10953,16 +10959,16 @@
 	                    if (errorCode) {
 	                        switch (errorCode) {
 	                            case 'comingsoon':
-	                                Log.out(result.communityId + ' is STATE==COMINGSOON', 'isStartedBroadcast');
+	                                _Log2.default.out(result.communityId + ' is STATE==COMINGSOON', 'isStartedBroadcast');
 	                                resolve(true);
 	                                return;
 	                            case 'closed':
-	                                Log.out(result.communityId + ' is STATE==NOT_READY', 'isStartedBroadcast');
+	                                _Log2.default.out(result.communityId + ' is STATE==NOT_READY', 'isStartedBroadcast');
 	                                result.isStarted = false;
 	                                resolve(result);
 	                                return;
 	                            case 'error':
-	                                Log.out(result.communityId + ' is STATE==ERROR.', 'isStartedBroadcast');
+	                                _Log2.default.out(result.communityId + ' is STATE==ERROR.', 'isStartedBroadcast');
 	                                reject();
 	                                return;
 	                        }
@@ -10970,11 +10976,11 @@
 	                    // OFFAIR or ONAIR.
 	                    var endTime = (0, _jquery2.default)(response).find('end_time').text();
 	                    if (Date.now() < endTime + '000') {
-	                        Log.out((0, _jquery2.default)(response).find('stream id').text() + ' is STATE==OPEN.', 'isStartedBroadcast');
+	                        _Log2.default.out((0, _jquery2.default)(response).find('stream id').text() + ' is STATE==OPEN.', 'isStartedBroadcast');
 	                        result.isStarted = true;
 	                        result.nextBroadcastId = (0, _jquery2.default)(response).find('stream id').text();
 	                    } else {
-	                        Log.out(result.communityId + ' is STATE==NOT_READY.', 'isStartedBroadcast');
+	                        _Log2.default.out(result.communityId + ' is STATE==NOT_READY.', 'isStartedBroadcast');
 	                        result.isStarted = false;
 	                    }
 	                    resolve(result);
@@ -11260,22 +11266,16 @@
 	            if (pageType == 'STAND_BY_PAGE') {
 	                this.$program_title.css('display', 'inline');
 	                return;
-	            }
-	
-	            if (pageType == 'GATE_PAGE') {
+	            } else if (pageType == 'GATE_PAGE') {
 	                this.$program_icon.css('float', 'none');
 	                this.$program_icon.css('display', 'inline-block');
 	                this.$program_title.css('display', 'inline-block');
 	                this.$program_title.attr('title', this.$program_title.text());
 	                return;
-	            }
-	
-	            if (pageType == 'MODERN_CAST_PAGE') {
+	            } else if (pageType == 'MODERN_CAST_PAGE') {
 	                // Do nothing.
 	                return;
-	            }
-	
-	            if (pageType == 'NORMAL_CAST_PAGE' || pageType == 'OFFICIAL_CAST_PAGE') {
+	            } else if (pageType == 'NORMAL_CAST_PAGE' || pageType == 'OFFICIAL_CAST_PAGE') {
 	                this.$watch_title_box_meta.css('width', '1000px');
 	                this.$slider_container.css('padding', '0'); // For ExtendedBar
 	                return;
@@ -11301,6 +11301,10 @@
 	var _jquery = __webpack_require__(1);
 	
 	var _jquery2 = _interopRequireDefault(_jquery);
+	
+	var _Log = __webpack_require__(5);
+	
+	var _Log2 = _interopRequireDefault(_Log);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -11346,8 +11350,8 @@
 	    this.liveId = getLiveId();
 	    this.communityId = getCommunityId();
 	
-	    Log.info(this.liveId, 'constructor');
-	    Log.info(this.communityId, 'constructor');
+	    _Log2.default.info(this.liveId, 'constructor');
+	    _Log2.default.info(this.communityId, 'constructor');
 	};
 	
 	exports.default = IdHolder;
@@ -11358,11 +11362,19 @@
 
 	'use strict';
 	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
 	var _jquery = __webpack_require__(1);
 	
 	var _jquery2 = _interopRequireDefault(_jquery);
+	
+	var _Log = __webpack_require__(5);
+	
+	var _Log2 = _interopRequireDefault(_Log);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -11394,7 +11406,7 @@
 	                pageType = 'NORMAL_CAST_PAGE';
 	            }
 	
-	            Log.info(pageType, 'constructor');
+	            _Log2.default.info(pageType, 'constructor');
 	
 	            return pageType;
 	        }
@@ -11454,15 +11466,17 @@
 	            }
 	        }
 	    }]);
-
+	
 	    return PageType;
 	}();
+	
+	exports.default = PageType;
 
 /***/ },
 /* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	"use strict";
 	
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
@@ -11477,6 +11491,18 @@
 	var _Buttons2 = __webpack_require__(12);
 	
 	var _Buttons3 = _interopRequireDefault(_Buttons2);
+	
+	var _IdHolder = __webpack_require__(9);
+	
+	var _IdHolder2 = _interopRequireDefault(_IdHolder);
+	
+	var _PageType = __webpack_require__(10);
+	
+	var _PageType2 = _interopRequireDefault(_PageType);
+	
+	var _Storage = __webpack_require__(13);
+	
+	var _Storage2 = _interopRequireDefault(_Storage);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -11495,9 +11521,9 @@
 	        var _this = _possibleConstructorReturn(this, (AutoRedirectButton.__proto__ || Object.getPrototypeOf(AutoRedirectButton)).call(this));
 	
 	        _this._className = 'auto_redirect_button';
-	        _this._label = '\u81EA\u52D5\u6B21\u67A0\u79FB\u52D5';
+	        _this._label = "\u81EA\u52D5\u6B21\u67A0\u79FB\u52D5";
 	
-	        _this._balloonMessage = '\u3053\u306E\u30DA\u30FC\u30B8\u3092\u958B\u3044\u305F\u307E\u307E\u306B\u3057\u3066\u304A\u304F\u3068\uFF0C\u65B0\u3057\u3044\u67A0\u3067\u653E\u9001\u304C\u59CB\u307E\u3063\u305F\u3068\u304D\u81EA\u52D5\u3067\u67A0\u3078\u79FB\u52D5\u3057\u307E\u3059';
+	        _this._balloonMessage = "\u3053\u306E\u30DA\u30FC\u30B8\u3092\u958B\u3044\u305F\u307E\u307E\u306B\u3057\u3066\u304A\u304F\u3068\uFF0C\u65B0\u3057\u3044\u67A0\u3067\u653E\u9001\u304C\u59CB\u307E\u3063\u305F\u3068\u304D\u81EA\u52D5\u3067\u67A0\u3078\u79FB\u52D5\u3057\u307E\u3059";
 	        _this._balloonPos = 'up';
 	        _this._balloonLength = 'xlarge';
 	
@@ -11511,7 +11537,7 @@
 	
 	
 	    _createClass(AutoRedirectButton, [{
-	        key: '_make',
+	        key: "_make",
 	        value: function _make() {
 	            this.$template.addClass(this._className);
 	
@@ -11528,7 +11554,7 @@
 	        // @Override
 	
 	    }, {
-	        key: 'getClassName',
+	        key: "getClassName",
 	        value: function getClassName() {
 	            return this.className;
 	        }
@@ -11536,7 +11562,7 @@
 	        // @Override
 	
 	    }, {
-	        key: 'getDom',
+	        key: "getDom",
 	        value: function getDom() {
 	            return this._body;
 	        }
@@ -11544,7 +11570,7 @@
 	        // @Override
 	
 	    }, {
-	        key: 'toggleOn',
+	        key: "toggleOn",
 	        value: function toggleOn() {
 	            var $link = (0, _jquery2.default)('.' + this._className).find('.link');
 	            $link.addClass('switch_is_on');
@@ -11555,7 +11581,7 @@
 	        // @Override
 	
 	    }, {
-	        key: 'toggleOff',
+	        key: "toggleOff",
 	        value: function toggleOff() {
 	            var $link = (0, _jquery2.default)('.' + this._className).find('.link');
 	            $link.addClass('switch_is_off');
@@ -11566,7 +11592,7 @@
 	        // @Override
 	
 	    }, {
-	        key: 'isToggledOn',
+	        key: "isToggledOn",
 	        value: function isToggledOn() {
 	            var $link = (0, _jquery2.default)('.' + this._className).find('.link');
 	            var isToggledOn = $link.hasClass('switch_is_on');
@@ -11576,7 +11602,7 @@
 	        // @Override
 	
 	    }, {
-	        key: 'saveAsAutoEnter',
+	        key: "saveAsAutoEnter",
 	        value: function saveAsAutoEnter() {}
 	        // Do nothing.
 	
@@ -11584,7 +11610,7 @@
 	        // @Override
 	
 	    }, {
-	        key: 'removeAsAutoEnter',
+	        key: "removeAsAutoEnter",
 	        value: function removeAsAutoEnter() {
 	            // Do nothing.
 	        }
@@ -11610,6 +11636,10 @@
 	var _jquery = __webpack_require__(1);
 	
 	var _jquery2 = _interopRequireDefault(_jquery);
+	
+	var _IdHolder = __webpack_require__(9);
+	
+	var _IdHolder2 = _interopRequireDefault(_IdHolder);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -11672,9 +11702,60 @@
 
 /***/ },
 /* 13 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
 	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	var Storage = function () {
+	    function Storage() {
+	        _classCallCheck(this, Storage);
+	    }
+	
+	    _createClass(Storage, null, [{
+	        key: 'saveToNestedLocalStorage',
+	        value: function saveToNestedLocalStorage(key, innerKey, innerValue) {
+	            console.debug(innerValue);
+	
+	            chrome.runtime.sendMessage({
+	                purpose: 'saveToNestedLocalStorage',
+	                key: key,
+	                innerKey: innerKey,
+	                innerValue: innerValue
+	            }, function (response) {
+	                console.info('[imanani][saveToNestedLocalStorage] response = ', response);
+	            });
+	        }
+	    }, {
+	        key: 'removeFromNestedLocalStorage',
+	        value: function removeFromNestedLocalStorage(key, innerKey) {
+	            chrome.runtime.sendMessage({
+	                purpose: 'removeFromNestedLocalStorage',
+	                key: key,
+	                innerKey: innerKey
+	            }, function (response) {
+	                console.info('[imanani][removeFromNestedLocalStorage] response = ', response);
+	            });
+	        }
+	    }]);
+	
+	    return Storage;
+	}();
+	
+	exports.default = Storage;
+
+/***/ },
+/* 14 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
 	
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
@@ -11689,6 +11770,18 @@
 	var _Buttons2 = __webpack_require__(12);
 	
 	var _Buttons3 = _interopRequireDefault(_Buttons2);
+	
+	var _IdHolder = __webpack_require__(9);
+	
+	var _IdHolder2 = _interopRequireDefault(_IdHolder);
+	
+	var _PageType = __webpack_require__(10);
+	
+	var _PageType2 = _interopRequireDefault(_PageType);
+	
+	var _Storage = __webpack_require__(13);
+	
+	var _Storage2 = _interopRequireDefault(_Storage);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -11707,9 +11800,9 @@
 	        var _this = _possibleConstructorReturn(this, (AutoEnterCommunityButton.__proto__ || Object.getPrototypeOf(AutoEnterCommunityButton)).call(this));
 	
 	        _this._className = 'auto_enter_community_button';
-	        _this._label = '(\u3053\u306E\u30B3\u30DF\u30E5\u30CB\u30C6\u30A3\u306B) \u81EA\u52D5\u5165\u5834';
+	        _this._label = "(\u3053\u306E\u30B3\u30DF\u30E5\u30CB\u30C6\u30A3\u306B) \u81EA\u52D5\u5165\u5834";
 	
-	        _this._balloonMessage = '\u3053\u306E\u30B3\u30DF\u30E5\u30CB\u30C6\u30A3\u30FB\u30C1\u30E3\u30F3\u30CD\u30EB\u304C\u653E\u9001\u3092\u59CB\u3081\u305F\u3068\u304D\u81EA\u52D5\u3067\u67A0\u3092\u65B0\u3057\u3044\u30BF\u30D6\u3067\u958B\u304D\u307E\u3059\uFF0E\n                                [\u26A0\uFE0F\u8CA0\u8377\u8EFD\u6E1B\u306E\u305F\u3081\u6700\u5927\u767B\u9332\u6570\u306F5\u3092\u76EE\u5B89\u306B\u3057\u3066\u304F\u3060\u3055\u3044]\n                                [\uD83D\uDCA1\u81EA\u52D5\u6B21\u67A0\u79FB\u52D5\u304C ON \u306E\u72B6\u614B\u3067\u3082\u79FB\u52D5\u5148\u306E\u67A0\u304C\u65B0\u3057\u3044\u30BF\u30D6\u3067\u958B\u304B\u308C\u307E\u3059]';
+	        _this._balloonMessage = "\u3053\u306E\u30B3\u30DF\u30E5\u30CB\u30C6\u30A3\u30FB\u30C1\u30E3\u30F3\u30CD\u30EB\u304C\u653E\u9001\u3092\u59CB\u3081\u305F\u3068\u304D\u81EA\u52D5\u3067\u67A0\u3092\u65B0\u3057\u3044\u30BF\u30D6\u3067\u958B\u304D\u307E\u3059\uFF0E\n                                [\u26A0\uFE0F\u8CA0\u8377\u8EFD\u6E1B\u306E\u305F\u3081\u6700\u5927\u767B\u9332\u6570\u306F5\u3092\u76EE\u5B89\u306B\u3057\u3066\u304F\u3060\u3055\u3044]\n                                [\uD83D\uDCA1\u81EA\u52D5\u6B21\u67A0\u79FB\u52D5\u304C ON \u306E\u72B6\u614B\u3067\u3082\u79FB\u52D5\u5148\u306E\u67A0\u304C\u65B0\u3057\u3044\u30BF\u30D6\u3067\u958B\u304B\u308C\u307E\u3059]";
 	        _this._balloonPos = 'up';
 	        _this._balloonLength = 'xlarge';
 	
@@ -11723,7 +11816,7 @@
 	
 	
 	    _createClass(AutoEnterCommunityButton, [{
-	        key: '_make',
+	        key: "_make",
 	        value: function _make() {
 	            this.$template.addClass(this._className);
 	
@@ -11740,7 +11833,7 @@
 	        // @Override
 	
 	    }, {
-	        key: 'getClassName',
+	        key: "getClassName",
 	        value: function getClassName() {
 	            return this.className;
 	        }
@@ -11748,7 +11841,7 @@
 	        // @Override
 	
 	    }, {
-	        key: 'getDom',
+	        key: "getDom",
 	        value: function getDom() {
 	            return this._body;
 	        }
@@ -11757,7 +11850,7 @@
 	        // TODO: スーパークラスに任せる．
 	
 	    }, {
-	        key: 'toggleOn',
+	        key: "toggleOn",
 	        value: function toggleOn() {
 	            var $link = (0, _jquery2.default)('.' + this._className).find('.link');
 	            $link.addClass('switch_is_on');
@@ -11769,7 +11862,7 @@
 	        // TODO: スーパークラスに任せる．
 	
 	    }, {
-	        key: 'toggleOff',
+	        key: "toggleOff",
 	        value: function toggleOff() {
 	            var $link = (0, _jquery2.default)('.' + this._className).find('.link');
 	            $link.addClass('switch_is_off');
@@ -11780,7 +11873,7 @@
 	        // @Override
 	
 	    }, {
-	        key: 'isToggledOn',
+	        key: "isToggledOn",
 	        value: function isToggledOn() {
 	            var $link = (0, _jquery2.default)('.' + this._className).find('.link');
 	            var isToggledOn = $link.hasClass('switch_is_on');
@@ -11790,7 +11883,7 @@
 	        // @Override
 	
 	    }, {
-	        key: 'saveAsAutoEnter',
+	        key: "saveAsAutoEnter",
 	        value: function saveAsAutoEnter() {
 	            var id = void 0; // Required for Both.
 	            var thumbnail = void 0; // Required for Both.
@@ -11800,28 +11893,28 @@
 	
 	            thumbnail = (0, _jquery2.default)('meta[property="og:image"]').attr('content');
 	
-	            var idHolder = new IdHolder();
+	            var idHolder = new _IdHolder2.default();
 	
 	            id = idHolder.communityId;
 	
-	            var pageType = PageType.get();
+	            var pageType = _PageType2.default.get();
+	
+	            console.info(_PageType2.default);
 	
 	            if (pageType === 'COMMUNITY_PAGE') {
 	                title = (0, _jquery2.default)('div.communityData > h2.title > a').text().replace(/[ ]/, '');
 	                owner = (0, _jquery2.default)('div.communityData tr.row:first-child > td.content > a').text().replace(/[ ]/, '');
-	            }
-	
-	            if (pageType === 'CHANNEL_PAGE') {
+	            } else if (pageType === 'CHANNEL_PAGE') {
 	                title = (0, _jquery2.default)('h3.cp_chname').text();
 	                owner = (0, _jquery2.default)('p.cp_viewname').text();
+	            } else if (pageType === 'NORMAL_CAST_PAGE' || pageType === 'MODERN_CAST_PAGE' || pageType === 'OFFICIAL_CAST_PAGE') {
+	                title = (0, _jquery2.default)((0, _jquery2.default)('.commu_info').find('a').get(0)).html() || (0, _jquery2.default)('.ch_name').html();
+	                owner = (0, _jquery2.default)('.nicopedia_nushi').find('a').text() || (0, _jquery2.default)('.company').text();
 	            }
 	
-	            if (pageType === 'NORMAL_CAST_PAGE' || pageType === 'MODERN_CAST_PAGE' || pageType === 'OFFICIAL_CAST_PAGE') {
-	                title = (0, _jquery2.default)((0, _jquery2.default)('.commu_info').find('a').get(0)).html();
-	                owner = (0, _jquery2.default)('.nicopedia_nushi').find('a').text();
-	            }
+	            console.info(title, owner);
 	
-	            Storage.saveToNestedLocalStorage('autoEnterCommunityList', id, {
+	            _Storage2.default.saveToNestedLocalStorage('autoEnterCommunityList', id, {
 	                state: 'initialized',
 	                thumbnail: thumbnail,
 	                title: title,
@@ -11833,9 +11926,9 @@
 	        // @Override
 	
 	    }, {
-	        key: 'removeAsAutoEnter',
+	        key: "removeAsAutoEnter",
 	        value: function removeAsAutoEnter() {
-	            var idHolder = new IdHolder();
+	            var idHolder = new _IdHolder2.default();
 	
 	            var id = idHolder.communityId;
 	            var object = {
@@ -11843,7 +11936,7 @@
 	                status: 'initialized'
 	            };
 	
-	            Storage.removeFromNestedLocalStorage('autoEnterCommunityList', id);
+	            _Storage2.default.removeFromNestedLocalStorage('autoEnterCommunityList', id);
 	        }
 	    }]);
 	
@@ -11853,10 +11946,10 @@
 	exports.default = AutoEnterCommunityButton;
 
 /***/ },
-/* 14 */
+/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	"use strict";
 	
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
@@ -11871,6 +11964,18 @@
 	var _Buttons2 = __webpack_require__(12);
 	
 	var _Buttons3 = _interopRequireDefault(_Buttons2);
+	
+	var _IdHolder = __webpack_require__(9);
+	
+	var _IdHolder2 = _interopRequireDefault(_IdHolder);
+	
+	var _PageType = __webpack_require__(10);
+	
+	var _PageType2 = _interopRequireDefault(_PageType);
+	
+	var _Storage = __webpack_require__(13);
+	
+	var _Storage2 = _interopRequireDefault(_Storage);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -11889,9 +11994,9 @@
 	        var _this = _possibleConstructorReturn(this, (AutoEnterProgramButton.__proto__ || Object.getPrototypeOf(AutoEnterProgramButton)).call(this));
 	
 	        _this._className = 'auto_enter_program_button';
-	        _this._label = '(\u3053\u306E\u756A\u7D44\u306B) \u81EA\u52D5\u5165\u5834';
+	        _this._label = "(\u3053\u306E\u756A\u7D44\u306B) \u81EA\u52D5\u5165\u5834";
 	
-	        _this._balloonMessage = '\u3053\u306E\u756A\u7D44\u304C\u59CB\u307E\u3063\u305F\u3068\u304D\u81EA\u52D5\u3067\u756A\u7D44\u3092\u65B0\u3057\u3044\u30BF\u30D6\u3067\u958B\u304D\u307E\u3059\uFF0E\n                                [\u26A0\uFE0F\u8CA0\u8377\u8EFD\u6E1B\u306E\u305F\u3081\u6700\u5927\u767B\u9332\u6570\u306F5\u3092\u76EE\u5B89\u306B\u3057\u3066\u304F\u3060\u3055\u3044]\n                                [\uD83D\uDCA1\u767B\u9332\u3057\u305F\u756A\u7D44\u306F\u8A2D\u5B9A\u753B\u9762\u3088\u308A\u8A2D\u5B9A\u3067\u304D\u307E\u3059]';
+	        _this._balloonMessage = "\u3053\u306E\u756A\u7D44\u304C\u59CB\u307E\u3063\u305F\u3068\u304D\u81EA\u52D5\u3067\u756A\u7D44\u3092\u65B0\u3057\u3044\u30BF\u30D6\u3067\u958B\u304D\u307E\u3059\uFF0E\n                                [\u26A0\uFE0F\u8CA0\u8377\u8EFD\u6E1B\u306E\u305F\u3081\u6700\u5927\u767B\u9332\u6570\u306F5\u3092\u76EE\u5B89\u306B\u3057\u3066\u304F\u3060\u3055\u3044]\n                                [\uD83D\uDCA1\u767B\u9332\u3057\u305F\u756A\u7D44\u306F\u8A2D\u5B9A\u753B\u9762\u3088\u308A\u8A2D\u5B9A\u3067\u304D\u307E\u3059]";
 	        _this._balloonPos = 'up';
 	        _this._balloonLength = 'xlarge';
 	
@@ -11905,7 +12010,7 @@
 	
 	
 	    _createClass(AutoEnterProgramButton, [{
-	        key: '_make',
+	        key: "_make",
 	        value: function _make() {
 	            this.$template.addClass(this._className);
 	
@@ -11922,7 +12027,7 @@
 	        // @Override
 	
 	    }, {
-	        key: 'getClassName',
+	        key: "getClassName",
 	        value: function getClassName() {
 	            return this.className;
 	        }
@@ -11930,7 +12035,7 @@
 	        // @Override
 	
 	    }, {
-	        key: 'getDom',
+	        key: "getDom",
 	        value: function getDom() {
 	            return this._body;
 	        }
@@ -11939,7 +12044,7 @@
 	        // TODO: スーパークラスに任せる．
 	
 	    }, {
-	        key: 'toggleOn',
+	        key: "toggleOn",
 	        value: function toggleOn() {
 	            var $link = (0, _jquery2.default)('.' + this._className).find('.link');
 	            $link.addClass('switch_is_on');
@@ -11951,7 +12056,7 @@
 	        // TODO: スーパークラスに任せる．
 	
 	    }, {
-	        key: 'toggleOff',
+	        key: "toggleOff",
 	        value: function toggleOff() {
 	            var $link = (0, _jquery2.default)('.' + this._className).find('.link');
 	            $link.addClass('switch_is_off');
@@ -11962,7 +12067,7 @@
 	        // @Override
 	
 	    }, {
-	        key: 'isToggledOn',
+	        key: "isToggledOn",
 	        value: function isToggledOn() {
 	            var $link = (0, _jquery2.default)('.' + this._className).find('.link');
 	            var isToggledOn = $link.hasClass('switch_is_on');
@@ -11972,7 +12077,7 @@
 	        // @Override
 	
 	    }, {
-	        key: 'saveAsAutoEnter',
+	        key: "saveAsAutoEnter",
 	        value: function saveAsAutoEnter() {
 	            var id = void 0; // Required for Both.
 	            var thumbnail = void 0; // Required for Both.
@@ -11982,14 +12087,14 @@
 	
 	            thumbnail = (0, _jquery2.default)('meta[property="og:image"]').attr('content');
 	
-	            var idHolder = new IdHolder();
+	            var idHolder = new _IdHolder2.default();
 	            id = idHolder.liveId;
 	
-	            var pageType = PageType.get();
+	            var pageType = _PageType2.default.get();
 	            title = (0, _jquery2.default)('meta[property="og:title"]').attr('content');
 	            openDate = (0, _jquery2.default)('.kaijo meta[itemprop="datePublished"]').attr("content");
 	
-	            Storage.saveToNestedLocalStorage('autoEnterProgramList', id, {
+	            _Storage2.default.saveToNestedLocalStorage('autoEnterProgramList', id, {
 	                state: 'initialized',
 	                thumbnail: thumbnail,
 	                title: title,
@@ -12001,9 +12106,9 @@
 	        // @Override
 	
 	    }, {
-	        key: 'removeAsAutoEnter',
+	        key: "removeAsAutoEnter",
 	        value: function removeAsAutoEnter() {
-	            var idHolder = new IdHolder();
+	            var idHolder = new _IdHolder2.default();
 	
 	            var id = idHolder.liveId;;
 	            var object = {
@@ -12011,7 +12116,7 @@
 	                status: 'initialized'
 	            };
 	
-	            Storage.removeFromNestedLocalStorage('autoEnterProgramList', id);
+	            _Storage2.default.removeFromNestedLocalStorage('autoEnterProgramList', id);
 	        }
 	    }]);
 	

@@ -52,6 +52,10 @@
 	
 	var _jquery2 = _interopRequireDefault(_jquery);
 	
+	var _Time = __webpack_require__(6);
+	
+	var _Time2 = _interopRequireDefault(_Time);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -137,7 +141,7 @@
 	
 	    (0, _jquery2.default)(document).on('click', '#saveAll', function () {
 	        var settings = SettingPage.getAllSettings();
-	        for (key in settings) {
+	        for (var key in settings) {
 	            localStorage.setItem(key, settings[key]);
 	        };
 	        ResultMessage.show('SAVE');
@@ -182,13 +186,13 @@
 	            (0, _jquery2.default)('.listgroup-program').append(subscribe);
 	        }
 	        // alert((Date.parse(response[id]['openDate'])));
-	        for (id in response) {
+	        for (var id in response) {
 	            var _subscribe = (0, _jquery2.default)('\n                <div class="listgroup-item clearfix">\n                  <div class="nudge-down BtnGroup float-right">\n                    <a href="#" class="btn btn-sm btn-danger BtnGroup-item" rel="facebox">\u524A\u9664</a>\n                  </div>\n                  <div class="list-group-text-block float-left">\n                    <img alt="" class="avatar" height="40" src="" width="40">\n                    <span class="meta-title">\n                      <a href="" target="_blank" class="developer-app-name">title</a>\n                    </span>\n                    <span class="meta-description text-small text-gray">\n                      ---\n                    </span>\n                  </div>\n                </div>\n            ');
 	            (0, _jquery2.default)(_subscribe).find('.id').text(id);
 	            (0, _jquery2.default)(_subscribe).find('.developer-app-name').text(response[id]['title']);
 	            (0, _jquery2.default)(_subscribe).find('.developer-app-name').attr({ href: 'http://live.nicovideo.jp/gate/' + id });
 	            (0, _jquery2.default)(_subscribe).find('.list-group-text-block img').attr({ src: response[id]['thumbnail'] });
-	            (0, _jquery2.default)(_subscribe).find('.meta-description').html('openDate: ' + Time.toJpnString(Date.parse(response[id]['openDate'])) + (Date.parse(response[id]['openDate']) < Date.now() ? '<span class="ended"> ⛔ この番組は終了しました</span>' : ''));
+	            (0, _jquery2.default)(_subscribe).find('.meta-description').html('openDate: ' + _Time2.default.toJpnString(Date.parse(response[id]['openDate'])) + (Date.parse(response[id]['openDate']) < Date.now() ? '<span class="ended"> ⛔ この番組は終了しました</span>' : ''));
 	            (0, _jquery2.default)(_subscribe).find('.btn-danger').attr('data-id', id);
 	            (0, _jquery2.default)(_subscribe).find('.btn-danger').attr('data-type', 'program');
 	            // $(subscribe).find('.meta-description').html(response[id]['openDate'] + ' · Owned by <a href="' + response[id]['communityId'] + '">' + response[id]['communityName'] + '</a>');
@@ -206,7 +210,7 @@
 	            (0, _jquery2.default)('.listgroup-community').append(subscribe);
 	        }
 	        // alert((Date.parse(response[id]['openDate'])));
-	        for (id in response) {
+	        for (var id in response) {
 	            var _subscribe2 = (0, _jquery2.default)('\n                <div class="listgroup-item clearfix">\n                  <div class="nudge-down BtnGroup float-right">\n                    <a href="#" class="btn btn-sm btn-danger BtnGroup-item" rel="facebox">\u524A\u9664</a>\n                  </div>\n                  <div class="list-group-text-block float-left">\n                    <img alt="" class="avatar" height="40" src="" width="40">\n                    <span class="meta-title">\n                      <a href="" target="_blank" class="developer-app-name">title</a>\n                    </span>\n                    <span class="meta-description text-small text-gray">\n                      ---\n                    </span>\n                  </div>\n                </div>\n            ');
 	            (0, _jquery2.default)(_subscribe2).find('.id').text(id);
 	            (0, _jquery2.default)(_subscribe2).find('.developer-app-name').text(response[id]['title']);
@@ -10446,6 +10450,91 @@
 	return jQuery;
 	} );
 
+
+/***/ },
+/* 2 */,
+/* 3 */,
+/* 4 */,
+/* 5 */,
+/* 6 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	var Time = function () {
+	    function Time() {
+	        _classCallCheck(this, Time);
+	    }
+	
+	    _createClass(Time, null, [{
+	        key: 'toJpnString',
+	        value: function toJpnString(milisec) {
+	            var date = new Date(milisec);
+	            var days = Time.days();
+	
+	            return [date.getFullYear(), date.getMonth() + 1, date.getDate()].join('/') + ' ' + '(' + days[date.getDay()] + ') ' + date.toLocaleTimeString();
+	        }
+	    }, {
+	        key: 'toJpnDay',
+	        value: function toJpnDay(milisec) {
+	            var days = Time.days();
+	
+	            return days[new Date(milisec).getDay()];
+	        }
+	    }, {
+	        key: 'toUnixTime',
+	        value: function toUnixTime(milisec) {
+	            var days = Time.days();
+	
+	            return days[new Date(milisec).getDay()];
+	        }
+	    }, {
+	        key: 'days',
+	        value: function days() {
+	            var days = {
+	                0: '日',
+	                1: '月',
+	                2: '火',
+	                3: '水',
+	                4: '木',
+	                5: '金',
+	                6: '土'
+	            };
+	
+	            return days;
+	        }
+	    }, {
+	        key: 'secondDistance',
+	        value: function secondDistance(src, dst) {
+	            var deltaMillsecond = dst.getTime() - src.getTime();
+	            return parseInt(deltaMillsecond / 1000);
+	        }
+	    }, {
+	        key: 'minuteDistanceOfSec',
+	        value: function minuteDistanceOfSec(src, dst) {
+	            var secDist = Time.secondDistance(src, dst);
+	            return parseInt(secDist % 60);
+	        }
+	    }, {
+	        key: 'minuteDistance',
+	        value: function minuteDistance(src, dst) {
+	            var deltaMillsecond = dst.getTime() - src.getTime();
+	            return parseInt(deltaMillsecond / 1000 / 60);
+	        }
+	    }]);
+	
+	    return Time;
+	}();
+	
+	exports.default = Time;
 
 /***/ }
 /******/ ]);

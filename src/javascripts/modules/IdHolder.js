@@ -1,4 +1,5 @@
 import $ from 'jquery'
+import Log from '../common/Log'
 
 function getLiveId() {
     const url = $('meta[property="og:url"]').attr('content');

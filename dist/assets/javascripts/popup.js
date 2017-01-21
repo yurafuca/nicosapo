@@ -52,7 +52,7 @@
 	
 	var _jquery2 = _interopRequireDefault(_jquery);
 	
-	__webpack_require__(15);
+	__webpack_require__(16);
 	
 	var _Log = __webpack_require__(5);
 	
@@ -10544,9 +10544,15 @@
 	
 	var _jquery2 = _interopRequireDefault(_jquery);
 	
+	var _Log = __webpack_require__(5);
+	
+	var _Log2 = _interopRequireDefault(_Log);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	var parameter_nicovideojs = [];
 	
 	var Napi = function () {
 	    function Napi() {
@@ -10763,7 +10769,7 @@
 	        key: 'getStatusByBroadcast',
 	        value: function getStatusByBroadcast(broadcastId) {
 	            return new Promise(function (resolve, reject) {
-	                getStatus(broadcastId).then(function (response) {
+	                Napi.getStatus(broadcastId).then(function (response) {
 	                    if (response) resolve(response);else reject();
 	                });
 	            });
@@ -10772,7 +10778,7 @@
 	        key: 'getStatusByCommunity',
 	        value: function getStatusByCommunity(communityId) {
 	            return new Promise(function (resolve, reject) {
-	                getStatus(communityId).then(function (response) {
+	                Napi.getStatus(communityId).then(function (response) {
 	                    if (response) {
 	                        response.communityId = response.param;
 	                        resolve(response);
@@ -10802,25 +10808,25 @@
 	        value: function isOffAir(broadcastId) {
 	            var theBroadcastId = broadcastId;
 	            return new Promise(function (resolve, reject) {
-	                getStatusByBroadcast(broadcastId).then(function (response) {
+	                Napi.getStatusByBroadcast(broadcastId).then(function (response) {
 	                    var errorCode = (0, _jquery2.default)(response).find('error code').text();
 	                    // OFFAIR or ERROR.
 	                    if (errorCode && errorCode !== 'require_community_member') {
 	                        switch (errorCode) {
 	                            case 'comingsoon':
-	                                Log.out(theBroadcastId + ' is COMINGSOON', 'isOffAir');
+	                                _Log2.default.out(theBroadcastId + ' is COMINGSOON', 'isOffAir');
 	                                response.isOffAir = true;
 	                                break;
 	                            case 'premium_only':
-	                                Log.out(theBroadcastId + ' is PREMIUMONLY', 'isOffAir');
+	                                _Log2.default.out(theBroadcastId + ' is PREMIUMONLY', 'isOffAir');
 	                                response.isOffAir = true;
 	                                break;
 	                            case 'closed':
-	                                Log.out(theBroadcastId + ' is OFFAIR', 'isOffAir');
+	                                _Log2.default.out(theBroadcastId + ' is OFFAIR', 'isOffAir');
 	                                response.isOffAir = true;
 	                                break;
 	                            case 'error':
-	                                Log.out(theBroadcastId + ' is ERROR.', 'isOffAir');
+	                                _Log2.default.out(theBroadcastId + ' is ERROR.', 'isOffAir');
 	                                reject();
 	                                return;
 	                        }
@@ -10828,7 +10834,7 @@
 	                        // ONAIR.
 	                        response.isOffAir = false;
 	                        var _broadcastId = (0, _jquery2.default)(response).find('stream id').text();
-	                        Log.out(_broadcastId + ' is ONAIR');
+	                        _Log2.default.out(_broadcastId + ' is ONAIR');
 	                    }
 	                    resolve(response);
 	                });
@@ -10839,7 +10845,7 @@
 	        value: function isStartedBroadcast(communityId) {
 	            var theCommunityId = communityId;
 	            return new Promise(function (resolve, reject) {
-	                getStatusByCommunity(theCommunityId).then(function (response) {
+	                Napi.getStatusByCommunity(theCommunityId).then(function (response) {
 	                    var errorCode = (0, _jquery2.default)(response).find('error code').text();
 	                    var result = {
 	                        isStarted: undefined,
@@ -10851,16 +10857,16 @@
 	                    if (errorCode) {
 	                        switch (errorCode) {
 	                            case 'comingsoon':
-	                                Log.out(result.communityId + ' is STATE==COMINGSOON', 'isStartedBroadcast');
+	                                _Log2.default.out(result.communityId + ' is STATE==COMINGSOON', 'isStartedBroadcast');
 	                                resolve(true);
 	                                return;
 	                            case 'closed':
-	                                Log.out(result.communityId + ' is STATE==NOT_READY', 'isStartedBroadcast');
+	                                _Log2.default.out(result.communityId + ' is STATE==NOT_READY', 'isStartedBroadcast');
 	                                result.isStarted = false;
 	                                resolve(result);
 	                                return;
 	                            case 'error':
-	                                Log.out(result.communityId + ' is STATE==ERROR.', 'isStartedBroadcast');
+	                                _Log2.default.out(result.communityId + ' is STATE==ERROR.', 'isStartedBroadcast');
 	                                reject();
 	                                return;
 	                        }
@@ -10868,11 +10874,11 @@
 	                    // OFFAIR or ONAIR.
 	                    var endTime = (0, _jquery2.default)(response).find('end_time').text();
 	                    if (Date.now() < endTime + '000') {
-	                        Log.out((0, _jquery2.default)(response).find('stream id').text() + ' is STATE==OPEN.', 'isStartedBroadcast');
+	                        _Log2.default.out((0, _jquery2.default)(response).find('stream id').text() + ' is STATE==OPEN.', 'isStartedBroadcast');
 	                        result.isStarted = true;
 	                        result.nextBroadcastId = (0, _jquery2.default)(response).find('stream id').text();
 	                    } else {
-	                        Log.out(result.communityId + ' is STATE==NOT_READY.', 'isStartedBroadcast');
+	                        _Log2.default.out(result.communityId + ' is STATE==NOT_READY.', 'isStartedBroadcast');
 	                        result.isStarted = false;
 	                    }
 	                    resolve(result);
@@ -11021,7 +11027,8 @@
 /* 12 */,
 /* 13 */,
 /* 14 */,
-/* 15 */
+/* 15 */,
+/* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!

@@ -1,4 +1,5 @@
 import $ from 'jquery'
+import Time from './common/Time'
 
 class SettingPage
 {
@@ -76,7 +77,7 @@ $(function()
 
     $(document).on('click','#saveAll',function() {
         const settings = SettingPage.getAllSettings();
-        for (key in settings) {
+        for (let key in settings) {
             localStorage.setItem(key, settings[key]);
         };
         ResultMessage.show('SAVE');
@@ -129,7 +130,7 @@ $(function()
             $('.listgroup-program').append(subscribe);
         }
         // alert((Date.parse(response[id]['openDate'])));
-        for (id in response) {
+        for (let id in response) {
             let subscribe = $(`
                 <div class="listgroup-item clearfix">
                   <div class="nudge-down BtnGroup float-right">
@@ -178,7 +179,7 @@ $(function()
             $('.listgroup-community').append(subscribe);
         }
         // alert((Date.parse(response[id]['openDate'])));
-        for (id in response) {
+        for (let id in response) {
             let subscribe = $(`
                 <div class="listgroup-item clearfix">
                   <div class="nudge-down BtnGroup float-right">

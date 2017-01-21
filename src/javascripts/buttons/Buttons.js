@@ -1,4 +1,5 @@
 import $ from 'jquery'
+import IdHolder from "../modules/IdHolder";
 
 export default class Buttons
 {

@@ -1,5 +1,8 @@
 import $ from 'jquery'
 import Buttons from "../buttons/Buttons"
+import IdHolder from "../modules/IdHolder";
+import PageType from "../modules/PageType";
+import Storage from "../modules/Storage";
 
 export default class AutoEnterCommunityButton extends Buttons
 {
@@ -85,22 +88,26 @@ export default class AutoEnterCommunityButton extends Buttons
 
         const pageType = PageType.get();
 
+        console.info(PageType);
+
         if (pageType === 'COMMUNITY_PAGE') {
             title = $('div.communityData > h2.title > a').text().replace(/[ ]/, '');
             owner = $('div.communityData tr.row:first-child > td.content > a').text().replace(/[ ]/, '');
         }
 
-        if (pageType === 'CHANNEL_PAGE') {
+        else if (pageType === 'CHANNEL_PAGE') {
             title = $('h3.cp_chname').text();
             owner = $('p.cp_viewname').text();
         }
 
-        if (pageType === 'NORMAL_CAST_PAGE' ||
+        else if (pageType === 'NORMAL_CAST_PAGE' ||
             pageType === 'MODERN_CAST_PAGE' ||
             pageType === 'OFFICIAL_CAST_PAGE') {
-            title = $($('.commu_info').find('a').get(0)).html();
-            owner = $('.nicopedia_nushi').find('a').text();
+            title = $($('.commu_info').find('a').get(0)).html() || $('.ch_name').html();
+            owner = $('.nicopedia_nushi').find('a').text() || $('.company').text();
         }
+
+        console.info(title, owner);
 
         Storage.saveToNestedLocalStorage('autoEnterCommunityList', id, {
             state: 'initialized',

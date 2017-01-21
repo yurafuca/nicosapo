@@ -1,18 +1,18 @@
 import $ from 'jquery'
 
-import  Napi  from "./api/Api";
+import Napi from "./api/Api";
 
-import  Log  from "./common/Log";
-import  Time  from "./common/Time";
+import Log  from "./common/Log";
+import Time  from "./common/Time";
 
-import  TimeCounter  from "./common/TimeCounter";
-import  FormatNicoPage  from "./modules/FormatNicoPage";
-import  IdHolder  from "./modules/IdHolder";
-import  PageType  from "./modules/PageType";
+import TimeCounter from "./common/TimeCounter";
+import FormatNicoPage from "./modules/FormatNicoPage";
+import IdHolder from "./modules/IdHolder";
+import PageType from "./modules/PageType";
 
-import  AutoRedirectButton  from "./buttons/AutoRedirectButton";
-import  AutoEnterCommunityButton  from "./buttons/AutoEnterCommunityButton";
-import  AutoEnterProgramButton  from "./buttons/AutoEnterProgramButton";
+import AutoRedirectButton from "./buttons/AutoRedirectButton";
+import AutoEnterCommunityButton from "./buttons/AutoEnterCommunityButton";
+import AutoEnterProgramButton from "./buttons/AutoEnterProgramButton";
 
 const timeCounter = new TimeCounter(new Date());
 const formatNicoPage = new FormatNicoPage();
@@ -250,7 +250,7 @@ function autoRedirect() {
         Napi.isOffAir(idHolder.liveId).then(function(response) {
 
             // ONAIR.
-            if (!response.Napi.isOffAir) {
+            if (!response.isOffAir) {
 
                 // Extended Bar.
                 const currentTime = Date.now();

@@ -7,49 +7,6 @@ let comuHolder = new ComuHolder();
 let newArrival = new NewArrival();
 let broadcastTabs = [];
 
-class Account {
-    static isLogined() {
-        return Napi.isLogined();
-    }
-}
-
-class Api {
-    static getStatusByBroadcast(broadcastId) {
-        return new Promise(function(resolve, reject) {
-            Api.Napi.getStatus(broadcastId).then(function(response) {
-                if (response)
-                    resolve(response);
-                else
-                    reject();
-            });
-        });
-    }
-
-    static getStatusByCommunity(communityId) {
-        return new Promise(function(resolve, reject) {
-            Api.Napi.getStatus(communityId).then(function(response) {
-                if (response)
-                    resolve(response);
-                else
-                    reject();
-            });
-        });
-    }
-
-    static getStatus(param) {
-        return new Promise(function(resolve, reject) {
-            const endpoint = "http://watch.live.nicovideo.jp/api/getplayerstatus?v=";
-            const posting = $.get(endpoint + param);
-
-            posting.done(function(response) {
-                let status = $(response).find('getplayerstatus').attr('status');
-                console.info('[imanani][Napi.getStatus] response = ', response);
-                resolve(response);
-            });
-        });
-    }
-}
-
 $(function() {
 
     Napi.getSubscribe_2();
@@ -80,7 +37,7 @@ $(function() {
 
 function refresh() {
     Promise.resolve()
-        .then(Account.Napi.isLogined)
+        .then(Napi.isLogined)
         .catch(function(e) {
             setBadgeText('x');
             reject();
@@ -98,7 +55,7 @@ function refresh() {
                     if (enableOrNull(localStorage.getItem('options.playsound.enable'))) {
                         const soundfile = localStorage.getItem('options.soundfile') || 'ta-da.mp3';
                         const volume = localStorage.getItem('options.playsound.volume') || 1.0;
-                        const audio = new Audio('sound/' + soundfile);
+                        const audio = new Audio('sounds/' + soundfile);
                         audio.volume = volume;
                         audio.play();
                     }
@@ -120,8 +77,20 @@ function refresh() {
 }
 
 function isExistsInAutoLists(communityId, liveId) {
-    const autoEnterCommunityList = localStorage['autoEnterCommunityList'] || {};
-    const autoEnterProgramList   = localStorage['autoEnterProgramList'] || {};
+    let autoEnterCommunityList = localStorage['autoEnterCommunityList'];
+    let autoEnterProgramList   = localStorage['autoEnterProgramList'];
+
+    if (autoEnterCommunityList) {
+        autoEnterCommunityList = JSON.parse(autoEnterCommunityList);
+    } else {
+        autoEnterCommunityList = {};
+    }
+
+    if (autoEnterProgramList) {
+        autoEnterProgramList = JSON.parse(autoEnterProgramList);
+    } else {
+        autoEnterProgramList = {};
+    }
 
     console.info('-------------');
     console.info(communityId);
@@ -142,7 +111,8 @@ function isExistsInAutoLists(communityId, liveId) {
             return true;
         }
     }
-            console.info(false);
+
+    console.info(false);
 
     return false;
 
@@ -265,7 +235,7 @@ function test(id, storagedData) {
         console.info('[imanani][●autoEnterProgram] id = ', id);
         Napi.isOffAir(id).then(function(response) {
             // ONAIR
-            if (response.Napi.isOffAir == false) {
+            if (response.isOffAir == false) {
                 console.info('[imanani][○autoEnterProgram] id = ', id);
                 chrome.tabs.create({
                     url: 'http://live.nicovideo.jp/watch/' + id

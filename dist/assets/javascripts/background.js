@@ -46,8 +46,6 @@
 
 	"use strict";
 	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
 	var _jquery = __webpack_require__(1);
 	
 	var _jquery2 = _interopRequireDefault(_jquery);
@@ -66,68 +64,9 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
 	var comuHolder = new _CommunityHolder2.default();
 	var newArrival = new _NewArrival2.default();
 	var broadcastTabs = [];
-	
-	var Account = function () {
-	    function Account() {
-	        _classCallCheck(this, Account);
-	    }
-	
-	    _createClass(Account, null, [{
-	        key: "isLogined",
-	        value: function isLogined() {
-	            return _Api2.default.isLogined();
-	        }
-	    }]);
-	
-	    return Account;
-	}();
-	
-	var Api = function () {
-	    function Api() {
-	        _classCallCheck(this, Api);
-	    }
-	
-	    _createClass(Api, null, [{
-	        key: "getStatusByBroadcast",
-	        value: function getStatusByBroadcast(broadcastId) {
-	            return new Promise(function (resolve, reject) {
-	                Api.Napi.getStatus(broadcastId).then(function (response) {
-	                    if (response) resolve(response);else reject();
-	                });
-	            });
-	        }
-	    }, {
-	        key: "getStatusByCommunity",
-	        value: function getStatusByCommunity(communityId) {
-	            return new Promise(function (resolve, reject) {
-	                Api.Napi.getStatus(communityId).then(function (response) {
-	                    if (response) resolve(response);else reject();
-	                });
-	            });
-	        }
-	    }, {
-	        key: "getStatus",
-	        value: function getStatus(param) {
-	            return new Promise(function (resolve, reject) {
-	                var endpoint = "http://watch.live.nicovideo.jp/api/getplayerstatus?v=";
-	                var posting = _jquery2.default.get(endpoint + param);
-	
-	                posting.done(function (response) {
-	                    var status = (0, _jquery2.default)(response).find('getplayerstatus').attr('status');
-	                    console.info('[imanani][Napi.getStatus] response = ', response);
-	                    resolve(response);
-	                });
-	            });
-	        }
-	    }]);
-	
-	    return Api;
-	}();
 	
 	(0, _jquery2.default)(function () {
 	
@@ -155,7 +94,7 @@
 	});
 	
 	function refresh() {
-	    Promise.resolve().then(Account.Napi.isLogined).catch(function (e) {
+	    Promise.resolve().then(_Api2.default.isLogined).catch(function (e) {
 	        setBadgeText('x');
 	        reject();
 	    }).then(function () {
@@ -170,7 +109,7 @@
 	                if (enableOrNull(localStorage.getItem('options.playsound.enable'))) {
 	                    var soundfile = localStorage.getItem('options.soundfile') || 'ta-da.mp3';
 	                    var volume = localStorage.getItem('options.playsound.volume') || 1.0;
-	                    var audio = new Audio('sound/' + soundfile);
+	                    var audio = new Audio('sounds/' + soundfile);
 	                    audio.volume = volume;
 	                    audio.play();
 	                }
@@ -192,8 +131,20 @@
 	}
 	
 	function isExistsInAutoLists(communityId, liveId) {
-	    var autoEnterCommunityList = localStorage['autoEnterCommunityList'] || {};
-	    var autoEnterProgramList = localStorage['autoEnterProgramList'] || {};
+	    var autoEnterCommunityList = localStorage['autoEnterCommunityList'];
+	    var autoEnterProgramList = localStorage['autoEnterProgramList'];
+	
+	    if (autoEnterCommunityList) {
+	        autoEnterCommunityList = JSON.parse(autoEnterCommunityList);
+	    } else {
+	        autoEnterCommunityList = {};
+	    }
+	
+	    if (autoEnterProgramList) {
+	        autoEnterProgramList = JSON.parse(autoEnterProgramList);
+	    } else {
+	        autoEnterProgramList = {};
+	    }
 	
 	    console.info('-------------');
 	    console.info(communityId);
@@ -214,6 +165,7 @@
 	            return true;
 	        }
 	    }
+	
 	    console.info(false);
 	
 	    return false;
@@ -336,7 +288,7 @@
 	        console.info('[imanani][●autoEnterProgram] id = ', id);
 	        _Api2.default.isOffAir(id).then(function (response) {
 	            // ONAIR
-	            if (response.Napi.isOffAir == false) {
+	            if (response.isOffAir == false) {
 	                console.info('[imanani][○autoEnterProgram] id = ', id);
 	                chrome.tabs.create({
 	                    url: 'http://live.nicovideo.jp/watch/' + id
@@ -10872,9 +10824,15 @@
 	
 	var _jquery2 = _interopRequireDefault(_jquery);
 	
+	var _Log = __webpack_require__(5);
+	
+	var _Log2 = _interopRequireDefault(_Log);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	var parameter_nicovideojs = [];
 	
 	var Napi = function () {
 	    function Napi() {
@@ -11091,7 +11049,7 @@
 	        key: 'getStatusByBroadcast',
 	        value: function getStatusByBroadcast(broadcastId) {
 	            return new Promise(function (resolve, reject) {
-	                getStatus(broadcastId).then(function (response) {
+	                Napi.getStatus(broadcastId).then(function (response) {
 	                    if (response) resolve(response);else reject();
 	                });
 	            });
@@ -11100,7 +11058,7 @@
 	        key: 'getStatusByCommunity',
 	        value: function getStatusByCommunity(communityId) {
 	            return new Promise(function (resolve, reject) {
-	                getStatus(communityId).then(function (response) {
+	                Napi.getStatus(communityId).then(function (response) {
 	                    if (response) {
 	                        response.communityId = response.param;
 	                        resolve(response);
@@ -11130,25 +11088,25 @@
 	        value: function isOffAir(broadcastId) {
 	            var theBroadcastId = broadcastId;
 	            return new Promise(function (resolve, reject) {
-	                getStatusByBroadcast(broadcastId).then(function (response) {
+	                Napi.getStatusByBroadcast(broadcastId).then(function (response) {
 	                    var errorCode = (0, _jquery2.default)(response).find('error code').text();
 	                    // OFFAIR or ERROR.
 	                    if (errorCode && errorCode !== 'require_community_member') {
 	                        switch (errorCode) {
 	                            case 'comingsoon':
-	                                Log.out(theBroadcastId + ' is COMINGSOON', 'isOffAir');
+	                                _Log2.default.out(theBroadcastId + ' is COMINGSOON', 'isOffAir');
 	                                response.isOffAir = true;
 	                                break;
 	                            case 'premium_only':
-	                                Log.out(theBroadcastId + ' is PREMIUMONLY', 'isOffAir');
+	                                _Log2.default.out(theBroadcastId + ' is PREMIUMONLY', 'isOffAir');
 	                                response.isOffAir = true;
 	                                break;
 	                            case 'closed':
-	                                Log.out(theBroadcastId + ' is OFFAIR', 'isOffAir');
+	                                _Log2.default.out(theBroadcastId + ' is OFFAIR', 'isOffAir');
 	                                response.isOffAir = true;
 	                                break;
 	                            case 'error':
-	                                Log.out(theBroadcastId + ' is ERROR.', 'isOffAir');
+	                                _Log2.default.out(theBroadcastId + ' is ERROR.', 'isOffAir');
 	                                reject();
 	                                return;
 	                        }
@@ -11156,7 +11114,7 @@
 	                        // ONAIR.
 	                        response.isOffAir = false;
 	                        var _broadcastId = (0, _jquery2.default)(response).find('stream id').text();
-	                        Log.out(_broadcastId + ' is ONAIR');
+	                        _Log2.default.out(_broadcastId + ' is ONAIR');
 	                    }
 	                    resolve(response);
 	                });
@@ -11167,7 +11125,7 @@
 	        value: function isStartedBroadcast(communityId) {
 	            var theCommunityId = communityId;
 	            return new Promise(function (resolve, reject) {
-	                getStatusByCommunity(theCommunityId).then(function (response) {
+	                Napi.getStatusByCommunity(theCommunityId).then(function (response) {
 	                    var errorCode = (0, _jquery2.default)(response).find('error code').text();
 	                    var result = {
 	                        isStarted: undefined,
@@ -11179,16 +11137,16 @@
 	                    if (errorCode) {
 	                        switch (errorCode) {
 	                            case 'comingsoon':
-	                                Log.out(result.communityId + ' is STATE==COMINGSOON', 'isStartedBroadcast');
+	                                _Log2.default.out(result.communityId + ' is STATE==COMINGSOON', 'isStartedBroadcast');
 	                                resolve(true);
 	                                return;
 	                            case 'closed':
-	                                Log.out(result.communityId + ' is STATE==NOT_READY', 'isStartedBroadcast');
+	                                _Log2.default.out(result.communityId + ' is STATE==NOT_READY', 'isStartedBroadcast');
 	                                result.isStarted = false;
 	                                resolve(result);
 	                                return;
 	                            case 'error':
-	                                Log.out(result.communityId + ' is STATE==ERROR.', 'isStartedBroadcast');
+	                                _Log2.default.out(result.communityId + ' is STATE==ERROR.', 'isStartedBroadcast');
 	                                reject();
 	                                return;
 	                        }
@@ -11196,11 +11154,11 @@
 	                    // OFFAIR or ONAIR.
 	                    var endTime = (0, _jquery2.default)(response).find('end_time').text();
 	                    if (Date.now() < endTime + '000') {
-	                        Log.out((0, _jquery2.default)(response).find('stream id').text() + ' is STATE==OPEN.', 'isStartedBroadcast');
+	                        _Log2.default.out((0, _jquery2.default)(response).find('stream id').text() + ' is STATE==OPEN.', 'isStartedBroadcast');
 	                        result.isStarted = true;
 	                        result.nextBroadcastId = (0, _jquery2.default)(response).find('stream id').text();
 	                    } else {
-	                        Log.out(result.communityId + ' is STATE==NOT_READY.', 'isStartedBroadcast');
+	                        _Log2.default.out(result.communityId + ' is STATE==NOT_READY.', 'isStartedBroadcast');
 	                        result.isStarted = false;
 	                    }
 	                    resolve(result);
@@ -11213,6 +11171,51 @@
 	}();
 	
 	exports.default = Napi;
+
+/***/ },
+/* 5 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function getValName(val) {
+	    return Object.keys({ val: val })[0];
+	}
+	
+	var Log = function () {
+	    function Log() {
+	        _classCallCheck(this, Log);
+	    }
+	
+	    _createClass(Log, null, [{
+	        key: 'info',
+	        value: function info(val, funcName) {
+	            var APPNAME = '[nicosapo]';
+	            var FNCNAME = funcName ? '[' + funcName + ']' : '';
+	            var VALNAME = getValName(val);
+	            console.info(APPNAME + FNCNAME + '' + VALNAME + ' = ', val);
+	        }
+	    }, {
+	        key: 'out',
+	        value: function out(str, funcName) {
+	            var APPNAME = '[nicosapo]';
+	            var FNCNAME = funcName ? '[' + funcName + ']' : '';
+	            console.info(APPNAME + FNCNAME + str);
+	        }
+	    }]);
+	
+	    return Log;
+	}();
+	
+	exports.default = Log;
 
 /***/ }
 /******/ ]);

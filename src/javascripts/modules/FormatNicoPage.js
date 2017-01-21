@@ -15,7 +15,7 @@ export default class FormatNicoPage
             return;
         }
 
-        if (pageType == 'GATE_PAGE') {
+        else if (pageType == 'GATE_PAGE') {
             this.$program_icon.css('float', 'none');
             this.$program_icon.css('display', 'inline-block');
             this.$program_title.css('display', 'inline-block');
@@ -23,12 +23,12 @@ export default class FormatNicoPage
             return;
         }
 
-        if (pageType == 'MODERN_CAST_PAGE') {
+        else if (pageType == 'MODERN_CAST_PAGE') {
             // Do nothing.
             return;
         }
 
-        if (pageType == 'NORMAL_CAST_PAGE' || pageType == 'OFFICIAL_CAST_PAGE') {
+        else if (pageType == 'NORMAL_CAST_PAGE' || pageType == 'OFFICIAL_CAST_PAGE') {
             this.$watch_title_box_meta.css('width', '1000px');
             this.$slider_container.css('padding', '0'); // For ExtendedBar
             return;

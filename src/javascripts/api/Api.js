@@ -1,4 +1,7 @@
 import $ from 'jquery'
+import Log from '../common/Log'
+
+const parameter_nicovideojs = [];
 
 export default class Napi
 {
@@ -235,7 +238,7 @@ export default class Napi
 
     static getStatusByBroadcast(broadcastId) {
         return new Promise((resolve, reject) => {
-            getStatus(broadcastId).then(function(response) {
+            Napi.getStatus(broadcastId).then(function(response) {
                 if (response)
                     resolve(response);
                 else
@@ -246,7 +249,7 @@ export default class Napi
 
     static getStatusByCommunity(communityId) {
         return new Promise((resolve, reject) => {
-            getStatus(communityId).then(function(response) {
+            Napi.getStatus(communityId).then(function(response) {
                 if (response) {
             				response.communityId = response.param;
             				resolve(response);
@@ -274,7 +277,7 @@ export default class Napi
     static isOffAir(broadcastId) {
         const theBroadcastId = broadcastId;
         return new Promise((resolve, reject) => {
-            getStatusByBroadcast(broadcastId).then(function(response) {
+            Napi.getStatusByBroadcast(broadcastId).then(function(response) {
                 const errorCode = $(response).find('error code').text();
                 // OFFAIR or ERROR.
                 if (errorCode && (errorCode !== 'require_community_member')) {
@@ -310,7 +313,7 @@ export default class Napi
     static isStartedBroadcast(communityId) {
         const theCommunityId = communityId;
         return new Promise((resolve, reject) => {
-            getStatusByCommunity(theCommunityId).then(function(response) {
+            Napi.getStatusByCommunity(theCommunityId).then(function(response) {
                 const errorCode = $(response).find('error code').text();
                 const result = {
                     isStarted: undefined,

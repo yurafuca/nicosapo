@@ -1,6 +1,7 @@
 import $ from 'jquery'
+import Log from '../common/Log'
 
-class PageType
+export default class PageType
 {
     static get() {
         let pageType;
