@@ -1,8 +1,7 @@
 import $ from 'jquery'
-
-import { NewArrival } from "../javascripts/newArrival";
-import { ComuHolder } from "../javascripts/comuHolder";
-import { Napi } from "../javascripts/nicovideo";
+import NewArrival from "./modules/NewArrival";
+import ComuHolder from "./modules/CommunityHolder";
+import Napi from "./api/Api";
 
 let comuHolder = new ComuHolder();
 let newArrival = new NewArrival();
@@ -51,33 +50,6 @@ class Api {
     }
 }
 
-function loadCasts(liveType) {
-    return new Promise(function(resolve, reject) {
-        console.info('[imanani][Broadcasts.loadAnyBroadcasts] liveType = ', liveType);
-        if (liveType == 'user') {
-            Napi.getSubscribe_2().then(
-                function($videoInfos) {
-                    console.info($videoInfos);
-                    resolve($videoInfos);
-                }
-            ).catch(reject);
-        }
-        if (liveType == 'official') {
-            // return Napi.getOfficialOnair();
-            Napi.getOfficialOnair().then(function(official_lives) {
-                console.info(official_lives);
-                resolve(official_lives);
-            });
-        }
-        // if (liveType == 'future') {
-        //     Napi.getFutureOnair().then(function(future_lives) {
-        //         console.info(future_lives);
-        //         resolve(future_lives);
-        //     });
-        // }
-    });
-}
-
 $(function() {
 
     Napi.getSubscribe_2();
@@ -114,7 +86,7 @@ function refresh() {
             reject();
         })
         .then(function() {
-            return loadCasts('user');
+            return Napi.loadCasts('user');
         })
         .then(function(videoInfos) {
             console.info('[imanani] videoInfos = ', videoInfos);

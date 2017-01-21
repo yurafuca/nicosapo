@@ -9,9 +9,9 @@
 	 },
     "description": "自動枠移動（新配信（β）対応） / 自動入場 / 放送中の番組を一覧表示 / デスクトップ通知 / 延長通知 / 番組の残り時間を表示 をサポートします．",
     "icons": {
-        "16": "src/images/icon.png",
-        "32": "src/images/icon.png",
-        "64": "src/images/icon.png"
+        "16": "images/icon.png",
+        "32": "images/icon.png",
+        "64": "images/icon.png"
     },
     "permissions": [
         "alarms",
@@ -57,7 +57,7 @@
     ],
     "options_page": "src/html/options.html",
     "web_accessible_resources": [
-        "image/icon.png",
+        "images/icon.png",
         "font/baseballpark.ttf"
     ]
 }

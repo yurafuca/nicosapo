@@ -97,7 +97,7 @@ a:hover .screen_name {
 
 .nowloading {
 	min-height: 65px;
-	background-image: url('/image/loading.gif');
+	background-image: url('/images/loading.gif');
 	background-size: 65px;
 	background-repeat: no-repeat;
 	background-position: center;
@@ -161,7 +161,7 @@ a:hover .screen_name {
 	position: relative;
 	top: -1px;
 	float: left;
-	background-image: url('/image/icon.png');
+	background-image: url('/images/icon.png');
 	background-size: 27px;
 	background-repeat: no-repeat;
 	background-position: center;

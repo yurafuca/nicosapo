@@ -1,17 +1,18 @@
 import $ from 'jquery'
 
-import { Log } from "../javascripts/log";
-import { Napi } from "../javascripts/nicovideo";
-import { Time } from "../javascripts/common";
-import { PageType } from "../javascripts/pageType";
+import  Napi  from "./api/Api";
 
-import { TimeCounter } from "../javascripts/timeCounter";
-import { FormatNicoPage } from "../javascripts/formatNicoPage";
-import { IdHolder } from "../javascripts/idHolder";
+import  Log  from "./common/Log";
+import  Time  from "./common/Time";
 
-import { AutoRedirectButton } from "../javascripts/autoRedirectButton";
-import { AutoEnterCommunityButton } from "../javascripts/autoEnterCommunityButton";
-import { AutoEnterProgramButton } from "../javascripts/autoEnterProgramButton";
+import  TimeCounter  from "./common/TimeCounter";
+import  FormatNicoPage  from "./modules/FormatNicoPage";
+import  IdHolder  from "./modules/IdHolder";
+import  PageType  from "./modules/PageType";
+
+import  AutoRedirectButton  from "./buttons/AutoRedirectButton";
+import  AutoEnterCommunityButton  from "./buttons/AutoEnterCommunityButton";
+import  AutoEnterProgramButton  from "./buttons/AutoEnterProgramButton";
 
 const timeCounter = new TimeCounter(new Date());
 const formatNicoPage = new FormatNicoPage();

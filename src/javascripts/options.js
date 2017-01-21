@@ -1,4 +1,4 @@
-const bg = chrome.extension.getBackgroundPage();
+import $ from 'jquery'
 
 class SettingPage
 {

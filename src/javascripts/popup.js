@@ -1,9 +1,8 @@
 import $ from 'jquery'
-import { Log } from "../javascripts/log";
-import { Time } from "../javascripts/common";
-import { Napi } from "../javascripts/nicovideo";
-
-const bg = chrome.extension.getBackgroundPage();
+import 'jquery-powertip';
+import Log from "./common/Log";
+import Time from "./common/Time";
+import Napi from "./api/Api";
 
 class Massages {
     static show(type) {
@@ -50,6 +49,8 @@ $(function() {
 });
 
 function loadBroadcasts(liveType) {
+    console.info(Napi);
+    console.info(Napi.isLogined);
     Promise.resolve()
         .then(Loading.start)
         .then(Napi.isLogined)
@@ -59,7 +60,8 @@ function loadBroadcasts(liveType) {
             reject();
         })
         .then(function() {
-            return bg.loadCasts(liveType);
+            // const bg = chrome.extension.getBackgroundPage();
+            return Napi.loadCasts(liveType);
         })
         .then(function(programs) {
             return show(programs, liveType);
@@ -223,7 +225,7 @@ function createOneProgram(program, programType, numOfPrograms, currentIndex) {
 }
 
 function wordWrap(text, length) {
-    reg = new RegExp("(.{" + parseInt(length) + "})", "g");
+    const reg = new RegExp("(.{" + parseInt(length) + "})", "g");
     return text.replace(/[\r|\r\n|\n]/g, "").replace(reg, "$1" + "<br>");
 }
 
