@@ -14,6 +14,14 @@ import AutoRedirectButton from "./buttons/AutoRedirectButton";
 import AutoEnterCommunityButton from "./buttons/AutoEnterCommunityButton";
 import AutoEnterProgramButton from "./buttons/AutoEnterProgramButton";
 
+import StandByPage from "./page/StandByPage";
+import GatePage from "./page/GatePage";
+import NormalCastPage from "./page/NormalCastPage";
+import ModernCastPage from "./page/ModernCastPage";
+import OfficialCastPage from "./page/OfficialCastPage";
+import CommunityPage from "./page/CommunityPage";
+import ChannelPage from "./page/ChannelPage";
+
 const timeCounter = new TimeCounter(new Date());
 const formatNicoPage = new FormatNicoPage();
 const idHolder = new IdHolder();
@@ -28,161 +36,22 @@ $(function()
 
     formatNicoPage.exec(pageType);
 
-    if (pageType === 'STAND_BY_PAGE') {
-        $('.infobox').prepend(autoRedirectButton.getDom());
-        chrome.runtime.sendMessage({
-                purpose: 'getFromNestedLocalStorage',
-                key: 'autoEnterProgramList'
-            },
-            function(response) {
-                if (response[idHolder.liveId]) {
-                    // Buttons.toggleOn('autoEnterProgram');
-                    autoEnterProgramButton.toggleOn();
-                } else {
-                    // Buttons.toggleOff('autoEnterProgram');
-                    autoEnterProgramButton.toggleOff();
-                }
-            }
-        );
+    const pages = {
+        'STAND_BY_PAGE': StandByPage,
+        'GATE_PAGE': GatePage,
+        'NORMAL_CAST_PAGE': NormalCastPage,
+        'MODERN_CAST_PAGE': ModernCastPage,
+        'OFFICIAL_CAST_PAGE': OfficialCastPage,
+        'COMMUNITY_PAGE': CommunityPage,
+        'CHANNEL_PAGE': ChannelPage,
     }
 
-    else if (pageType === 'GATE_PAGE') {
-        $('.gate_title').prepend(autoEnterProgramButton.getDom());
-    }
-
-    else if (pageType === 'MODERN_CAST_PAGE') {
-        $('.program-detail div').last().append(autoRedirectButton.getDom());
-    }
-
-    else if (pageType === 'NORMAL_CAST_PAGE') {
-        $('.meta').append(autoRedirectButton.getDom());
-        $('.meta').append(autoEnterCommunityButton.getDom());
-    }
-
-    else if (pageType === 'OFFICIAL_CAST_PAGE') {
-        const noSupport = $(`<span>　
-                              /* 公式番組では自動枠移動，コミュニティへの自動入場に対応していません */
-                              </span>`)
-        $('.meta').append(noSupport);
-    }
-
-    else if (pageType === 'COMMUNITY_PAGE') {
-        $('a#comSetting_hide').after(autoEnterCommunityButton.getDom());
-    }
-
-    else if (pageType === 'CHANNEL_PAGE') {
-        $('div.join_leave').prepend(autoEnterCommunityButton.getDom());
-    }
-
-    const extendedBar = $(`
-            <div id="extended-bar">
-                <div class="time end-time"></div>
-                <div class="message">延長されていません</div>
-                <div class="time rest-time"></div>
-            </div>
-        `);
-
-    switch (pageType) {
-        case 'OFFICIAL_CAST_PAGE': // Fall Through.
-        case 'NORMAL_CAST_PAGE':   // Fall Through.
-        case 'MODERN_CAST_PAGE':
-            $('#player').after(extendedBar);
-            $('#watch_player_top_box').after(extendedBar);
-            // $('#watch_player_box').after(extendedBar);
-            chrome.runtime.sendMessage({
-                    purpose: 'getFromLocalStorage',
-                    key: 'options.autoJump.enable'
-                },
-                function(response) {
-                    if (enabledOrNull(response)) {
-                        autoRedirectButton.toggleOn();
-                    } else {
-                        autoRedirectButton.toggleOff();
-                    }
-                }
-            );
-            chrome.runtime.sendMessage({
-                    purpose: 'getFromNestedLocalStorage',
-                    key: 'autoEnterCommunityList'
-                },
-                function(response) {
-                    if (response[idHolder.communityId]) {
-                        autoEnterCommunityButton.toggleOn();
-                    } else {
-                        autoEnterCommunityButton.toggleOff();
-                    }
-                }
-            );
-            Napi.getStatusByBroadcast(idHolder.liveId).then(function(response) {
-
-                // Extended Bar.
-                const currentTime = Date.now();
-                const currentDate = new Date(currentTime);
-
-                // new Date() は引数にミリ秒を要求するので 1000 倍するために末尾に '000' を付加する．
-                const endTime = Number($(response).find('stream end_time').text() + '000');
-                const endDate = new Date(endTime);
-
-                const endTimeJpn = Time.toJpnString(endDate.getTime());
-
-                const restTime_Minute = Time.minuteDistance(currentDate, endDate);
-                let   restTime_Second = Time.minuteDistanceOfSec(currentDate, endDate);
-                      restTime_Second = ('0' + restTime_Second).slice(-2);
-
-                // タイマーを初期化
-                timeCounter.setHour(0);
-                timeCounter.setMinute(restTime_Minute);
-                timeCounter.setSecond(restTime_Second);
-
-                $('#extended-bar .end-time').text(`${endTimeJpn}`);
-                $('#extended-bar .rest-time').text(`${restTime_Minute}：${restTime_Second}`);
-            });
-            break;
-        case 'STAND_BY_PAGE':
-            chrome.runtime.sendMessage({
-                    purpose: 'getFromLocalStorage',
-                    key: 'options.autoJump.enable'
-                },
-                function(response) {
-                    if (enabledOrNull(response)) {
-                        autoRedirectButton.toggleOn();
-                    } else {
-                        autoRedirectButton.toggleOff();
-                    }
-                }
-            );
-            break;
-        case 'GATE_PAGE':
-            chrome.runtime.sendMessage({
-                    purpose: 'getFromNestedLocalStorage',
-                    key: 'autoEnterProgramList'
-                },
-                function(response) {
-                    if (response[idHolder.liveId]) {
-                        autoEnterProgramButton.toggleOn();
-                    } else {
-                        autoEnterProgramButton.toggleOff();
-                    }
-                });
-            break;
-        case 'COMMUNITY_PAGE': // Fall Through.
-        case 'CHANNEL_PAGE':
-            chrome.runtime.sendMessage({
-                    purpose: 'getFromNestedLocalStorage',
-                    key: 'autoEnterCommunityList'
-                },
-                function(response) {
-                    if (response[idHolder.communityId]) {
-                        autoEnterCommunityButton.toggleOn();
-                    } else {
-                        autoEnterCommunityButton.toggleOff();
-                    }
-                });
-            break;
-    }
+    pages[pageType].putButton();
+    pages[pageType].setUpButton();
 
     if ((pageType === 'NORMAL_CAST_PAGE') || (pageType === 'MODERN_CAST_PAGE') || (pageType ==='STAND_BY_PAGE')) {
-        // setInterval(autoRedirect, 1000 * 50);
+        pages[pageType].putExtendedBar();
+        pages[pageType].setUpExtendedBar(timeCounter);
         chrome.runtime.sendMessage({
                 purpose: 'getFromLocalStorage',
                 key: 'options.redirect.time'
@@ -320,10 +189,6 @@ function autoRedirect() {
             setTimeout(autoRedirect, intervalTime * 1000);
         }
     );
-}
-
-function autoEnter() {
-
 }
 
 function redirectBroadcastPage(broadcastId) {
