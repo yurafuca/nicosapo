@@ -105,45 +105,34 @@
 	
 	    formatNicoPage.exec(pageType);
 	
-	    switch (pageType) {
-	        case 'STAND_BY_PAGE':
-	            (0, _jquery2.default)('.infobox').prepend(autoRedirectButton.getDom());
-	            chrome.runtime.sendMessage({
-	                purpose: 'getFromNestedLocalStorage',
-	                key: 'autoEnterProgramList'
-	            }, function (response) {
-	                if (response[idHolder.liveId]) {
-	                    // Buttons.toggleOn('autoEnterProgram');
-	                    autoEnterProgramButton.toggleOn();
-	                } else {
-	                    // Buttons.toggleOff('autoEnterProgram');
-	                    autoEnterProgramButton.toggleOff();
-	                }
-	            });
-	            break;
-	        case 'GATE_PAGE':
-	            (0, _jquery2.default)('.gate_title').prepend(autoEnterProgramButton.getDom());
-	            break;
-	        case 'MODERN_CAST_PAGE':
-	            (0, _jquery2.default)('.program-detail div').last().append(autoRedirectButton.getDom());
-	            break;
-	        case 'NORMAL_CAST_PAGE':
-	            (0, _jquery2.default)('.meta').append(autoRedirectButton.getDom());
-	            (0, _jquery2.default)('.meta').append(autoEnterCommunityButton.getDom());
-	            break;
-	        case 'OFFICIAL_CAST_PAGE':
-	            var noSupport = (0, _jquery2.default)("<span>\u3000\n                                  /* \u516C\u5F0F\u756A\u7D44\u3067\u306F\u81EA\u52D5\u67A0\u79FB\u52D5\uFF0C\n                                  \u30B3\u30DF\u30E5\u30CB\u30C6\u30A3\u3078\u306E\u81EA\u52D5\u5165\u5834\u306B\u5BFE\u5FDC\u3057\u3066\u3044\u307E\u305B\u3093 */\n                                  </span>");
-	            (0, _jquery2.default)('.meta').append(noSupport);
-	            break;
-	        case 'COMMUNITY_PAGE':
-	            (0, _jquery2.default)('a#comSetting_hide').after(autoEnterCommunityButton.getDom());
-	            break;
-	        case 'CHANNEL_PAGE':
-	            (0, _jquery2.default)('div.join_leave').prepend(autoEnterCommunityButton.getDom());
-	            break;
-	        default:
-	            // Do nothing.
-	            break;
+	    if (pageType === 'STAND_BY_PAGE') {
+	        (0, _jquery2.default)('.infobox').prepend(autoRedirectButton.getDom());
+	        chrome.runtime.sendMessage({
+	            purpose: 'getFromNestedLocalStorage',
+	            key: 'autoEnterProgramList'
+	        }, function (response) {
+	            if (response[idHolder.liveId]) {
+	                // Buttons.toggleOn('autoEnterProgram');
+	                autoEnterProgramButton.toggleOn();
+	            } else {
+	                // Buttons.toggleOff('autoEnterProgram');
+	                autoEnterProgramButton.toggleOff();
+	            }
+	        });
+	    } else if (pageType === 'GATE_PAGE') {
+	        (0, _jquery2.default)('.gate_title').prepend(autoEnterProgramButton.getDom());
+	    } else if (pageType === 'MODERN_CAST_PAGE') {
+	        (0, _jquery2.default)('.program-detail div').last().append(autoRedirectButton.getDom());
+	    } else if (pageType === 'NORMAL_CAST_PAGE') {
+	        (0, _jquery2.default)('.meta').append(autoRedirectButton.getDom());
+	        (0, _jquery2.default)('.meta').append(autoEnterCommunityButton.getDom());
+	    } else if (pageType === 'OFFICIAL_CAST_PAGE') {
+	        var noSupport = (0, _jquery2.default)("<span>\u3000\n                              /* \u516C\u5F0F\u756A\u7D44\u3067\u306F\u81EA\u52D5\u67A0\u79FB\u52D5\uFF0C\u30B3\u30DF\u30E5\u30CB\u30C6\u30A3\u3078\u306E\u81EA\u52D5\u5165\u5834\u306B\u5BFE\u5FDC\u3057\u3066\u3044\u307E\u305B\u3093 */\n                              </span>");
+	        (0, _jquery2.default)('.meta').append(noSupport);
+	    } else if (pageType === 'COMMUNITY_PAGE') {
+	        (0, _jquery2.default)('a#comSetting_hide').after(autoEnterCommunityButton.getDom());
+	    } else if (pageType === 'CHANNEL_PAGE') {
+	        (0, _jquery2.default)('div.join_leave').prepend(autoEnterCommunityButton.getDom());
 	    }
 	
 	    var extendedBar = (0, _jquery2.default)("\n            <div id=\"extended-bar\">\n                <div class=\"time end-time\"></div>\n                <div class=\"message\">\u5EF6\u9577\u3055\u308C\u3066\u3044\u307E\u305B\u3093</div>\n                <div class=\"time rest-time\"></div>\n            </div>\n        ");

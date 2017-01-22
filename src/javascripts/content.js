@@ -28,50 +28,50 @@ $(function()
 
     formatNicoPage.exec(pageType);
 
-    switch (pageType) {
-        case 'STAND_BY_PAGE':
-            $('.infobox').prepend(autoRedirectButton.getDom());
-            chrome.runtime.sendMessage({
-                    purpose: 'getFromNestedLocalStorage',
-                    key: 'autoEnterProgramList'
-                },
-                function(response) {
-                    if (response[idHolder.liveId]) {
-                        // Buttons.toggleOn('autoEnterProgram');
-                        autoEnterProgramButton.toggleOn();
-                    } else {
-                        // Buttons.toggleOff('autoEnterProgram');
-                        autoEnterProgramButton.toggleOff();
-                    }
+    if (pageType === 'STAND_BY_PAGE') {
+        $('.infobox').prepend(autoRedirectButton.getDom());
+        chrome.runtime.sendMessage({
+                purpose: 'getFromNestedLocalStorage',
+                key: 'autoEnterProgramList'
+            },
+            function(response) {
+                if (response[idHolder.liveId]) {
+                    // Buttons.toggleOn('autoEnterProgram');
+                    autoEnterProgramButton.toggleOn();
+                } else {
+                    // Buttons.toggleOff('autoEnterProgram');
+                    autoEnterProgramButton.toggleOff();
                 }
-            );
-            break;
-        case 'GATE_PAGE':
-            $('.gate_title').prepend(autoEnterProgramButton.getDom());
-            break;
-        case 'MODERN_CAST_PAGE':
-            $('.program-detail div').last().append(autoRedirectButton.getDom());
-            break;
-        case 'NORMAL_CAST_PAGE':
-            $('.meta').append(autoRedirectButton.getDom());
-            $('.meta').append(autoEnterCommunityButton.getDom());
-            break;
-        case 'OFFICIAL_CAST_PAGE':
-            const noSupport = $(`<span>　
-                                  /* 公式番組では自動枠移動，
-                                  コミュニティへの自動入場に対応していません */
-                                  </span>`)
-            $('.meta').append(noSupport);
-            break;
-        case 'COMMUNITY_PAGE':
-            $('a#comSetting_hide').after(autoEnterCommunityButton.getDom());
-            break;
-        case 'CHANNEL_PAGE':
-            $('div.join_leave').prepend(autoEnterCommunityButton.getDom());
-            break;
-        default:
-            // Do nothing.
-            break;
+            }
+        );
+    }
+
+    else if (pageType === 'GATE_PAGE') {
+        $('.gate_title').prepend(autoEnterProgramButton.getDom());
+    }
+
+    else if (pageType === 'MODERN_CAST_PAGE') {
+        $('.program-detail div').last().append(autoRedirectButton.getDom());
+    }
+
+    else if (pageType === 'NORMAL_CAST_PAGE') {
+        $('.meta').append(autoRedirectButton.getDom());
+        $('.meta').append(autoEnterCommunityButton.getDom());
+    }
+
+    else if (pageType === 'OFFICIAL_CAST_PAGE') {
+        const noSupport = $(`<span>　
+                              /* 公式番組では自動枠移動，コミュニティへの自動入場に対応していません */
+                              </span>`)
+        $('.meta').append(noSupport);
+    }
+
+    else if (pageType === 'COMMUNITY_PAGE') {
+        $('a#comSetting_hide').after(autoEnterCommunityButton.getDom());
+    }
+
+    else if (pageType === 'CHANNEL_PAGE') {
+        $('div.join_leave').prepend(autoEnterCommunityButton.getDom());
     }
 
     const extendedBar = $(`
