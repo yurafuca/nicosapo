@@ -48,11 +48,12 @@ export default class ModernCastPage extends Page {
   }
 
   putExtendedBar() {
-    extendedBar.put('#player');
+    extendedBar.put('#bourbon-block');
   }
 
   setUpExtendedBar(timeCounter) {
     extendedBar.setUp();
+    $('#extended-bar').css('width', '1024px');
   }
 
   countExtendedBar() {

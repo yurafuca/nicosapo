@@ -1,11 +1,11 @@
 {
     "name": "にこさぽ （ニコ生サポート）",
 	"manifest_version": 2,
-    "version": "1.8.0",
+    "version": "1.8.1",
      "browser_action": {
-	      "default_icon": "src/images/icon.png",
+	      "default_icon": "images/icon.png",
 	      "default_title": "放送中の番組を確認する",
-          "default_popup": "src/html/popup.html"
+          "default_popup": "html/popup.html"
 	 },
     "description": "自動枠移動（新配信（β）対応） / 自動入場 / 放送中の番組を一覧表示 / デスクトップ通知 / 延長通知 / 番組の残り時間を表示 をサポートします．",
     "icons": {
@@ -29,12 +29,7 @@
     ],
     "background": {
 	    "scripts": [
-            "src/javascripts/libs/jquery-2.1.4.min.js",
-            "src/javascripts/log.js",
-            "src/javascripts/newArrival.js",
-            "src/javascripts/comuHolder.js",
-            "src/javascripts/nicovideo.js",
-            "src/javascripts/background.js"
+            "javascripts/background.js"
         ]
 	},
     "content_scripts": [
@@ -47,15 +42,15 @@
             "http://ch.nicovideo.jp/*"
         ],
           "js": [
-                "src/javascripts/content.js"
+                "javascripts/content.js"
             ],
           "css": [
-            "src/stylesheets/content.css",
-            "src/stylesheets/balloon.css"
+            "stylesheets/content.css",
+            "stylesheets/balloon.css"
             ]
         }
     ],
-    "options_page": "src/html/options.html",
+    "options_page": "html/options.html",
     "web_accessible_resources": [
         "images/icon.png",
         "font/baseballpark.ttf"

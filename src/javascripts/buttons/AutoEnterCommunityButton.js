@@ -95,11 +95,12 @@ export default class AutoEnterCommunityButton extends Buttons {
     } else if (pageType === 'CHANNEL_PAGE') {
       title = $('h3.cp_chname').text();
       owner = $('p.cp_viewname').text();
-    } else if (pageType === 'NORMAL_CAST_PAGE' ||
-      pageType === 'MODERN_CAST_PAGE' ||
-      pageType === 'OFFICIAL_CAST_PAGE') {
+    } else if (pageType === 'NORMAL_CAST_PAGE' || pageType === 'OFFICIAL_CAST_PAGE') {
       title = $($('.commu_info').find('a').get(0)).html() || $('.ch_name').html();
       owner = $('.nicopedia_nushi').find('a').text() || $('.company').text();
+    } else if (pageType === 'MODERN_CAST_PAGE') {
+      title = $('.program-community-name').text();
+      owner = $($('.program-broadcaster-name').find('a').get(0)).text()
     }
 
     console.info(title, owner);
