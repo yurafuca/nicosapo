@@ -33,8 +33,8 @@ export default class OfficialCastPage extends Page {
     extendedBar.countDown();
   }
 
-  updateExtendedBar() {
-    extendedBar.update();
+  updateExtendedBar(response) {
+    extendedBar.update(response);
   }
 
   invalidateExtendedBar() {

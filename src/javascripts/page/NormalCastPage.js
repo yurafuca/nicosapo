@@ -58,8 +58,8 @@ export default class NormalCastPage extends Page {
     extendedBar.countDown();
   }
 
-  updateExtendedBar() {
-    extendedBar.update();
+  updateExtendedBar(response) {
+    extendedBar.update(reseponse);
   }
 
   invalidateExtendedBar() {
