@@ -5,7 +5,6 @@ import Napi from "./api/Api";
 import Log  from "./common/Log";
 import Time  from "./common/Time";
 
-import TimeCounter from "./common/TimeCounter";
 import FormatNicoPage from "./modules/FormatNicoPage";
 import IdHolder from "./modules/IdHolder";
 import PageType from "./modules/PageType";
@@ -22,13 +21,14 @@ import OfficialCastPage from "./page/OfficialCastPage";
 import CommunityPage from "./page/CommunityPage";
 import ChannelPage from "./page/ChannelPage";
 
-const timeCounter = new TimeCounter(new Date());
 const formatNicoPage = new FormatNicoPage();
 const idHolder = new IdHolder();
 
 const autoRedirectButton = new AutoRedirectButton();
 const autoEnterCommunityButton = new AutoEnterCommunityButton();
 const autoEnterProgramButton = new AutoEnterProgramButton();
+
+let _page = null;
 
 $(function()
 {
@@ -46,12 +46,14 @@ $(function()
         'CHANNEL_PAGE': ChannelPage,
     }
 
-    pages[pageType].putButton();
-    pages[pageType].setUpButton();
+    _page = new pages[pageType]();
+
+    _page.putButton();
+    _page.setUpButton();
 
     if ((pageType === 'NORMAL_CAST_PAGE') || (pageType === 'MODERN_CAST_PAGE') || (pageType ==='STAND_BY_PAGE')) {
-        pages[pageType].putExtendedBar();
-        pages[pageType].setUpExtendedBar(timeCounter);
+        _page.putExtendedBar();
+        _page.setUpExtendedBar();
         chrome.runtime.sendMessage({
                 purpose: 'getFromLocalStorage',
                 key: 'options.redirect.time'
@@ -66,15 +68,7 @@ $(function()
 
     // TimeCounter.
     setInterval(function() {
-        const $restTime = $('#extended-bar .rest-time');
-        if ($restTime.text() == '放送が終了しました') { // TODO: Too Ugly.
-            return;
-        }
-        const minute = timeCounter.getMinute();
-        let   second = timeCounter.getSecond();
-              second = ('0' + second).slice(-2);
-        $restTime.text(`${minute}：${second}`);
-        timeCounter.subSecond(1);
+        _page.countExtendedBar();
     }, 1000);
 });
 
@@ -113,72 +107,23 @@ function enabledOrNull(value) {
 // TODO: Rename.
 function autoRedirect() {
     if (autoRedirectButton.isToggledOn()) {
-
         Log.out(idHolder.liveId + ' is enabled auto redirect.');
-
         Napi.isOffAir(idHolder.liveId).then(function(response) {
-
-            // ONAIR.
-            if (!response.isOffAir) {
-
-                // Extended Bar.
-                const currentTime = Date.now();
-                const currentDate = new Date(currentTime);
-
-                // new Date() は引数にミリ秒を要求するので 1000 倍するために末尾に '000' を付加する．
-                const endTime = Number($(response).find('stream end_time').text() + '000');
-                const endDate = new Date(endTime)
-
-                const endTimeJpn = Time.toJpnString(endDate.getTime());
-                const endTimeJpnLast = $('#extended-bar .end-time').text();
-
-                const restTime_Minute = Time.minuteDistance(currentDate, endDate);
-                let   restTime_Second = Time.minuteDistanceOfSec(currentDate, endDate);
-                      restTime_Second = ('0' + restTime_Second).slice(-2);
-
-                // 終了時刻が更新された場合はタイマーを更新
-                if (endTimeJpnLast !== endTimeJpn) {
-                    timeCounter.setHour(0); // TODO:
-                    timeCounter.setMinute(restTime_Minute);
-                    timeCounter.setSecond(restTime_Second);
-
-                    $('#extended-bar .end-time').text(`${endTimeJpn}`);
-                    $('#extended-bar .rest-time').text(`${restTime_Minute}：${restTime_Second}`);
-
-                    // 点滅処理 (奇数回繰り返してメッセージを残す)
-                    for (let i = 0; i < 9; i++) {
-                        let message = '';
-                        if (i % 2 === 0) {
-                            message = `${endTimeJpn} に放送が延長されました`;
-                        } else {
-                            message = ``;
-                        }
-                        setTimeout(function() {
-                            $('#extended-bar .message').text(message);
-                        }, i * 500);
+            if (!response.isOffAir) { // ONAIR
+                _page.updateExtendedBar();
+            } else {
+                _page.invalidateExtendedBar();
+                Napi.isStartedBroadcast(idHolder.communityId).then(function(response) { // OFFAIR
+                    if (response.isStarted) {
+                        redirectBroadcastPage(response.nextBroadcastId);
                     }
-                }
-
-                return;
+                });
             }
 
-            // OFFAIR.
-            Napi.isStartedBroadcast(idHolder.communityId).then(function(response) {
-                // タイマーを無効化
-                $('#extended-bar .end-time').text(`放送が終了しました`);
-                $('#extended-bar .rest-time').text(`放送が終了しました`);
-
-                Log.out('Napi.isStartedBroadcast', response);
-
-                if (response.isStarted) {
-                    redirectBroadcastPage(response.nextBroadcastId);
-                }
-            });
         });
     } else {
         Log.out(idHolder.liveId + ' is disabled auto redirect.');
     }
-
     chrome.runtime.sendMessage({
             purpose: 'getFromLocalStorage',
             key: 'options.redirect.time'

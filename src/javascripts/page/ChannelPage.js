@@ -10,11 +10,11 @@ const autoEnterCommunityButton = new AutoEnterCommunityButton();
 
 export default class ChannelPage extends Page
 {
-    static putButton() {
+    putButton() {
         $('div.join_leave').prepend(autoEnterCommunityButton.getDom());
     }
 
-    static setUpButton() {
+    setUpButton() {
         chrome.runtime.sendMessage({
                 purpose: 'getFromNestedLocalStorage',
                 key: 'autoEnterCommunityList'

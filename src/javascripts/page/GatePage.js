@@ -10,11 +10,11 @@ const autoEnterProgramButton = new AutoEnterProgramButton();
 
 export default class GatePage extends Page
 {
-    static putButton() {
+    putButton() {
         $('.gate_title').prepend(autoEnterProgramButton.getDom());
     }
 
-    static setUpButton() {
+    setUpButton() {
         chrome.runtime.sendMessage({
                 purpose: 'getFromNestedLocalStorage',
                 key: 'autoEnterProgramList'

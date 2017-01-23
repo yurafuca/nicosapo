@@ -10,11 +10,11 @@ const autoEnterCommunityButton = new AutoEnterCommunityButton();
 
 export default class CommunityPage extends Page
 {
-    static putButton() {
+    putButton() {
         $('a#comSetting_hide').after(autoEnterCommunityButton.getDom());
     }
 
-    static setUpButton() {
+    setUpButton() {
         chrome.runtime.sendMessage({
                 purpose: 'getFromNestedLocalStorage',
                 key: 'autoEnterCommunityList'

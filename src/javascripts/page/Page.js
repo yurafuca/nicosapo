@@ -1,10 +1,10 @@
 export default class Page
 {
-    static putButton() {
+    putButton() {
         // Must to be Override.
     }
 
-    static setUpButton() {
+    setUpButton() {
         // Must to be Override.
     }
 }

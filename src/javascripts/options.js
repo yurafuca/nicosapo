@@ -85,7 +85,7 @@ $(function()
 
     $("#options-soundfile").change(function () {
       $("#options-soundfile option:selected").each(function() {
-            new Audio('../sound/' + $(this).val()).play();
+            new Audio('../sounds/' + $(this).val()).play();
       });
     });
 
@@ -108,7 +108,7 @@ $(function()
     $(document).on('click','.soundtest',function() {
         const soundfile = $('#options-soundfile :selected').val();
         const volume    = $("input[name=options-playsound-volume]").val();
-        const audio     = new Audio('../sound/' + soundfile);
+        const audio     = new Audio('../sounds/' + soundfile);
         audio.volume    = volume;
         audio.play();
     });
