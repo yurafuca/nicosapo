@@ -14,7 +14,7 @@ body {
 }
 
 #powerTip {
-	position: absolute;
+	z-index: 2147483647;
 }
 
 a {
