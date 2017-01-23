@@ -1,45 +1,44 @@
 import $ from 'jquery'
 
-export default class NewArrival
-{
-    constructor(initial = null) {
-        this.source = initial;
+export default class NewArrival {
+  constructor(initial = null) {
+    this.source = initial;
+  }
+
+  // TODO: validation.
+  setSource(infos) {
+    this.source = infos;
+  }
+
+  /*
+   * @param Array infos
+   * @return Array newArrives
+   * videoInfosを引数にとって新しく始まったと推定される放送のリストを返却する
+   */
+  get(infos) {
+    if (this.source == null) {
+      // return infos;
+      return [];
     }
 
-    // TODO: validation.
-    setSource(infos) {
-        this.source = infos;
-    }
+    let newArrives = $.makeArray();
+    let sourceTimes = $.makeArray();
 
-    /*
-     * @param Array infos
-     * @return Array newArrives
-     * videoInfosを引数にとって新しく始まったと推定される放送のリストを返却する
-     */
-    get(infos) {
-        if (this.source == null) {
-            // return infos;
-            return [];
-        }
+    $.each(this.source, function (index, item) {
+      // 'id'（コミュニティID） ではなく 'open_time_jpstr' でユニーク判定している理由は 'id' ではユニーク判定できない場合があるから．
+      // 'id' でユニーク判定できない場合は，放送終了後即座に次の放送が始まった場合．
+      // sourceTimes には放送終了前の 'id' が，newArrives には放送終了後の 'id' が入る．
+      sourceTimes.push($(item).find('video open_time_jpstr').text());
+    });
 
-        let newArrives  = $.makeArray();
-        let sourceTimes = $.makeArray();
+    $.each(infos, function (index, info) {
+      let targetTime = $(info).find('video open_time_jpstr').text();
+      let result = $.inArray(targetTime, sourceTimes);
+      if (result === -1) {
+        newArrives.push(info);
+      }
+    });
 
-        $.each(this.source, function(index, item) {
-            // 'id'（コミュニティID） ではなく 'open_time_jpstr' でユニーク判定している理由は 'id' ではユニーク判定できない場合があるから．
-            // 'id' でユニーク判定できない場合は，放送終了後即座に次の放送が始まった場合．
-            // sourceTimes には放送終了前の 'id' が，newArrives には放送終了後の 'id' が入る．
-            sourceTimes.push($(item).find('video open_time_jpstr').text());
-        });
-
-        $.each(infos, function(index, info) {
-            let targetTime = $(info).find('video open_time_jpstr').text();
-            let result = $.inArray(targetTime, sourceTimes);
-            if (result === -1) {
-                newArrives.push(info);
-            }
-        });
-
-        return newArrives;
-    }
+    return newArrives;
+  }
 }

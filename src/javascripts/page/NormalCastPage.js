@@ -13,57 +13,56 @@ const autoRedirectButton = new AutoRedirectButton();
 const autoEnterCommunityButton = new AutoEnterCommunityButton();
 const extendedBar = new ExtendedBar();
 
-export default class NormalCastPage extends Page
-{
-    putButton() {
-        $('.meta').append(autoRedirectButton.getDom());
-        $('.meta').append(autoEnterCommunityButton.getDom());
-    }
+export default class NormalCastPage extends Page {
+  putButton() {
+    $('.meta').append(autoRedirectButton.getDom());
+    $('.meta').append(autoEnterCommunityButton.getDom());
+  }
 
-    setUpButton() {
-        chrome.runtime.sendMessage({
-                purpose: 'getFromLocalStorage',
-                key: 'options.autoJump.enable'
-            },
-            function(response) {
-                if (Common.enabledOrNull(response)) {
-                    autoRedirectButton.toggleOn();
-                } else {
-                    autoRedirectButton.toggleOff();
-                }
-            }
-        );
-        chrome.runtime.sendMessage({
-                purpose: 'getFromNestedLocalStorage',
-                key: 'autoEnterCommunityList'
-            },
-            function(response) {
-                if (response[idHolder.communityId]) {
-                    autoEnterCommunityButton.toggleOn();
-                } else {
-                    autoEnterCommunityButton.toggleOff();
-                }
-            }
-        );
-    }
+  setUpButton() {
+    chrome.runtime.sendMessage({
+        purpose: 'getFromLocalStorage',
+        key: 'options.autoJump.enable'
+      },
+      function (response) {
+        if (Common.enabledOrNull(response)) {
+          autoRedirectButton.toggleOn();
+        } else {
+          autoRedirectButton.toggleOff();
+        }
+      }
+    );
+    chrome.runtime.sendMessage({
+        purpose: 'getFromNestedLocalStorage',
+        key: 'autoEnterCommunityList'
+      },
+      function (response) {
+        if (response[idHolder.communityId]) {
+          autoEnterCommunityButton.toggleOn();
+        } else {
+          autoEnterCommunityButton.toggleOff();
+        }
+      }
+    );
+  }
 
-    putExtendedBar() {
-        extendedBar.put('#watch_player_top_box');
-    }
+  putExtendedBar() {
+    extendedBar.put('#watch_player_top_box');
+  }
 
-    setUpExtendedBar(timeCounter) {
-        extendedBar.setUp();
-    }
+  setUpExtendedBar(timeCounter) {
+    extendedBar.setUp();
+  }
 
-    countExtendedBar() {
-        extendedBar.countDown();
-    }
+  countExtendedBar() {
+    extendedBar.countDown();
+  }
 
-    updateExtendedBar() {
-        extendedBar.update();
-    }
+  updateExtendedBar() {
+    extendedBar.update();
+  }
 
-    invalidateExtendedBar() {
-        extendedBar.invalidate();
-    }
+  invalidateExtendedBar() {
+    extendedBar.invalidate();
+  }
 }

@@ -1,36 +1,35 @@
 import $ from 'jquery'
 
-export default class ArrivalMan
-{
-    constructor(initial = null) {
-        this.source = initial;
+export default class ArrivalMan {
+  constructor(initial = null) {
+    this.source = initial;
+  }
+
+  // TODO: validation.
+  setSource(infos) {
+    this.source = infos;
+  }
+
+  getArrivals(infos) {
+    if (this.source == null) {
+      return infos;
     }
 
-    // TODO: validation.
-    setSource(infos) {
-        this.source = infos;
-    }
+    let newArrives = $.makeArray();
+    let sourceTimes = $.makeArray();
 
-    getArrivals(infos) {
-        if (this.source == null) {
-            return infos;
-        }
+    $.each(this.source, function (index, item) {
+      sourceTimes.push($(item).find('video start_time').text());
+    });
 
-        let newArrives  = $.makeArray();
-        let sourceTimes = $.makeArray();
+    $.each(infos, function (index, info) {
+      let targetTime = $(info).find('video start_time').text();
+      let result = $.inArray(targetTime, sourceTimes);
+      if (result === -1) {
+        newArrives.push(info);
+      }
+    });
 
-        $.each(this.source, function(index, item) {
-            sourceTimes.push($(item).find('video start_time').text());
-        });
-
-        $.each(infos, function(index, info) {
-            let targetTime = $(info).find('video start_time').text();
-            let result = $.inArray(targetTime, sourceTimes);
-            if (result === -1) {
-                newArrives.push(info);
-            }
-        });
-
-        return newArrives;
-    }
+    return newArrives;
+  }
 }

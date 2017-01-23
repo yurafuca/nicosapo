@@ -9,36 +9,35 @@ import Napi from "../api/Api";
 const idHolder = new IdHolder();
 const extendedBar = new ExtendedBar();
 
-export default class OfficialCastPage extends Page
-{
-    putButton() {
-        const noSupport = $(`<span>　
+export default class OfficialCastPage extends Page {
+  putButton() {
+    const noSupport = $(`<span>　
                               /* 公式番組では自動枠移動，コミュニティへの自動入場に対応していません */
                               </span>`)
-        $('.meta').append(noSupport);
-    }
+    $('.meta').append(noSupport);
+  }
 
-    setUpButton() {
-        // Do nothing.
-    }
+  setUpButton() {
+    // Do nothing.
+  }
 
-    putExtendedBar() {
-        extendedBar.put('#watch_player_top_box');
-    }
+  putExtendedBar() {
+    extendedBar.put('#watch_player_top_box');
+  }
 
-    setUpExtendedBar(timeCounter) {
-        extendedBar.setUp();
-    }
+  setUpExtendedBar(timeCounter) {
+    extendedBar.setUp();
+  }
 
-    countExtendedBar() {
-        extendedBar.countDown();
-    }
+  countExtendedBar() {
+    extendedBar.countDown();
+  }
 
-    updateExtendedBar() {
-        extendedBar.update();
-    }
+  updateExtendedBar() {
+    extendedBar.update();
+  }
 
-    invalidateExtendedBar() {
-        extendedBar.invalidate();
-    }
+  invalidateExtendedBar() {
+    extendedBar.invalidate();
+  }
 }
