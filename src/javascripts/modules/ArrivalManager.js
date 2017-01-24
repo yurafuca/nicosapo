@@ -15,16 +15,16 @@ export default class ArrivalMan {
       return infos;
     }
 
-    let newArrives = $.makeArray();
-    let sourceTimes = $.makeArray();
+    const newArrives = $.makeArray();
+    const sourceTimes = $.makeArray();
 
-    $.each(this.source, function (index, item) {
+    $.each(this.source, (index, item) => {
       sourceTimes.push($(item).find('video start_time').text());
     });
 
-    $.each(infos, function (index, info) {
-      let targetTime = $(info).find('video start_time').text();
-      let result = $.inArray(targetTime, sourceTimes);
+    $.each(infos, (index, info) => {
+      const targetTime = $(info).find('video start_time').text();
+      const result = $.inArray(targetTime, sourceTimes);
       if (result === -1) {
         newArrives.push(info);
       }

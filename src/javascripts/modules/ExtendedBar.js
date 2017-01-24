@@ -27,20 +27,20 @@ export default class ExtendedBar {
   }
 
   setUp() {
-    Napi.getStatusByBroadcast(idHolder.liveId).then(function (response) {
+    Napi.getStatusByBroadcast(idHolder.liveId).then((response) => {
       // Extended Bar.
       const currentTime = Date.now();
       const currentDate = new Date(currentTime);
 
       // new Date() は引数にミリ秒を要求するので 1000 倍するために末尾に '000' を付加する．
-      const endTime = Number($(response).find('stream end_time').text() + '000');
+      const endTime = Number(`${$(response).find('stream end_time').text()}000`);
       const endDate = new Date(endTime);
 
       const endTimeJpn = Time.toJpnString(endDate.getTime());
 
       const restTime_Minute = Time.minuteDistance(currentDate, endDate);
       let restTime_Second = Time.minuteDistanceOfSec(currentDate, endDate);
-      restTime_Second = ('0' + restTime_Second).slice(-2);
+      restTime_Second = `0${restTime_Second}`.slice(-2);
 
       // タイマーを初期化
       timeCounter.setHour(0);
@@ -59,7 +59,7 @@ export default class ExtendedBar {
     }
     const minute = timeCounter.getMinute();
     let second = timeCounter.getSecond();
-    second = ('0' + second).slice(-2);
+    second = `0${second}`.slice(-2);
     $restTime.text(`${minute}：${second}`);
     timeCounter.subSecond(1);
   }
@@ -69,7 +69,7 @@ export default class ExtendedBar {
     const currentDate = new Date(currentTime);
 
     // new Date() は引数にミリ秒を要求するので 1000 倍するために末尾に '000' を付加する．
-    const endTime = Number($(response).find('stream end_time').text() + '000');
+    const endTime = Number(`${$(response).find('stream end_time').text()}000`);
     const endDate = new Date(endTime)
 
     const endTimeJpn = Time.toJpnString(endDate.getTime());
@@ -77,7 +77,7 @@ export default class ExtendedBar {
 
     const restTime_Minute = Time.minuteDistance(currentDate, endDate);
     let restTime_Second = Time.minuteDistanceOfSec(currentDate, endDate);
-    restTime_Second = ('0' + restTime_Second).slice(-2);
+    restTime_Second = `0${restTime_Second}`.slice(-2);
 
     // 終了時刻が更新された場合はタイマーを更新
     if (endTimeJpnLast !== endTimeJpn) {
@@ -96,7 +96,7 @@ export default class ExtendedBar {
         } else {
           message = ``;
         }
-        setTimeout(function () {
+        setTimeout(() => {
           $('#extended-bar .message').text(message);
         }, i * 500);
       }

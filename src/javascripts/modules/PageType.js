@@ -1,5 +1,4 @@
 import $ from 'jquery'
-import Log from '../common/Log'
 
 export default class PageType {
   static get() {

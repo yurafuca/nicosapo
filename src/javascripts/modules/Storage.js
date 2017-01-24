@@ -8,7 +8,7 @@ export default class Storage {
         innerKey: innerKey,
         innerValue: innerValue
       },
-      function (response) {
+      (response) => {
         console.info('[imanani][saveToNestedLocalStorage] response = ', response);
       });
   }
@@ -19,7 +19,7 @@ export default class Storage {
         key: key,
         innerKey: innerKey
       },
-      function (response) {
+      (response) => {
         console.info('[imanani][removeFromNestedLocalStorage] response = ', response);
       });
   }

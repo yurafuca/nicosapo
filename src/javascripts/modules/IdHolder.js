@@ -1,12 +1,11 @@
 import $ from 'jquery'
-import Log from '../common/Log'
 
 function getLiveId() {
   const url = $('meta[property="og:url"]').attr('content');
   const re = /http:\/\/live\.nicovideo\.jp\/watch\/lv([0-9]+)/;
 
   if (re.exec(url)) {
-    const liveId = 'lv' + re.exec(url)[1];
+    const liveId = `lv${re.exec(url)[1]}`;
     return liveId;
   }
 
