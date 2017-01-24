@@ -1,4 +1,4 @@
-import $ from 'jquery';
+import $ from 'jquery'
 import 'jquery-powertip';
 import Common from "./common/Common";
 import Napi from "./api/Api";
@@ -32,7 +32,7 @@ $(() => {
 });
 
 $(() => {
-  $(document).on('click', '.tab.non-selected', function() {
+  $(document).on('click', '.tab.non-selected', function () {
     $('.tab').removeClass('selected non-selected');
     $('.tab').not(this).addClass('non-selected');
     $(this).addClass('selected');
@@ -85,6 +85,8 @@ function showAsThumbnailDoms($videoInfos, liveType) {
 function isReserved($info) {
   const is_reserved = $($info).find('video is_reserved').text();
   return is_reserved == 'true';
+  // const startTime = Date.parse($(program).find('open_time').text());
+  // return Date.now() < startTime;
 }
 
 /**

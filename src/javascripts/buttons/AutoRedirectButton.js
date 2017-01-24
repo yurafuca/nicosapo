@@ -1,8 +1,5 @@
 import $ from 'jquery'
 import Buttons from "../buttons/Buttons"
-import IdHolder from "../modules/IdHolder";
-import PageType from "../modules/PageType";
-import Storage from "../modules/Storage";
 
 export default class AutoRedirectButton extends Buttons {
   constructor() {
@@ -46,7 +43,7 @@ export default class AutoRedirectButton extends Buttons {
 
   // @Override
   toggleOn() {
-    const $link = $(`.${(this._className).find('.link')}`);
+    const $link = $($(`.${this._className}`).find('.link'));
     $link.addClass('switch_is_on');
     $link.removeClass('switch_is_off');
     $link.text(`${this._label}ON`);
@@ -54,16 +51,15 @@ export default class AutoRedirectButton extends Buttons {
 
   // @Override
   toggleOff() {
-    const $link = $(`.${(this._className).find('.link')}`);
-    $link.addClass('switch_is_on');
-    $link.removeClass('switch_is_off');
+    const $link = $($(`.${this._className}`).find('.link'));
+    $link.addClass('switch_is_off');
+    $link.removeClass('switch_is_on');
     $link.text(`${this._label}OFF`);
   }
 
   // @Override
   isToggledOn() {
-    const $link = $(`.${(this._className).find('.link')}`);
-
+    const $link = $($(`.${this._className}`).find('.link'));
     const isToggledOn = $link.hasClass('switch_is_on');
     return isToggledOn;
   }

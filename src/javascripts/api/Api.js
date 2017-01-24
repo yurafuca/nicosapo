@@ -1,5 +1,4 @@
-import $ from 'jquery'
-import Log from '../common/Log'
+import $ from 'jquery';
 
 const parameter_nicovideojs = [];
 

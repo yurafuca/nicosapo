@@ -1,5 +1,6 @@
+"use strict";
 
-import $ from 'jquery';
+import $ from 'jquery'
 
 import Napi from "./api/Api";
 
@@ -52,27 +53,29 @@ $(() => {
     chrome.runtime.sendMessage({
         purpose: 'getFromLocalStorage',
         key: 'options.redirect.time'
-      }, (response) => {
-      const intervalTime = response || '50';
-      console.info('[nicosapo]intervalTime = ', intervalTime);
-      setTimeout(autoRedirect, intervalTime * 1000);
-    });
+      },
+      function (response) {
+        const intervalTime = response || '50';
+        console.info('[nicosapo]intervalTime = ', intervalTime);
+        setTimeout(autoRedirect, intervalTime * 1000);
+      }
+    );
     // TimeCounter.
-    setInterval(() => {
+    setInterval(function () {
       _page.countExtendedBar();
     }, 1000);
   }
 });
 
-$(() => {
-  $(document).on('click', '.auto_redirect_button', () => {
+$(function () {
+  $(document).on('click', '.auto_redirect_button', function () {
     if (autoRedirectButton.isToggledOn()) {
       autoRedirectButton.toggleOff();
     } else {
       autoRedirectButton.toggleOn();
     }
   });
-  $(document).on('click', '.auto_enter_program_button', () => {
+  $(document).on('click', '.auto_enter_program_button', function () {
     if (autoEnterProgramButton.isToggledOn()) {
       autoEnterProgramButton.toggleOff();
       autoEnterProgramButton.removeAsAutoEnter();
@@ -81,7 +84,7 @@ $(() => {
       autoEnterProgramButton.saveAsAutoEnter();
     }
   });
-  $(document).on('click', '.auto_enter_community_button', () => {
+  $(document).on('click', '.auto_enter_community_button', function () {
     if (autoEnterCommunityButton.isToggledOn()) {
       autoEnterCommunityButton.toggleOff();
       autoEnterCommunityButton.removeAsAutoEnter();
@@ -95,13 +98,13 @@ $(() => {
 // TODO: Rename.
 function autoRedirect() {
   if (autoRedirectButton.isToggledOn()) {
-    console.log(`${idHolder.liveId} is enabled auto redirect.`);
-    Napi.isOffAir(idHolder.liveId).then((response) => {
+    console.log(idHolder.liveId + ' is enabled auto redirect.');
+    Napi.isOffAir(idHolder.liveId).then(function (response) {
       if (!response.isOffAir) { // ONAIR
         _page.updateExtendedBar(response);
       } else {
         _page.invalidateExtendedBar();
-        Napi.isStartedBroadcast(idHolder.communityId).then((response) => { // OFFAIR
+        Napi.isStartedBroadcast(idHolder.communityId).then(function (response) { // OFFAIR
           if (response.isStarted) {
             redirectBroadcastPage(response.nextBroadcastId);
           }
@@ -110,16 +113,18 @@ function autoRedirect() {
 
     });
   } else {
-    console.log(`${idHolder.liveId} is disabled auto redirect.`);
+    console.log(idHolder.liveId + ' is disabled auto redirect.');
   }
   chrome.runtime.sendMessage({
       purpose: 'getFromLocalStorage',
       key: 'options.redirect.time'
-    }, (response) => {
-    const intervalTime = response || '50';
-    console.info('[nicosapo]intervalTime = ', intervalTime);
-    setTimeout(autoRedirect, intervalTime * 1000);
-  });
+    },
+    function (response) {
+      const intervalTime = response || '50';
+      console.info('[nicosapo]intervalTime = ', intervalTime);
+      setTimeout(autoRedirect, intervalTime * 1000);
+    }
+  );
 }
 
 function redirectBroadcastPage(broadcastId) {

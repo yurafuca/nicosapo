@@ -1,5 +1,6 @@
 {
     "extends": "eslint:recommended",
+    "global-strict": ["error", "always"],
     "env": {
         "browser": true,
         "es6": true
@@ -28,7 +29,7 @@
         "rest-spread-spacing": "error",
         "template-curly-spacing": "error",
         "yield-star-spacing": "error",
-        "no-console": "warn"
+        "no-console": 0
     },
     "parserOptions": {
         "sourceType": "module"

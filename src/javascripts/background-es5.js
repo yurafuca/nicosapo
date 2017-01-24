@@ -7,7 +7,7 @@ import Common from "./common/Common";
 const communityHolder = new CommunityHolder();
 const newArrival = new NewArrival();
 
-$(() => {
+$(function () {
 
   Napi.getSubscribe_2();
 
@@ -19,8 +19,8 @@ $(() => {
 
   setInterval(refresh, 1000 * 30);
 
-  setTimeout(() => {
-    setInterval(() => {
+  setTimeout(function () {
+    setInterval(function () {
       Promise.resolve()
         .then(autoEnterProgramRoutine)
         .then(autoEnterCommunityRoutine);
@@ -29,7 +29,7 @@ $(() => {
 
 
   const storagedData = JSON.parse(localStorage.getItem('autoEnterCommunityList'));
-  for (const id in storagedData) {
+  for (let id in storagedData) {
     storagedData[id].state = 'init';
   }
   localStorage.setItem('autoEnterCommunityList', JSON.stringify(storagedData));
@@ -38,37 +38,40 @@ $(() => {
 function refresh() {
   Promise.resolve()
     .then(Napi.isLogined)
-    .catch(() => {
+    .catch(function (e) {
       setBadgeText('x');
+      reject();
     })
-    .then(() => Napi.loadCasts('user'))
-    .then(($videoInfos) => {
+    .then(function () {
+      return Napi.loadCasts('user');
+    })
+    .then(function ($videoInfos) {
       console.info('[imanani] videoInfos = ', $videoInfos);
       setBadgeText($videoInfos.length);
       // count(removeReservation($videoInfos)).then(setBadgeText);
-      $.each(newArrival.get($videoInfos), (index, $infos) => {
+      $.each(newArrival.get($videoInfos), function (index, $infos) {
         if (communityHolder.isNew($infos)) {
           // Do nothing.
         } else {
           if (Common.enabledOrNull(localStorage.getItem('options.playsound.enable'))) {
             const soundfile = localStorage.getItem('options.soundfile') || 'ta-da.mp3';
             const volume = localStorage.getItem('options.playsound.volume') || 1.0;
-            const audio = new Audio(`sounds/${soundfile}`);
+            const audio = new Audio('sounds/' + soundfile);
             audio.volume = volume;
             audio.play();
           }
           if (Common.enabledOrNull(localStorage.getItem('options.popup.enable'))) {
-            const communityId = `co${$infos.find('community id').text()}`;
+            const communityId = 'co' + $infos.find('community id').text();
             const liveId = $infos.find('video id').text();
             if (!existsInAutoLists(communityId, liveId)) {
-              showNotification($infos);
+              showNotification(infos);
             }
           }
         }
       });
       newArrival.setSource($videoInfos);
     });
-  Napi.getCheckList().then((idList) => {
+  Napi.getCheckList().then(function (idList) {
     communityHolder.setSource(idList);
   });
 }
@@ -89,7 +92,7 @@ function existsInAutoLists(communityId, liveId) {
     autoEnterProgramList = {};
   }
 
-  for (const id in autoEnterCommunityList) {
+  for (let id in autoEnterCommunityList) {
     console.info(id);
     if (id === communityId) {
       console.info(true);
@@ -97,7 +100,7 @@ function existsInAutoLists(communityId, liveId) {
     }
   }
 
-  for (const id in autoEnterProgramList) {
+  for (let id in autoEnterProgramList) {
     console.info(id);
     if (id === liveId) {
       console.info(true);
@@ -111,7 +114,7 @@ function existsInAutoLists(communityId, liveId) {
 
 }
 
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   // getFromLocalStorage
   if (request.purpose == 'getFromLocalStorage') {
     sendResponse(localStorage.getItem(request.key));
@@ -170,7 +173,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
   // removeFromNestedLocalStorage
   if (request.purpose == 'removeFromNestedLocalStorage') {
-    const storagedData = JSON.parse(localStorage.getItem(request.key));
+    let storagedData = JSON.parse(localStorage.getItem(request.key));
     console.info('[imanani] Delete storagedData[innerKey] ', storagedData[request.innerKey]);
     delete storagedData[request.innerKey];
     localStorage.setItem(request.key, JSON.stringify(storagedData));
@@ -179,7 +182,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 });
 
 function autoEnterProgramRoutine() {
-  return new Promise((resolve) => {
+  return new Promise(function (resolve, reject) {
     console.info('autoEnterProgramRoutine');
 
     let storagedData = localStorage.getItem('autoEnterProgramList');
@@ -190,9 +193,9 @@ function autoEnterProgramRoutine() {
       storagedData = {};
     }
 
-    const tasks = [];
+    let tasks = [];
 
-    for (const id in storagedData) {
+    for (let id in storagedData) {
       tasks.push(test.bind(null, id, storagedData));
     }
 
@@ -205,32 +208,30 @@ function autoEnterProgramRoutine() {
     }
 
     for (let i = 0; i < tasks.length; i++) {
-      (() => {
-        setTimeout(() => {
-          tasks[i].call(null);
-          console.info('i = ', i);
-          console.info('length = ', length);
-          if (i === length - 1) {
-            console.info('resolve');
-            setTimeout(resolve, 3000);
-          }
-        }, i * 3000); // 連続アクセスを防ぐ
-      })(i, length);
+      setTimeout(function () {
+        tasks[i].call(null);
+        console.info('i = ', i);
+        console.info('length = ', length);
+        if (i === length - 1) {
+          console.info('resolve');
+          setTimeout(resolve, 3000);
+        }
+      }.bind(null, i, length), i * 3000); // 連続アクセスを避ける
     }
   });
 }
 
 function test(id, storagedData) {
-  return new Promise((resolve) => {
+  return new Promise(function (resolve) {
     console.info('[imanani][●autoEnterProgram] id = ', id);
-    Napi.isOffAir(id).then((response) => {
+    Napi.isOffAir(id).then(function (response) {
       // ONAIR
       if (response.isOffAir == false) {
         console.info('[imanani][○autoEnterProgram] id = ', id);
         chrome.tabs.create({
-          url: `http://live.nicovideo.jp/watch/${id}`
-        }, () => {
-          const options = {
+          url: 'http://live.nicovideo.jp/watch/' + id
+        }, function () {
+          let options = {
             type: "basic",
             title: "自動入場（番組）",
             message: storagedData[id]['title'],
@@ -238,7 +239,7 @@ function test(id, storagedData) {
           };
           chrome.notifications.create(id, options);
           // Remove.
-          console.info(`[imanani] Delete storagedData[${id}] `, storagedData[id]);
+          console.info('[imanani] Delete storagedData[' + id + '] ', storagedData[id]);
           delete storagedData[id];
           localStorage.setItem('autoEnterProgramList', JSON.stringify(storagedData));
           resolve();
@@ -250,7 +251,7 @@ function test(id, storagedData) {
 }
 
 function autoEnterCommunityRoutine() {
-  return new Promise((resolve) => {
+  return new Promise(function (resolve, reject) {
     console.info('autoEnterCommunityRoutine');
 
     let storagedData = localStorage.getItem('autoEnterCommunityList');
@@ -263,9 +264,9 @@ function autoEnterCommunityRoutine() {
 
     console.debug('storagedData = ', storagedData);
 
-    const tasks = [];
+    let tasks = [];
 
-    for (const id in storagedData) {
+    for (let id in storagedData) {
       tasks.push(checkAndOpenFreshCast.bind(null, id, storagedData));
     }
 
@@ -276,30 +277,28 @@ function autoEnterCommunityRoutine() {
     }
 
     for (let i = 0; i < tasks.length; i++) {
-      (() => {
-        setTimeout(() => {
-          tasks[i].call(null);
-          console.info('i = ', i);
-          console.info('length = ', length);
-          if (i === length - 1) {
-            console.info('resolve');
-            resolve();
-          }
-        }, i * 2000); // 連続アクセスを防ぐ
-      })(i, length);
+      setTimeout(function () {
+        tasks[i].call(null);
+        console.info('i = ', i);
+        console.info('length = ', length);
+        if (i === length - 1) {
+          console.info('resolve');
+          resolve();
+        }
+      }.bind(null, i, length), i * 2000); // 連続アクセスを避ける
     }
   });
 }
 
 function checkAndOpenFreshCast(id, storagedData) {
-  Napi.isStartedBroadcast(id).then((result) => {
+  Napi.isStartedBroadcast(id).then(function (result) {
     if (result.isStarted == true) {
-      const lastState = storagedData[result.communityId]['state'];
+      let lastState = storagedData[result.communityId]['state'];
       if (lastState == 'offair') {
         chrome.tabs.create({
-          url: `http://live.nicovideo.jp/watch/${result.nextBroadcastId}`
+          url: 'http://live.nicovideo.jp/watch/' + result.nextBroadcastId
         });
-        const options = {
+        let options = {
           type: "basic",
           title: "自動入場（コミュニティ）",
           message: storagedData[result.communityId]['title'],
@@ -319,25 +318,35 @@ function checkAndOpenFreshCast(id, storagedData) {
 }
 
 function showNotification(newInfos) {
-  const options = {
+  let options = {
     type: "basic",
     title: "放送開始のお知らせ",
     message: $(newInfos).first().find('video title').text(),
     iconUrl: $(newInfos).first().find('community thumbnail').text()
   };
   console.log(newInfos);
-  const id = $(newInfos).first().find('video id').text();
+  let id = $(newInfos).first().find('video id').text();
   chrome.notifications.create(id, options);
 }
-chrome.notifications.onClicked.addListener((id) => {
+chrome.notifications.onClicked.addListener(function (id) {
   chrome.tabs.create({
-    url: `http://live.nicovideo.jp/watch/${id}`,
+    url: 'http://live.nicovideo.jp/watch/' + id,
     active: true
   });
 });
 
+function count(obj) {
+  return new Promise(function (resolve, reject) {
+    if (obj === null || typeof obj === 'undefined') {
+      reject(new Error('Object for count is invalid.'));
+      return;
+    }
+    resolve(obj.length);
+  });
+}
+
 function setBadgeText(value) {
-  return new Promise((resolve) => {
+  return new Promise(function (resolve, reject) {
     if (value == 0) {
       value = '';
     }
@@ -348,15 +357,15 @@ function setBadgeText(value) {
   });
 }
 
-// function removeReservation($videoInfos) {
-//   const result = [];
-//   console.info($videoInfos);
-//   $.each($($videoInfos), (index, item) => {
-//     const is_reserved = $(item).find('video is_reserved').text();
-//     if (is_reserved == 'false') {
-//       result.push(item);
-//     }
-//   });
-//   console.info(result);
-//   return $(result);
-// }
+function removeReservation($videoInfos) {
+  var result = [];
+  console.info($videoInfos);
+  $.each($($videoInfos), function (index, item) {
+    const is_reserved = $(item).find('video is_reserved').text();
+    if (is_reserved == 'false') {
+      result.push(item);
+    }
+  });
+  console.info(result);
+  return $(result);
+}

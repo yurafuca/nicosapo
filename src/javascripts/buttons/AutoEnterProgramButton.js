@@ -1,7 +1,6 @@
 import $ from 'jquery'
 import Buttons from "../buttons/Buttons"
 import IdHolder from "../modules/IdHolder";
-import PageType from "../modules/PageType";
 import Storage from "../modules/Storage";
 
 export default class AutoEnterProgramButton extends Buttons {
@@ -49,7 +48,7 @@ export default class AutoEnterProgramButton extends Buttons {
   // @Override
   // TODO: スーパークラスに任せる．
   toggleOn() {
-    const $link = $(`.${(this._className).find('.link')}`);
+    const $link = $($(`.${this._className}`).find('.link'));
     $link.addClass('switch_is_on');
     $link.removeClass('switch_is_off');
     $link.text(`${this._label}ON`);
@@ -58,28 +57,27 @@ export default class AutoEnterProgramButton extends Buttons {
   // @Override
   // TODO: スーパークラスに任せる．
   toggleOff() {
-    const $link = $(`.${(this._className).find('.link')}`);
-    $link.addClass('switch_is_on');
-    $link.removeClass('switch_is_off');
+    const $link = $($(`.${this._className}`).find('.link'));
+    $link.addClass('switch_is_off');
+    $link.removeClass('switch_is_on');
     $link.text(`${this._label}OFF`);
   }
 
   // @Override
   isToggledOn() {
-    const $link = $(`.${(this._className).find('.link')}`);
+    const $link = $($(`.${this._className}`).find('.link'));
     const isToggledOn = $link.hasClass('switch_is_on');
     return isToggledOn;
   }
 
   // @Override
   saveAsAutoEnter() {
+    const idHolder = new IdHolder();
     const id = idHolder.liveId; // Required for Both.
     const thumbnail = $('meta[property="og:image"]').attr('content'); // Required for Both.
     const title = $('meta[property="og:title"]').attr('content');  // Required for Both.
     const openDate = $('.kaijo meta[itemprop="datePublished"]').attr("content"); // Required for Live only.
     let owner; // Required for Community only.
-
-    const idHolder = new IdHolder();
 
     Storage.saveToNestedLocalStorage('autoEnterProgramList', id, {
       state: 'initialized',
