@@ -1,4 +1,4 @@
-import $ from 'jquery'
+import $ from 'jquery';
 import Page from '../page/Page';
 import AutoRedirectButton from "../buttons/AutoRedirectButton";
 import AutoEnterCommunityButton from "../buttons/AutoEnterCommunityButton";

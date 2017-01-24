@@ -1796,7 +1796,7 @@ function log() {
   // the `console.log` function doesn't have 'apply'
   return 'object' === typeof console
     && console.log
-    && Function.prototype.apply.call(console.log, console, arguments);
+    && Function.prototype.apply.call(console.log, console);
 }
 
 /**

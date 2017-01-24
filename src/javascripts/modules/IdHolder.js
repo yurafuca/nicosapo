@@ -40,7 +40,7 @@ export default class IdHolder {
     this.liveId = getLiveId();
     this.communityId = getCommunityId();
 
-    Log.info(this.liveId, 'constructor');
-    Log.info(this.communityId, 'constructor');
+    console.info(this.liveId, 'constructor');
+    console.info(this.communityId, 'constructor');
   }
 }

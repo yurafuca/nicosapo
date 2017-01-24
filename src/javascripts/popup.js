@@ -1,7 +1,6 @@
 import $ from 'jquery'
 import 'jquery-powertip';
-import Log from "./common/Log";
-import Time from "./common/Time";
+import Common from "./common/Common";
 import Napi from "./api/Api";
 
 class Massages {
@@ -10,12 +9,10 @@ class Massages {
       NOT_LOGINED: 'ニコニコ動画にログインしていません．ログインしてから再度試してください．',
       ITEM_IS_ZERO: '放送中の番組がありません．'
     };
-
-    const message = $('<div class="message"></div>');
-    message.text(messages[type]);
-
-    const communities = $('#communities');
-    communities.html(message);
+    const $message = $('<div class="message"></div>');
+    $message.text(messages[type]);
+    const $parent = $('#communities');
+    $parent.html($message);
   }
 }
 
@@ -30,71 +27,63 @@ class Loading {
   }
 }
 
-$(function () {
-  loadBroadcasts('user');
+$(() => {
+  renderCasts('user');
 });
 
-$(function () {
+$(() => {
   $(document).on('click', '.tab.non-selected', function () {
     $('.tab').removeClass('selected non-selected');
     $('.tab').not(this).addClass('non-selected');
     $(this).addClass('selected');
-
     if ($(this).is('#user-lives')) {
-      loadBroadcasts('user');
+      renderCasts('user');
     } else {
-      loadBroadcasts('official');
+      renderCasts('official');
     }
   });
 });
 
-function loadBroadcasts(liveType) {
-  console.info(Napi);
-  console.info(Napi.isLogined);
+function renderCasts(liveType) {
   Promise.resolve()
     .then(Loading.start)
     .then(Napi.isLogined)
-    .catch(function (e) {
+    .catch(() => {
       Loading.done();
       Massages.show('NOT_LOGINED');
-      reject();
+      // reject();
     })
-    .then(function () {
-      // const bg = chrome.extension.getBackgroundPage();
-      return Napi.loadCasts(liveType);
-    })
-    .then(function (programs) {
-      return show(programs, liveType);
-    })
+    .then(() => Napi.loadCasts(liveType))
+    .then(($videoInfos) => showAsThumbnailDoms($videoInfos, liveType))
     .then(Loading.done);
 
 }
 
-function show(programs, liveType) {
-  console.info(programs);
-  return new Promise(function (resolve, reject) {
-    const length = programs.length;
+function showAsThumbnailDoms($videoInfos, liveType) {
+  console.info($videoInfos);
+  return new Promise((resolve) => {
+    const length = $videoInfos.length;
     const isEnableShowReservedProgram = localStorage.getItem('options.showReserved.enable');
-    $.each(programs, function (index, item) {
-      if (!enableOrNull(isEnableShowReservedProgram) && isReserved(item)) {
+    $.each($videoInfos, (index, $info) => {
+      if (!Common.enabledOrNull(isEnableShowReservedProgram) && isReserved($info)) {
         // Do nothing.
       } else {
-        console.info(item);
-        const program = createOneProgram($(item), liveType, programs.length, index);
-        $('#communities').append(program);
+        console.info($info);
+        const thumbnailDom = createThumbnailDom($info, liveType, length, index);
+        $('#communities').append(thumbnailDom);
       }
       if (index == length - 1) {
         if ($('#communities').children().length == 0) {
           Massages.show('ITEM_IS_ZERO');
-        };
+        }
       }
     });
     resolve();
   });
 }
 
-function isReserved(program) {
-  const is_reserved = $(program).find('video is_reserved').text();
+function isReserved($info) {
+  const is_reserved = $($info).find('video is_reserved').text();
   return is_reserved == 'true';
   // const startTime = Date.parse($(program).find('open_time').text());
   // return Date.now() < startTime;
@@ -106,16 +95,9 @@ function isReserved(program) {
  * @param numOfPrograms 'official' の場合のみ必要
  * @param currentIndex 'official' の場合のみ必要
  */
-function createOneProgram(program, programType, numOfPrograms, currentIndex) {
-  const attributes = {
-    thumbnailAsProp: null,
-    thumbnailUrl: null,
-    title: null,
-    url: null,
-    id: null
-  };
-
-  var community = $(`
+function createThumbnailDom(program, programType, numOfPrograms, currentIndex) {
+  let thumbnailAsProp, thumbnailUrl, title, url, id;
+  const $community = $(`
 		<div class="community-hover-wrapper">
 			<div class="side-corner-tag enabled">
 				<div class="community">
@@ -129,64 +111,66 @@ function createOneProgram(program, programType, numOfPrograms, currentIndex) {
 	`);
 
   if (programType == 'user') {
-    attributes.thumbnailUrl = program.find('community thumbnail').text();
-    attributes.thumbnailAsProp = 'url(' + attributes.thumbnailUrl + ')';
-    attributes.title = program.find('video title').text();
-    attributes.id = program.find('video id').text();
-    attributes.url = 'http://live.nicovideo.jp/watch/' + attributes.id;
+    thumbnailUrl = program.find('community thumbnail').text();
+    thumbnailAsProp = `url('${thumbnailUrl}')`;
+    title = program.find('video title').text();
+    id = program.find('video id').text();
+    url = `http://live.nicovideo.jp/watch/${id}`;
   }
 
-  if (programType == 'official') {
+  else if (programType == 'official') {
     const communityId = $(program).find('.video_text a').attr('href');
     const regexp = /http\:\/\/ch.nicovideo.jp\/channel\/(.+)/;
     const resultarr = regexp.exec(communityId);
     let thumbnailTmp = undefined;
 
     if (resultarr != null) {
-      thumbnailTmp = 'http://icon.nimg.jp/channel/' + resultarr[1] + '.jpg';
+      thumbnailTmp = `http://icon.nimg.jp/channel/${resultarr[1]}.jpg`;
     } else {
       thumbnailTmp = $(program).find('.info a img').attr('src');
     }
 
-    attributes.thumbnailUrl = thumbnailTmp
-    attributes.thumbnailAsProp = 'url(' + attributes.thumbnailUrl + ')';
-    attributes.title = $(program).find('.video_title').text();
-    attributes.id = 'lv' + $(program).find('.video_id').text();
-    attributes.url = 'http://live.nicovideo.jp/watch/' + attributes.id;
+    thumbnailUrl = thumbnailTmp
+    thumbnailAsProp = `url('${thumbnailUrl}')`;
+    title = $(program).find('.video_title').text();
+    id = `lv${$(program).find('.video_id').text()}`;
+    url = `http://live.nicovideo.jp/watch/${id}`;
   }
 
-  community.find('.thumbnail').css('background-image', attributes.thumbnailAsProp);
-  community.find('a').attr('href', attributes.url);
+  $community.find('.thumbnail').css('background-image', thumbnailAsProp);
+  $community.find('a').attr('href', url);
 
   const charPerLine = 16;
-  const wrappedTitle = wordWrap(attributes.title, charPerLine);
+  const wrappedTitle = Common.wordWrap(title, charPerLine);
   let tooltipText = wrappedTitle;
 
   if (isReserved(program) == true) {
-    community.find('.side-corner-tag').removeClass('disabled');
-    community.find('.side-corner-tag').addClass('enabled');
+    $community.find('.side-corner-tag').removeClass('disabled');
+    $community.find('.side-corner-tag').addClass('enabled');
 
-    const startTimeInfo = '<span style="color:#adff2f">' + program.find('video open_time_jpstr').text() + '</span><br>';
+    const startTimeInfo = `<span style="color:#adff2f">
+      ${program.find('video open_time_jpstr').text()}
+    </span><br>`;
     tooltipText = startTimeInfo + tooltipText;
-
-    // const startTime = Date.parse(program.find('open_time').text());
-    // const startDate = new Date(startTime).getDate();
-    // const startDay = Time.toJpnDay(startTime);
 
     const startDayJpn = program.find('video open_time_jpstr').text().match(/\d+\/(\d+)/)[1]; // Month/Day(Date) ...
     const startDateJpn = program.find('video open_time_jpstr').text().match(/\d+\/\d+\((.)\)/)[1];
 
-    community.find('.reserved-message').text(startDayJpn + '(' + startDateJpn + ')');
+    $community.find('.reserved-message').text(`${startDayJpn}(${startDateJpn})`);
   } else {
-    community.find('.side-corner-tag').removeClass('side-corner-tag');
-    community.find('p').remove();
+    $community.find('.side-corner-tag').removeClass('side-corner-tag');
+    $community.find('p').remove();
   }
 
-  community.data('powertip', tooltipText);
+  setPowerTip($community, tooltipText, numOfPrograms, currentIndex, programType);
 
+  return $community;
+}
+
+function setPowerTip($dom, tooltipText, numOfPrograms, currentIndex, programType) {
   $.fn.powerTip.smartPlacementLists.n = ['n', 's', 'ne', 'nw', 'e', 'w', 'n'];
-
-  community.powerTip({
+  $dom.data('powertip', tooltipText);
+  $dom.powerTip({
     smartPlacement: true,
     fadeInTime: 30,
     fadeOutTime: 30,
@@ -198,37 +182,26 @@ function createOneProgram(program, programType, numOfPrograms, currentIndex) {
     // TODO: Fix.
     const hasManyCasts = numOfPrograms > 35;
     const isTopRow = currentIndex < 5;
-    const offset = (hasManyCasts && !isTopRow) ? -219 : 10;
-    const smartPlacement = currentIndex < 5 ? false : true;
+    const theOffset = (hasManyCasts && !isTopRow) ? -219 : 10;
+    const theSmartPlacement = currentIndex < 5 ? false : true;
 
     // TODO: Fix.
     const manualPositions = ['se', 's', 's', 's', 'sw'];
-    const placement = (currentIndex < 5) ? manualPositions[currentIndex] : 'n';
-    console.log(offset);
+    const thePlacement = (currentIndex < 5) ? manualPositions[currentIndex] : 'n';
+    console.log(theOffset);
 
     // TODO: Fix.
     $.fn.powerTip.smartPlacementLists.n = ['n', 's', 'ne', 'nw', 'e', 'w', 'n'];
 
     // TODO: Fix.
-    community.powerTip({
-      smartPlacement: smartPlacement,
-      placement: placement,
+    $dom.powerTip({
+      smartPlacement: theSmartPlacement,
+      placement: thePlacement,
       fadeInTime: 30,
       fadeOutTime: 30,
       closeDelay: 0,
       intentPollInterval: 0,
-      offset: offset
+      offset: theOffset
     });
   }
-
-  return community;
-}
-
-function wordWrap(text, length) {
-  const reg = new RegExp("(.{" + parseInt(length) + "})", "g");
-  return text.replace(/[\r|\r\n|\n]/g, "").replace(reg, "$1" + "<br>");
-}
-
-function enableOrNull(value) {
-  return (value === 'enable') || value == null;
 }

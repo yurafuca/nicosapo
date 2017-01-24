@@ -32,7 +32,6 @@ let _page = null;
 
 $(function () {
   const pageType = PageType.get();
-
   formatNicoPage.exec(pageType);
 
   const pages = {
@@ -46,11 +45,10 @@ $(function () {
   }
 
   _page = new pages[pageType]();
-
   _page.putButton();
   _page.setUpButton();
 
-  if ((pageType === 'NORMAL_CAST_PAGE') || (pageType === 'MODERN_CAST_PAGE') || (pageType === 'STAND_BY_PAGE')) {
+  if ((pageType === 'NORMAL_CAST_PAGE') || (pageType === 'MODERN_CAST_PAGE') || (pageType === 'OFFICIAL_CAST_PAGE')) {
     _page.putExtendedBar();
     _page.setUpExtendedBar();
     chrome.runtime.sendMessage({
@@ -63,12 +61,11 @@ $(function () {
         setTimeout(autoRedirect, intervalTime * 1000);
       }
     );
+    // TimeCounter.
+    setInterval(function () {
+      _page.countExtendedBar();
+    }, 1000);
   }
-
-  // TimeCounter.
-  setInterval(function () {
-    _page.countExtendedBar();
-  }, 1000);
 });
 
 $(function () {
@@ -99,14 +96,10 @@ $(function () {
   });
 });
 
-function enabledOrNull(value) {
-  return (value === 'enable') || value == null;
-}
-
 // TODO: Rename.
 function autoRedirect() {
   if (autoRedirectButton.isToggledOn()) {
-    Log.out(idHolder.liveId + ' is enabled auto redirect.');
+    console.log(idHolder.liveId + ' is enabled auto redirect.');
     Napi.isOffAir(idHolder.liveId).then(function (response) {
       if (!response.isOffAir) { // ONAIR
         _page.updateExtendedBar(response);
@@ -121,7 +114,7 @@ function autoRedirect() {
 
     });
   } else {
-    Log.out(idHolder.liveId + ' is disabled auto redirect.');
+    console.log(idHolder.liveId + ' is disabled auto redirect.');
   }
   chrome.runtime.sendMessage({
       purpose: 'getFromLocalStorage',
@@ -139,17 +132,4 @@ function redirectBroadcastPage(broadcastId) {
   const endpoint = 'http://live.nicovideo.jp/watch/';
   const broadcastUrl = endpoint + broadcastId;
   window.location.replace(broadcastUrl);
-}
-
-function isEnabledAutoRedirect() {
-  const data = sessionStorage[idHolder.communityId];
-
-  if (data == undefined) {
-    return true;
-  }
-
-  const parsedData = JSON.parse(data);
-
-  if (parsedData.enabledAutoRedirect == 'false')
-    return false;
 }

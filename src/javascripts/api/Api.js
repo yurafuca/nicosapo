@@ -282,19 +282,19 @@ export default class Napi {
         if (errorCode && (errorCode !== 'require_community_member')) {
           switch (errorCode) {
           case 'comingsoon':
-            Log.out(theBroadcastId + ' is COMINGSOON', 'isOffAir');
+            console.log(theBroadcastId + ' is COMINGSOON');
             response.isOffAir = true;
             break;
           case 'premium_only':
-            Log.out(theBroadcastId + ' is PREMIUMONLY', 'isOffAir');
+            console.log(theBroadcastId + ' is PREMIUMONLY');
             response.isOffAir = true;
             break;
           case 'closed':
-            Log.out(theBroadcastId + ' is OFFAIR', 'isOffAir');
+            console.log(theBroadcastId + ' is OFFAIR');
             response.isOffAir = true;
             break;
           case 'error':
-            Log.out(theBroadcastId + ' is ERROR.', 'isOffAir');
+            console.log(theBroadcastId + ' is ERROR.');
             reject();
             return;
           }
@@ -302,7 +302,7 @@ export default class Napi {
           // ONAIR.
           response.isOffAir = false;
           const broadcastId = $(response).find('stream id').text();
-          Log.out(broadcastId + ' is ONAIR');
+          console.log(broadcastId + ' is ONAIR');
         }
         resolve(response);
       });
@@ -324,16 +324,16 @@ export default class Napi {
         if (errorCode) {
           switch (errorCode) {
           case 'comingsoon':
-            Log.out(result.communityId + ' is STATE==COMINGSOON', 'isStartedBroadcast');
+            console.log(result.communityId + ' is STATE==COMINGSOON');
             resolve(true);
             return;
           case 'closed':
-            Log.out(result.communityId + ' is STATE==NOT_READY', 'isStartedBroadcast');
+            console.log(result.communityId + ' is STATE==NOT_READY');
             result.isStarted = false;
             resolve(result);
             return;
           case 'error':
-            Log.out(result.communityId + ' is STATE==ERROR.', 'isStartedBroadcast');
+            console.log(result.communityId + ' is STATE==ERROR.');
             reject();
             return;
           }
@@ -341,11 +341,11 @@ export default class Napi {
         // OFFAIR or ONAIR.
         const endTime = $(response).find('end_time').text();
         if (Date.now() < (endTime + '000')) {
-          Log.out($(response).find('stream id').text() + ' is STATE==OPEN.', 'isStartedBroadcast');
+          console.log($(response).find('stream id').text() + ' is STATE==OPEN.');
           result.isStarted = true;
           result.nextBroadcastId = $(response).find('stream id').text();
         } else {
-          Log.out(result.communityId + ' is STATE==NOT_READY.', 'isStartedBroadcast');
+          console.log(result.communityId + ' is STATE==NOT_READY.');
           result.isStarted = false;
         }
         resolve(result);

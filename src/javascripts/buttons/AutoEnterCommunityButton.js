@@ -100,7 +100,7 @@ export default class AutoEnterCommunityButton extends Buttons {
       owner = $('.nicopedia_nushi').find('a').text() || $('.company').text();
     } else if (pageType === 'MODERN_CAST_PAGE') {
       title = $('.program-community-name').text();
-      owner = $($('.program-broadcaster-name').find('a').get(0)).text()
+      owner = $($('.program-broadcaster-name').find('a').get(0)).text();
     }
 
     console.info(title, owner);

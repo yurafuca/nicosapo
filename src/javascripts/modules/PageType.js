@@ -21,7 +21,7 @@ export default class PageType {
       pageType = 'NORMAL_CAST_PAGE';
     }
 
-    Log.info(pageType, 'constructor');
+    console.info(pageType, 'constructor');
 
     return pageType;
   }

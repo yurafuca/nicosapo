@@ -1,11 +1,11 @@
 import $ from 'jquery'
 import NewArrival from "./modules/NewArrival";
-import ComuHolder from "./modules/CommunityHolder";
+import CommunityHolder from "./modules/CommunityHolder";
 import Napi from "./api/Api";
+import Common from "./common/Common";
 
-let comuHolder = new ComuHolder();
-let newArrival = new NewArrival();
-let broadcastTabs = [];
+const communityHolder = new CommunityHolder();
+const newArrival = new NewArrival();
 
 $(function () {
 
@@ -28,11 +28,11 @@ $(function () {
   }, 1000 * 5);
 
 
-  const storagedData = JSON.parse(localStorage['autoEnterCommunityList']);
+  const storagedData = JSON.parse(localStorage.getItem('autoEnterCommunityList'));
   for (let id in storagedData) {
     storagedData[id].state = 'init';
   }
-  localStorage['autoEnterCommunityList'] = JSON.stringify(storagedData);
+  localStorage.setItem('autoEnterCommunityList', JSON.stringify(storagedData));
 });
 
 function refresh() {
@@ -45,40 +45,40 @@ function refresh() {
     .then(function () {
       return Napi.loadCasts('user');
     })
-    .then(function (videoInfos) {
-      console.info('[imanani] videoInfos = ', videoInfos);
-      count(removeReservation(videoInfos)).then(setBadgeText);
-      $.each(newArrival.get(videoInfos), function (index, infos) {
-        if (comuHolder.isNew(infos)) {
+    .then(function ($videoInfos) {
+      console.info('[imanani] videoInfos = ', $videoInfos);
+      setBadgeText($videoInfos.length);
+      // count(removeReservation($videoInfos)).then(setBadgeText);
+      $.each(newArrival.get($videoInfos), function (index, $infos) {
+        if (communityHolder.isNew($infos)) {
           // Do nothing.
         } else {
-          if (enableOrNull(localStorage.getItem('options.playsound.enable'))) {
+          if (Common.enabledOrNull(localStorage.getItem('options.playsound.enable'))) {
             const soundfile = localStorage.getItem('options.soundfile') || 'ta-da.mp3';
             const volume = localStorage.getItem('options.playsound.volume') || 1.0;
             const audio = new Audio('sounds/' + soundfile);
             audio.volume = volume;
             audio.play();
           }
-          if (enableOrNull(localStorage.getItem('options.popup.enable'))) {
-            const communityId = 'co' + $(infos).find('community id').text();
-            const liveId = $(infos).find('video id').text();
-            if (!isExistsInAutoLists(communityId, liveId)) {
+          if (Common.enabledOrNull(localStorage.getItem('options.popup.enable'))) {
+            const communityId = 'co' + $infos.find('community id').text();
+            const liveId = $infos.find('video id').text();
+            if (!existsInAutoLists(communityId, liveId)) {
               showNotification(infos);
             }
           }
         }
       });
-      newArrival.setSource(videoInfos);
+      newArrival.setSource($videoInfos);
     });
-
   Napi.getCheckList().then(function (idList) {
-    comuHolder.setSource(idList);
+    communityHolder.setSource(idList);
   });
 }
 
-function isExistsInAutoLists(communityId, liveId) {
-  let autoEnterCommunityList = localStorage['autoEnterCommunityList'];
-  let autoEnterProgramList = localStorage['autoEnterProgramList'];
+function existsInAutoLists(communityId, liveId) {
+  let autoEnterCommunityList = localStorage.getItem('autoEnterCommunityList');
+  let autoEnterProgramList = localStorage.getItem('autoEnterProgramList');
 
   if (autoEnterCommunityList) {
     autoEnterCommunityList = JSON.parse(autoEnterCommunityList);
@@ -117,13 +117,13 @@ function isExistsInAutoLists(communityId, liveId) {
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   // getFromLocalStorage
   if (request.purpose == 'getFromLocalStorage') {
-    sendResponse(localStorage[request.key]);
+    sendResponse(localStorage.getItem(request.key));
     return;
   }
 
   // saveToLocalstorage
   if (request.purpose == 'saveToLocalStorage') {
-    localStorage[request.key] = request.value;
+    localStorage.setItem(request.key, request.value);
     return;
   }
 
@@ -136,8 +136,8 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   // getFromNestedLocalStorage
   if (request.purpose == 'getFromNestedLocalStorage') {
     let storagedData;
-    if (localStorage[request.key])
-      storagedData = JSON.parse(localStorage[request.key]);
+    if (localStorage.getItem(request.key))
+      storagedData = JSON.parse(localStorage.getItem(request.key));
     else
       storagedData = {};
     sendResponse(storagedData);
@@ -148,8 +148,8 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request.purpose == 'saveToNestedLocalStorage') {
     let storagedData;
 
-    if (localStorage[request.key]) {
-      storagedData = JSON.parse(localStorage[request.key]);
+    if (localStorage.getItem(request.key)) {
+      storagedData = JSON.parse(localStorage.getItem(request.key));
     } else {
       storagedData = {};
     }
@@ -167,30 +167,25 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
       storagedData[request.innerKey]['owner'] = request.innerValue.owner;
     }
 
-    localStorage[request.key] = JSON.stringify(storagedData);
+    localStorage.setItem(request.key, JSON.stringify(storagedData));
     return;
   }
 
   // removeFromNestedLocalStorage
   if (request.purpose == 'removeFromNestedLocalStorage') {
-    let storagedData = JSON.parse(localStorage[request.key]);
+    let storagedData = JSON.parse(localStorage.getItem(request.key));
     console.info('[imanani] Delete storagedData[innerKey] ', storagedData[request.innerKey]);
     delete storagedData[request.innerKey];
-    localStorage[request.key] = JSON.stringify(storagedData);
+    localStorage.setItem(request.key, JSON.stringify(storagedData));
     return;
   }
 });
-
-function enableOrNull(value) {
-  return (value === 'enable') || value == null;
-}
-
 
 function autoEnterProgramRoutine() {
   return new Promise(function (resolve, reject) {
     console.info('autoEnterProgramRoutine');
 
-    let storagedData = localStorage['autoEnterProgramList'];
+    let storagedData = localStorage.getItem('autoEnterProgramList');
 
     if (storagedData) {
       storagedData = JSON.parse(storagedData);
@@ -246,7 +241,7 @@ function test(id, storagedData) {
           // Remove.
           console.info('[imanani] Delete storagedData[' + id + '] ', storagedData[id]);
           delete storagedData[id];
-          localStorage['autoEnterProgramList'] = JSON.stringify(storagedData);
+          localStorage.setItem('autoEnterProgramList', JSON.stringify(storagedData));
           resolve();
         });
       }
@@ -259,7 +254,7 @@ function autoEnterCommunityRoutine() {
   return new Promise(function (resolve, reject) {
     console.info('autoEnterCommunityRoutine');
 
-    let storagedData = localStorage['autoEnterCommunityList'];
+    let storagedData = localStorage.getItem('autoEnterCommunityList');
 
     if (storagedData) {
       storagedData = JSON.parse(storagedData);
@@ -318,7 +313,7 @@ function checkAndOpenFreshCast(id, storagedData) {
       storagedData[result.communityId]['state'] = 'offair';
     }
     console.info('id = ', result.communityId);
-    localStorage['autoEnterCommunityList'] = JSON.stringify(storagedData);
+    localStorage.setItem('autoEnterCommunityList', JSON.stringify(storagedData));
   });
 }
 
@@ -333,7 +328,6 @@ function showNotification(newInfos) {
   let id = $(newInfos).first().find('video id').text();
   chrome.notifications.create(id, options);
 }
-
 chrome.notifications.onClicked.addListener(function (id) {
   chrome.tabs.create({
     url: 'http://live.nicovideo.jp/watch/' + id,
@@ -363,18 +357,15 @@ function setBadgeText(value) {
   });
 }
 
-function removeReservation(videoInfos) {
+function removeReservation($videoInfos) {
   var result = [];
-
-  console.info(videoInfos);
-
-  $.each($(videoInfos), function (index, item) {
+  console.info($videoInfos);
+  $.each($($videoInfos), function (index, item) {
     const is_reserved = $(item).find('video is_reserved').text();
     if (is_reserved == 'false') {
       result.push(item);
     }
   });
-
   console.info(result);
   return $(result);
 }
