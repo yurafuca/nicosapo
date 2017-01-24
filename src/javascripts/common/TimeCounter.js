@@ -5,18 +5,6 @@ export default class TimeCounter {
     this.hour = date.getHours();
   }
 
-  // Adder.
-
-  addSecond(second) {
-    second = parseInt(second);
-    if (this.second === 59) {
-      this.second = 0;
-      addMinute(1);
-    } else {
-      this.second += parseInt(second);
-    }
-  }
-
   // Substracter.
 
   subSecond(second) {
