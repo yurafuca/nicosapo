@@ -4,6 +4,11 @@
         "browser": true,
         "es6": true
     },
+    "globals": {
+      "chrome": false,
+      "module": false,
+      "process": false
+    },
     "rules": {
         "arrow-body-style": "error",
         "arrow-parens": "error",
