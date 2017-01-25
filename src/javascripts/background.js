@@ -7,27 +7,25 @@ import Common from "./common/Common";
 const communityHolder = new CommunityHolder();
 const newArrival = new NewArrival();
 
-$(() => {
+const INTERVAL_TIME = {
+  CHECK_NEW_CASTS: 30,
+  AUTO_ENTER: 30,
+  MERGIN: 3
+};
 
-  Napi.getSubscribe_2();
+const BADGE_COLOR = '#ff6200';
 
-  chrome.browserAction.setBadgeBackgroundColor({
-    color: "#ff6200"
-  });
-
-  refresh();
-
-  setInterval(refresh, 1000 * 30);
-
+$(document).ready(() => {
+  chrome.browserAction.setBadgeBackgroundColor({ color: BADGE_COLOR });
+  checkNewCasts();
+  setInterval(checkNewCasts, 1000 * INTERVAL_TIME.CHECK_NEW_CASTS);
   setTimeout(() => {
     setInterval(() => {
       Promise.resolve()
         .then(autoEnterProgramRoutine)
         .then(autoEnterCommunityRoutine);
-    }, 1000 * 30);
+    }, 1000 * INTERVAL_TIME.AUTO_ENTER);
   }, 1000 * 5);
-
-
   const storagedData = JSON.parse(localStorage.getItem('autoEnterCommunityList'));
   for (const id in storagedData) {
     storagedData[id].state = 'init';
@@ -35,26 +33,23 @@ $(() => {
   localStorage.setItem('autoEnterCommunityList', JSON.stringify(storagedData));
 });
 
-function refresh() {
+const checkNewCasts = () => {
   Promise.resolve()
     .then(Napi.isLogined)
-    .catch(() => {
-      setBadgeText('x');
-    })
+    .catch(() => { setBadgeText('x'); })
     .then(() => Napi.loadCasts('user'))
     .then(($videoInfos) => {
-      console.info('[imanani] videoInfos = ', $videoInfos);
-      setBadgeText($videoInfos.length);
-      // count(removeReservation($videoInfos)).then(setBadgeText);
+      setBadgeText(removeReservation($videoInfos).length);
       $.each(newArrival.get($videoInfos), (index, $infos) => {
         if (communityHolder.isNew($infos)) {
+          // $infos is a followed community by a user as NEWLY.
           // Do nothing.
         } else {
           if (Common.enabledOrNull(localStorage.getItem('options.playsound.enable'))) {
-            const soundfile = localStorage.getItem('options.soundfile') || 'ta-da.mp3';
-            const volume = localStorage.getItem('options.playsound.volume') || 1.0;
-            const audio = new Audio(`sounds/${soundfile}`);
-            audio.volume = volume;
+            const soundFile = localStorage.getItem('options.soundfile') || 'ta-da.mp3';
+            const volume    = localStorage.getItem('options.playsound.volume') || 1.0;
+            const audio     = new Audio(`sounds/${soundFile}`);
+            audio.volume    = volume;
             audio.play();
           }
           if (Common.enabledOrNull(localStorage.getItem('options.popup.enable'))) {
@@ -68,47 +63,32 @@ function refresh() {
       });
       newArrival.setSource($videoInfos);
     });
+  // Get a list of following communities.
   Napi.getCheckList().then((idList) => {
     communityHolder.setSource(idList);
   });
 }
 
-function existsInAutoLists(communityId, liveId) {
-  let autoEnterCommunityList = localStorage.getItem('autoEnterCommunityList');
-  let autoEnterProgramList = localStorage.getItem('autoEnterProgramList');
-
-  if (autoEnterCommunityList) {
-    autoEnterCommunityList = JSON.parse(autoEnterCommunityList);
-  } else {
-    autoEnterCommunityList = {};
+const existsInAutoLists = (communityId, liveId) => {
+  let autoEnterCommunityList = {};
+  let autoEnterProgramList = {};
+  if (localStorage.getItem('autoEnterCommunityList')) {
+    autoEnterCommunityList = JSON.parse(localStorage.getItem('autoEnterCommunityList'));
   }
-
-  if (autoEnterProgramList) {
-    autoEnterProgramList = JSON.parse(autoEnterProgramList);
-  } else {
-    autoEnterProgramList = {};
+  if (localStorage.getItem('autoEnterProgramList')) {
+    autoEnterProgramList = JSON.parse(localStorage.getItem('autoEnterProgramList'));
   }
-
   for (const id in autoEnterCommunityList) {
-    console.info(id);
     if (id === communityId) {
-      console.info(true);
       return true;
     }
   }
-
   for (const id in autoEnterProgramList) {
-    console.info(id);
     if (id === liveId) {
-      console.info(true);
       return true;
     }
   }
-
-  console.info(false);
-
   return false;
-
 }
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
@@ -143,90 +123,70 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   // saveToNestedLocalStorage
   // localStorage->{id->{state, test, ...}, id->{state, test, ...}}
   if (request.purpose == 'saveToNestedLocalStorage') {
-    let storagedData;
-
+    let storagedData = {};
     if (localStorage.getItem(request.key)) {
       storagedData = JSON.parse(localStorage.getItem(request.key));
-    } else {
-      storagedData = {};
     }
-
     storagedData[request.innerKey] = {};
     storagedData[request.innerKey]['state'] = request.innerValue.state;
     storagedData[request.innerKey]['thumbnail'] = request.innerValue.thumbnail;
     storagedData[request.innerKey]['title'] = request.innerValue.title;
-
     if (request.innerValue.openDate) {
       storagedData[request.innerKey]['openDate'] = request.innerValue.openDate;
     }
-
     if (request.innerValue.owner) {
       storagedData[request.innerKey]['owner'] = request.innerValue.owner;
     }
-
     localStorage.setItem(request.key, JSON.stringify(storagedData));
     return;
   }
 
   // removeFromNestedLocalStorage
   if (request.purpose == 'removeFromNestedLocalStorage') {
-    const storagedData = JSON.parse(localStorage.getItem(request.key));
-    console.info('[imanani] Delete storagedData[innerKey] ', storagedData[request.innerKey]);
+    let storagedData = {};
+    if (localStorage.getItem(request.key)) {
+      storagedData = JSON.parse(JSON.parse(localStorage.getItem(request.key)));
+    }
+    console.info('[nicosapo] Delete storagedData[innerKey] ', storagedData[request.innerKey]);
     delete storagedData[request.innerKey];
     localStorage.setItem(request.key, JSON.stringify(storagedData));
     return;
   }
 });
 
-function autoEnterProgramRoutine() {
-  return new Promise((resolve) => {
-    console.info('autoEnterProgramRoutine');
-
-    let storagedData = localStorage.getItem('autoEnterProgramList');
-
-    if (storagedData) {
-      storagedData = JSON.parse(storagedData);
-    } else {
-      storagedData = {};
+const autoEnterProgramRoutine = () => {
+  new Promise((resolve) => {
+    let storagedData = {};
+    if (localStorage.getItem('autoEnterProgramList')) {
+      storagedData = JSON.parse(localStorage.getItem('autoEnterProgramList'));
     }
-
     const tasks = [];
-
     for (const id in storagedData) {
       tasks.push(test.bind(null, id, storagedData));
     }
-
-    console.info(tasks);
-
     const length = tasks.length;
-
     if (tasks.length === 0) {
       resolve();
     }
-
     for (let i = 0; i < tasks.length; i++) {
       (() => {
         setTimeout(() => {
           tasks[i].call(null);
-          console.info('i = ', i);
-          console.info('length = ', length);
+          console.info('(i, length) = ', i, length);
           if (i === length - 1) {
-            console.info('resolve');
-            setTimeout(resolve, 3000);
+            setTimeout(resolve, 1000 * INTERVAL_TIME.MERGIN);
           }
-        }, i * 3000); // 連続アクセスを防ぐ
+        }, i * 1000 * INTERVAL_TIME.MERGIN); // 連続アクセスを防ぐ
       })(i, length);
     }
   });
-}
+};
 
-function test(id, storagedData) {
-  return new Promise((resolve) => {
-    console.info('[imanani][●autoEnterProgram] id = ', id);
+const test = (id, storagedData) => {
+  new Promise((resolve) => {
     Napi.isOffAir(id).then((response) => {
       // ONAIR
       if (response.isOffAir == false) {
-        console.info('[imanani][○autoEnterProgram] id = ', id);
         chrome.tabs.create({
           url: `http://live.nicovideo.jp/watch/${id}`
         }, () => {
@@ -238,7 +198,7 @@ function test(id, storagedData) {
           };
           chrome.notifications.create(id, options);
           // Remove.
-          console.info(`[imanani] Delete storagedData[${id}] `, storagedData[id]);
+          console.info(`[nicosapo] Delete storagedData[${id}] `, storagedData[id]);
           delete storagedData[id];
           localStorage.setItem('autoEnterProgramList', JSON.stringify(storagedData));
           resolve();
@@ -247,51 +207,37 @@ function test(id, storagedData) {
       resolve();
     });
   });
-}
+};
 
-function autoEnterCommunityRoutine() {
-  return new Promise((resolve) => {
-    console.info('autoEnterCommunityRoutine');
-
-    let storagedData = localStorage.getItem('autoEnterCommunityList');
-
-    if (storagedData) {
-      storagedData = JSON.parse(storagedData);
-    } else {
-      storagedData = {};
+const autoEnterCommunityRoutine = () => {
+  new Promise((resolve) => {
+    let storagedData = {};
+    if (localStorage.getItem('autoEnterCommunityList')) {
+      storagedData = JSON.parse(localStorage.getItem('autoEnterCommunityList'));
     }
-
-    console.debug('storagedData = ', storagedData);
-
     const tasks = [];
-
     for (const id in storagedData) {
       tasks.push(checkAndOpenFreshCast.bind(null, id, storagedData));
     }
-
     const length = tasks.length;
-
     if (tasks.length === 0) {
       resolve();
     }
-
     for (let i = 0; i < tasks.length; i++) {
       (() => {
         setTimeout(() => {
           tasks[i].call(null);
-          console.info('i = ', i);
-          console.info('length = ', length);
+          console.info('(i, length) = ', i, length);
           if (i === length - 1) {
-            console.info('resolve');
             resolve();
           }
-        }, i * 2000); // 連続アクセスを防ぐ
+        }, i * 1000 * INTERVAL_TIME.MERGIN); // 連続アクセスを防ぐ
       })(i, length);
     }
   });
-}
+};
 
-function checkAndOpenFreshCast(id, storagedData) {
+const checkAndOpenFreshCast = (id, storagedData) => {
   Napi.isStartedBroadcast(id).then((result) => {
     if (result.isStarted == true) {
       const lastState = storagedData[result.communityId]['state'];
@@ -316,19 +262,19 @@ function checkAndOpenFreshCast(id, storagedData) {
     console.info('id = ', result.communityId);
     localStorage.setItem('autoEnterCommunityList', JSON.stringify(storagedData));
   });
-}
+};
 
-function showNotification(newInfos) {
+const showNotification = (newInfos) => {
   const options = {
     type: "basic",
     title: "放送開始のお知らせ",
     message: $(newInfos).first().find('video title').text(),
     iconUrl: $(newInfos).first().find('community thumbnail').text()
   };
-  console.log(newInfos);
   const id = $(newInfos).first().find('video id').text();
   chrome.notifications.create(id, options);
 }
+
 chrome.notifications.onClicked.addListener((id) => {
   chrome.tabs.create({
     url: `http://live.nicovideo.jp/watch/${id}`,
@@ -336,8 +282,8 @@ chrome.notifications.onClicked.addListener((id) => {
   });
 });
 
-function setBadgeText(value) {
-  return new Promise((resolve) => {
+const setBadgeText = (value) => {
+  new Promise((resolve) => {
     if (value == 0) {
       value = '';
     }
@@ -346,17 +292,17 @@ function setBadgeText(value) {
     });
     resolve();
   });
-}
+};
 
-// function removeReservation($videoInfos) {
-//   const result = [];
-//   console.info($videoInfos);
-//   $.each($($videoInfos), (index, item) => {
-//     const is_reserved = $(item).find('video is_reserved').text();
-//     if (is_reserved == 'false') {
-//       result.push(item);
-//     }
-//   });
-//   console.info(result);
-//   return $(result);
-// }
+const removeReservation = ($videoInfos) => {
+  const result = [];
+  console.info($videoInfos);
+  $.each($($videoInfos), (index, item) => {
+    const is_reserved = $(item).find('video is_reserved').text();
+    if (is_reserved == 'false') {
+      result.push(item);
+    }
+  });
+  console.info(result);
+  return $(result);
+};

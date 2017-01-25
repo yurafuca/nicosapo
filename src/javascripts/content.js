@@ -93,7 +93,7 @@ $(() => {
 });
 
 // TODO: Rename.
-function autoRedirect() {
+const autoRedirect = () => {
   if (autoRedirectButton.isToggledOn()) {
     console.log(`${idHolder.liveId} is enabled auto redirect.`);
     Napi.isOffAir(idHolder.liveId).then((response) => {
@@ -122,7 +122,7 @@ function autoRedirect() {
   });
 }
 
-function redirectBroadcastPage(broadcastId) {
+const redirectBroadcastPage = (broadcastId) => {
   const endpoint = 'http://live.nicovideo.jp/watch/';
   const broadcastUrl = endpoint + broadcastId;
   window.location.replace(broadcastUrl);

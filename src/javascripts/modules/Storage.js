@@ -9,7 +9,7 @@ export default class Storage {
         innerValue: innerValue
       },
       (response) => {
-        console.info('[imanani][saveToNestedLocalStorage] response = ', response);
+        console.info('[nicosapo][saveToNestedLocalStorage] response = ', response);
       });
   }
 
@@ -20,7 +20,7 @@ export default class Storage {
         innerKey: innerKey
       },
       (response) => {
-        console.info('[imanani][removeFromNestedLocalStorage] response = ', response);
+        console.info('[nicosapo][removeFromNestedLocalStorage] response = ', response);
       });
   }
 }

@@ -43,7 +43,7 @@ export default class Napi {
 
   static loadCasts(liveType) {
     return new Promise(function (resolve, reject) {
-      console.info('[imanani][Broadcasts.loadAnyBroadcasts] liveType = ', liveType);
+      console.info('[nicosapo][Broadcasts.loadAnyBroadcasts] liveType = ', liveType);
       if (liveType == 'user') {
         Napi.getSubscribe_2().then(
           function ($videoInfos) {

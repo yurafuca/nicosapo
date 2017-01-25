@@ -28,7 +28,7 @@ nicosapo - にこさぽ
 # 使い方
 ## 自動次枠移動
 
-![Alt Text](https://tsuyuno.github.io/resources/imanani_auto_redirect.png)
+![Alt Text](https://tsuyuno.github.io/resources/nicosapo_auto_redirect.png)
 
 インストールすると，放送用ページ（http：//live.nicovideo.jp/watch/lv* ）に自動次枠移動の有効/無効を切り替えるボタンが表示されます．ボタンをクリックするごとにボタンの状態が切り替わります．「自動次枠移動ON」の状態では自動次枠移動が有効になります．一方，「自動次枠移動OFF」の状態では自動次枠移動が無効になります．
 
@@ -41,7 +41,7 @@ nicosapo - にこさぽ
 
 ## 自動入場
 
-![Alt Text](https://tsuyuno.github.io/resources/imanani_auto_enter.png)
+![Alt Text](https://tsuyuno.github.io/resources/nicosapo_auto_enter.png)
 
 インストールするとゲートページに自動入場の有効/無効を切り替えるボタンが表示されます．ボタンをクリックするごとにボタンの状態が切り替わります．「自動入場ON」の状態では自動入場が有効になり，にこさぽ内部の自動入場リストに当該番組が登録されます．一方「自動入場OFF」の状態では自動入場が無効になり，自動入場リストから当該番組が削除されます．
 
@@ -51,7 +51,7 @@ Google Chrome が起動している間，にこさぽは自動入場リストの
 
 ## 放送中の番組一覧を表示
 
-![Alt Text](https://tsuyuno.github.io/resources/imanani_popup.png)
+![Alt Text](https://tsuyuno.github.io/resources/nicosapo_popup.png)
 
 インストール後にツールバーに追加されるアイコンをクリックすると，コミュニティ登録しているコミュニティとチャンネルの放送番組を一覧表示します．サムネイルをマウスオーバーすると，放送の説明が表示されます．
 
@@ -69,10 +69,10 @@ Google Chrome が起動している間，にこさぽは自動入場リストの
 
 通知が表示されるまでに最大1分程度のラグが発生します．
 
-![Alt Text](https://tsuyuno.github.io/resources/imanani_notification.png)
+![Alt Text](https://tsuyuno.github.io/resources/nicosapo_notification.png)
 
 ## 設定画面
 
 インストール後にツールバーに追加されるアイコンを右クリック->設定 から，にこさぽの設定をおこなえます．
 
-![Alt Text](https://tsuyuno.github.io/resources/imanani_setting.png)
+![Alt Text](https://tsuyuno.github.io/resources/nicosapo_setting.png)

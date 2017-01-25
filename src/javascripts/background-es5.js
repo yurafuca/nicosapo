@@ -46,7 +46,7 @@ function refresh() {
       return Napi.loadCasts('user');
     })
     .then(function ($videoInfos) {
-      console.info('[imanani] videoInfos = ', $videoInfos);
+      console.info('[nicosapo] videoInfos = ', $videoInfos);
       setBadgeText($videoInfos.length);
       // count(removeReservation($videoInfos)).then(setBadgeText);
       $.each(newArrival.get($videoInfos), function (index, $infos) {
@@ -174,7 +174,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   // removeFromNestedLocalStorage
   if (request.purpose == 'removeFromNestedLocalStorage') {
     let storagedData = JSON.parse(localStorage.getItem(request.key));
-    console.info('[imanani] Delete storagedData[innerKey] ', storagedData[request.innerKey]);
+    console.info('[nicosapo] Delete storagedData[innerKey] ', storagedData[request.innerKey]);
     delete storagedData[request.innerKey];
     localStorage.setItem(request.key, JSON.stringify(storagedData));
     return;
@@ -223,11 +223,11 @@ function autoEnterProgramRoutine() {
 
 function test(id, storagedData) {
   return new Promise(function (resolve) {
-    console.info('[imanani][●autoEnterProgram] id = ', id);
+    console.info('[nicosapo][●autoEnterProgram] id = ', id);
     Napi.isOffAir(id).then(function (response) {
       // ONAIR
       if (response.isOffAir == false) {
-        console.info('[imanani][○autoEnterProgram] id = ', id);
+        console.info('[nicosapo][○autoEnterProgram] id = ', id);
         chrome.tabs.create({
           url: 'http://live.nicovideo.jp/watch/' + id
         }, function () {
@@ -239,7 +239,7 @@ function test(id, storagedData) {
           };
           chrome.notifications.create(id, options);
           // Remove.
-          console.info('[imanani] Delete storagedData[' + id + '] ', storagedData[id]);
+          console.info('[nicosapo] Delete storagedData[' + id + '] ', storagedData[id]);
           delete storagedData[id];
           localStorage.setItem('autoEnterProgramList', JSON.stringify(storagedData));
           resolve();

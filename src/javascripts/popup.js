@@ -44,7 +44,7 @@ $(() => {
   });
 });
 
-function renderCasts(liveType) {
+const renderCasts = (liveType) => {
   Promise.resolve()
     .then(Loading.start)
     .then(Napi.isLogined)
@@ -59,7 +59,7 @@ function renderCasts(liveType) {
 
 }
 
-function showAsThumbnailDoms($videoInfos, liveType) {
+const showAsThumbnailDoms = ($videoInfos, liveType) => {
   console.info($videoInfos);
   return new Promise((resolve) => {
     const length = $videoInfos.length;
@@ -82,7 +82,7 @@ function showAsThumbnailDoms($videoInfos, liveType) {
   });
 }
 
-function isReserved($info) {
+const isReserved = ($info) => {
   const is_reserved = $($info).find('video is_reserved').text();
   return is_reserved == 'true';
 }
@@ -93,7 +93,7 @@ function isReserved($info) {
  * @param numOfPrograms 'official' の場合のみ必要
  * @param currentIndex 'official' の場合のみ必要
  */
-function createThumbnailDom(program, programType, numOfPrograms, currentIndex) {
+const createThumbnailDom = (program, programType, numOfPrograms, currentIndex) => {
   let thumbnailAsProp, thumbnailUrl, title, url, id;
   const $community = $(`
 		<div class="community-hover-wrapper">
@@ -165,7 +165,7 @@ function createThumbnailDom(program, programType, numOfPrograms, currentIndex) {
   return $community;
 }
 
-function setPowerTip($dom, tooltipText, numOfPrograms, currentIndex, programType) {
+const setPowerTip = ($dom, tooltipText, numOfPrograms, currentIndex, programType) => {
   $.fn.powerTip.smartPlacementLists.n = ['n', 's', 'ne', 'nw', 'e', 'w', 'n'];
   $dom.data('powertip', tooltipText);
   $dom.powerTip({

@@ -11,7 +11,7 @@ class SettingPage {
     settings['options.soundfile'] = $('#options-soundfile :selected').val();
     settings['options.playsound.volume'] = $("input[name=options-playsound-volume]").val();
     settings['options.autoJump.enable'] = $('input[name=options-autoJump-enable]:checked').val();
-    console.info('[imanani][getAllSettings] settings = ', settings);
+    console.info('[nicosapo][getAllSettings] settings = ', settings);
     return settings;
   }
 
@@ -105,7 +105,7 @@ $(() => {
       purpose: 'getFromNestedLocalStorage',
       key: 'autoEnterProgramList'
     }, (response) => {
-    console.info('[imanani][getFromNestedLocalStorage] response = ', response);
+    console.info('[nicosapo][getFromNestedLocalStorage] response = ', response);
     if ($.isEmptyObject(response)) {
       const subscribe = $(`
               <div class="listgroup-item clearfix">
@@ -154,7 +154,7 @@ $(() => {
       purpose: 'getFromNestedLocalStorage',
       key: 'autoEnterCommunityList'
     }, (response) => {
-    console.info('[imanani][getFromNestedLocalStorage] response = ', response);
+    console.info('[nicosapo][getFromNestedLocalStorage] response = ', response);
     if ($.isEmptyObject(response)) {
       const subscribe = $(`
               <div class="listgroup-item clearfix">
