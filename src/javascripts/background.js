@@ -17,8 +17,8 @@ const BADGE_COLOR = '#ff6200';
 
 $(document).ready(() => {
   chrome.browserAction.setBadgeBackgroundColor({ color: BADGE_COLOR });
-  checkNewCasts();
-  setInterval(checkNewCasts, 1000 * INTERVAL_TIME.CHECK_NEW_CASTS);
+  refreshBadgeAndDB();
+  setInterval(refreshBadgeAndDB, 1000 * INTERVAL_TIME.CHECK_NEW_CASTS);
   setTimeout(() => {
     setInterval(() => {
       Promise.resolve()
@@ -26,14 +26,18 @@ $(document).ready(() => {
         .then(autoEnterCommunityRoutine);
     }, 1000 * INTERVAL_TIME.AUTO_ENTER);
   }, 1000 * 5);
+  initAutoEnterCommunityList();
+});
+
+const initAutoEnterCommunityList = () => {
   const storagedData = JSON.parse(localStorage.getItem('autoEnterCommunityList'));
   for (const id in storagedData) {
     storagedData[id].state = 'init';
   }
   localStorage.setItem('autoEnterCommunityList', JSON.stringify(storagedData));
-});
+};
 
-const checkNewCasts = () => {
+const refreshBadgeAndDB = () => {
   Promise.resolve()
     .then(Napi.isLogined)
     .catch(() => { setBadgeText('x'); })
@@ -112,11 +116,10 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
   // getFromNestedLocalStorage
   if (request.purpose == 'getFromNestedLocalStorage') {
-    let storagedData;
-    if (localStorage.getItem(request.key))
+    let storagedData = {};
+    if (localStorage.getItem(request.key)) {
       storagedData = JSON.parse(localStorage.getItem(request.key));
-    else
-      storagedData = {};
+    }
     sendResponse(storagedData);
   }
 
@@ -128,14 +131,14 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       storagedData = JSON.parse(localStorage.getItem(request.key));
     }
     storagedData[request.innerKey] = {};
-    storagedData[request.innerKey]['state'] = request.innerValue.state;
-    storagedData[request.innerKey]['thumbnail'] = request.innerValue.thumbnail;
-    storagedData[request.innerKey]['title'] = request.innerValue.title;
+    storagedData[request.innerKey].state = request.innerValue.state;
+    storagedData[request.innerKey].thumbnail = request.innerValue.thumbnail;
+    storagedData[request.innerKey].title = request.innerValue.title;
     if (request.innerValue.openDate) {
-      storagedData[request.innerKey]['openDate'] = request.innerValue.openDate;
+      storagedData[request.innerKey].openDate = request.innerValue.openDate;
     }
     if (request.innerValue.owner) {
-      storagedData[request.innerKey]['owner'] = request.innerValue.owner;
+      storagedData[request.innerKey].owner = request.innerValue.owner;
     }
     localStorage.setItem(request.key, JSON.stringify(storagedData));
     return;

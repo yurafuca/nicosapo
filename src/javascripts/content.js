@@ -55,7 +55,7 @@ $(() => {
       }, (response) => {
       const intervalTime = response || '50';
       console.info('[nicosapo]intervalTime = ', intervalTime);
-      setTimeout(autoRedirect, intervalTime * 1000);
+      setTimeout(checkNewCasts, intervalTime * 1000);
     });
     // TimeCounter.
     setInterval(() => {
@@ -93,7 +93,7 @@ $(() => {
 });
 
 // TODO: Rename.
-const autoRedirect = () => {
+const checkNewCasts = () => {
   if (autoRedirectButton.isToggledOn()) {
     console.log(`${idHolder.liveId} is enabled auto redirect.`);
     Napi.isOffAir(idHolder.liveId).then((response) => {
@@ -103,7 +103,7 @@ const autoRedirect = () => {
         _page.invalidateExtendedBar();
         Napi.isStartedBroadcast(idHolder.communityId).then((response) => { // OFFAIR
           if (response.isStarted) {
-            redirectBroadcastPage(response.nextBroadcastId);
+            redirectToCast(response.nextBroadcastId);
           }
         });
       }
@@ -116,13 +116,13 @@ const autoRedirect = () => {
       purpose: 'getFromLocalStorage',
       key: 'options.redirect.time'
     }, (response) => {
-    const intervalTime = response || '50';
-    console.info('[nicosapo]intervalTime = ', intervalTime);
-    setTimeout(autoRedirect, intervalTime * 1000);
+      const intervalTime = response || '50';
+      console.info('[nicosapo]intervalTime = ', intervalTime);
+      setTimeout(checkNewCasts, intervalTime * 1000);
   });
 }
 
-const redirectBroadcastPage = (broadcastId) => {
+const redirectToCast = (broadcastId) => {
   const endpoint = 'http://live.nicovideo.jp/watch/';
   const broadcastUrl = endpoint + broadcastId;
   window.location.replace(broadcastUrl);
