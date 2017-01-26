@@ -222,32 +222,6 @@ export default class Napi {
     });
   }
 
-  static getStatusByBroadcast(broadcastId) {
-    return new Promise((resolve, reject) => {
-      Napi.getStatus(broadcastId).then((response) => {
-        if (response) {
-          resolve(response);
-        }
-        else {
-          reject();
-        }
-      });
-    });
-  }
-
-  static getStatusByCommunity(communityId) {
-    return new Promise((resolve, reject) => {
-      Napi.getStatus(communityId).then((response) => {
-        if (response) {
-          response.communityId = response.param;
-          resolve(response);
-        } else {
-          reject();
-        }
-      });
-    });
-  }
-
   static getStatus(param) {
     parameter_nicovideojs.push(param);
     return new Promise((resolve) => {
@@ -261,84 +235,30 @@ export default class Napi {
     });
   }
 
-  static isOffAir(broadcastId) {
-    const theBroadcastId = broadcastId;
-    return new Promise((resolve, reject) => {
-      Napi.getStatusByBroadcast(broadcastId).then((response) => {
+  /**
+   * @param <string> requestId apiに渡すパラメータ
+   *   e.g. 'lv9999999', 'co9999999', 'ch9999999'
+   */
+  static isOpen(requestId) {
+    const theRequestId = requestId;
+    return new Promise((resolve) => {
+      Napi.getStatus(requestId).then((response) => {
         const errorCode = $(response).find('error code').text();
-        // OFFAIR or ERROR.
-        if (errorCode && (errorCode !== 'require_community_member')) {
-          switch (errorCode) {
-          case 'comingsoon':
-            console.log(`${theBroadcastId}  is COMINGSOON`);
-            response.isOffAir = true;
-            break;
-          case 'premium_only':
-            console.log(`${theBroadcastId} is PREMIUMONLY`);
-            response.isOffAir = true;
-            break;
-          case 'closed':
-            console.log(`${theBroadcastId} is OFFAIR`);
-            response.isOffAir = true;
-            break;
-          case 'error':
-            console.log(`${theBroadcastId} is ERROR`);
-            reject();
-            return;
+        if (!errorCode || ((errorCode === 'require_community_member'))) {
+          const $response = $(response);
+          const endTime = $response.find('end_time').text();
+          if (Date.now() < `${endTime}000`) {
+            const liveId = $response.find('stream id').text();
+            console.log(`${theRequestId} is ONAIR`);
+            response.isOpen = true;
+            response.nextLiveId = liveId;
           }
         } else {
-          // ONAIR.
-          response.isOffAir = false;
-          const broadcastId = $(response).find('stream id').text();
-          console.log(`${broadcastId} is ONAIR`);
+          console.log(`${theRequestId} is OFFAIR or ERROR`);
+          response.isOpen = true;
         }
+        response.requestId = theRequestId;
         resolve(response);
-      });
-    });
-  }
-
-  static isStartedBroadcast(communityId) {
-    const theCommunityId = communityId;
-    return new Promise((resolve, reject) => {
-      Napi.getStatusByCommunity(theCommunityId).then((response) => {
-        const errorCode = $(response).find('error code').text();
-        const result = {
-          isStarted: undefined,
-          nextBroadcastId: undefined,
-          communityId: undefined
-        };
-        result.communityId = response.communityId;
-        // OFFAIR or ERROR.
-        if (errorCode) {
-          switch (errorCode) {
-          case 'comingsoon':
-            console.log(`${result.communityId} is STATE==COMINGSOON`);
-            resolve(true);
-            return;
-          case 'closed':
-            console.log(`${result.communityId} is STATE==NOT_READY`);
-            result.isStarted = false;
-            resolve(result);
-            return;
-          case 'error':
-            console.log(`${result.communityId} is STATE==ERROR`);
-            reject();
-            return;
-          }
-        }
-        // OFFAIR or ONAIR.
-        const $response = $(response);
-        const endTime = $response.find('end_time').text();
-        const liveId = $response.find('stream id').text();
-        if (Date.now() < `${endTime}000`) {
-          console.log(`${liveId} is STATE==OPEN`);
-          result.isStarted = true;
-          result.nextBroadcastId = $(response).find('stream id').text();
-        } else {
-          console.log(`${result.communityId} is STATE==NOT_READY`);
-          result.isStarted = false;
-        }
-        resolve(result);
       });
     });
   }

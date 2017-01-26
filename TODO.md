@@ -5,3 +5,4 @@
 - 'use strict'
 - isStartedBroadcast()とisOffAir()の整理
 - Napi -> Api
+- 不要なフォントを削除する

@@ -27,7 +27,7 @@ export default class ExtendedBar {
   }
 
   setUp() {
-    Napi.getStatusByBroadcast(idHolder.liveId).then((response) => {
+    Napi.getStatus(idHolder.liveId).then((response) => {
       // Extended Bar.
       const currentTime = Date.now();
       const currentDate = new Date(currentTime);

@@ -96,14 +96,14 @@ $(() => {
 const checkNewCasts = () => {
   if (autoRedirectButton.isToggledOn()) {
     console.log(`${idHolder.liveId} is enabled auto redirect.`);
-    Napi.isOffAir(idHolder.liveId).then((response) => {
-      if (!response.isOffAir) { // ONAIR
+    Napi.isOpen(idHolder.liveId).then((response) => {
+      if (response.isOpen) { // ONAIR
         _page.updateExtendedBar(response);
       } else {
         _page.invalidateExtendedBar();
-        Napi.isStartedBroadcast(idHolder.communityId).then((response) => { // OFFAIR
-          if (response.isStarted) {
-            redirectToCast(response.nextBroadcastId);
+        Napi.isOpen(idHolder.communityId).then((response) => { // OFFAIR
+          if (response.isOpen) {
+            redirectToCast(response.nextLiveId);
           }
         });
       }
