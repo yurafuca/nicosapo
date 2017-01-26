@@ -255,7 +255,7 @@ export default class Napi {
           }
         } else {
           console.log(`${theRequestId} is OFFAIR or ERROR`);
-          response.isOpen = true;
+          response.isOpen = false;
         }
         response.requestId = theRequestId;
         resolve(response);
