@@ -78,7 +78,7 @@ $(() => {
     });
   });
 
-  $(document).on('click', '.btn-danger', () => {
+  $(document).on('click', '.btn-danger', function() {
     const id = $(this).attr('data-id');
     const type = $(this).attr('data-type');
     const keys = {
@@ -114,39 +114,31 @@ $(() => {
           `);
       $('.listgroup-program').append(subscribe);
     }
-    // alert((Date.parse(response[id]['openDate'])));
     for (const id in response) {
-      const subscribe = $(`
-              <div class="listgroup-item clearfix">
-                <div class="nudge-down BtnGroup float-right">
-                  <a href="#" class="btn btn-sm btn-danger BtnGroup-item" rel="facebox">削除</a>
-                </div>
-                <div class="list-group-text-block float-left">
-                  <img alt="" class="avatar" height="40" src="" width="40">
-                  <span class="meta-title">
-                    <a href="" target="_blank" class="developer-app-name">title</a>
-                  </span>
-                  <span class="meta-description text-small text-gray">
-                    ---
-                  </span>
-                </div>
-              </div>
-          `);
-      $(subscribe).find('.id').text(id);
-      $(subscribe).find('.developer-app-name').text(response[id]['title']);
-      $(subscribe).find('.developer-app-name').attr({
-        href: `http://live.nicovideo.jp/gate/${id}`
-      });
-      $(subscribe).find('.list-group-text-block img').attr({
-        src: response[id]['thumbnail']
-      });
-      $(subscribe).find('.meta-description').html(
-        `${Date.parse(response[id]['openDate']) < Date.now()}openDate: ${Time.toJpnString(Date.parse(response[id]['openDate']))}${(Date.parse(response[id]['openDate']) < Date.now()) ? '<span class="ended"> ⛔ この番組は終了しました</span>' : ''}`
-      );
-      $(subscribe).find('.btn-danger').attr('data-id', id);
-      $(subscribe).find('.btn-danger').attr('data-type', 'program');
-      // $(subscribe).find('.meta-description').html(response[id]['openDate'] + ' · Owned by <a href="' + response[id]['communityId'] + '">' + response[id]['communityName'] + '</a>');
-      $('.listgroup-program').append(subscribe);
+      const $subscribe = $(`
+          <div class="listgroup-item clearfix">
+            <div class="nudge-down BtnGroup float-right">
+              <a href="#" class="btn btn-sm btn-danger BtnGroup-item" rel="facebox">削除</a>
+            </div>
+            <div class="list-group-text-block float-left">
+              <img alt="" class="avatar" height="40" src="" width="40">
+              <span class="meta-title">
+                <a href="" target="_blank" class="developer-app-name">title</a>
+              </span>
+              <span class="meta-description text-small text-gray">
+                ---
+              </span>
+            </div>
+          </div>
+      `);
+      $subscribe.find('.id').text(id);
+      $subscribe.find('.developer-app-name').text(response[id]['title']);
+      $subscribe.find('.developer-app-name').attr({ href: `http://live.nicovideo.jp/gate/${id}` });
+      $subscribe.find('.list-group-text-block img').attr({ src: response[id]['thumbnail']});
+      $subscribe.find('.meta-description').html(`${Date.parse(response[id]['openDate']) < Date.now()}openDate: ${Time.toJpnString(Date.parse(response[id]['openDate']))}${(Date.parse(response[id]['openDate']) < Date.now()) ? '<span class="ended"> ⛔ この番組は終了しました</span>' : ''}`);
+      $subscribe.find('.btn-danger').attr('data-id', id);
+      $subscribe.find('.btn-danger').attr('data-type', 'program');
+      $('.listgroup-program').append($subscribe);
     }
   });
 
@@ -157,15 +149,14 @@ $(() => {
     console.info('[nicosapo][getFromNestedLocalStorage] response = ', response);
     if ($.isEmptyObject(response)) {
       const subscribe = $(`
-              <div class="listgroup-item clearfix">
-                  <span>アイテムがありません</span>
-              </div>
-          `);
+          <div class="listgroup-item clearfix">
+              <span>アイテムがありません</span>
+          </div>
+      `);
       $('.listgroup-community').append(subscribe);
     }
-    // alert((Date.parse(response[id]['openDate'])));
     for (const id in response) {
-      const subscribe = $(`
+      const $subscribe = $(`
               <div class="listgroup-item clearfix">
                 <div class="nudge-down BtnGroup float-right">
                   <a href="#" class="btn btn-sm btn-danger BtnGroup-item" rel="facebox">削除</a>
@@ -181,19 +172,14 @@ $(() => {
                 </div>
               </div>
           `);
-      $(subscribe).find('.id').text(id);
-      $(subscribe).find('.developer-app-name').text(response[id]['title']);
-      $(subscribe).find('.developer-app-name').attr({
-        href: `http://com.nicovideo.jp/community/${id}`
-      });
-      $(subscribe).find('.list-group-text-block img').attr({
-        src: response[id]['thumbnail']
-      });
-      $(subscribe).find('.meta-description').html(response[id]['owner']);
-      $(subscribe).find('.btn-danger').attr('data-id', id);
-      $(subscribe).find('.btn-danger').attr('data-type', 'community');
-      // $(subscribe).find('.meta-description').html(response[id]['openDate'] + ' · Owned by <a href="' + response[id]['communityId'] + '">' + response[id]['communityName'] + '</a>');
-      $('.listgroup-community').append(subscribe);
+      $subscribe.find('.id').text(id);
+      $subscribe.find('.developer-app-name').text(response[id]['title']);
+      $subscribe.find('.developer-app-name').attr({ href: `http://com.nicovideo.jp/community/${id}` });
+      $subscribe.find('.list-group-text-block img').attr({ src: response[id]['thumbnail'] });
+      $subscribe.find('.meta-description').html(response[id]['owner']);
+      $subscribe.find('.btn-danger').attr('data-id', id);
+      $subscribe.find('.btn-danger').attr('data-type', 'community');
+      $('.listgroup-community').append($subscribe);
     }
   });
 });

@@ -148,7 +148,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.purpose == 'removeFromNestedLocalStorage') {
     let storagedData = {};
     if (localStorage.getItem(request.key)) {
-      storagedData = JSON.parse(JSON.parse(localStorage.getItem(request.key)));
+      storagedData = JSON.parse(localStorage.getItem(request.key));
     }
     console.info('[nicosapo] Delete storagedData[innerKey] ', storagedData[request.innerKey]);
     delete storagedData[request.innerKey];
@@ -300,10 +300,10 @@ const setBadgeText = (value) => {
 const removeReservation = ($videoInfos) => {
   const result = [];
   console.info($videoInfos);
-  $.each($($videoInfos), (index, item) => {
-    const is_reserved = $(item).find('video is_reserved').text();
+  $.each($videoInfos, (index, $item) => {
+    const is_reserved = $item.find('video is_reserved').text();
     if (is_reserved == 'false') {
-      result.push(item);
+      result.push($item);
     }
   });
   console.info(result);

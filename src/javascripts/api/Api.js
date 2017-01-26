@@ -4,10 +4,10 @@ const parameter_nicovideojs = [];
 
 export default class Napi {
   isLogined() {
-    var promise = new Promise((resolve, reject) => {
-      var posting = $.post("http://www.nicovideo.jp/api/mylistgroup/list", function (response) {
-        var status = $(response).attr('status');
-        console.log(status);
+    return new Promise((resolve, reject) => {
+      const endpoint = 'http://www.nicovideo.jp/api/mylistgroup/list';
+      $.post(endpoint, (response) => {
+        const status = $(response).attr('status');
         switch (status) {
         case 'ok':
           resolve(true);
@@ -18,18 +18,18 @@ export default class Napi {
         }
       }, 'json');
     });
-    return promise;
   }
 
   static getSessionId() {
-    var promise = new Promise((resolve, reject) => {
-      var posting = $.post("http://api.ce.nicovideo.jp/api/v1/session.create", {});
-      posting.done(function (data) {
-        var status = $(data).find('nicovideo_user_response').attr('status');
+    return new Promise((resolve, reject) => {
+      const endpoint = 'http://api.ce.nicovideo.jp/api/v1/session.create';
+      $.post(endpoint, (response) => {
+        const status = $(response).find('nicovideo_user_response').attr('status');
+        console.info('response = ', response);
+        let sessionId;
         switch (status) {
-        case "ok":
-          var sessionId = $(data).find('session').text();
-          console.info('session: ' + sessionId);
+        case 'ok':
+          sessionId = $(response).find('session').text();
           resolve(sessionId);
           break;
         case "fail":
@@ -38,23 +38,18 @@ export default class Napi {
         }
       });
     });
-    return promise;
   }
 
   static loadCasts(liveType) {
-    return new Promise(function (resolve, reject) {
-      console.info('[nicosapo][Broadcasts.loadAnyBroadcasts] liveType = ', liveType);
+    return new Promise((resolve, reject) => {
       if (liveType == 'user') {
-        Napi.getSubscribe_2().then(
-          function ($videoInfos) {
-            console.info($videoInfos);
-            resolve($videoInfos);
-          }
-        ).catch(reject);
+        Napi.getSubscribe_2().then(($videoInfos) => {
+          console.info($videoInfos);
+          resolve($videoInfos);
+        }).catch(reject);
       }
       if (liveType == 'official') {
-        // return Napi.getOfficialOnair();
-        Napi.getOfficialOnair().then(function (official_lives) {
+        Napi.getOfficialOnair().then((official_lives) => {
           console.info(official_lives);
           resolve(official_lives);
         });
@@ -70,46 +65,43 @@ export default class Napi {
 
   // 有料限定∧公式チャンネル の情報が含まれない
   static getSubscribe(sessionId) {
-    var promise = new Promise((resolve, reject) => {
-      var dummy = Math.floor(Math.random() * 1000);
-      var request = $.ajax({
-        url: "http://api.ce.nicovideo.jp/liveapi/v1/user.subscribe?__context=" + Math.floor(Math.random() * 1000),
-        method: "POST",
-        dataType: "xml",
+    return new Promise((resolve, reject) => {
+      const endpoint = 'http://api.ce.nicovideo.jp/liveapi/v1/user.subscribe?__context=';
+      const request = $.ajax({
+        url: endpoint + Math.floor(Math.random() * 1000),
+        method: 'POST',
+        dataType: 'xml',
         headers: {
-          "x-nicovita-session": sessionId
+          'x-nicovita-session': sessionId
         }
       });
-      request.done(function (videoInfos) {
+      request.done((videoInfos) => {
         resolve(videoInfos);
       });
-      request.fail(function (jqXHR, textStatus) {
-        reject(new Error('Request failed: ' + textStatus));
+      request.fail((jqXHR, textStatus) => {
+        reject(new Error(`Request failed: ${textStatus}`));
       });
     });
-    return promise;
   }
 
   // 有料限定∧公式チャンネル の情報が含まれない
   static getSubscribe_2() {
-    var promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
+      const endpoint = 'http://live.nicovideo.jp/my';
+      $.post(endpoint, (response) => {
+        const $html = $(response);
+        const subscribes = $html.find("[id$=subscribeItemsWrap] > .liveItems > [class^='liveItem']");
+        const reserved = $html.find("[id$=subscribeReservedItemsWrap] > .liveItems > [class^='liveItem']");
 
-      var posting = $.post("http://live.nicovideo.jp/my");
-
-      posting.done(function (response) {
-        const htmlContent = $(response);
-        const subscribes = htmlContent.find("[id$=subscribeItemsWrap] > .liveItems > [class^='liveItem']");
-        const reserved = htmlContent.find("[id$=subscribeReservedItemsWrap] > .liveItems > [class^='liveItem']");
-
-        $.each($(reserved), function (index, item) {
+        $.each($(reserved), (index, item) => {
           item.is_reserved = true;
         });
 
         $.merge(subscribes, reserved);
 
-        let videoInfos = [];
+        const videoInfos = [];
 
-        $.each($(subscribes), function (index, item) {
+        $.each($(subscribes), (index, item) => {
 
           const video_title = $(item).find('a').first().attr('title');
           const video_url = $(item).find('a').first().attr('href');
@@ -123,7 +115,7 @@ export default class Napi {
 
           const community_thumbnail_base = img.attr('src').match(/http\:\/\/icon.nimg.jp\/(channel|community)\//)[0];
           const community_id = img.attr('src').match(/(ch|co)\d+/)[0];
-          const community_thumbnail = community_thumbnail_base + community_id + '.jpg';
+          const community_thumbnail = `${community_thumbnail_base}${community_id}.jpg`;
 
           const video_open_time_jpstr = $(item).find('strong').first().text();
 
@@ -181,22 +173,21 @@ export default class Napi {
       });
 
     });
-
-    return promise;
   }
 
 
   static getCheckList() {
-    var promise = new Promise((resolve, reject) => {
-      let endpoint = "http://flapi.nicovideo.jp/api/getchecklist";
-      let posting = $.get(endpoint);
+    return new Promise((resolve, reject) => {
+      const endpoint = "http://flapi.nicovideo.jp/api/getchecklist";
+      const posting = $.get(endpoint);
       // I dont know why "posting" calls fail(), not done().
-      posting.fail(function (data) {
-        let text = $.parseJSON(data.responseText);
-        var status = text.status;
+      posting.fail((data) => {
+        const text = $.parseJSON(data.responseText);
+        const status = text.status;
+        let checkList = '';
         switch (status) {
         case "OK":
-          var checkList = text.community_id;
+          checkList = text.community_id;
           resolve($(checkList));
           break;
         default:
@@ -205,49 +196,48 @@ export default class Napi {
         }
       });
     });
-    return promise;
   }
 
   static getFutureOnair(index) {
-    var promise = new Promise((resolve, reject) => {
-      let endpoint = "http://live.nicovideo.jp/api/getindexzerostreamlist?status=comingsoon&sort=timeshift_reserved_count&zpage=";
-      let posting = $.get(endpoint + index);
-      posting.done(function (response) {
+    return new Promise((resolve) => {
+      const endpoint = "http://live.nicovideo.jp/api/getindexzerostreamlist?status=comingsoon&sort=timeshift_reserved_count&zpage=";
+      const posting = $.get(endpoint + index);
+      posting.done((response) => {
         const feature_lives = response['reserved_stream_list'];
         if (feature_lives) {
           resolve(feature_lives);
         }
       });
     });
-    return promise;
   }
 
   static getOfficialOnair() {
-    var promise = new Promise((resolve, reject) => {
-      let endpoint = "http://live.nicovideo.jp/ranking?type=onair&main_provider_type=official";
-      let posting = $.get(endpoint);
-      posting.done(function (response) {
-        let official_lives = $(response).find('.ranking_video');
+    return new Promise((resolve) => {
+      const endpoint = "http://live.nicovideo.jp/ranking?type=onair&main_provider_type=official";
+      const posting = $.get(endpoint);
+      posting.done((response) => {
+        const official_lives = $(response).find('.ranking_video');
         resolve(official_lives);
       });
     });
-    return promise;
   }
 
   static getStatusByBroadcast(broadcastId) {
     return new Promise((resolve, reject) => {
-      Napi.getStatus(broadcastId).then(function (response) {
-        if (response)
+      Napi.getStatus(broadcastId).then((response) => {
+        if (response) {
           resolve(response);
-        else
+        }
+        else {
           reject();
+        }
       });
     });
   }
 
   static getStatusByCommunity(communityId) {
     return new Promise((resolve, reject) => {
-      Napi.getStatus(communityId).then(function (response) {
+      Napi.getStatus(communityId).then((response) => {
         if (response) {
           response.communityId = response.param;
           resolve(response);
@@ -260,12 +250,11 @@ export default class Napi {
 
   static getStatus(param) {
     parameter_nicovideojs.push(param);
-    return new Promise((resolve, reject) => {
-      const endpoint = "http://watch.live.nicovideo.jp/api/getplayerstatus?v=";
-      const posting = $.get(endpoint + param);
+    return new Promise((resolve) => {
+      const endpoint = 'http://watch.live.nicovideo.jp/api/getplayerstatus?v=';
       const parameter = parameter_nicovideojs.shift();
-      posting.done((response) => {
-        let status = $(response).find('getplayerstatus').attr('status');
+      $.get(endpoint + param, (response) => {
+        // const status = $(response).find('getplayerstatus').attr('status');
         response.param = parameter;
         resolve(response);
       });
@@ -275,25 +264,25 @@ export default class Napi {
   static isOffAir(broadcastId) {
     const theBroadcastId = broadcastId;
     return new Promise((resolve, reject) => {
-      Napi.getStatusByBroadcast(broadcastId).then(function (response) {
+      Napi.getStatusByBroadcast(broadcastId).then((response) => {
         const errorCode = $(response).find('error code').text();
         // OFFAIR or ERROR.
         if (errorCode && (errorCode !== 'require_community_member')) {
           switch (errorCode) {
           case 'comingsoon':
-            console.log(theBroadcastId + ' is COMINGSOON');
+            console.log(`${theBroadcastId}  is COMINGSOON`);
             response.isOffAir = true;
             break;
           case 'premium_only':
-            console.log(theBroadcastId + ' is PREMIUMONLY');
+            console.log(`${theBroadcastId} is PREMIUMONLY`);
             response.isOffAir = true;
             break;
           case 'closed':
-            console.log(theBroadcastId + ' is OFFAIR');
+            console.log(`${theBroadcastId} is OFFAIR`);
             response.isOffAir = true;
             break;
           case 'error':
-            console.log(theBroadcastId + ' is ERROR.');
+            console.log(`${theBroadcastId} is ERROR`);
             reject();
             return;
           }
@@ -301,7 +290,7 @@ export default class Napi {
           // ONAIR.
           response.isOffAir = false;
           const broadcastId = $(response).find('stream id').text();
-          console.log(broadcastId + ' is ONAIR');
+          console.log(`${broadcastId} is ONAIR`);
         }
         resolve(response);
       });
@@ -311,7 +300,7 @@ export default class Napi {
   static isStartedBroadcast(communityId) {
     const theCommunityId = communityId;
     return new Promise((resolve, reject) => {
-      Napi.getStatusByCommunity(theCommunityId).then(function (response) {
+      Napi.getStatusByCommunity(theCommunityId).then((response) => {
         const errorCode = $(response).find('error code').text();
         const result = {
           isStarted: undefined,
@@ -323,28 +312,30 @@ export default class Napi {
         if (errorCode) {
           switch (errorCode) {
           case 'comingsoon':
-            console.log(result.communityId + ' is STATE==COMINGSOON');
+            console.log(`${result.communityId} is STATE==COMINGSOON`);
             resolve(true);
             return;
           case 'closed':
-            console.log(result.communityId + ' is STATE==NOT_READY');
+            console.log(`${result.communityId} is STATE==NOT_READY`);
             result.isStarted = false;
             resolve(result);
             return;
           case 'error':
-            console.log(result.communityId + ' is STATE==ERROR.');
+            console.log(`${result.communityId} is STATE==ERROR`);
             reject();
             return;
           }
         }
         // OFFAIR or ONAIR.
-        const endTime = $(response).find('end_time').text();
-        if (Date.now() < (endTime + '000')) {
-          console.log($(response).find('stream id').text() + ' is STATE==OPEN.');
+        const $response = $(response);
+        const endTime = $response.find('end_time').text();
+        const liveId = $response.find('stream id').text();
+        if (Date.now() < `${endTime}000`) {
+          console.log(`${liveId} is STATE==OPEN`);
           result.isStarted = true;
           result.nextBroadcastId = $(response).find('stream id').text();
         } else {
-          console.log(result.communityId + ' is STATE==NOT_READY.');
+          console.log(`${result.communityId} is STATE==NOT_READY`);
           result.isStarted = false;
         }
         resolve(result);
