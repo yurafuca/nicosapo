@@ -1,5 +1,5 @@
 import $ from 'jquery'
-import Napi from "../api/Api";
+import Api from "../api/Api";
 import Time from "../common/Time";
 import TimeCounter from "../common/TimeCounter";
 import IdHolder from "../modules/IdHolder";
@@ -27,7 +27,7 @@ export default class ExtendedBar {
   }
 
   setUp() {
-    Napi.getStatus(idHolder.liveId).then((response) => {
+    Api.getStatus(idHolder.liveId).then((response) => {
       // Extended Bar.
       const currentTime = Date.now();
       const currentDate = new Date(currentTime);

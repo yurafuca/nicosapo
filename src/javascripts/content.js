@@ -1,7 +1,6 @@
-
 import $ from 'jquery';
 
-import Napi from "./api/Api";
+import Api from "./api/Api";
 
 import FormatNicoPage from "./modules/FormatNicoPage";
 import IdHolder from "./modules/IdHolder";
@@ -92,18 +91,19 @@ $(() => {
   });
 });
 
-// TODO: Rename.
 const checkNewCasts = () => {
   if (autoRedirectButton.isToggledOn()) {
     console.log(`${idHolder.liveId} is enabled auto redirect.`);
-    Napi.isOpen(idHolder.liveId).then((response) => {
-      if (response.isOpen) { // ONAIR
+    Api.isOpen(idHolder.liveId).then((response) => {
+      if (response.isOpen) {
+        // OPENED
         _page.updateExtendedBar(response);
       } else {
+        // CLOSED
         _page.invalidateExtendedBar();
-        Napi.isOpen(idHolder.communityId).then((response) => { // OFFAIR
+        Api.isOpen(idHolder.communityId).then((response) => {
           if (response.isOpen) {
-            redirectToCast(response.nextLiveId);
+            goToCast(response.nextLiveId);
           }
         });
       }
@@ -122,8 +122,8 @@ const checkNewCasts = () => {
   });
 }
 
-const redirectToCast = (broadcastId) => {
-  const endpoint = 'http://live.nicovideo.jp/watch/';
-  const broadcastUrl = endpoint + broadcastId;
-  window.location.replace(broadcastUrl);
+const goToCast = (liveId) => {
+  const baseUrl = 'http://live.nicovideo.jp/watch/';
+  const liveUrl = baseUrl + liveId;
+  window.location.replace(liveUrl);
 }

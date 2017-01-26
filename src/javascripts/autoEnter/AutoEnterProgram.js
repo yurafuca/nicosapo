@@ -1,17 +1,17 @@
-import Napi from '../api/Api';
+import Api from '../api/Api';
 
 const _listKey = 'autoEnterProgramList';
 const _notificationTitle = '自動入場（番組）';
 
 export default class AutoEnterProgram {
   exec(id) {
-    Napi.isOpen(id).then((response) => {
+    Api.isOpen(id).then((response) => {
       if (response.isOpen) {
-        let storagedData = {};
-        if (localStorage.getItem(_listKey)) {
-          storagedData = JSON.parse(localStorage.getItem(_listKey));
-        }
-        chrome.tabs.create({ url: `http://live.nicovideo.jp/watch/${id}` }, () => {
+        chrome.tabs.create({ url: `http://live.nicovideo.jp/watch/${response.nextLiveId}` }, () => {
+          let storagedData = {};
+          if (localStorage.getItem(_listKey)) {
+            storagedData = JSON.parse(localStorage.getItem(_listKey));
+          }
           const options = {
             type: 'basic',
             title: _notificationTitle,

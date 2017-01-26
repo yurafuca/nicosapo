@@ -2,7 +2,7 @@ import $ from 'jquery';
 
 const parameter_nicovideojs = [];
 
-export default class Napi {
+export default class Api {
   isLogined() {
     return new Promise((resolve, reject) => {
       const endpoint = 'http://www.nicovideo.jp/api/mylistgroup/list';
@@ -43,19 +43,19 @@ export default class Napi {
   static loadCasts(liveType) {
     return new Promise((resolve, reject) => {
       if (liveType == 'user') {
-        Napi.getSubscribe_2().then(($videoInfos) => {
+        Api.getSubscribe_2().then(($videoInfos) => {
           console.info($videoInfos);
           resolve($videoInfos);
         }).catch(reject);
       }
       if (liveType == 'official') {
-        Napi.getOfficialOnair().then((official_lives) => {
+        Api.getOfficialOnair().then((official_lives) => {
           console.info(official_lives);
           resolve(official_lives);
         });
       }
       // if (liveType == 'future') {
-      //     Napi.getFutureOnair().then(function(future_lives) {
+      //     Api.getFutureOnair().then(function(future_lives) {
       //         console.info(future_lives);
       //         resolve(future_lives);
       //     });
@@ -242,16 +242,16 @@ export default class Napi {
   static isOpen(requestId) {
     const theRequestId = requestId;
     return new Promise((resolve) => {
-      Napi.getStatus(requestId).then((response) => {
+      Api.getStatus(requestId).then((response) => {
         const errorCode = $(response).find('error code').text();
-        if (!errorCode || ((errorCode === 'require_community_member'))) {
+        if (!errorCode || (errorCode === 'require_community_member')) {
           const $response = $(response);
           const endTime = $response.find('end_time').text();
           if (Date.now() < `${endTime}000`) {
-            const liveId = $response.find('stream id').text();
             console.log(`${theRequestId} is ONAIR`);
-            response.isOpen = true;
+            const liveId = $response.find('stream id').text();
             response.nextLiveId = liveId;
+            response.isOpen = true;
           }
         } else {
           console.log(`${theRequestId} is OFFAIR or ERROR`);

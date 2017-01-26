@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import 'jquery-powertip';
 import Common from "./common/Common";
-import Napi from "./api/Api";
+import Api from "./api/Api";
 
 class Massages {
   static show(type) {
@@ -47,13 +47,13 @@ $(() => {
 const renderCasts = (liveType) => {
   Promise.resolve()
     .then(Loading.start)
-    .then(Napi.isLogined)
+    .then(Api.isLogined)
     .catch(() => {
       Loading.done();
       Massages.show('NOT_LOGINED');
       // reject();
     })
-    .then(() => Napi.loadCasts(liveType))
+    .then(() => Api.loadCasts(liveType))
     .then(($videoInfos) => showAsThumbnailDoms($videoInfos, liveType))
     .then(Loading.done);
 

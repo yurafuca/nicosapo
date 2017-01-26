@@ -1,9 +1,10 @@
-import $ from 'jquery'
+import $ from 'jquery';
 import NewArrival from "./modules/NewArrival";
 import CommunityHolder from "./modules/CommunityHolder";
-import Napi from "./api/Api";
+import Api from "./api/Api";
 import Common from "./common/Common";
 import AutoEnterRunner from './autoEnter/AutoEnterRunner'
+import './chrome/runtime.onMessage';
 
 const communityHolder = new CommunityHolder();
 const newArrival = new NewArrival();
@@ -41,9 +42,9 @@ const initAutoEnterCommunityList = () => {
 
 const refreshBadgeAndDB = () => {
   Promise.resolve()
-    .then(Napi.isLogined)
+    .then(Api.isLogined)
     .catch(() => { setBadgeText('x'); })
-    .then(() => Napi.loadCasts('user'))
+    .then(() => Api.loadCasts('user'))
     .then(($videoInfos) => {
       setBadgeText(removeReservation($videoInfos).length);
       $.each(newArrival.get($videoInfos), (index, $infos) => {
@@ -51,18 +52,18 @@ const refreshBadgeAndDB = () => {
           // $infos is a followed community by a user as NEWLY.
           // Do nothing.
         } else {
-          if (Common.enabledOrNull(localStorage.getItem('options.playsound.enable'))) {
-            const soundFile = localStorage.getItem('options.soundfile') || 'ta-da.mp3';
-            const volume    = localStorage.getItem('options.playsound.volume') || 1.0;
-            const audio     = new Audio(`sounds/${soundFile}`);
-            audio.volume    = volume;
-            audio.play();
-          }
-          if (Common.enabledOrNull(localStorage.getItem('options.popup.enable'))) {
-            const communityId = `co${$infos.find('community id').text()}`; // co[0-9]+
-            const liveId = $infos.find('video id').text(); // lv[0-9]+
-            if (!existsInAutoLists(communityId, liveId)) {
-              // A new broadCast will be show in a notification later.
+          const communityId = `co${$infos.find('community id').text()}`; // co[0-9]+
+          const liveId = $infos.find('video id').text(); // lv[0-9]+
+          if (!existsInAutoLists(communityId, liveId)) {
+            // A new broadCast will be show in a notification later.
+            if (Common.enabledOrNull(localStorage.getItem('options.playsound.enable'))) {
+              const soundFile = localStorage.getItem('options.soundfile') || 'ta-da.mp3';
+              const volume    = localStorage.getItem('options.playsound.volume') || 1.0;
+              const audio     = new Audio(`sounds/${soundFile}`);
+              audio.volume    = volume;
+              audio.play();
+            }
+            if (Common.enabledOrNull(localStorage.getItem('options.popup.enable'))) {
               showNotification($infos);
             }
           }
@@ -71,7 +72,7 @@ const refreshBadgeAndDB = () => {
       newArrival.setSource($videoInfos);
     });
   // Get a list of following communities.
-  Napi.getCheckList().then((idList) => {
+  Api.getCheckList().then((idList) => {
     communityHolder.setSource(idList);
   });
 }
@@ -97,62 +98,6 @@ const existsInAutoLists = (communityId, liveId) => {
   }
   return false;
 }
-
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if (request.purpose == 'getFromLocalStorage') {
-    sendResponse(localStorage.getItem(request.key));
-    return;
-  }
-
-  if (request.purpose == 'saveToLocalStorage') {
-    localStorage.setItem(request.key, request.value);
-    return;
-  }
-
-  if (request.purpose == 'removeFromLocalStorage') {
-    localStorage.removeItem(request.key);
-    return;
-  }
-
-  if (request.purpose == 'getFromNestedLocalStorage') {
-    let storagedData = {};
-    if (localStorage.getItem(request.key)) {
-      storagedData = JSON.parse(localStorage.getItem(request.key));
-    }
-    sendResponse(storagedData);
-  }
-
-  // localStorage->{id->{state, test, ...}, id->{state, test, ...}}
-  if (request.purpose == 'saveToNestedLocalStorage') {
-    let storagedData = {};
-    if (localStorage.getItem(request.key)) {
-      storagedData = JSON.parse(localStorage.getItem(request.key));
-    }
-    storagedData[request.innerKey] = {};
-    storagedData[request.innerKey].state = request.innerValue.state;
-    storagedData[request.innerKey].thumbnail = request.innerValue.thumbnail;
-    storagedData[request.innerKey].title = request.innerValue.title;
-    if (request.innerValue.openDate) {
-      storagedData[request.innerKey].openDate = request.innerValue.openDate;
-    }
-    if (request.innerValue.owner) {
-      storagedData[request.innerKey].owner = request.innerValue.owner;
-    }
-    localStorage.setItem(request.key, JSON.stringify(storagedData));
-    return;
-  }
-
-  if (request.purpose == 'removeFromNestedLocalStorage') {
-    let storagedData = {};
-    if (localStorage.getItem(request.key)) {
-      storagedData = JSON.parse(localStorage.getItem(request.key));
-    }
-    console.info('[nicosapo] Delete storagedData[innerKey] ', storagedData[request.innerKey]);
-    delete storagedData[request.innerKey];
-    localStorage.setItem(request.key, JSON.stringify(storagedData));
-    return;
-  }
-});
 
 const showNotification = (newInfos) => {
   const options = {
