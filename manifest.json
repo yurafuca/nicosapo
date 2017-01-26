@@ -53,6 +53,5 @@
     "options_page": "html/options.html",
     "web_accessible_resources": [
         "images/icon.png",
-        "font/baseballpark.ttf"
     ]
 }
