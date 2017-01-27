@@ -13,9 +13,8 @@ export default class AutoEnterProgram {
       if (response.isOpen) {
         // OPENED
         const lastState = storagedData[response.requestId].state;
-        if (['onair', 'init'].includes(lastState)) {
-          storagedData[response.requestId].state = 'offair';
-        } else if (['offair'].includes(lastState)) {
+        if (lastState === 'offair') {
+          storagedData[response.requestId].state = 'onair';
           chrome.tabs.create({ url: `http://live.nicovideo.jp/watch/${id}` }, () => {
             const options = {
               type: 'basic',
@@ -24,14 +23,16 @@ export default class AutoEnterProgram {
               iconUrl: storagedData[id].thumbnail
             };
             chrome.notifications.create(id, options);
-            storagedData[response.requestId].state = 'onair';
           });
+        } else if (lastState === 'onair' || lastState === 'init') {
+          storagedData[response.requestId].state = 'onair';
         }
       } else {
         // CLOSED
         storagedData[response.requestId].state = 'offair';
       }
       console.info('id = ', response.requestId);
+      localStorage.setItem(_listKey, JSON.stringify(storagedData));
     });
   }
 }

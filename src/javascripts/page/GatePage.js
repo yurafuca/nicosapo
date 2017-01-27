@@ -16,7 +16,7 @@ export default class GatePage extends Page {
         purpose: 'getFromNestedLocalStorage',
         key: 'autoEnterProgramList'
       },
-      function (response) {
+      (response) => {
         if (response[idHolder.liveId]) {
           autoEnterProgramButton.toggleOn();
         } else {

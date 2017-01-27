@@ -80,7 +80,7 @@ export default class AutoEnterProgramButton extends Buttons {
     let owner; // Required for Community only.
 
     Storage.saveToNestedLocalStorage('autoEnterProgramList', id, {
-      state: 'initialized',
+      state: 'init',
       thumbnail: thumbnail,
       title: title,
       openDate: openDate,

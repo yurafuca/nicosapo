@@ -16,7 +16,7 @@ export default class CommunityPage extends Page {
         purpose: 'getFromNestedLocalStorage',
         key: 'autoEnterCommunityList'
       },
-      function (response) {
+      (response) => {
         if (response[idHolder.communityId]) {
           autoEnterCommunityButton.toggleOn();
         } else {

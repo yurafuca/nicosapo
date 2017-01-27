@@ -1,4 +1,4 @@
 ## TODO
 
 - 'use strict'
-- 不要なフォントを削除する
+- balloon.css を powertip に代替できる場合は代替する

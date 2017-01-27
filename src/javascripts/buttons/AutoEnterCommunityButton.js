@@ -100,7 +100,7 @@ export default class AutoEnterCommunityButton extends Buttons {
     console.info(title, owner);
 
     Storage.saveToNestedLocalStorage('autoEnterCommunityList', id, {
-      state: 'initialized',
+      state: 'init',
       thumbnail: thumbnail,
       title: title,
       openDate: openDate,
