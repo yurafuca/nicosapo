@@ -44,13 +44,11 @@ export default class Api {
     return new Promise((resolve, reject) => {
       if (liveType == 'user') {
         Api.getSubscribe_2().then(($videoInfos) => {
-          console.info($videoInfos);
           resolve($videoInfos);
         }).catch(reject);
       }
       if (liveType == 'official') {
         Api.getOfficialOnair().then((official_lives) => {
-          console.info(official_lives);
           resolve(official_lives);
         });
       }

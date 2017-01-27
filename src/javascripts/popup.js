@@ -27,11 +27,11 @@ class Loading {
   }
 }
 
-$(() => {
+$(document).ready(() => {
   renderCasts('user');
 });
 
-$(() => {
+$(document).ready(() => {
   $(document).on('click', '.tab.non-selected', function() {
     $('.tab').removeClass('selected non-selected');
     $('.tab').not(this).addClass('non-selected');
@@ -60,7 +60,6 @@ const renderCasts = (liveType) => {
 }
 
 const showAsThumbnailDoms = ($videoInfos, liveType) => {
-  console.info($videoInfos);
   return new Promise((resolve) => {
     const length = $videoInfos.length;
     const isEnableShowReservedProgram = localStorage.getItem('options.showReserved.enable');
@@ -68,7 +67,6 @@ const showAsThumbnailDoms = ($videoInfos, liveType) => {
       if (!Common.enabledOrNull(isEnableShowReservedProgram) && isReserved($info)) {
         // Do nothing.
       } else {
-        console.info($info);
         const thumbnailDom = createThumbnailDom($info, liveType, length, index);
         $('#communities').append(thumbnailDom);
       }
@@ -186,7 +184,6 @@ const setPowerTip = ($dom, tooltipText, numOfPrograms, currentIndex, programType
     // TODO: Fix.
     const manualPositions = ['se', 's', 's', 's', 'sw'];
     const thePlacement = (currentIndex < 5) ? manualPositions[currentIndex] : 'n';
-    console.log(theOffset);
 
     // TODO: Fix.
     $.fn.powerTip.smartPlacementLists.n = ['n', 's', 'ne', 'nw', 'e', 'w', 'n'];
