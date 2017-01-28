@@ -9,7 +9,7 @@ export default class TimeCounter {
 
   subSecond(second) {
     second = parseInt(second);
-    if (this.second === 0) {
+    if (this.second <= 0) {
       this.second = 59;
       this._subMinute(1);
     } else {
@@ -19,7 +19,7 @@ export default class TimeCounter {
 
   _subMinute(minute) {
     minute = parseInt(minute);
-    if (this.minute === 0) {
+    if (this.minute <= 0) {
       this.minute = 59;
       this._subHour(1);
     } else {
@@ -29,7 +29,7 @@ export default class TimeCounter {
 
   _subHour(hour) {
     hour = parseInt(hour);
-    if (this.hour === 0) {
+    if (this.hour <= 0) {
       this.hour = 0;
     } else {
       this.hour -= parseInt(hour);
