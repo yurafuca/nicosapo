@@ -29,7 +29,11 @@ export default class TimeCounter {
 
   _subHour(hour) {
     hour = parseInt(hour);
-    this.minute -= parseInt(hour);
+    if (this.hour === 0) {
+      this.hour = 0;
+    } else {
+      this.hour -= parseInt(hour);
+    }
   }
 
   // Setter.

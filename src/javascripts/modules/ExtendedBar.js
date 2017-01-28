@@ -38,17 +38,26 @@ export default class ExtendedBar {
 
       const endTimeJpn = Time.toJpnString(endDate.getTime());
 
-      const restTime_Minute = Time.minuteDistance(currentDate, endDate);
-      let restTime_Second = Time.minuteDistanceOfSec(currentDate, endDate);
+      const restTime_Hour = Time.hourDistance(currentDate, endDate);
+      let restTime_Minute = Time.minuteSurplusDistance(currentDate, endDate);
+      let restTime_Second = Time.secondSurplusDistance(currentDate, endDate);
+
+      if (Number(restTime_Hour) > 0) {
+        restTime_Minute = `0${restTime_Minute}`.slice(-2);
+      }
       restTime_Second = `0${restTime_Second}`.slice(-2);
 
       // タイマーを初期化
-      timeCounter.setHour(0);
+      timeCounter.setHour(restTime_Hour);
       timeCounter.setMinute(restTime_Minute);
       timeCounter.setSecond(restTime_Second);
 
       $('#extended-bar .end-time').text(`${endTimeJpn}`);
-      $('#extended-bar .rest-time').text(`${restTime_Minute}：${restTime_Second}`);
+      if (Number(restTime_Hour) > 0) {
+        $('#extended-bar .rest-time').text(`${restTime_Hour}：${restTime_Minute}：${restTime_Second}`);
+      } else {
+        $('#extended-bar .rest-time').text(`${restTime_Minute}：${restTime_Second}`);
+      }
     });
   }
 
@@ -57,10 +66,20 @@ export default class ExtendedBar {
     if ($restTime.text() == '放送が終了しました') { // TODO: Too Ugly.
       return;
     }
-    const minute = timeCounter.getMinute();
+    const hour = timeCounter.getHour();
+    let minute = timeCounter.getMinute();
     let second = timeCounter.getSecond();
+
+    if (Number(hour) > 0) {
+      minute = `0${minute}`.slice(-2);
+    }
     second = `0${second}`.slice(-2);
-    $restTime.text(`${minute}：${second}`);
+
+    if (Number(hour) > 0) {
+      $restTime.text(`${hour}：${minute}：${second}`);
+    } else {
+      $restTime.text(`${minute}：${second}`);
+    }
     timeCounter.subSecond(1);
   }
 
@@ -75,18 +94,27 @@ export default class ExtendedBar {
     const endTimeJpn = Time.toJpnString(endDate.getTime());
     const endTimeJpnLast = $('#extended-bar .end-time').text();
 
-    const restTime_Minute = Time.minuteDistance(currentDate, endDate);
-    let restTime_Second = Time.minuteDistanceOfSec(currentDate, endDate);
+    const restTime_Hour = Time.hourDistance(currentDate, endDate);
+    let restTime_Minute = Time.minuteSurplusDistance(currentDate, endDate);
+    let restTime_Second = Time.secondSurplusDistance(currentDate, endDate);
+
+    if (Number(restTime_Hour) > 0) {
+      restTime_Minute = `0${restTime_Minute}`.slice(-2);
+    }
     restTime_Second = `0${restTime_Second}`.slice(-2);
 
     // 終了時刻が更新された場合はタイマーを更新
     if (endTimeJpnLast !== endTimeJpn) {
-      timeCounter.setHour(0); // TODO:
+      timeCounter.setHour(restTime_Hour);
       timeCounter.setMinute(restTime_Minute);
       timeCounter.setSecond(restTime_Second);
 
       $('#extended-bar .end-time').text(`${endTimeJpn}`);
-      $('#extended-bar .rest-time').text(`${restTime_Minute}：${restTime_Second}`);
+      if (Number(restTime_Hour) > 0) {
+        $('#extended-bar .rest-time').text(`${restTime_Hour}：${restTime_Minute}：${restTime_Second}`);
+      } else {
+        $('#extended-bar .rest-time').text(`${restTime_Minute}：${restTime_Second}`);
+      }
 
       // 点滅処理 (奇数回繰り返してメッセージを残す)
       for (let i = 0; i < 9; i++) {

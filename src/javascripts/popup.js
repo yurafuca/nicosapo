@@ -60,7 +60,7 @@ const renderCasts = (liveType) => {
 }
 
 const showAsThumbnailDoms = ($videoInfos, liveType) => {
-  return new Promise((resolve) => {
+  new Promise((resolve) => {
     const length = $videoInfos.length;
     const isEnableShowReservedProgram = localStorage.getItem('options.showReserved.enable');
     $.each($videoInfos, (index, $info) => {

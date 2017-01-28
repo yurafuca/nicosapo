@@ -43,7 +43,7 @@ export default class Time {
     return parseInt(deltaMillsecond / 1000);
   }
 
-  static minuteDistanceOfSec(src, dst) {
+  static secondSurplusDistance(src, dst) {
     const secDist = Time.secondDistance(src, dst);
     return parseInt(secDist % 60);
   }
@@ -52,4 +52,15 @@ export default class Time {
     const deltaMillsecond = dst.getTime() - src.getTime();
     return parseInt(deltaMillsecond / 1000 / 60);
   }
+
+  static minuteSurplusDistance(src, dst) {
+    const secDist = Time.minuteDistance(src, dst);
+    return parseInt(secDist % 60 % 60);
+  }
+
+  static hourDistance(src, dst) {
+    const deltaMillsecond = dst.getTime() - src.getTime();
+    return parseInt(deltaMillsecond / 1000 / 60 / 60);
+  }
+
 }
