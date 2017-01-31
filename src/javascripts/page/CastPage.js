@@ -43,7 +43,7 @@ export default class CastPage extends Page {
     const minute = remainSec / 60;
     Storage.getItem('options.toast.minList').then((minList) => {
       if (minList == null) {
-        return;
+        minList = [1,3,5];
       }
       if (!minList.includes(minute)) {
         return
