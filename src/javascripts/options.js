@@ -15,6 +15,7 @@ class SettingPage {
     $('input[name=options-toast-minList]:checked').map(function() {
       settings['options.toast.minList'].push($(this).val());
     }).get();
+    settings['options.toast.minList'] = JSON.stringify(settings['options.toast.minList']);
     console.info('[nicosapo][getAllSettings] settings = ', settings);
     return settings;
   }
