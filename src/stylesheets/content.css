@@ -15,6 +15,43 @@
 // For Nicosapo
 */
 
+#nicosapo-toast {
+  font-family: "Lucida Grande","Lucida Sans Unicode","Hiragino","Meiryo","Apple Color Emoji","Segoe UI Emoji","NotoColorEmoji","Segoe UI Symbol","Android Emoji","EmojiSymbols";
+  position: absolute;
+  z-index: 999;
+  top: 79px;
+  left: 25px;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  border-radius: 4px;
+  font-size: 18px;
+  font-weight: 700;
+  padding: 3px 7px 3px 3px;
+  border: solid 1px rgba(255, 255, 255, .3);
+}
+
+#nicosapo-toast-icon {
+    display: inline-block;
+    background-image: url('chrome-extension://__MSG_@@extension_id__/images/icon.png');
+    background-size: 27px;
+    background-repeat: no-repeat;
+    background-position: center;
+    height: 37px;
+    width: 40px;
+    opacity: 0.8 !important;
+    filter: alpha(opacity=80);
+    vertical-align: middle;
+}
+
+#nicosapo-toast-text {
+  opacity: 0.8 !important;
+  position: relative;
+  top: 3px;
+  vertical-align: middle;
+  display: inline-block;
+
+}
+
 .on_off_button {
     display: inline-block;
     text-align: center;

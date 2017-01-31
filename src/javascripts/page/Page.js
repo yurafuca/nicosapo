@@ -1,9 +1,9 @@
 export default class Page {
   putButton() {
-    // Must to be Override.
+    throw new Error('Not Implemented');
   }
 
   setUpButton() {
-    // Must to be Override.
+    throw new Error('Not Implemented');
   }
 }

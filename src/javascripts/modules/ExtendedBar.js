@@ -135,4 +135,8 @@ export default class ExtendedBar {
     $('#extended-bar .end-time').text(`放送が終了しました`);
     $('#extended-bar .rest-time').text(`放送が終了しました`);
   }
+
+  getRemainSec() {
+    return timeCounter.getRemainSec();
+  }
 }

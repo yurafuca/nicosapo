@@ -1,17 +1,15 @@
 import $ from 'jquery'
-import Page from '../page/Page';
+import CastPage from '../page/CastPage';
 import AutoRedirectButton from "../buttons/AutoRedirectButton";
 import AutoEnterCommunityButton from "../buttons/AutoEnterCommunityButton";
 import Common from "../common/Common";
 import IdHolder from "../modules/IdHolder";
-import ExtendedBar from "../modules/ExtendedBar";
 
 const idHolder = new IdHolder();
 const autoRedirectButton = new AutoRedirectButton();
 const autoEnterCommunityButton = new AutoEnterCommunityButton();
-const extendedBar = new ExtendedBar();
 
-export default class ModernCastPage extends Page {
+export default class ModernCastPage extends CastPage {
 
   putButton() {
     $('.program-detail div').last().append(autoRedirectButton.getDom());
@@ -46,23 +44,11 @@ export default class ModernCastPage extends Page {
   }
 
   putExtendedBar() {
-    extendedBar.put('#bourbon-block');
+    super.putExtendedBar('#bourbon-block');
   }
 
   setUpExtendedBar() {
-    extendedBar.setUp();
+    super.setUpExtendedBar();
     $('#extended-bar').css('width', '1024px');
-  }
-
-  countExtendedBar() {
-    extendedBar.countDown();
-  }
-
-  updateExtendedBar(response) {
-    extendedBar.update(response);
-  }
-
-  invalidateExtendedBar() {
-    extendedBar.invalidate();
   }
 }

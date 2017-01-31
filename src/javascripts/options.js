@@ -3,7 +3,7 @@ import Time from './common/Time'
 
 class SettingPage {
   static getAllSettings() {
-    const settings = new Object();
+    const settings = {};
     settings['options.redirect.time'] = $('#options-redirect-time :selected').val();
     settings['options.popup.enable'] = $('input[name=options-popup-enable]:checked').val();
     settings['options.showReserved.enable'] = $('input[name=options-showReserved-enable]:checked').val();
@@ -11,6 +11,10 @@ class SettingPage {
     settings['options.soundfile'] = $('#options-soundfile :selected').val();
     settings['options.playsound.volume'] = $("input[name=options-playsound-volume]").val();
     settings['options.autoJump.enable'] = $('input[name=options-autoJump-enable]:checked').val();
+    settings['options.toast.minList'] = [];
+    $('input[name=options-toast-minList]:checked').map(function() {
+      settings['options.toast.minList'].push($(this).val());
+    }).get();
     console.info('[nicosapo][getAllSettings] settings = ', settings);
     return settings;
   }
@@ -45,6 +49,10 @@ class SettingPage {
     setting = localStorage.getItem('options.autoJump.enable');
     if (setting != null)
       $('[name=options-autoJump-enable]').val([setting]);
+
+    setting = localStorage.getItem('options.toast.minList');
+    if (setting != null)
+      $('[name=options-toast-minList]').val(JSON.parse(setting));
   }
 }
 

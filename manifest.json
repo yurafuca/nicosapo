@@ -7,7 +7,7 @@
         "default_title": "放送中の番組を確認する",
         "default_popup": "html/popup.html"
     },
-    "description": "自動枠移動（新配信（β）対応） / 自動入場 / 放送中の番組を一覧表示 / デスクトップ通知 / 延長通知 / 番組の残り時間を表示 をサポートします．",
+    "description": "[ニコニコ生放送] 自動枠移動（新配信（β）対応） / 自動入場 / 放送中の番組を一覧表示 / デスクトップ通知 / 延長通知 / 番組の残り時間を表示 をサポートします．",
     "icons": {
         "16": "images/icon.png",
         "32": "images/icon.png",
@@ -45,7 +45,8 @@
         ],
         "css": [
             "stylesheets/content.css",
-            "stylesheets/balloon.css"
+            "stylesheets/balloon.css",
+            "stylesheets/animate.css"
         ]
     }],
     "options_page": "html/options.html",

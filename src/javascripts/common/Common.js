@@ -8,4 +8,7 @@ export default class Common {
     return text.replace(/[\r|\r\n|\n]/g, "").replace(reg, "$1" + "<br>");
   }
 
+  static sleep (time) {
+    return new Promise((resolve) => setTimeout(resolve, time));
+  }
 }

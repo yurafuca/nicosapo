@@ -30,6 +30,12 @@
                     <option value="120">120秒</option>
                     </select>
                 <p class='note red'>音声や動画が頻繁に停止する場合は時間を長めに設定してください</p>
+                <h3>残り時間が少なくなったときに通知を表示する</h3>
+                <input type="checkbox" name="options-toast-minList" value="5" checked> 5分前
+                <input type="checkbox" name="options-toast-minList" value="4" checked> 4分前
+                <input type="checkbox" name="options-toast-minList" value="3" checked> 3分前
+                <input type="checkbox" name="options-toast-minList" value="2" checked> 2分前
+                <input type="checkbox" name="options-toast-minList" value="1" checked> 1分前
                 <h3>自動次枠移動をデフォルトで「ON」にする</h3>
                 <input type="radio" name="options-autoJump-enable" value="enable" checked="checked"> 有効
                 <input type="radio" name="options-autoJump-enable" value="disable"> 無効
@@ -56,7 +62,7 @@
                 <p class='note'>選択するとサンプル音が鳴ります</p>
                 <h3>通知音のボリューム</h3>
                 <input type="range" name="options-playsound-volume" value="1.0" min="0.0" max="1.0" step="0.1">
-                <button class="soundtest"> 音量テスト
+                <button class="soundtest">音量テスト</button>
                 </div>
                 <div id="buttons">
                      <input id="saveAll" type="submit" value="設定を保存する" />
@@ -77,8 +83,8 @@
                 <h1 class="appicon">作者にカンパする</h1>
                 <div class="items">
                     <span class="campa">にこさぽの開発を応援してくださる方はよろしくお願いします．今後の開発の励みになります．😇</span>
-                        <p><a target="_blank" href="http://amzn.asia/hqChgj3">Amazon Wishlist - ほしい雑貨</a></p>
-                        <p><a target="_blank" href="http://amzn.asia/8BFBccC">Amazon Wishlist - ほしい本</a></p>
+                        <p><a target="_blank" href="http://amzn.asia/hqChgj3">Amazon ほしいものリスト - ほしい雑貨</a></p>
+                        <p><a target="_blank" href="http://amzn.asia/8BFBccC">Amazon ほしいものリスト - ほしい本</a></p>
                     </div>
                 </div>
             </div>

@@ -9,6 +9,9 @@ export default class TimeCounter {
 
   subSecond(second) {
     second = parseInt(second);
+    if (this.second <= 0 && this.minute <= 0 && this.hour <= 0) {
+      return;
+    }
     if (this.second <= 0) {
       this.second = 59;
       this._subMinute(1);
@@ -62,5 +65,9 @@ export default class TimeCounter {
 
   getHour() {
     return this.hour;
+  }
+
+  getRemainSec() {
+    return this.second + this.minute * 60 + this.hour * 60 * 60;
   }
 }

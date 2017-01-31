@@ -23,4 +23,20 @@ export default class Storage {
         console.info('[nicosapo][removeFromNestedLocalStorage] response = ', response);
       });
   }
+
+  static getItem(key) {
+    return new Promise((resolve) => {
+      chrome.runtime.sendMessage({
+          purpose: 'getFromLocalStorage',
+          key: key
+        },
+        (response) => {
+          if (response == null) {
+            resolve(null);
+          } else {
+            resolve(JSON.parse(response));
+          }
+        });
+    });
+  }
 }
