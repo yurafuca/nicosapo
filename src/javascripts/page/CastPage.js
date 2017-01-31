@@ -41,11 +41,11 @@ export default class CastPage extends Page {
       return;
     }
     const minute = remainSec / 60;
-    Storage.getItem('options.toast.minList').then((minList) => {
-      if (minList == null) {
-        minList = [1,3,5];
+    Storage.getItem('options.toast.minuteList').then((minuteList) => {
+      if (minuteList == null) {
+        minuteList = [1,3,5];
       }
-      if (!minList.includes(minute)) {
+      if (!minuteList.includes(minute)) {
         return
       }
       this.showToast(`残り${minute}分です`);

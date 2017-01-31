@@ -11,11 +11,11 @@ class SettingPage {
     settings['options.soundfile'] = $('#options-soundfile :selected').val();
     settings['options.playsound.volume'] = $("input[name=options-playsound-volume]").val();
     settings['options.autoJump.enable'] = $('input[name=options-autoJump-enable]:checked').val();
-    settings['options.toast.minList'] = [];
-    $('input[name=options-toast-minList]:checked').map(function() {
-      settings['options.toast.minList'].push(Number($(this).val()));
+    settings['options.toast.minuteList'] = [];
+    $('input[name=options-toast-minuteList]:checked').map(function() {
+      settings['options.toast.minuteList'].push(Number($(this).val()));
     }).get();
-    settings['options.toast.minList'] = JSON.stringify(settings['options.toast.minList']);
+    settings['options.toast.minuteList'] = JSON.stringify(settings['options.toast.minuteList']);
     console.info('[nicosapo][getAllSettings] settings = ', settings);
     return settings;
   }
@@ -51,9 +51,9 @@ class SettingPage {
     if (setting != null)
       $('[name=options-autoJump-enable]').val([setting]);
 
-    setting = localStorage.getItem('options.toast.minList');
+    setting = localStorage.getItem('options.toast.minuteList');
     if (setting != null)
-      $('[name=options-toast-minList]').val(JSON.parse(setting));
+      $('[name=options-toast-minuteList]').val(JSON.parse(setting));
   }
 }
 
