@@ -6,7 +6,6 @@ import Storage from "../modules/Storage";
 
 const extendedBar = new ExtendedBar();
 const secList = [
-  31 * 60,
   5 * 60,
   4 * 60,
   3 * 60,

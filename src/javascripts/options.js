@@ -13,7 +13,7 @@ class SettingPage {
     settings['options.autoJump.enable'] = $('input[name=options-autoJump-enable]:checked').val();
     settings['options.toast.minList'] = [];
     $('input[name=options-toast-minList]:checked').map(function() {
-      settings['options.toast.minList'].push($(this).val());
+      settings['options.toast.minList'].push(Number($(this).val()));
     }).get();
     settings['options.toast.minList'] = JSON.stringify(settings['options.toast.minList']);
     console.info('[nicosapo][getAllSettings] settings = ', settings);
