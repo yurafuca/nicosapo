@@ -33,11 +33,14 @@ $(document).ready(() => {
 });
 
 const initAutoEnterCommunityList = () => {
-  const storagedData = JSON.parse(localStorage.getItem('autoEnterCommunityList'));
-  for (const id in storagedData) {
-    storagedData[id].state = 'init';
+  let autoEnterCommunityList = {};
+  if (localStorage.getItem('autoEnterCommunityList')) {
+    autoEnterCommunityList = JSON.parse(localStorage.getItem('autoEnterCommunityList'));
   }
-  localStorage.setItem('autoEnterCommunityList', JSON.stringify(storagedData));
+  for (const id in autoEnterCommunityList) {
+    autoEnterCommunityList[id].state = 'init';
+  }
+  localStorage.setItem('autoEnterCommunityList', JSON.stringify(autoEnterCommunityList));
 };
 
 const refreshBadgeAndDB = () => {

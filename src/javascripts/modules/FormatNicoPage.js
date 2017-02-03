@@ -19,7 +19,8 @@ export default class FormatNicoPage {
       this.$program_title.attr('title', this.$program_title.text());
       return;
     } else if (pageType == 'MODERN_CAST_PAGE') {
-      // Do nothing.
+      $('.program-detail').css('width', '930px');
+      $('#program-social-block').css('bottom', '30px');
       return;
     } else if (pageType == 'NORMAL_CAST_PAGE' || pageType == 'OFFICIAL_CAST_PAGE') {
       this.$watch_title_box_meta.css('width', '1000px');
