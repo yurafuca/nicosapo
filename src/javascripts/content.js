@@ -48,6 +48,9 @@ $(() => {
   if ((pageType === 'NORMAL_CAST_PAGE') || (pageType === 'MODERN_CAST_PAGE') || (pageType === 'OFFICIAL_CAST_PAGE')) {
     _page.putExtendedBar();
     _page.setUpExtendedBar();
+  }
+
+  if ((pageType === 'NORMAL_CAST_PAGE') || (pageType === 'MODERN_CAST_PAGE')) {
     chrome.runtime.sendMessage({
         purpose: 'getFromLocalStorage',
         key: 'options.redirect.time'
