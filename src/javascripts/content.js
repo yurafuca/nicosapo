@@ -48,6 +48,10 @@ $(() => {
   if ((pageType === 'NORMAL_CAST_PAGE') || (pageType === 'MODERN_CAST_PAGE') || (pageType === 'OFFICIAL_CAST_PAGE')) {
     _page.putExtendedBar();
     _page.setUpExtendedBar();
+    // TimeCounter.
+    setInterval(() => {
+      _page.countExtendedBar();
+    }, 1000);
   }
 
   if ((pageType === 'NORMAL_CAST_PAGE') || (pageType === 'MODERN_CAST_PAGE')) {
@@ -59,10 +63,6 @@ $(() => {
       console.info('[nicosapo]intervalTime = ', intervalTime);
       setTimeout(checkNewCasts, intervalTime * 1000);
     });
-    // TimeCounter.
-    setInterval(() => {
-      _page.countExtendedBar();
-    }, 1000);
   }
 });
 
