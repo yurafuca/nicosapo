@@ -28,8 +28,11 @@ module.exports = {
     plugins: [
       new CopyWebpackPlugin([
         { from: 'src/html', to: '../html' },
-        { from: 'src/stylesheets', to: '../stylesheets' },
-        { from: 'manifest.json', to: '../manifest.json' }
+        { from: 'src/images', to: '../images' },
+        { from: 'src/octicons', to: '../octicons' },
+        { from: 'src/sounds', to: '../sounds' },
+       { from: 'src/stylesheets', to: '../stylesheets' },
+       { from: 'manifest.json', to: '../manifest.json' }
       ])
     ],
     devtool: 'source-map'
