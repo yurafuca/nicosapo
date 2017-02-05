@@ -13,7 +13,7 @@ const _keys = {
   channel: 'autoEnterCommunityList'
 };
 
-const INTERVAL = 3 * 1000;
+const INTERVAL = 6 * 1000;
 
 export default class AutoEnterRunner {
   run(requestType) {

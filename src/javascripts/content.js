@@ -55,10 +55,8 @@ $(() => {
   }
 
   if ((pageType === 'NORMAL_CAST_PAGE') || (pageType === 'MODERN_CAST_PAGE')) {
-    chrome.runtime.sendMessage({
-        purpose: 'getFromLocalStorage',
-        key: 'options.redirect.time'
-      }, (response) => {
+    chrome.runtime.sendMessage({purpose: 'getFromLocalStorage', key: 'options.redirect.time'},
+    (response) => {
       const intervalTime = response || '50';
       console.info('[nicosapo]intervalTime = ', intervalTime);
       setTimeout(checkNewCasts, intervalTime * 1000);

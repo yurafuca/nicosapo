@@ -27,11 +27,7 @@ module.exports = {
     },
     plugins: [
       new CopyWebpackPlugin([
-        // {output}/file.txt
         { from: 'src/html', to: '../html' },
-        { from: 'src/images', to: '../images' },
-        { from: 'src/octicons', to: '../octicons' },
-        { from: 'src/sounds', to: '../sounds' },
         { from: 'src/stylesheets', to: '../stylesheets' },
         { from: 'manifest.json', to: '../manifest.json' }
       ])

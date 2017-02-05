@@ -9,7 +9,12 @@ import './chrome/runtime.onMessage';
 const communityHolder = new CommunityHolder();
 const newArrival = new NewArrival();
 const BADGE_COLOR = '#ff6200';
-const INTERVAL = 30 * 1000;
+const INTERVAL = 60 * 1000;
+
+// let _crawlState = null;
+// let CrawlState = {RUNNING: 0, WAITING: 1};
+
+// let isCrawling = null;
 
 chrome.notifications.onClicked.addListener((id) => {
   chrome.tabs.create({
@@ -18,6 +23,12 @@ chrome.notifications.onClicked.addListener((id) => {
   });
 });
 
+// chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+//   if (request.purpose == 'isCrawling') {
+//     sendResponse(isCrawling);
+//   }
+// });
+
 $(document).ready(() => {
   chrome.browserAction.setBadgeBackgroundColor({ color: BADGE_COLOR });
   refreshBadgeAndDB();
@@ -25,8 +36,10 @@ $(document).ready(() => {
   setTimeout(() => {
     setInterval(() => {
       Promise.resolve()
+        // .then(() => {isCrawling = true;})
         .then((new AutoEnterRunner()).run('live'))
         .then((new AutoEnterRunner()).run('community'));
+        // .then(() => {isCrawling = false;});
     }, INTERVAL);
   }, 1000 * 5);
   initAutoEnterCommunityList();

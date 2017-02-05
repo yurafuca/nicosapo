@@ -11,4 +11,19 @@ export default class Common {
   static sleep (time) {
     return new Promise((resolve) => setTimeout(resolve, time));
   }
+
+  static waitUntilCrawlDone() {
+    return new Promise((resolve) => {
+      const checkFunction = () => {
+        chrome.runtime.sendMessage({
+            purpose: 'getCrawlState',
+          }, (response) => {
+          const intervalTime = response || '50';
+          console.info('[nicosapo]intervalTime = ', intervalTime);
+          setTimeout(checkNewCasts, intervalTime * 1000);
+        });
+      }
+      
+    });
+  }
 }
