@@ -3,17 +3,17 @@ nicosapo - にこさぽ
 
 ニコニコ生放送の視聴を支援する Google Chrome Extension.
 
-# Install
+## Install
 
 [にこさぽ - Chrome ウェブストア](https://chrome.google.com/webstore/detail/%E3%83%8B%E3%82%B3%E7%94%9F%E3%83%81%E3%82%A7%E3%83%83%E3%82%AB%E3%83%BC/kfnogdokhemdbbclknmmjpcnmjmpjknc)
 
-# How to Build
+## How to Build
 
 ```
 yarn run Build
 ```
 
-# 機能一覧
+## 機能一覧
 
 1. 自動枠移動（新配信（β）対応）
 1. 自動入場
@@ -23,7 +23,7 @@ yarn run Build
 1. 番組の残り時間を表示
 1. 残り時間が短くなったときにプレイヤー上に通知を表示
 
-# 使い方
+
 ## 自動次枠移動
 
 ![Alt Text](https://tsuyuno.github.io/resources/nicosapo_auto_redirect.png)
@@ -44,7 +44,7 @@ yarn run Build
 1. 番組への自動入場
 2. コミュニティ/チャンネルへの自動入場
 
-### 番組への自動入場
+## 番組への自動入場
 
 ![Alt Text](https://tsuyuno.github.io/resources/nicosapo_auto_enter.png)
 
@@ -52,7 +52,7 @@ yarn run Build
 
 Google Chrome が起動している間，にこさぽは自動入場リストの中から放送が始まった番組を一定時間ごとにチェックします．放送が始まった番組を検知すると，にこさぽはその番組を自動的に新しいタブで開きます．新しいタブが開かれると同時に当該番組は自動入場リストから自動的に削除されます．
 
-### コミュニティ/チャンネルへの自動入場
+## コミュニティ/チャンネルへの自動入場
 
 ![Alt Text](https://tsuyuno.github.io/resources/nicosapo_autoenter_community_1.png)
 ![Alt Text](https://tsuyuno.github.io/resources/nicosapo_autoenter_community_2.png)
