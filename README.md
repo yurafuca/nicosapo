@@ -10,7 +10,7 @@ nicosapo - にこさぽ
 ## How to Build
 
 ```
-yarn run Build
+yarn run build
 ```
 
 ## 機能一覧
