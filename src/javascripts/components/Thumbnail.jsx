@@ -7,18 +7,23 @@ export default class Thumbnail extends React.Component {
     const tooltip = (
       <Tooltip id="tooltip"><strong>Holy guacamole!</strong> Check this info.</Tooltip>
     );
+    const style = {
+      backgroundImage: this.props.background
+    }
     return (
       <OverlayTrigger placement="left" overlay={tooltip}>
         <div className="community-hover-wrapper">
-    			<div className={"side-corner-tag " + (this.props.isReserved ? 'enabled' : 'disabled')}>
-    				<div className="community">
-    					<a href={this.props.url} target="_blank">
-    						<span className="thumbnail" style={"background-image: " + this.props.background}></span>
-    					</a>
-    				</div>
-    				<p><span className="reserved-message">{this.props.day}</span></p>
-    			</div>
-    		</div>
+          <div className={"side-corner-tag " + (this.props.isReserved ? 'enabled' : 'disabled')}>
+            <div className="community">
+              <a href={this.props.url} target="_blank">
+                <span className="thumbnail" style={style}></span>
+              </a>
+            </div>
+            <p>
+              <span className="reserved-message">{this.props.day}</span>
+            </p>
+          </div>
+        </div>
       </OverlayTrigger>
     );
   }
@@ -26,5 +31,5 @@ export default class Thumbnail extends React.Component {
 
 ReactDOM.render(
   <Thumbnail />,
-  document.getElementById('container')
+  document.getElementById('communities')
 );

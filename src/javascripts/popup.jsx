@@ -59,8 +59,10 @@ const renderCasts = (liveType) => {
     .then(() => Api.loadCasts(liveType))
     .then(($videoInfos) => {
       // user と official で render を分ける
+      console.log('foo');
       console.info($videoInfos);
       ReactDOM.render(
+        // videoInfos will be convert to native array from jQuery array.
         <UserThumbnails programs={$videoInfos}/>,
         document.getElementById('communities')
       );
