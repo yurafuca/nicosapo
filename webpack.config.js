@@ -5,7 +5,7 @@ module.exports = {
     entry: {
         background: "./src/javascripts/background.js",
         content: "./src/javascripts/content.js",
-        popup: "./src/javascripts/popup.js",
+        popup: "./src/javascripts/popup.jsx",
         options: "./src/javascripts/options.js"
     },
     output: {
@@ -15,12 +15,15 @@ module.exports = {
     module: {
         loaders: [
             {
-                loader: 'babel',
+                loader: 'babel-loader',
                 exclude: /node_modules/,
-                test: /\.js[x]?$/,
+                test: /\.jsx?$/,
                 query: {
                     cacheDirectory: true,
-                    presets: ['react', 'es2015']
+                    presets: [
+                      'react',
+                      'es2015'
+                    ]
                 }
             }
         ]
@@ -35,5 +38,13 @@ module.exports = {
        { from: 'manifest.json', to: '../manifest.json' }
       ])
     ],
-    devtool: 'source-map'
+    devtool: 'source-map',
+    resolve: {
+      extensions: [
+        "",
+        ".js",
+        ".jsx",
+        ".scss",
+      ]
+    },
 };
