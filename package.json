@@ -25,6 +25,7 @@
     "react-bootstrap": "^0.30.7",
     "react-dom": "^15.4.1",
     "sass-loader": "^6.0.0",
+    "sloc": "^0.2.0",
     "style-loader": "^0.13.1",
     "to-integer": "^1.0.1"
   },

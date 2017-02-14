@@ -8,6 +8,7 @@ class SettingPage {
     settings['options.popup.enable'] = $('input[name=options-popup-enable]:checked').val();
     settings['options.showReserved.enable'] = $('input[name=options-showReserved-enable]:checked').val();
     settings['options.playsound.enable'] = $('input[name=options-playsound-enable]:checked').val();
+    settings['options.openingNotification.duration'] = $("input[name=options-openingNotification-duration]").val();
     settings['options.soundfile'] = $('#options-soundfile :selected').val();
     settings['options.playsound.volume'] = $("input[name=options-playsound-volume]").val();
     settings['options.autoJump.enable'] = $('input[name=options-autoJump-enable]:checked').val();
@@ -38,6 +39,12 @@ class SettingPage {
     setting = localStorage.getItem('options.playsound.enable');
     if (setting != null)
       $('[name=options-playsound-enable]').val([setting]);
+
+    setting = localStorage.getItem('options.openingNotification.duration');
+    if (setting != null) {
+      $('[name=options-openingNotification-duration]').val([setting]);
+      $('#openingNotification-duration').text([setting]);
+    }
 
     setting = localStorage.getItem('options.playsound.volume');
     if (setting != null)
@@ -108,6 +115,10 @@ $(() => {
     const audio = new Audio(`../sounds/${soundfile}`);
     audio.volume = volume;
     audio.play();
+  });
+
+  $("input[name=options-openingNotification-duration]").on("input", () => {
+    $("#openingNotification-duration").text($("input[name=options-openingNotification-duration]").val());
   });
 
   chrome.runtime.sendMessage({

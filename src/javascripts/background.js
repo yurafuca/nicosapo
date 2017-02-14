@@ -116,14 +116,34 @@ const existsInAutoLists = (communityId, liveId) => {
 }
 
 const showNotification = (newInfos) => {
-  const options = {
-    type: "basic",
-    title: "放送開始のお知らせ",
-    message: $(newInfos).first().find('video title').text(),
-    iconUrl: $(newInfos).first().find('community thumbnail').text()
-  };
+  let duration = 6;
+  if (localStorage.getItem('options.openingNotification.duration')) {
+    duration = Number(localStorage.getItem('options.openingNotification.duration'));
+  }
+  console.info('duration = ', duration);
   const id = $(newInfos).first().find('video id').text();
-  chrome.notifications.create(id, options);
+  const options = {
+    body: $(newInfos).first().find('video title').text(),
+    icon: $(newInfos).first().find('community thumbnail').text(),
+    tag: id
+  };
+  const notification = new Notification('放送開始のお知らせ', options);
+  setTimeout(notification.close.bind(notification), duration * 1000);
+  notification.onclick = () => {
+    chrome.tabs.create({
+      url: `http://live.nicovideo.jp/watch/${notification.tag}`,
+      active: true
+    });
+  };
+  // const options = {
+  //   type: "basic",
+  //   title: "放送開始のお知らせ",
+  //   message: $(newInfos).first().find('video title').text(),
+  //   iconUrl: $(newInfos).first().find('community thumbnail').text(),
+  //   eventTime: Date.now() + Number(duration) * 1000
+  // };
+  // const id = $(newInfos).first().find('video id').text();
+  // chrome.notifications.create(id, options);
 }
 
 const setBadgeText = (value) => {
