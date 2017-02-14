@@ -193,6 +193,7 @@ a {
 	margin: 5px 0 0 5px;
 	display: inline-block;
 	&:hover {
+		-webkit-filter: brightness(0.8);
 	}
 }
 .reserved-message {
