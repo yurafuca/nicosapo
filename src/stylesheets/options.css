@@ -141,7 +141,7 @@ h3 {
     display: table;
     content: "";
 }
-..BtnGroup-item:last-child {
+.BtnGroup-item:last-child {
     border-right-width: 1px;
     border-top-right-radius: 3px;
     border-bottom-right-radius: 3px;

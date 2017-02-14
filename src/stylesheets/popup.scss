@@ -1,0 +1,263 @@
+//colors
+$color_mine_shaft_approx: #333;
+$color_iron_approx: #d8d8d8;
+$black_80: rgba(0,0,0,0.8);
+$color_lochmara_approx: #08c;
+$gray: gray;
+$color_wild_sand_approx: #f5f5f5;
+$white: #fff;
+$color_alabaster_approx: #fbfbfb;
+$color_alto_approx: #dcdcdc;
+$color_hot_cinnamon_approx: #d26911;
+$black_20: rgba(0, 0, 0, 0.20);
+$color_quill_gray_approx: #d5d5d5;
+$color_gallery_approx: #eee;
+$black: black;
+$black_15: rgba(0,0,0,0.15);
+$color_matterhorn_approx: #4d394b;
+$color_celeste_approx: #ccc;
+
+//fonts
+$font_0: Arial;
+$font_1: sans-serif;
+
+//urls
+$url_0: url(/images/loading.gif);
+$url_1: url(/images/icon.png);
+
+html {
+	display: table;
+}
+body {
+	display: table-cell;
+	min-width: 380px;
+	margin: 0;
+	padding: 0;
+	color: $color_mine_shaft_approx;
+	border: 1px solid $color_iron_approx;
+	//Instead of the line below you could use @include border-radius($radius, $vertical-radius)
+	border-radius: 3px;
+	font: 13px / 1.4 Helvetica, Meiryo, arial, nimbussansl, liberationsans, freesans, clean, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+}
+.tooltip-inner {
+	max-width: 270px !important;
+	padding: 7px !important;
+	background: $black_80 !important;
+}
+a {
+	text-decoration: none;
+	&:hover {
+		span {
+			color: $color_lochmara_approx !important;
+			text-decoration: none !important;
+		}
+		.screen_name {
+			color: $gray !important;
+			text-decoration: none !important;
+		}
+	}
+}
+#menu {
+	padding-top: 3px;
+	padding-bottom: 3px;
+	font-weight: 500;
+	background: $color_wild_sand_approx;
+	border-bottom: 1px solid $color_iron_approx;
+}
+#tab-container {
+	font-size: 0;
+}
+.tab {
+	font-size: 13px;
+	width: 50%;
+	height: 27px;
+	line-height: 23px;
+	font-weight: bold;
+	//Instead of the line below you could use @include text-shadow($shadow-1, $shadow-2, $shadow-3, $shadow-4, $shadow-5, $shadow-6, $shadow-7, $shadow-8, $shadow-9, $shadow-10)
+	text-shadow: 0 1px 0 $white;
+	background: $color_alabaster_approx;
+	border-left: solid 1px $color_iron_approx;
+	display: inline-block;
+	border-bottom: 1px solid $color_alto_approx;
+	text-align: center;
+	//Instead of the line below you could use @include box-sizing($bs)
+	box-sizing: border-box;
+	vertical-align: middle;
+	&:first-child {
+		border-left: 0;
+	}
+	&.selected {
+		cursor: default;
+		background: $white;
+		border-bottom: solid 1px transparent;
+		border-top: solid 2px $color_hot_cinnamon_approx;
+	}
+	&.non-selected {
+		cursor: pointer;
+		line-height: 23px;
+		padding: 2px;
+		&:hover {
+			background: $color_wild_sand_approx;
+		}
+		&:active {
+			background-color: $color_alto_approx;
+			//Instead of the line below you could use @include box-shadow($shadow-1, $shadow-2, $shadow-3, $shadow-4, $shadow-5, $shadow-6, $shadow-7, $shadow-8, $shadow-9, $shadow-10)
+			box-shadow: inset 0 1px 6px $black_20;
+		}
+	}
+}
+#communities {
+	min-height: 65px;
+	padding-bottom: 5px;
+}
+.nowloading {
+	min-height: 65px;
+	background-image: $url_0;
+	background-size: 65px;
+	background-repeat: no-repeat;
+	background-position: center;
+}
+.message {
+	width: auto;
+	font-size: 18px;
+	margin: 10px;
+}
+.menu-button {
+	position: relative;
+	top: 5px;
+	float: right;
+	vertical-align: middle;
+	color: $color_mine_shaft_approx;
+	margin-right: 6px;
+	padding: 3px 10px;
+	border: solid 1px $color_quill_gray_approx;
+	//Instead of the line below you could use @include border-radius($radius, $vertical-radius)
+	border-radius: 3px;
+	background-image: linear-gradient($color_alabaster_approx, $color_gallery_approx);
+	&:hover {
+		background-image: linear-gradient($color_gallery_approx, $color_alto_approx);
+		text-decoration: none;
+		> span {
+			color: $black !important;
+			text-decoration: none;
+		}
+	}
+	&:active {
+		background-color: $color_alto_approx;
+		//Instead of the line below you could use @include box-shadow($shadow-1, $shadow-2, $shadow-3, $shadow-4, $shadow-5, $shadow-6, $shadow-7, $shadow-8, $shadow-9, $shadow-10)
+		box-shadow: inset 0 1px 6px $black_20;
+		> span {
+			color: $black !important;
+			text-decoration: none;
+		}
+	}
+	> span {
+		color: inherit;
+		//Instead of the line below you could use @include text-shadow($shadow-1, $shadow-2, $shadow-3, $shadow-4, $shadow-5, $shadow-6, $shadow-7, $shadow-8, $shadow-9, $shadow-10)
+		text-shadow: 0 1px 0 $white;
+		&.octicon {
+			position: relative;
+			top: 1px;
+			font-size: 17px !important;
+		}
+		&.title {
+			font-size: 12px;
+			font-weight: bold;
+		}
+	}
+}
+.avator {
+	position: relative;
+	top: -1px;
+	float: left;
+	background-image: $url_1;
+	background-size: 27px;
+	background-repeat: no-repeat;
+	background-position: center;
+	height: 37px;
+	width: 40px;
+	margin-left: 2px;
+	//Instead of the line below you could use @include border-radius($radius, $vertical-radius)
+	border-radius: 3px 0 0 0;
+}
+.username {
+	margin-left: 2px;
+	color: $color_mine_shaft_approx;
+	font-size: 14px;
+	line-height: 38px;
+	font-weight: bold;
+	//Instead of the line below you could use @include text-shadow($shadow-1, $shadow-2, $shadow-3, $shadow-4, $shadow-5, $shadow-6, $shadow-7, $shadow-8, $shadow-9, $shadow-10)
+	text-shadow: 0 1px 0 $white;
+}
+.community-hover-wrapper {
+	margin: 5px 0 0 5px;
+	display: inline-block;
+	&:hover {
+	}
+}
+.reserved-message {
+	position: absolute;
+	display: inline-block;
+	//Instead of the line below you could use @include box-shadow($shadow-1, $shadow-2, $shadow-3, $shadow-4, $shadow-5, $shadow-6, $shadow-7, $shadow-8, $shadow-9, $shadow-10)
+	box-shadow: 0 0 10px $black_20;
+	text-align: center;
+	text-transform: uppercase;
+	top: 0;
+	left: 0;
+	background: $color_matterhorn_approx;
+	background: $black_80;
+	width: 70px;
+	padding: 0;
+	//Instead of the line below you could use @include border-radius($radius, $vertical-radius)
+	border-radius: 3px 3px 0 0;
+}
+.community {
+	display: inline-block;
+	//Instead of the line below you could use @include border-radius($radius, $vertical-radius)
+	border-radius: 3px;
+}
+.community_long {
+	display: list-item;
+	margin-bottom: 10px;
+	padding-bottom: 10px;
+	border-bottom: 1px solid $color_celeste_approx;
+	.comu_thumbnail {
+		float: left;
+	}
+}
+.comu_thumbnail {
+	display: block;
+	width: 70px;
+	height: 70px;
+	background-size: 70px;
+	//Instead of the line below you could use @include border-radius($radius, $vertical-radius)
+	border-radius: 3px;
+}
+.large {
+	background-size: contain;
+	background-position: 50% 0;
+	min-width: 70px;
+	max-width: 100px;
+	height: 70px;
+}
+.tooltip.in {
+	opacity: 1.0 !important;
+}
+.side-corner-tag.enabled {
+	position: relative;
+	color: $white;
+	display: inline-block;
+	overflow: hidden;
+	font-family: $font_0, $font_1;
+	font-weight: 900;
+	//Instead of the line below you could use @include text-shadow($shadow-1, $shadow-2, $shadow-3, $shadow-4, $shadow-5, $shadow-6, $shadow-7, $shadow-8, $shadow-9, $shadow-10)
+	text-shadow: 0 -1px 0 $black_15;
+	p {
+		display: inline;
+	}
+	&:hover {
+		cursor: pointer;
+	}
+}
+.tumbnail:hover {
+}
