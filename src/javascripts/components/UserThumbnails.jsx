@@ -7,6 +7,15 @@ import Thumbnail from '../components/Thumbnail';
 const thumbParams = [];
 
 export default class UserThumbnails extends React.Component {
+  constructor(props) {
+    super(props);
+    thumbParams.length = 0;
+  }
+
+  componentWillUpdate() {
+    console.log("componentWillUpdate");
+  }
+
   setParams() {
     const programs = this.props.programs;
     programs.forEach(($program, index) => {
@@ -32,7 +41,7 @@ export default class UserThumbnails extends React.Component {
     const is_reserved = $($program).find('video is_reserved').text();
     return is_reserved == 'true';
   }
-
+  
   render() {
     this.setParams();
     const thumbs = thumbParams.map(thumbParam => {

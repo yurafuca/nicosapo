@@ -7,6 +7,11 @@ import Thumbnail from '../components/Thumbnail';
 const thumbParams = [];
 
 export default class OfficialThumbnails extends React.Component {
+  constructor(props) {
+    super(props);
+    thumbParams.length = 0;
+  }
+
   setParams() {
     const programs = this.props.programs;
     console.info(programs);

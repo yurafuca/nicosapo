@@ -58,6 +58,7 @@ const renderCasts = (liveType) => {
     })
     .then(() => Api.loadCasts(liveType))
     .then(($videoInfos) => {
+      // $('#communities').empty();
       if (liveType === 'user') {
         ReactDOM.render(
           <UserThumbnails programs={$videoInfos}/>,
@@ -66,7 +67,8 @@ const renderCasts = (liveType) => {
       }
       if (liveType === 'official') {
         ReactDOM.render(
-          <OfficialThumbnails programs={$videoInfos.toArray()}/>,
+          <OfficialThumbnails programs={$videoInfos.toArray()
+            }/>,
           document.getElementById('communities')
         );
       }

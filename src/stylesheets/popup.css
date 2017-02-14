@@ -18,10 +18,14 @@ body {
 }*/
 
 /* React Bootstrap Tooltip */
-.tooltip {
-	max-width: 600px !important;
-  width: auto !important;
-	padding: 5px  !important;
+.tooltip-inner {
+	max-width: 270px !important;
+  /*width: auto !important;*/
+	padding: 7px  !important;
+	background: rgba(0,0,0,0.8) !important;
+}
+.tooltip.in {
+	opacity: 1.0 !important;
 }
 
 a {
@@ -30,7 +34,7 @@ a {
 
 a:hover span {
 	color: #08c !important;
-	text-decoration: underline;
+	text-decoration: none !important;
 }
 
 a:hover .screen_name {
@@ -130,6 +134,7 @@ a:hover .screen_name {
 
 .menu-button:hover{
 	background-image: linear-gradient(#eee, #ddd);
+	text-decoration: none;
 }
 
 .menu-button:active{
