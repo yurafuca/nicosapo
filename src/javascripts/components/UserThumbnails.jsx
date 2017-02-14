@@ -3,16 +3,13 @@ import React from 'react'
 import ReactDOM from 'react-dom';
 import { Tooltip } from 'react-bootstrap';
 import Thumbnail from '../components/Thumbnail';
-import Common from "../common/Common";
 
 const thumbParams = [];
 
 export default class UserThumbnails extends React.Component {
   setParams() {
-    console.info(this.props.programs);
     const programs = this.props.programs;
-    // for (const $program in programs) {
-    programs.forEach(($program) => {
+    programs.forEach(($program, index) => {
       console.info($program);
       const thumbParam = {};
       const thumbnailUrl = $program.find('community thumbnail').text();
@@ -24,13 +21,9 @@ export default class UserThumbnails extends React.Component {
       const startDayJpn = $program.find('video open_time_jpstr').text().match(/\d+\/(\d+)/)[1]; // Month/Day(Date) ...
       const startDateJpn = $program.find('video open_time_jpstr').text().match(/\d+\/\d+\((.)\)/)[1];
       thumbParam.day = `${startDayJpn}(${startDateJpn})`;
-      const wrappedTitle = Common.wordWrap(thumbParam.title, 16);
-      const startTimeInfo = `
-        &lt;span style="color:#adff2f"&gt;
-          ${$program.find('video open_time_jpstr').text()}
-        &lt;/span&gt;&lt;br&gt;
-      `;
-      thumbParam.text = startTimeInfo + wrappedTitle;
+      thumbParam.openTime = $program.find('video open_time_jpstr').text();
+      thumbParam.text = thumbParam.title;
+      thumbParam.index = index;
       thumbParams.push(thumbParam);
     });
   }
@@ -49,8 +42,9 @@ export default class UserThumbnails extends React.Component {
         url={thumbParam.url}
         id={thumbParam.id}
         isReserved={thumbParam.isReserved}
-        tooltip={thumbParam.tooltip}
+        text={thumbParam.text}
         day={thumbParam.day}
+        openTime={thumbParam.openTime}
         index={thumbParam.index} />
     });
     return (

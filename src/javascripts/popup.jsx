@@ -3,7 +3,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Common from "./common/Common";
 import UserThumbnails from "./components/UserThumbnails";
-// import officialThumbnailList from "./components/OfficialThumbnailList";
+import OfficialThumbnails from "./components/OfficialThumbnails";
 import Api from "./api/Api";
 
 class Massages {
@@ -58,14 +58,18 @@ const renderCasts = (liveType) => {
     })
     .then(() => Api.loadCasts(liveType))
     .then(($videoInfos) => {
-      // user と official で render を分ける
-      console.log('foo');
-      console.info($videoInfos);
-      ReactDOM.render(
-        // videoInfos will be convert to native array from jQuery array.
-        <UserThumbnails programs={$videoInfos}/>,
-        document.getElementById('communities')
-      );
+      if (liveType === 'user') {
+        ReactDOM.render(
+          <UserThumbnails programs={$videoInfos}/>,
+          document.getElementById('communities')
+        );
+      }
+      if (liveType === 'official') {
+        ReactDOM.render(
+          <OfficialThumbnails programs={$videoInfos.toArray()}/>,
+          document.getElementById('communities')
+        );
+      }
     })
     .then(Loading.done);
 };

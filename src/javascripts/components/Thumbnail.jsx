@@ -3,25 +3,38 @@ import ReactDOM from 'react-dom';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 export default class Thumbnail extends React.Component {
-  render() {
+  getToolTip() {
     const tooltip = (
-      <Tooltip id="tooltip"><strong>Holy guacamole!</strong> Check this info.</Tooltip>
+      <Tooltip id="tooltip">{[
+          <span style={{fontSize: '14px'}}>
+            {(() => {
+              if (this.props.isReserved)
+                return <span style={{color:'#adff2f',}}>{this.props.openTime}<br/></span>
+            })()}
+            {this.props.text}
+          </span>
+        ]}
+      </Tooltip>
     );
-    const style = {
-      backgroundImage: this.props.background
-    }
+    return tooltip;
+  }
+
+  render() {
     return (
-      <OverlayTrigger placement="left" overlay={tooltip}>
+      <OverlayTrigger placement="top" animation={false} overlay={this.getToolTip()}>
         <div className="community-hover-wrapper">
           <div className={"side-corner-tag " + (this.props.isReserved ? 'enabled' : 'disabled')}>
             <div className="community">
               <a href={this.props.url} target="_blank">
-                <span className="thumbnail" style={style}></span>
+                <span className="comu_thumbnail" style={{backgroundImage: this.props.background}}></span>
               </a>
             </div>
-            <p>
-              <span className="reserved-message">{this.props.day}</span>
-            </p>
+            {(() => {
+              if (this.props.isReserved)
+                return <p>
+                  <span className="reserved-message">{this.props.day}</span>
+                </p>
+            })()}
           </div>
         </div>
       </OverlayTrigger>

@@ -13,8 +13,15 @@ body {
 	font: 13px / 1.4 Helvetica, Meiryo, arial, nimbussansl, liberationsans, freesans, clean, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
 
-#powerTip {
+/*#powerTip {
 	z-index: 2147483647;
+}*/
+
+/* React Bootstrap Tooltip */
+.tooltip {
+	max-width: 600px !important;
+  width: auto !important;
+	padding: 5px  !important;
 }
 
 a {
@@ -197,7 +204,7 @@ a:hover .screen_name {
     display: inline;
 }
 
-.side-corner-tag.enabled p span {
+.reserved-message {
     position: absolute;
     display: inline-block;
     /*right: -28px;*/
@@ -205,6 +212,7 @@ a:hover .screen_name {
     text-align: center;
     text-transform: uppercase;
     top: 0px;
+		left: 0px;
     /*background: #219184;*/
     background: #4D394B;
     background: rgba(0,0,0,0.8);
@@ -235,7 +243,7 @@ a:hover .screen_name {
     border-bottom: 1px solid #CCC;
 }
 
-.community_long .thumbnail {
+.community_long .comu_thumbnail {
 	float: left;
 }
 
@@ -247,7 +255,7 @@ a:hover .screen_name {
 	-webkit-filter: brightness(0.8);
 }
 
-.thumbnail {
+.comu_thumbnail {
 	display: block;
 	width: 70px;
 	height: 70px;
