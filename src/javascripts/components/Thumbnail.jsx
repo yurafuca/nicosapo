@@ -9,7 +9,7 @@ export default class Thumbnail extends React.Component {
           <span style={{fontSize: '14px'}}>
             {(() => {
               if (this.props.isReserved)
-                return <span style={{color:'#adff2f', fontSize: '14px'}}>{this.props.openTime}<br/></span>
+                return <span style={{color:'#adff2f'}}>{this.props.openTime}<br/></span>
             })()}
             {this.props.text}
           </span>
