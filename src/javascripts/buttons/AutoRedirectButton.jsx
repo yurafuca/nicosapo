@@ -6,13 +6,17 @@ import Common from "../common/Common"
 export default class AutoRedirectButton extends React.Component {
   constructor() {
     super();
+    this.state = { isToggledOn: null };
     this._className      = 'auto_redirect_button';
     this._label          = `自動次枠移動`;
     this._balloonMessage = `このページを開いたままにしておくと，新しい枠で放送が始まったとき自動で枠へ移動します．`;
     this._balloonPos     = 'up';
     this._balloonLength  = 'xlarge';
-    this.setUp();
     this.onClick         = this.onClick.bind(this);
+  }
+
+  componentDidMount() {
+    this.setUp();
   }
 
   setUp() {
@@ -21,56 +25,39 @@ export default class AutoRedirectButton extends React.Component {
         key: 'options.autoJump.enable'
       },
       (response) => {
-        console.info(response);
         if (Common.enabledOrNull(response)) {
-          this.toggleOn();
+          this.setState({ isToggledOn: true });
         } else {
-          this.toggleOff();
+          this.setState({ isToggledOn: false });
         }
       }
     )
   }
 
-  toggleOn() {
-    console.info('toggleon');
-    const $link = $($(`.${this._className}`).find('.link'));
-    $link.addClass('switch_is_on');
-    $link.removeClass('switch_is_off');
-    $link.text(`${this._label}ON`);
-  }
-
-  toggleOff() {
-    console.info('toggleoff');
-    const $link = $($(`.${this._className}`).find('.link'));
-    $link.addClass('switch_is_off');
-    $link.removeClass('switch_is_on');
-    $link.text(`${this._label}OFF`);
-  }
-
-  isToggledOn() {
-    const $link = $($(`.${this._className}`).find('.link'));
-    const isToggledOn = $link.hasClass('switch_is_on');
-    return isToggledOn;
+  toggle() {
+    if (this.state.isToggledOn) {
+      this.setState({ isToggledOn: false });
+    } else {
+      this.setState({ isToggledOn: true });
+    }
   }
 
   onClick(e) {
-    if (this.isToggledOn()) {
-      this.toggleOff();
-      this.removeAsAutoEnter();
-    } else {
-      this.toggleOn();
-      this.saveAsAutoEnter();
-    }
+    this.toggle();
+  }
+
+  isToggledOn() {
+    return this.state.isToggledOn;
   }
 
   render() {
     return (
         <span className={this._className + (' on_off_button')} onClick={this.onClick}>
-            <a className={('link switch_is_on')}
+            <a className={'link ' + (this.state.isToggledOn ? 'switch_is_on' : 'switch_is_off')}
               data-balloon={this._balloonMessage}
               data-balloon-pos={this._balloonPos}
               data-balloon-length={this._balloonLength}>
-              Now Loading...
+              {(this.state.isToggledOn ? this._label + 'ON' : this._label + 'OFF')}
             </a>
         </span>
     );

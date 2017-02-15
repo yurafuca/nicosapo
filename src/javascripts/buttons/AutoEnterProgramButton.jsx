@@ -8,6 +8,7 @@ import Storage from "../modules/Storage";
 export default class AutoEnterProgramButton extends React.Component {
   constructor() {
     super();
+    this.state = { isToggledOn: null };
     this._className      = 'auto_enter_program_button';
     this._label          = `(この番組に) 自動入場`;
     this._balloonMessage = `この番組が始まったとき自動で番組を新しいタブで開きます．
@@ -15,8 +16,12 @@ export default class AutoEnterProgramButton extends React.Component {
                             [💡登録した番組は設定画面より設定できます]`;
     this._balloonPos    = 'up';
     this._balloonLength = 'xlarge';
-    this.setUp();
     this.onClick        = this.onClick.bind(this);
+  }
+
+  componentDidMount() {
+    console.log('didmount');
+    this.setUp();
   }
 
   setUp() {
@@ -27,52 +32,38 @@ export default class AutoEnterProgramButton extends React.Component {
       (response) => {
         const idHolder = new IdHolder();
         if (response[idHolder.liveId]) {
-          this.toggleOn();
+          this.setState({ isToggledOn: true });
         } else {
-          this.toggleOff();
+          this.setState({ isToggledOn: false });
         }
       }
     );
   }
 
-  toggleOn() {
-    const $link = $($(`.${this._className}`).find('.link'));
-    $link.addClass('switch_is_on');
-    $link.removeClass('switch_is_off');
-    $link.text(`${this._label}ON`);
-  }
-
-  toggleOff() {
-    const $link = $($(`.${this._className}`).find('.link'));
-    $link.addClass('switch_is_off');
-    $link.removeClass('switch_is_on');
-    $link.text(`${this._label}OFF`);
-  }
-
-  isToggledOn() {
-    const $link = $($(`.${this._className}`).find('.link'));
-    const isToggledOn = $link.hasClass('switch_is_on');
-    return isToggledOn;
-  }
-
-  onClick(e) {
-    if (this.isToggledOn()) {
-      this.toggleOff();
-      this.removeAsAutoEnter();
+  toggle() {
+    if (this.state.isToggledOn) {
+      this.setState({ isToggledOn: false });
     } else {
-      this.toggleOn();
-      this.saveAsAutoEnter();
+      this.setState({ isToggledOn: true });
     }
   }
 
-  saveAsAutoEnter() {
-    const idHolder = new IdHolder();
-    const id = idHolder.liveId; // Required for Both.
-    const thumbnail = $('meta[property="og:image"]').attr('content'); // Required for Both.
-    const title = $('meta[property="og:title"]').attr('content');  // Required for Both.
-    const openDate = $('.kaijo meta[itemprop="datePublished"]').attr("content"); // Required for Live only.
-    let owner; // Required for Community only.
+  onClick(e) {
+    if (this.state.isToggledOn) {
+      this.removeAsAutoEnter();
+    } else {
+      this.saveAsAutoEnter();
+    }
+    this.toggle();
+  }
 
+  saveAsAutoEnter() {
+    const idHolder  = new IdHolder();
+    const id        = idHolder.liveId;
+    const thumbnail = $('meta[property="og:image"]').attr('content');
+    const title     = $('meta[property="og:title"]').attr('content');
+    const openDate  = $('.kaijo meta[itemprop="datePublished"]').attr("content");
+    const owner     = null;
     Storage.saveToNestedLocalStorage('autoEnterProgramList', id, {
       state: 'init',
       thumbnail: thumbnail,
@@ -90,14 +81,14 @@ export default class AutoEnterProgramButton extends React.Component {
 
   render() {
     return (
-      <span className={this._className + (' on_off_button')} onClick={this.onClick}>
-          <a className={('link switch_is_on')}
-            data-balloon={this._balloonMessage}
-            data-balloon-pos={this._balloonPos}
-            data-balloon-length={this._balloonLength}>
-            Now Loading...
-          </a>
-      </span>
+        <span className={this._className + (' on_off_button')} onClick={this.onClick}>
+            <a className={'link ' + (this.state.isToggledOn ? 'switch_is_on' : 'switch_is_off')}
+              data-balloon={this._balloonMessage}
+              data-balloon-pos={this._balloonPos}
+              data-balloon-length={this._balloonLength}>
+              {(this.state.isToggledOn ? this._label + 'ON' : this._label + 'OFF')}
+            </a>
+        </span>
     );
   }
 }
