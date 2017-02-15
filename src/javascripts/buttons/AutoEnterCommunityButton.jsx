@@ -21,7 +21,6 @@ export default class AutoEnterCommunityButton extends React.Component {
   }
 
   componentDidMount() {
-    console.log('didmount');
     this.setUp();
   }
 

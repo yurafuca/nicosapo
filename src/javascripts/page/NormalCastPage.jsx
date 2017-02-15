@@ -11,6 +11,10 @@ const autoRedirectButton = new AutoRedirectButton();
 const autoEnterCommunityButton = new AutoEnterCommunityButton();
 
 export default class NormalCastPage extends CastPage {
+  constructor() {
+    super();
+  }
+
   putButton() {
     const parent = document.getElementsByClassName('meta')[0];
     const child = document.createElement('div');
@@ -18,7 +22,7 @@ export default class NormalCastPage extends CastPage {
     parent.appendChild(child);
     ReactDOM.render(
       <div style={{display: 'inline-block'}}>
-        <AutoRedirectButton />
+        <AutoRedirectButton notify={super.recieveNotify} />
         <AutoEnterCommunityButton />
       </div>, child
     );

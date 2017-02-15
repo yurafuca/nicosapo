@@ -1,13 +1,6 @@
 import $ from 'jquery';
-
-import Api from "./api/Api";
-
 import FormatNicoPage from "./modules/FormatNicoPage";
-import IdHolder from "./modules/IdHolder";
 import PageType from "./modules/PageType";
-
-import AutoRedirectButton from "./buttons/AutoRedirectButton";
-
 import StandByPage from "./page/StandByPage";
 import GatePage from "./page/GatePage";
 import NormalCastPage from "./page/NormalCastPage";
@@ -15,11 +8,9 @@ import ModernCastPage from "./page/ModernCastPage";
 import OfficialCastPage from "./page/OfficialCastPage";
 import CommunityPage from "./page/CommunityPage";
 import ChannelPage from "./page/ChannelPage";
-
 const formatNicoPage = new FormatNicoPage();
-const idHolder = new IdHolder();
-
-const autoRedirectButton = new AutoRedirectButton();
+import AutoRedirectButton from "./buttons/AutoRedirectButton"; //
+const autoRedirectButton = new AutoRedirectButton(); //
 
 let _page = null;
 
@@ -39,60 +30,50 @@ $(() => {
 
   _page = new pages[pageType]();
   _page.putButton();
-  // _page.setUpButton();
 
-  if ((pageType === 'NORMAL_CAST_PAGE') || (pageType === 'MODERN_CAST_PAGE') || (pageType === 'OFFICIAL_CAST_PAGE')) {
-    _page.putExtendedBar();
-    _page.setUpExtendedBar();
-    // TimeCounter.
-    setInterval(() => {
-      _page.countExtendedBar();
-    }, 1000);
-  }
-
-  if ((pageType === 'NORMAL_CAST_PAGE') || (pageType === 'MODERN_CAST_PAGE')) {
-    chrome.runtime.sendMessage({purpose: 'getFromLocalStorage', key: 'options.redirect.time'},
-    (response) => {
-      const intervalTime = response || '50';
-      console.info('[nicosapo]intervalTime = ', intervalTime);
-      setTimeout(checkNewCasts, intervalTime * 1000);
-    });
-  }
+  // if ((pageType === 'NORMAL_CAST_PAGE') || (pageType === 'MODERN_CAST_PAGE')) {
+  //   chrome.runtime.sendMessage({purpose: 'getFromLocalStorage', key: 'options.redirect.time'},
+  //   (response) => {
+  //     const intervalTime = response || '50';
+  //     console.info('[nicosapo]intervalTime = ', intervalTime);
+  //     setTimeout(checkNewCasts, intervalTime * 1000);
+  //   });
+  // }
 });
 
-const checkNewCasts = () => {
-  if (autoRedirectButton.isToggledOn()) {
-    console.log(`${idHolder.liveId} is enabled auto redirect.`);
-    Api.isOpen(idHolder.liveId).then((response) => {
-      if (response.isOpen) {
-        // OPENED
-        _page.updateExtendedBar(response);
-      } else {
-        // CLOSED
-        _page.invalidateExtendedBar();
-        Api.isOpen(idHolder.communityId).then((response) => {
-          if (response.isOpen) {
-            goToCast(response.nextLiveId);
-          }
-        });
-      }
+// const checkNewCasts = () => {
+//   if (autoRedirectButton.isToggledOn()) {
+//     console.log(`${idHolder.liveId} is enabled auto redirect.`);
+//     Api.isOpen(idHolder.liveId).then((response) => {
+//       if (response.isOpen) {
+//         // OPENED
+//         _page.updateExtendedBar(response);
+//       } else {
+//         // CLOSED
+//         _page.invalidateExtendedBar();
+//         Api.isOpen(idHolder.communityId).then((response) => {
+//           if (response.isOpen) {
+//             goToCast(response.nextLiveId);
+//           }
+//         });
+//       }
+//
+//     });
+//   } else {
+//     console.log(`${idHolder.liveId} is disabled auto redirect.`);
+//   }
+//   chrome.runtime.sendMessage({
+//       purpose: 'getFromLocalStorage',
+//       key: 'options.redirect.time'
+//     }, (response) => {
+//       const intervalTime = response || '50';
+//       console.info('[nicosapo]intervalTime = ', intervalTime);
+//       setTimeout(checkNewCasts, intervalTime * 1000);
+//   });
+// }
 
-    });
-  } else {
-    console.log(`${idHolder.liveId} is disabled auto redirect.`);
-  }
-  chrome.runtime.sendMessage({
-      purpose: 'getFromLocalStorage',
-      key: 'options.redirect.time'
-    }, (response) => {
-      const intervalTime = response || '50';
-      console.info('[nicosapo]intervalTime = ', intervalTime);
-      setTimeout(checkNewCasts, intervalTime * 1000);
-  });
-}
-
-const goToCast = (liveId) => {
-  const baseUrl = 'http://live.nicovideo.jp/watch/';
-  const liveUrl = baseUrl + liveId;
-  window.location.replace(liveUrl);
-}
+// const goToCast = (liveId) => {
+//   const baseUrl = 'http://live.nicovideo.jp/watch/';
+//   const liveUrl = baseUrl + liveId;
+//   window.location.replace(liveUrl);
+// }

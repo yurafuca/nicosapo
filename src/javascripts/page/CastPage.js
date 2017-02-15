@@ -1,9 +1,13 @@
 import $ from 'jquery'
-import Page from '../page/Page';
+import React from 'react';
+import Api from "../api/Api";
 import Common from "../common/Common";
 import ExtendedBar from "../modules/ExtendedBar";
 import Storage from "../modules/Storage";
+import IdHolder from "../modules/IdHolder";
 
+let isEnabledAutoRedirect = null;
+const idHolder = new IdHolder();
 const extendedBar = new ExtendedBar();
 const secList = [
   5 * 60,
@@ -13,7 +17,57 @@ const secList = [
   1 * 60
 ];
 
-export default class CastPage extends Page {
+export default class CastPage extends React.Component {
+  constructor() {
+    super();
+    this.putExtendedBar();
+    this.setUpExtendedBar();
+    setInterval(() => { this.countExtendedBar(); }, 1000);
+    this.checkNewCast = this.checkNewCast.bind(this);
+    this.appointment(this.checkNewCast);
+  }
+
+  recieveNotify(isToggledOn) {
+    isEnabledAutoRedirect = isToggledOn;
+  }
+
+
+  appointment(appointedFunc) {
+    chrome.runtime.sendMessage({
+        purpose: 'getFromLocalStorage',
+        key: 'options.redirect.time'
+      }, (response) => {
+        const intervalTime = response || 50;
+        setTimeout(appointedFunc, intervalTime * 1000);
+    });
+  }
+
+  checkNewCast() {
+    if (isEnabledAutoRedirect) {
+      Api.isOpen(idHolder.liveId).then((response) => {
+        // console.info(response.isOpen);
+        if (response.isOpen) {
+          this.updateExtendedBar(response);
+        } else {
+          this.invalidateExtendedBar();
+          Api.isOpen(idHolder.communityId)
+          .then((response) => {
+            if (response.isOpen) {
+              this.goToCast(response.nextLiveId);
+            }
+          });
+        }
+      });
+    }
+    this.appointment(this.checkNewCast);
+  }
+
+  goToCast(liveId) {
+    const baseUrl = 'http://live.nicovideo.jp/watch/';
+    const liveUrl = baseUrl + liveId;
+    window.location.replace(liveUrl);
+  }
+
   putExtendedBar(query) {
     extendedBar.put(query);
   }
