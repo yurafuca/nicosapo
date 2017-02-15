@@ -3,9 +3,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Common from "../common/Common"
 
-// TODO: make()はなくなった
-// TODO: $('#watch_title_box .meta').css('overflow', 'visible'); をどこかでする
-
 export default class AutoRedirectButton extends React.Component {
   constructor() {
     super();
@@ -34,29 +31,6 @@ export default class AutoRedirectButton extends React.Component {
     )
   }
 
-  // getMessage() {
-  //   return `このページを開いたままにしておくと，新しい枠で放送が始まったとき自動で枠へ移動します．`;
-  // }
-
-  // getToolTip() {
-  //   // return (
-  //   //   <Tooltip>{[
-  //   //       <span style={{fontSize: '14px'}}></span>]}
-  //   //   </Tooltip>
-  //   // )
-  //   const tooltip = (
-  //     <Tooltip id="tooltip">{[
-  //         <span style={{fontSize: '14px'}}>
-  //           <span style={{color:'#adff2f'}}>てすと<br/></span>
-  //           ほげ
-  //         </span>
-  //       ]}
-  //     </Tooltip>
-  //   );
-  //   return tooltip;
-  // }
-
-  // @Override
   toggleOn() {
     console.info('toggleon');
     const $link = $($(`.${this._className}`).find('.link'));
@@ -65,7 +39,6 @@ export default class AutoRedirectButton extends React.Component {
     $link.text(`${this._label}ON`);
   }
 
-  // @Override
   toggleOff() {
     console.info('toggleoff');
     const $link = $($(`.${this._className}`).find('.link'));
@@ -74,7 +47,6 @@ export default class AutoRedirectButton extends React.Component {
     $link.text(`${this._label}OFF`);
   }
 
-  // @Override
   isToggledOn() {
     const $link = $($(`.${this._className}`).find('.link'));
     const isToggledOn = $link.hasClass('switch_is_on');
@@ -89,16 +61,6 @@ export default class AutoRedirectButton extends React.Component {
       this.toggleOn();
       this.saveAsAutoEnter();
     }
-  }
-
-  // @Override
-  saveAsAutoEnter() {
-    // Do nothing.
-  }
-
-  // @Override
-  removeAsAutoEnter() {
-    // Do nothing.
   }
 
   render() {

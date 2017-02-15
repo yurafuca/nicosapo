@@ -35,22 +35,6 @@ export default class AutoEnterProgramButton extends React.Component {
     );
   }
 
-  // getMessage() {
-  //   return `この番組が始まったとき自動で番組を新しいタブで開きます<br/>
-  //     <span className="alertText">⚠️負荷軽減のため最大登録数は5を目安にしてください<br/></span>
-  //     <span className="infoText">💡登録した番組は設定画面より設定できます<br/></span>`;
-  // }
-  //
-  // getToolTip() {
-  //   return (
-  //     <Tooltip>{[
-  //         <span style={{fontSize: '14px'}}>{this._message}</span>]}
-  //     </Tooltip>
-  //   )
-  // }
-
-  // @Override
-  // TODO: スーパークラスに任せる．
   toggleOn() {
     const $link = $($(`.${this._className}`).find('.link'));
     $link.addClass('switch_is_on');
@@ -58,8 +42,6 @@ export default class AutoEnterProgramButton extends React.Component {
     $link.text(`${this._label}ON`);
   }
 
-  // @Override
-  // TODO: スーパークラスに任せる．
   toggleOff() {
     const $link = $($(`.${this._className}`).find('.link'));
     $link.addClass('switch_is_off');
@@ -67,7 +49,6 @@ export default class AutoEnterProgramButton extends React.Component {
     $link.text(`${this._label}OFF`);
   }
 
-  // @Override
   isToggledOn() {
     const $link = $($(`.${this._className}`).find('.link'));
     const isToggledOn = $link.hasClass('switch_is_on');
@@ -84,7 +65,6 @@ export default class AutoEnterProgramButton extends React.Component {
     }
   }
 
-  // @Override
   saveAsAutoEnter() {
     const idHolder = new IdHolder();
     const id = idHolder.liveId; // Required for Both.
@@ -102,7 +82,6 @@ export default class AutoEnterProgramButton extends React.Component {
     });
   }
 
-  // @Override
   removeAsAutoEnter() {
     const idHolder = new IdHolder();
     const id = idHolder.liveId;

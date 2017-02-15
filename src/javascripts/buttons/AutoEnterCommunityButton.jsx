@@ -36,23 +36,6 @@ export default class AutoEnterCommunityButton extends React.Component {
     );
   }
 
-  // getMessage() {
-  //   return `[このコミュニティチャンネルが放送を始めたとき自動で枠を新しいタブで開きます．<br/>
-  //     <span className="alertText">⚠️負荷軽減のため最大登録数は5を目安にしてください<br/></span>
-  //     <span className="infoText">💡自動次枠移動が ON の状態でも移動先の枠が新しいタブで開かれます]<br/></span>`;
-  // }
-  //
-  // getToolTip() {
-  //   const tooltip = (
-  //     <Tooltip>{[
-  //         <span style={{fontSize: '14px'}}>てすと</span>]}
-  //     </Tooltip>
-  //   )
-  //   return tooltip;
-  // }
-
-  // @Override
-  // TODO: スーパークラスに任せる．
   toggleOn() {
     const $link = $($(`.${this._className}`).find('.link'));
     $link.addClass('switch_is_on');
@@ -60,8 +43,6 @@ export default class AutoEnterCommunityButton extends React.Component {
     $link.text(`${this._label}ON`);
   }
 
-  // @Override
-  // TODO: スーパークラスに任せる．
   toggleOff() {
     const $link = $($(`.${this._className}`).find('.link'));
     $link.addClass('switch_is_off');
@@ -69,7 +50,6 @@ export default class AutoEnterCommunityButton extends React.Component {
     $link.text(`${this._label}OFF`);
   }
 
-  // @Override
   isToggledOn() {
     const $link = $($(`.${this._className}`).find('.link'));
     const isToggledOn = $link.hasClass('switch_is_on');
@@ -86,7 +66,6 @@ export default class AutoEnterCommunityButton extends React.Component {
     }
   }
 
-  // @Override
   saveAsAutoEnter() {
     const idHolder = new IdHolder();
     const id = idHolder.communityId; // Required for Both.
@@ -123,7 +102,6 @@ export default class AutoEnterCommunityButton extends React.Component {
     });
   }
 
-  // @Override
   removeAsAutoEnter() {
     const idHolder = new IdHolder();
     const id = idHolder.communityId;
