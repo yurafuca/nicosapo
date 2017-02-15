@@ -7,8 +7,6 @@ import IdHolder from "./modules/IdHolder";
 import PageType from "./modules/PageType";
 
 import AutoRedirectButton from "./buttons/AutoRedirectButton";
-import AutoEnterCommunityButton from "./buttons/AutoEnterCommunityButton";
-import AutoEnterProgramButton from "./buttons/AutoEnterProgramButton";
 
 import StandByPage from "./page/StandByPage";
 import GatePage from "./page/GatePage";
@@ -22,8 +20,6 @@ const formatNicoPage = new FormatNicoPage();
 const idHolder = new IdHolder();
 
 const autoRedirectButton = new AutoRedirectButton();
-const autoEnterCommunityButton = new AutoEnterCommunityButton();
-const autoEnterProgramButton = new AutoEnterProgramButton();
 
 let _page = null;
 
@@ -43,7 +39,7 @@ $(() => {
 
   _page = new pages[pageType]();
   _page.putButton();
-  _page.setUpButton();
+  // _page.setUpButton();
 
   if ((pageType === 'NORMAL_CAST_PAGE') || (pageType === 'MODERN_CAST_PAGE') || (pageType === 'OFFICIAL_CAST_PAGE')) {
     _page.putExtendedBar();
@@ -62,34 +58,6 @@ $(() => {
       setTimeout(checkNewCasts, intervalTime * 1000);
     });
   }
-});
-
-$(() => {
-  $(document).on('click', '.auto_redirect_button', () => {
-    if (autoRedirectButton.isToggledOn()) {
-      autoRedirectButton.toggleOff();
-    } else {
-      autoRedirectButton.toggleOn();
-    }
-  });
-  $(document).on('click', '.auto_enter_program_button', () => {
-    if (autoEnterProgramButton.isToggledOn()) {
-      autoEnterProgramButton.toggleOff();
-      autoEnterProgramButton.removeAsAutoEnter();
-    } else {
-      autoEnterProgramButton.toggleOn();
-      autoEnterProgramButton.saveAsAutoEnter();
-    }
-  });
-  $(document).on('click', '.auto_enter_community_button', () => {
-    if (autoEnterCommunityButton.isToggledOn()) {
-      autoEnterCommunityButton.toggleOff();
-      autoEnterCommunityButton.removeAsAutoEnter();
-    } else {
-      autoEnterCommunityButton.toggleOn();
-      autoEnterCommunityButton.saveAsAutoEnter();
-    }
-  });
 });
 
 const checkNewCasts = () => {

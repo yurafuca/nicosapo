@@ -1,50 +1,55 @@
 import $ from 'jquery'
+import React from 'react';
+import ReactDOM from 'react-dom';
 import Buttons from "../buttons/Buttons"
 import IdHolder from "../modules/IdHolder";
 import PageType from "../modules/PageType";
 import Storage from "../modules/Storage";
 
-export default class AutoEnterCommunityButton extends Buttons {
+export default class AutoEnterCommunityButton extends React.Component {
   constructor() {
     super();
-
-    this._className = 'auto_enter_community_button';
-    this._label = `(このコミュニティに) 自動入場`;
-
+    this._className      = 'auto_enter_community_button';
+    this._label          = `(このコミュニティに) 自動入場`;
     this._balloonMessage = `このコミュニティ・チャンネルが放送を始めたとき自動で枠を新しいタブで開きます．
-                                [⚠️負荷軽減のため最大登録数は5を目安にしてください]
-                                [💡自動次枠移動が ON の状態でも移動先の枠が新しいタブで開かれます]`;
-    this._balloonPos = 'up';
+                            [⚠️負荷軽減のため最大登録数は5を目安にしてください]
+                            [💡自動次枠移動が ON の状態でも移動先の枠が新しいタブで開かれます]`;
+    this._balloonPos    = 'up';
     this._balloonLength = 'xlarge';
-
-    this._body = this._make();
-
-    // console.info('[nicosapo][AutoEnterCommunityButton] this.body = ', this._body);
+    this.setUp();
+    this.onClick        = this.onClick.bind(this);
   }
 
-  // @Override
-  _make() {
-    this.$template.addClass(this._className);
-
-    this.$balloon.attr('data-balloon-pos', this._balloonPos);
-    this.$balloon.attr('data-balloon-length', this._balloonLength);
-    this.$balloon.attr('data-balloon', this._balloonMessage);
-
-    // TODO: 別クラスに切り分ける．
-    $('#watch_title_box .meta').css('overflow', 'visible');
-
-    return this.$template;
+  setUp() {
+    chrome.runtime.sendMessage({
+        purpose: 'getFromNestedLocalStorage',
+        key: 'autoEnterCommunityList'
+      },
+      (response) => {
+        const idHolder = new IdHolder();
+        if (response[idHolder.communityId]) {
+          this.toggleOn();
+        } else {
+          this.toggleOff();
+        }
+      }
+    );
   }
 
-  // @Override
-  getClassName() {
-    return this.className;
-  }
-
-  // @Override
-  getDom() {
-    return this._body;
-  }
+  // getMessage() {
+  //   return `[このコミュニティチャンネルが放送を始めたとき自動で枠を新しいタブで開きます．<br/>
+  //     <span className="alertText">⚠️負荷軽減のため最大登録数は5を目安にしてください<br/></span>
+  //     <span className="infoText">💡自動次枠移動が ON の状態でも移動先の枠が新しいタブで開かれます]<br/></span>`;
+  // }
+  //
+  // getToolTip() {
+  //   const tooltip = (
+  //     <Tooltip>{[
+  //         <span style={{fontSize: '14px'}}>てすと</span>]}
+  //     </Tooltip>
+  //   )
+  //   return tooltip;
+  // }
 
   // @Override
   // TODO: スーパークラスに任せる．
@@ -69,6 +74,16 @@ export default class AutoEnterCommunityButton extends Buttons {
     const $link = $($(`.${this._className}`).find('.link'));
     const isToggledOn = $link.hasClass('switch_is_on');
     return isToggledOn;
+  }
+
+  onClick(e) {
+    if (this.isToggledOn()) {
+      this.toggleOff();
+      this.removeAsAutoEnter();
+    } else {
+      this.toggleOn();
+      this.saveAsAutoEnter();
+    }
   }
 
   // @Override
@@ -113,5 +128,18 @@ export default class AutoEnterCommunityButton extends Buttons {
     const idHolder = new IdHolder();
     const id = idHolder.communityId;
     Storage.removeFromNestedLocalStorage('autoEnterCommunityList', id);
+  }
+
+  render() {
+    return (
+      <span className={this._className + (' on_off_button')} onClick={this.onClick}>
+          <a className={('link switch_is_on')}
+            data-balloon={this._balloonMessage}
+            data-balloon-pos={this._balloonPos}
+            data-balloon-length={this._balloonLength}>
+            Now Loading...
+          </a>
+      </span>
+    );
   }
 }

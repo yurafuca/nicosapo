@@ -38,12 +38,33 @@ $font_9: EmojiSymbols;
 //urls
 $url_0: url(chrome-extension://__MSG_@@extension_id__/images/icon.png);
 
+//for bug of nicolive
 .icon_follow {
 	position: relative;
 	display: inline-block;
 	width: 14px;
 	height: 14px;
 	vertical-align: top;
+}
+
+//format
+#watch_title_box .meta {
+	overflow: visible !important;
+}
+
+//react-bootstrap
+.tooltip-inner {
+	max-width: 270px !important;
+	padding: 7px 9px !important;
+	background: $black_80 !important;
+	z-index: 999 !important;
+}
+.tooltip.in {
+	opacity: 1.0 !important;
+}
+
+#nicosapo_buttons {
+	display: inline-block;
 }
 #nicosapo-toast {
 	font-family: $font_0, $font_1, $font_2, $font_3, $font_4, $font_5, $font_6, $font_7, $font_8, $font_9;

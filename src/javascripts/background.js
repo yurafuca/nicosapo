@@ -11,24 +11,6 @@ const newArrival = new NewArrival();
 const BADGE_COLOR = '#ff6200';
 const INTERVAL = 60 * 1000;
 
-// let _crawlState = null;
-// let CrawlState = {RUNNING: 0, WAITING: 1};
-
-// let isCrawling = null;
-
-chrome.notifications.onClicked.addListener((id) => {
-  chrome.tabs.create({
-    url: `http://live.nicovideo.jp/watch/${id}`,
-    active: true
-  });
-});
-
-// chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-//   if (request.purpose == 'isCrawling') {
-//     sendResponse(isCrawling);
-//   }
-// });
-
 $(document).ready(() => {
   chrome.browserAction.setBadgeBackgroundColor({ color: BADGE_COLOR });
   refreshBadgeAndDB();
@@ -36,10 +18,8 @@ $(document).ready(() => {
   setTimeout(() => {
     setInterval(() => {
       Promise.resolve()
-        // .then(() => {isCrawling = true;})
         .then((new AutoEnterRunner()).run('live'))
         .then((new AutoEnterRunner()).run('community'));
-        // .then(() => {isCrawling = false;});
     }, INTERVAL);
   }, 1000 * 5);
   initAutoEnterCommunityList();
@@ -135,15 +115,6 @@ const showNotification = (newInfos) => {
       active: true
     });
   };
-  // const options = {
-  //   type: "basic",
-  //   title: "放送開始のお知らせ",
-  //   message: $(newInfos).first().find('video title').text(),
-  //   iconUrl: $(newInfos).first().find('community thumbnail').text(),
-  //   eventTime: Date.now() + Number(duration) * 1000
-  // };
-  // const id = $(newInfos).first().find('video id').text();
-  // chrome.notifications.create(id, options);
 }
 
 const setBadgeText = (value) => {
