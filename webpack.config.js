@@ -8,7 +8,7 @@ module.exports = [
         background: "./src/javascripts/background.js",
         content: "./src/javascripts/content.js",
         popup: "./src/javascripts/popup.jsx",
-        options: "./src/javascripts/options.js"
+        options: "./src/javascripts/options.jsx"
     },
     output: {
         path: './dist/assets/javascripts',

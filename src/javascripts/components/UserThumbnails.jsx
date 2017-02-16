@@ -54,7 +54,7 @@ export default class UserThumbnails extends React.Component {
         index      = {thumbParam.index} />
     });
     return (
-      <div id="container">{thumbs}</div>
+      <div id="container">{thumbs}</div> // TODO: delete container
     );
   }
 }
