@@ -120,7 +120,7 @@ export default class ExtendedBar {
       for (let i = 0; i < 9; i++) {
         let message = '';
         if (i % 2 === 0) {
-          message = `${endTimeJpn} に放送が延長されました`;
+          message = `終了時刻が ${endTimeJpn} へ更新されました`;
         } else {
           message = ``;
         }
