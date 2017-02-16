@@ -32,45 +32,35 @@ const getAllSettings = () => {
 }
 
 const applyAllSettings = () => {
-  let setting = '';
-
-  setting = localStorage.getItem('options.redirect.time');
-  if (setting != null)
+  let setting;
+  if (setting = localStorage.getItem('options.redirect.time')) {
     $('#options-redirect-time').val([setting]);
-
-  setting = localStorage.getItem('options.popup.enable');
-  if (setting != null)
+  }
+  if (setting = localStorage.getItem('options.popup.enable')) {
     $('[name=options-popup-enable]').val([setting]);
-
-  setting = localStorage.getItem('options.showReserved.enable');
-  if (setting != null)
+  }
+  if (setting = localStorage.getItem('options.showReserved.enable')) {
     $('[name=options-showReserved-enable]').val([setting]);
-
-  setting = localStorage.getItem('options.playsound.enable');
-  if (setting != null)
+  }
+  if (setting = localStorage.getItem('options.playsound.enable')) {
     $('[name=options-playsound-enable]').val([setting]);
-
-  setting = localStorage.getItem('options.openingNotification.duration');
-  if (setting != null) {
+  }
+  if (setting = localStorage.getItem('options.openingNotification.duration')) {
     $('[name=options-openingNotification-duration]').val([setting]);
     $('#openingNotification-duration').text([setting]);
   }
-
-  setting = localStorage.getItem('options.playsound.volume');
-  if (setting != null)
+  if (setting = localStorage.getItem('options.playsound.volume')) {
     $('[name=options-playsound-volume]').val([setting]);
-
-  setting = localStorage.getItem('options.soundfile');
-  if (setting != null)
+  }
+  if (setting = localStorage.getItem('options.soundfile')) {
     $('#options-soundfile').val([setting]);
-
-  setting = localStorage.getItem('options.autoJump.enable');
-  if (setting != null)
+  }
+  if (setting = localStorage.getItem('options.autoJump.enable')) {
     $('[name=options-autoJump-enable]').val([setting]);
-
-  setting = localStorage.getItem('options.toast.minuteList');
-  if (setting != null)
+  }
+  if (setting = localStorage.getItem('options.toast.minuteList')) {
     $('[name=options-toast-minuteList]').val(JSON.parse(setting));
+  }
 }
 
 $(() => {
