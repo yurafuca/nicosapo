@@ -10,9 +10,6 @@
       "module": false,
       "process": false
     },
-    "ecmaFeatures": {
-      "jsx": true
-    },
     "plugins": [
       "react"
     ],
@@ -38,6 +35,10 @@
         "no-console": 0
     },
     "parserOptions": {
-        "sourceType": "module"
+        "sourceType": "module",
+        "ecmaFeatures": {
+          "experimentalObjectRestSpread": true,
+          "jsx": true
+        }
     }
 }
