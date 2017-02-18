@@ -45,8 +45,8 @@
         ],
         "css": [
             "stylesheets/content.css",
-            "stylesheets/balloon.css",
-            "stylesheets/animate.css"
+            "stylesheets/balloon.min.css",
+            "stylesheets/animate.min.css"
         ]
     }],
     "options_page": "html/options.html",
