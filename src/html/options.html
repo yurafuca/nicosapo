@@ -1,96 +1,11 @@
+<!DOCTYPE html>
 <html>
-
-<head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="../stylesheets/options.css">
-    <script src="../javascripts/options.js"></script>
-</head>
-
-<body>
-    <div class="header appicon">にこさぽ 設定</div>
-    <div class="content">
-        <div class="wrapper">
-            <h1 class="appicon">基本設定</h1>
-            <div class="items">
-                <h3>自動次枠移動の更新間隔</h3>
-                <select id="options-redirect-time">
-                    <option value="15">15秒</option>
-                    <option value="20">20秒</option>
-                    <option value="25">25秒</option>
-                    <option value="30">30秒</option>
-                    <option value="35">35秒</option>
-                    <option value="40">40秒</option>
-                    <option value="50" selected="selected">50秒</option>
-                    <option value="60">60秒</option>
-                    <option value="70">70秒</option>
-                    <option value="80">80秒</option>
-                    <option value="90">90秒</option>
-                    <option value="100">100秒</option>
-                    <option value="110">110秒</option>
-                    <option value="120">120秒</option>
-                    </select>
-                <p class='note red'>音声や動画が頻繁に停止する場合は時間を長めに設定してください</p>
-                <h3>残り時間が少なくなったとき，プレイヤー左上に通知を表示する</h3>
-                <input type="checkbox" name="options-toast-minuteList" value="5" checked> 5分前
-                <input type="checkbox" name="options-toast-minuteList" value="4"> 4分前
-                <input type="checkbox" name="options-toast-minuteList" value="3" checked> 3分前
-                <input type="checkbox" name="options-toast-minuteList" value="2"> 2分前
-                <input type="checkbox" name="options-toast-minuteList" value="1" checked> 1分前
-                <h3>自動次枠移動をデフォルトで「ON」にする</h3>
-                <input type="radio" name="options-autoJump-enable" value="enable" checked="checked"> 有効
-                <input type="radio" name="options-autoJump-enable" value="disable"> 無効
-                <h3>予約番組をポップアップに表示する</h3>
-                <input type="radio" name="options-showReserved-enable" value="enable" checked="checked"> 有効
-                <input type="radio" name="options-showReserved-enable" value="disable"> 無効
-                <h3>通知を放送開始時に表示する</h3>
-                <input type="radio" name="options-popup-enable" value="enable" checked="checked"> 有効
-                <input type="radio" name="options-popup-enable" value="disable"> 無効
-                <h3>音を放送開始時に鳴らす</h3>
-                <input type="radio" name="options-playsound-enable" value="enable" checked="checked"> 有効
-                <input type="radio" name="options-playsound-enable" value="disable"> 無効
-                <h3>通知の表示位置</h3>
-                <p style="color:#767676">Google Chrome の仕様上変更できません．</p>
-                <h3>「放送開始のお知らせ」通知の表示時間</h3>
-                <input type="range" name="options-openingNotification-duration" value="6" min="0" max="20" step="1">
-                <span id="openingNotification-duration">6</span>秒
-                <h3>通知音</h3>
-                <select id="options-soundfile">
-                        <option value="ta-da.mp3" selected="selected">Ta-da!</option>
-                        <option value="ding.mp3">Ding</option>
-                        <option value="shupopo.mp3">シュポポ</option>
-                        <option value="piroron.mp3">ピロロン</option>
-                        <option value="pinpon.mp3">ピンポン</option>
-                        <option value="famima.mp3">ファミマ</option>
-                    </select>
-                <p class='note'>選択するとサンプル音が鳴ります</p>
-                <h3>通知音のボリューム</h3>
-                <input type="range" name="options-playsound-volume" value="1.0" min="0.0" max="1.0" step="0.1">
-                <button class="soundtest">音量テスト</button>
-                </div>
-                <div id="buttons">
-                     <input id="saveAll" type="submit" value="設定を保存する" />
-                     <p id="console" style="color: #228b22;"></p>
-                </div>
-            </div>
-            <div class="wrapper">
-                <h1 class="appicon">自動入場が有効になっている番組</h1>
-                <div id="listgroup-program">
-                </div>
-            </div>
-            <div class="wrapper">
-                <h1 class="appicon">自動入場が有効になっているコミュニティ/チャンネル</h1>
-                <div id="listgroup-community">
-                </div>
-            </div>
-            <div class="wrapper">
-                <h1 class="appicon">作者にカンパする</h1>
-                <div class="items">
-                    <span class="campa">にこさぽの開発を応援してくださる方はよろしくお願いします．今後の開発の励みになります．😇</span>
-                        <p><a target="_blank" href="http://amzn.asia/hqChgj3">Amazon ほしいものリスト - ほしい雑貨</a></p>
-                        <p><a target="_blank" href="http://amzn.asia/8BFBccC">Amazon ほしいものリスト - ほしい本</a></p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </body>
+  <head>
+      <meta charset="UTF-8">
+      <link rel="stylesheet" href="../stylesheets/options.css">
+      <script src="../javascripts/options.js"></script>
+  </head>
+  <body>
+    <div id="container"></div>
+  </body>
 </html>
