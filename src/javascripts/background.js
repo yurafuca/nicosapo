@@ -1,4 +1,5 @@
 import $ from 'jquery';
+import store from 'store';
 import NewArrival from "./modules/NewArrival";
 import CommunityHolder from "./modules/CommunityHolder";
 import Api from "./api/Api";
@@ -27,13 +28,13 @@ $(document).ready(() => {
 
 const initAutoEnterCommunityList = () => {
   let autoEnterCommunityList = {};
-  if (localStorage.getItem('autoEnterCommunityList')) {
-    autoEnterCommunityList = JSON.parse(localStorage.getItem('autoEnterCommunityList'));
+  if (store.get('autoEnterCommunityList')) {
+    autoEnterCommunityList = store.get('autoEnterCommunityList');
   }
   for (const id in autoEnterCommunityList) {
     autoEnterCommunityList[id].state = 'init';
   }
-  localStorage.setItem('autoEnterCommunityList', JSON.stringify(autoEnterCommunityList));
+  store.set('autoEnterCommunityList', autoEnterCommunityList);
 };
 
 const refreshBadgeAndDB = () => {
@@ -52,14 +53,14 @@ const refreshBadgeAndDB = () => {
           const liveId = $infos.find('video id').text(); // lv[0-9]+
           if (!existsInAutoLists(communityId, liveId)) {
             // A new broadCast will be show in a notification later.
-            if (Common.enabledOrNull(localStorage.getItem('options.playsound.enable'))) {
-              const soundFile = localStorage.getItem('options.soundfile') || 'ta-da.mp3';
-              const volume    = localStorage.getItem('options.playsound.volume') || 1.0;
+            if (Common.enabledOrNull(store.get('options.playsound.enable'))) {
+              const soundFile = store.get('options.soundfile') || 'ta-da.mp3';
+              const volume    = store.get('options.playsound.volume') || 1.0;
               const audio     = new Audio(`sounds/${soundFile}`);
               audio.volume    = volume;
               audio.play();
             }
-            if (Common.enabledOrNull(localStorage.getItem('options.popup.enable'))) {
+            if (Common.enabledOrNull(store.get('options.popup.enable'))) {
               showNotification($infos);
             }
           }
@@ -76,11 +77,11 @@ const refreshBadgeAndDB = () => {
 const existsInAutoLists = (communityId, liveId) => {
   let autoEnterCommunityList = {};
   let autoEnterProgramList = {};
-  if (localStorage.getItem('autoEnterCommunityList')) {
-    autoEnterCommunityList = JSON.parse(localStorage.getItem('autoEnterCommunityList'));
+  if (store.get('autoEnterCommunityList')) {
+    autoEnterCommunityList = store.get('autoEnterCommunityList');
   }
-  if (localStorage.getItem('autoEnterProgramList')) {
-    autoEnterProgramList = JSON.parse(localStorage.getItem('autoEnterProgramList'));
+  if (store.get('autoEnterProgramList')) {
+    autoEnterProgramList = store.get('autoEnterProgramList');
   }
   for (const id in autoEnterCommunityList) {
     if (id === communityId) {
@@ -97,8 +98,8 @@ const existsInAutoLists = (communityId, liveId) => {
 
 const showNotification = (newInfos) => {
   let duration = 6;
-  if (localStorage.getItem('options.openingNotification.duration')) {
-    duration = Number(localStorage.getItem('options.openingNotification.duration'));
+  if (store.get('options.openingNotification.duration')) {
+    duration = Number(store.get('options.openingNotification.duration'));
   }
   console.info('duration = ', duration);
   const id = $(newInfos).first().find('video id').text();

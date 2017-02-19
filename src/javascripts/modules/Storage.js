@@ -32,7 +32,7 @@ export default class Storage {
           if (response == null) {
             resolve(null);
           } else {
-            resolve(JSON.parse(response));
+            resolve(response);
           }
         });
     });

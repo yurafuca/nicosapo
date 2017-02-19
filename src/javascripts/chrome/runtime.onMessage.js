@@ -1,23 +1,25 @@
+import store from 'store';
+
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.purpose == 'getFromLocalStorage') {
-    sendResponse(localStorage.getItem(request.key));
+    sendResponse(store.get(request.key));
     return;
   }
 
   if (request.purpose == 'saveToLocalStorage') {
-    localStorage.setItem(request.key, request.value);
+    store.set(request.key, request.value);
     return;
   }
 
   if (request.purpose == 'removeFromLocalStorage') {
-    localStorage.removeItem(request.key);
+    store.remove(request.key);
     return;
   }
 
   if (request.purpose == 'getFromNestedLocalStorage') {
     let storagedData = {};
-    if (localStorage.getItem(request.key)) {
-      storagedData = JSON.parse(localStorage.getItem(request.key));
+    if (store.get(request.key)) {
+      storagedData = store.get(request.key);
     }
     sendResponse(storagedData);
   }
@@ -25,8 +27,8 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   // localStorage->{id->{state, test, ...}, id->{state, test, ...}}
   if (request.purpose == 'saveToNestedLocalStorage') {
     let storagedData = {};
-    if (localStorage.getItem(request.key)) {
-      storagedData = JSON.parse(localStorage.getItem(request.key));
+    if (store.get(request.key)) {
+      storagedData = store.get(request.key);
     }
     storagedData[request.innerKey] = {};
     storagedData[request.innerKey].state = request.innerValue.state;
@@ -38,18 +40,18 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.innerValue.owner) {
       storagedData[request.innerKey].owner = request.innerValue.owner;
     }
-    localStorage.setItem(request.key, JSON.stringify(storagedData));
+    store.set(request.key, storagedData);
     return;
   }
 
   if (request.purpose == 'removeFromNestedLocalStorage') {
     let storagedData = {};
-    if (localStorage.getItem(request.key)) {
-      storagedData = JSON.parse(localStorage.getItem(request.key));
+    if (store.get(request.key)) {
+      storagedData = store.get(request.key);
     }
     console.info('[nicosapo] Delete storagedData[innerKey] ', storagedData[request.innerKey]);
     delete storagedData[request.innerKey];
-    localStorage.setItem(request.key, JSON.stringify(storagedData));
+    store.set(request.key, storagedData);
     return;
   }
 });

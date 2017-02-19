@@ -1,12 +1,6 @@
 export default class Common {
   static enabledOrNull(value) {
-    if (value == 'enable') {
-      return true;
-    }
-    if (value == null) {
-      return true;
-    }
-    return false;
+    return (value === 'enable') || value == null;
   }
 
   static wordWrap(text, length) {

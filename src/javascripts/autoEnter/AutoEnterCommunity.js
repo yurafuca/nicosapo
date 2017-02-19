@@ -1,4 +1,5 @@
 import Api from '../api/Api';
+import store from 'store';
 
 const _listKey = 'autoEnterCommunityList';
 const _notificationTitle = '自動入場（コミュニティ/チャンネル）';
@@ -7,8 +8,8 @@ export default class AutoEnterProgram {
   exec(id) {
     Api.isOpen(id).then((response) => {
       let storagedData = {};
-      if (localStorage.getItem(_listKey)) {
-        storagedData = JSON.parse(localStorage.getItem(_listKey));
+      if (store.get(_listKey)) {
+        storagedData = store.get(_listKey);
       }
       if (response.isOpen) {
         // OPENED
@@ -32,7 +33,7 @@ export default class AutoEnterProgram {
         storagedData[response.requestId].state = 'offair';
       }
       console.info('id = ', response.requestId);
-      localStorage.setItem(_listKey, JSON.stringify(storagedData));
+      store.set(_listKey, storagedData);
     });
   }
 }

@@ -1,8 +1,7 @@
 import $ from 'jquery';
 import React from 'react'
-import ReactDOM from 'react-dom';
+import store from 'store';
 import Thumbnail from '../components/Thumbnail';
-import Storage from '../modules/Storage';
 import Common from '../common/Common';
 
 const thumbParams = [];
@@ -28,7 +27,7 @@ export default class UserThumbnails extends React.Component {
       thumbParam.openTime   = $program.find('video open_time_jpstr').text();
       thumbParam.text       = thumbParam.title;
       thumbParam.index      = index;
-      if (!thumbParam.isReserved || Common.enabledOrNull(localStorage.getItem('options.showReserved.enable'))) {
+      if (!thumbParam.isReserved || Common.enabledOrNull(store.get('options.showReserved.enable'))) {
         thumbParams.push(thumbParam);
       }
     });
@@ -41,8 +40,8 @@ export default class UserThumbnails extends React.Component {
 
   render() {
     this.setParams();
-    const thumbs = thumbParams.map(thumbParam => {
-      return <Thumbnail
+    const thumbs = thumbParams.map((thumbParam) =>
+      <Thumbnail
         background = {thumbParam.background}
         title      = {thumbParam.title}
         url        = {thumbParam.url}
@@ -52,7 +51,7 @@ export default class UserThumbnails extends React.Component {
         day        = {thumbParam.day}
         openTime   = {thumbParam.openTime}
         index      = {thumbParam.index} />
-    });
+    );
     return (
       <div id="container">{thumbs}</div> // TODO: delete container
     );

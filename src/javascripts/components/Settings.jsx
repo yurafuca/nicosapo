@@ -22,38 +22,19 @@ export default class Settings extends React.Component {
   }
 
   getInitialState() {
-    const settings = this.getDefaultSettings();
-    const selectableList = {
-      minuteList: [15, 20, 25, 30, 25, 40, 50, 60, 70, 80, 90, 100, 110, 120],
-      toastTimes: [1, 2, 3, 4, 5],
-      soundFiles: [
-        {path: 'ta-da.mp3',   text: 'Ta-da!'},
-        {path: 'ding.mp3',    text: 'Ding'},
-        {path: 'shupopo.mp3', text: 'シュポポ'},
-        {path: 'piroron.mp3', text: 'ピロロン'},
-        {path: 'pinpon.mp3',  text: 'ピンポン'},
-        {path: 'famima.mp3',  text: 'ファミマ'},
-      ]
-    };
-    Object.assign(settings, {'selectableList': selectableList});
-    return settings;
-  }
-
-  componentDidMount() {
-    ReactDOM.render(
-      <AutoEnterList type='community' />,
-      document.getElementById('listgroup-community')
-    );
-
-    ReactDOM.render(
-      <AutoEnterList type='program' />,
-      document.getElementById('listgroup-program')
-    );
-    this.reflectSettings();
-  }
-
-  getDefaultSettings() {
-    return ({
+    const state = {
+      selectableList: {
+        minuteList: [15, 20, 25, 30, 25, 40, 50, 60, 70, 80, 90, 100, 110, 120],
+        toastTimes: [1, 2, 3, 4, 5],
+        soundFiles: [
+          {path: 'ta-da.mp3',   text: 'Ta-da!'},
+          {path: 'ding.mp3',    text: 'Ding'},
+          {path: 'shupopo.mp3', text: 'シュポポ'},
+          {path: 'piroron.mp3', text: 'ピロロン'},
+          {path: 'pinpon.mp3',  text: 'ピンポン'},
+          {path: 'famima.mp3',  text: 'ファミマ'},
+        ]
+      },
       'options.redirect.time':                50,
       'options.toast.minuteList':             [1, 3, 5],
       'options.soundfile':                    'ta-da.mp3',
@@ -63,7 +44,20 @@ export default class Settings extends React.Component {
       'options.playsound.enable':             'enable',
       'options.openingNotification.duration':  6,
       'options.playsound.volume':              1.0
-    })
+    };
+    return state;
+  }
+
+  componentDidMount() {
+    ReactDOM.render(
+      <AutoEnterList type='community' />,
+      document.getElementById('listgroup-community')
+    );
+    ReactDOM.render(
+      <AutoEnterList type='program' />,
+      document.getElementById('listgroup-program')
+    );
+    this.reflectSettings();
   }
 
   onChange(e) {
@@ -72,7 +66,7 @@ export default class Settings extends React.Component {
     }
     const state = {};
     state[e.target.name] = e.target.value;
-    // this.setState(state, () => { console.info(this.state); });
+    this.setState(state);
   }
 
   onChangeCheckBox(e) {
@@ -118,8 +112,6 @@ export default class Settings extends React.Component {
           <div className="wrapper">
             <h1 className="appicon">基本設定</h1>
             <div className="items">
-
-
               <div>
                 <h3>自動次枠移動の更新間隔</h3>
                 <select  name="options.redirect.time"  onChange={this.onChange} value={this.state['options.redirect.time']}>
@@ -131,9 +123,6 @@ export default class Settings extends React.Component {
                 </select>
                 <p className='note red'> 音声や動画が頻繁に停止する場合は時間を長めに設定してください </p>
               </div>
-
-
-
               <div>
                 <h3>残り時間が少なくなったとき，プレイヤー左上に通知を表示する</h3>
                 {
@@ -145,9 +134,6 @@ export default class Settings extends React.Component {
                   )
                 }
               </div>
-
-
-
               <div>
                 <h3>自動次枠移動をデフォルトで「ON」にする</h3>
                 <input type="radio" name="options.autoJump.enable" value={'enable'} checked={this.state['options.autoJump.enable'] == 'enable'} onChange={this.onChange} /> 有効
@@ -187,7 +173,6 @@ export default class Settings extends React.Component {
                 </select>
                 <p className='note'>選択するとサンプル音が鳴ります</p>
               </div>
-
               <div>
                 <h3>通知音のボリューム</h3>
                 <input type="range" name="options.playsound.volume" value={this.state['options.playsound.volume']} min="0.0" max="1.0" step="0.1" onChange={this.onChange} />

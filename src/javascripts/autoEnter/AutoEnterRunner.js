@@ -1,3 +1,4 @@
+import store from 'store';
 import AutoEnterProgram from '../autoEnter/AutoEnterProgram';
 import AutoEnterCommunity from '../autoEnter/AutoEnterCommunity';
 
@@ -19,8 +20,8 @@ export default class AutoEnterRunner {
   run(requestType) {
     new Promise((resolve) => {
       let storagedData = {};
-      if (localStorage.getItem(_keys[requestType])) {
-        storagedData = JSON.parse(localStorage.getItem(_keys[requestType]));
+      if (store.get(_keys[requestType])) {
+        storagedData = store.get(_keys[requestType]);
       }
       const funcs = [];
       for (const id in storagedData) {
