@@ -1,6 +1,12 @@
 export default class Common {
   static enabledOrNull(value) {
-    return (value === 'enable') || value == null;
+    if (value == 'enable') {
+      return true;
+    }
+    if (value == null) {
+      return true;
+    }
+    return false;
   }
 
   static wordWrap(text, length) {
@@ -10,20 +16,5 @@ export default class Common {
 
   static sleep (time) {
     return new Promise((resolve) => setTimeout(resolve, time));
-  }
-
-  static waitUntilCrawlDone() {
-    return new Promise((resolve) => {
-      const checkFunction = () => {
-        chrome.runtime.sendMessage({
-            purpose: 'getCrawlState',
-          }, (response) => {
-          const intervalTime = response || '50';
-          console.info('[nicosapo]intervalTime = ', intervalTime);
-          setTimeout(checkNewCasts, intervalTime * 1000);
-        });
-      }
-      
-    });
   }
 }

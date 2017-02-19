@@ -1,7 +1,5 @@
 export default class Storage {
   static saveToNestedLocalStorage(key, innerKey, innerValue) {
-    console.debug(innerValue);
-
     chrome.runtime.sendMessage({
         purpose: 'saveToNestedLocalStorage',
         key: key,
@@ -9,7 +7,7 @@ export default class Storage {
         innerValue: innerValue
       },
       (response) => {
-        console.info('[nicosapo][saveToNestedLocalStorage] response = ', response);
+        console.info('response = ', response);
       });
   }
 
@@ -20,7 +18,7 @@ export default class Storage {
         innerKey: innerKey
       },
       (response) => {
-        console.info('[nicosapo][removeFromNestedLocalStorage] response = ', response);
+        console.info('response = ', response);
       });
   }
 
