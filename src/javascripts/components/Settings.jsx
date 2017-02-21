@@ -23,6 +23,7 @@ export default class Settings extends React.Component {
 
   getInitialState() {
     const state = {
+      resultMessage: '',
       selectableList: {
         minuteList: [15, 20, 25, 30, 25, 40, 50, 60, 70, 80, 90, 100, 110, 120],
         toastTimes: [1, 2, 3, 4, 5],
@@ -91,7 +92,7 @@ export default class Settings extends React.Component {
   reflectSettings() {
     for (const key in store.getAll()) {
       const state = {};
-      state[key] = store.get(key);;
+      state[key] = store.get(key);
       this.setState(state);
     }
   }
@@ -102,12 +103,15 @@ export default class Settings extends React.Component {
         store.set(key, this.state[key]);
       }
     }
+    this.setState({resultMessage: '設定を保存しました'}, () => {
+      setTimeout(() => {this.setState({resultMessage: ''})}, 1000);
+    });
   }
 
   render() {
     return (
       <div>
-        <div className="header appicon">にこさぽ 設定</div>
+        // <div className="header appicon">にこさぽ 設定</div>
         <div className="content">
           <div className="wrapper">
             <h1 className="appicon">基本設定</h1>
@@ -163,7 +167,6 @@ export default class Settings extends React.Component {
                 <input type="range" name="options.openingNotification.duration" value={this.state['options.openingNotification.duration']} min="0" max="20" step="1" onChange={this.onChange} />
                 <span id="openingNotification.duration">{this.state['options.openingNotification.duration']}秒</span>
               </div>
-
               <div>
                 <h3>通知音</h3>
                 <select name="options.soundfile" onChange={this.onChange} value={this.state['options.soundfile']}>
@@ -180,8 +183,7 @@ export default class Settings extends React.Component {
               </div>
               <div id="buttons">
                 <input id="saveAll" type="submit" value="設定を保存する" onClick={this.saveSettings}/>
-                <p id="console" style={{color: '#228b22'}}>
-                </p>
+                <p id="console" style={{color: '#228b22'}}>{this.state.resultMessage}</p>
               </div>
             </div>
           </div>
