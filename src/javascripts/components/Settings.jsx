@@ -111,7 +111,6 @@ export default class Settings extends React.Component {
   render() {
     return (
       <div>
-        // <div className="header appicon">にこさぽ 設定</div>
         <div className="content">
           <div className="wrapper">
             <h1 className="appicon">基本設定</h1>
