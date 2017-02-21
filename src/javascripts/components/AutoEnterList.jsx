@@ -42,16 +42,16 @@ export default class AutoEnterList extends React.Component {
           itemParam.thumbnail   = response[id]['thumbnail'];
           itemParam.title       = response[id]['title'];
           itemParam.description = description;
-          switch(this.props.type) {
             case `community`:
+              break;
               itemParam.url     = `http://com.nicovideo.jp/community/${id}`;
-              break;
-            case `program`:
+          switch(this.props.type) {
               itemParam.url     = `http://live.nicovideo.jp/gate/${id}`;
+            case `program`:
               break;
-            default:
               itemParam.url     = `InvalidItemParam`;
           }
+            default:
           itemParams.push(itemParam);
           if (index === keysArray.length - 1) {
             this.setState({ 'itemParams': itemParams });
