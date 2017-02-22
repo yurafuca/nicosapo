@@ -1,6 +1,4 @@
-import $ from 'jquery';
 import React from 'react';
-import ReactDOM from 'react-dom';
 import Time from '../common/Time';
 import AutoEnterItem from '../components/AutoEnterItem';
 import AutoEnterEmpty from '../components/AutoEnterEmpty';
@@ -42,16 +40,17 @@ export default class AutoEnterList extends React.Component {
           itemParam.thumbnail   = response[id]['thumbnail'];
           itemParam.title       = response[id]['title'];
           itemParam.description = description;
-            case `community`:
-              break;
-              itemParam.url     = `http://com.nicovideo.jp/community/${id}`;
           switch(this.props.type) {
-              itemParam.url     = `http://live.nicovideo.jp/gate/${id}`;
-            case `program`:
+            case `community`:
+              itemParam.url     = `http://com.nicovideo.jp/community/${id}`;
               break;
-              itemParam.url     = `InvalidItemParam`;
-          }
+            case `program`:
+              itemParam.url     = `http://live.nicovideo.jp/gate/${id}`;
+              break;
             default:
+              itemParam.url     = `InvalidItemParam`;
+              break;
+          }
           itemParams.push(itemParam);
           if (index === keysArray.length - 1) {
             this.setState({ 'itemParams': itemParams });
@@ -74,15 +73,13 @@ export default class AutoEnterList extends React.Component {
       key: keys[this.props.type],
       innerKey: id
     });
-    const itemParams = itemParams.filter((param, index) => {
-      return param.id != id;
-    });
+    const itemParams = itemParams.filter((param) => param.id != id );
     this.setState({ 'itemParams': itemParams });
   }
 
   render() {
-    let items = this.state.itemParams.map((itemParam) => {
-      return <AutoEnterItem
+    let items = this.state.itemParams.map((itemParam) =>
+      <AutoEnterItem
         id          = {itemParam.id}
         type        = {itemParam.type}
         onClick     = {itemParam.onClick}
@@ -90,7 +87,7 @@ export default class AutoEnterList extends React.Component {
         url         = {itemParam.url}
         title       = {itemParam.title}
         description = {itemParam.description} />
-    });
+    );
     if (this.state.itemParams.length === 0) {
       items = <AutoEnterEmpty />
     }
