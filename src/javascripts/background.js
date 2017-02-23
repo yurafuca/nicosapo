@@ -3,7 +3,6 @@ import store from 'store';
 import NewArrival from "./modules/NewArrival";
 import CommunityHolder from "./modules/CommunityHolder";
 import Api from "./api/Api";
-import Common from "./common/Common";
 import AutoEnterRunner from './autoEnter/AutoEnterRunner'
 import './chrome/runtime.onMessage';
 
@@ -27,14 +26,11 @@ $(document).ready(() => {
 });
 
 const initAutoEnterCommunityList = () => {
-  let autoEnterCommunityList = {};
-  if (store.get('autoEnterCommunityList')) {
-    autoEnterCommunityList = store.get('autoEnterCommunityList');
+  const list = store.get('autoEnterCommunityList');
+  for (const id in list) {
+    list[id].state = 'init';
   }
-  for (const id in autoEnterCommunityList) {
-    autoEnterCommunityList[id].state = 'init';
-  }
-  store.set('autoEnterCommunityList', autoEnterCommunityList);
+  store.set('autoEnterCommunityList', list);
 };
 
 const refreshBadgeAndDB = () => {
@@ -46,21 +42,23 @@ const refreshBadgeAndDB = () => {
       setBadgeText(removeReservation($videoInfos).length);
       $.each(newArrival.get($videoInfos), (index, $infos) => {
         if (communityHolder.isNew($infos)) {
-          // $infos is a followed community by a user as NEWLY.
-          // Do nothing.
+          /**
+           * Do nothing.
+           * Reason: $infos is a followed community by a user as NEWLY.
+           */
         } else {
           const communityId = `co${$infos.find('community id').text()}`; // co[0-9]+
-          const liveId = $infos.find('video id').text(); // lv[0-9]+
-          if (!existsInAutoLists(communityId, liveId)) {
-            // A new broadCast will be show in a notification later.
-            if (Common.enabledOrNull(store.get('options.playsound.enable'))) {
-              const soundFile = store.get('options.soundfile') || 'ta-da.mp3';
-              const volume    = store.get('options.playsound.volume') || 1.0;
-              const audio     = new Audio(`sounds/${soundFile}`);
-              audio.volume    = volume;
-              audio.play();
+          const liveId      = $infos.find('video id').text(); // lv[0-9]+
+          if (existsInAutoLists(communityId, liveId)) {
+            /**
+             * Do nothing.
+             * Reason: A new broadCast will be show in a notification later.
+             */
+          } else {
+            if (store.get('options.playsound.enable') == 'enable') {
+              playSound();
             }
-            if (Common.enabledOrNull(store.get('options.popup.enable'))) {
+            if (store.get('options.popup.enable') == 'enable') {
               showNotification($infos);
             }
           }
@@ -68,27 +66,29 @@ const refreshBadgeAndDB = () => {
       });
       newArrival.setSource($videoInfos);
     });
-  // Get a list of following communities.
+
   Api.getCheckList().then((idList) => {
-    communityHolder.setSource(idList);
+    communityHolder.setSource(idList); // Get a list of following communities.
   });
 }
 
+const playSound = () => {
+  const soundFile = store.get('options.soundfile') || 'ta-da.mp3';
+  const volume    = store.get('options.playsound.volume') || 1.0;
+  const audio     = new Audio(`sounds/${soundFile}`);
+  audio.volume    = volume;
+  audio.play();
+}
+
 const existsInAutoLists = (communityId, liveId) => {
-  let autoEnterCommunityList = {};
-  let autoEnterProgramList = {};
-  if (store.get('autoEnterCommunityList')) {
-    autoEnterCommunityList = store.get('autoEnterCommunityList');
-  }
-  if (store.get('autoEnterProgramList')) {
-    autoEnterProgramList = store.get('autoEnterProgramList');
-  }
-  for (const id in autoEnterCommunityList) {
+  const communityList = store.get('autoEnterCommunityList');
+  const programList   = store.get('autoEnterProgramList');
+  for (const id in communityList) {
     if (id === communityId) {
       return true;
     }
   }
-  for (const id in autoEnterProgramList) {
+  for (const id in programList) {
     if (id === liveId) {
       return true;
     }
@@ -97,11 +97,7 @@ const existsInAutoLists = (communityId, liveId) => {
 }
 
 const showNotification = (newInfos) => {
-  let duration = 6;
-  if (store.get('options.openingNotification.duration')) {
-    duration = Number(store.get('options.openingNotification.duration'));
-  }
-  console.info('duration = ', duration);
+  const duration = store.get('options.openingNotification.duration') || 6;
   const id = $(newInfos).first().find('video id').text();
   const options = {
     body: $(newInfos).first().find('video title').text(),
@@ -132,13 +128,11 @@ const setBadgeText = (value) => {
 
 const removeReservation = ($videoInfos) => {
   const result = [];
-  console.info($videoInfos);
   $.each($videoInfos, (index, $item) => {
     const is_reserved = $item.find('video is_reserved').text();
     if (is_reserved == 'false') {
       result.push($item);
     }
   });
-  console.info(result);
   return $(result);
 };

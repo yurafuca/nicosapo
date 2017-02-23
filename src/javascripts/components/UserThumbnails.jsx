@@ -27,7 +27,7 @@ export default class UserThumbnails extends React.Component {
       thumbParam.openTime   = $program.find('video open_time_jpstr').text();
       thumbParam.text       = thumbParam.title;
       thumbParam.index      = index;
-      if (!thumbParam.isReserved || Common.enabledOrNull(store.get('options.showReserved.enable'))) {
+      if (!thumbParam.isReserved || store.get('options.showReserved.enable') == 'enable') {
         thumbParams.push(thumbParam);
       }
     });
