@@ -8,11 +8,10 @@ import './chrome/runtime.onMessage';
 
 const communityHolder = new CommunityHolder();
 const newArrival = new NewArrival();
-const BADGE_COLOR = '#ff6200';
 const INTERVAL = 60 * 1000;
 
 $(document).ready(() => {
-  chrome.browserAction.setBadgeBackgroundColor({ color: BADGE_COLOR });
+  chrome.browserAction.setBadgeBackgroundColor({ color: '#ff6200' });
   refreshBadgeAndDB();
   setInterval(refreshBadgeAndDB, INTERVAL);
   setTimeout(() => {

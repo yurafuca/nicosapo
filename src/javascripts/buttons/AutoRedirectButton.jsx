@@ -3,7 +3,7 @@ import React from 'react';
 export default class AutoRedirectButton extends React.Component {
   constructor() {
     super();
-    this.state = { isToggledOn: null };
+    this.state           = { isToggledOn: null };
     this._className      = 'auto_redirect_button';
     this._label          = `自動次枠移動`;
     this._balloonMessage = `このページを開いたままにしておくと，新しい枠で放送が始まったとき自動で枠へ移動します．`;
