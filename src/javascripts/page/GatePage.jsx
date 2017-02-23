@@ -2,10 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Page from '../page/Page';
 import AutoEnterProgramButton from "../buttons/AutoEnterProgramButton";
-import IdHolder from "../modules/IdHolder";
-
-const idHolder = new IdHolder();
-const autoEnterProgramButton = new AutoEnterProgramButton();
 
 function prependChild(newNode, parentNode) {
     parentNode.insertBefore(newNode, parentNode.firstChild);

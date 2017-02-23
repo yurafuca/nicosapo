@@ -3,12 +3,6 @@ import ReactDOM from 'react-dom';
 import CastPage from '../page/CastPage';
 import AutoRedirectButton from "../buttons/AutoRedirectButton";
 import AutoEnterCommunityButton from "../buttons/AutoEnterCommunityButton";
-import Common from "../common/Common";
-import IdHolder from "../modules/IdHolder";
-
-const idHolder = new IdHolder();
-const autoRedirectButton = new AutoRedirectButton();
-const autoEnterCommunityButton = new AutoEnterCommunityButton();
 
 export default class NormalCastPage extends CastPage {
   putButton() {
