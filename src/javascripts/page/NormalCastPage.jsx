@@ -11,10 +11,6 @@ const autoRedirectButton = new AutoRedirectButton();
 const autoEnterCommunityButton = new AutoEnterCommunityButton();
 
 export default class NormalCastPage extends CastPage {
-  constructor() {
-    super();
-  }
-
   putButton() {
     const parent = document.getElementsByClassName('meta')[0];
     const child = document.createElement('div');
