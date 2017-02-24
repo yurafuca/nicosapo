@@ -1,10 +1,11 @@
 import $ from 'jquery'
 import Api from "../api/Api";
 import Time from "../common/Time";
-import TimeCounter from "../common/TimeCounter";
+import Clock from "../common/Clock";
 import IdHolder from "../modules/IdHolder";
 
-let timeCounter;
+const clock = new Clock(new Date());
+const finMessage = '放送が終了しました';
 const idHolder = new IdHolder();
 const $template = $(`
     <div id="extended-bar">
@@ -14,128 +15,97 @@ const $template = $(`
     </div>
 `);
 
-function put(idName) {
+const put = (idName) => {
   $(idName).after($template);
 }
 
-function setUp() {
-  Api.getStatus(idHolder.liveId).then((response) => {
-    const currentTime = Date.now();
-    const currentDate = new Date(currentTime);
-    // new Date() は引数にミリ秒を要求するので 1000 倍するために末尾に '000' を付加する．
-    const endTime = Number(`${$(response).find('stream end_time').text()}000`);
-    const endDate = new Date(endTime);
-    const endTimeJpn = Time.toJpnString(endDate.getTime());
-    const restTime_Hour = Time.hourDistance(currentDate, endDate);
-    let restTime_Minute = Time.minuteSurplusDistance(currentDate, endDate);
-    let restTime_Second = Time.secondSurplusDistance(currentDate, endDate);
-    if (Number(restTime_Hour) > 0) {
-      restTime_Minute = `0${restTime_Minute}`.slice(-2);
+const set = (isReset, statusResponse) => {
+  (isReset
+    ? Promise.resolve(statusResponse)
+    : Api.getStatus(idHolder.liveId))
+  .then((response) => {
+    const endTimes = {
+      sec: '',
+      millisec: '',
+      jpstr: ''
+    };
+    endTimes.sec = Number($(response).find('stream end_time').text());
+    endTimes.millisec = Number(`${endTimes.sec}000`); // new Date() requires millisecond.
+    const dates = {
+      now: '',
+      end: ''
+    };
+    dates.now = new Date(Date.now());
+    dates.end = new Date(endTimes.millisec);
+    endTimes.jpstr = Time.toJpnString(dates.end.getTime());
+    const remainingTimes = {
+      hour: '',
+      min: '',
+      sec: ''
+    };
+    remainingTimes.hour = Time.hourDistance(dates.now, dates.end);
+    remainingTimes.min = Time.minuteSurplusDistance(dates.now, dates.end);
+    remainingTimes.sec = Time.secondSurplusDistance(dates.now, dates.end);
+    if (Number(remainingTimes.hour) > 0) {
+      remainingTimes.min = `0${remainingTimes.min}`.slice(-2);
     }
-    restTime_Second = `0${restTime_Second}`.slice(-2);
-    /**
-     * Initialize ExtendedBar's timer.
-     */
-    timeCounter.setHour(restTime_Hour);
-    timeCounter.setMinute(restTime_Minute);
-    timeCounter.setSecond(restTime_Second);
+    remainingTimes.sec = `0${remainingTimes.sec}`.slice(-2);
+    clock.setHour(remainingTimes.hour);
+    clock.setMinute(remainingTimes.min);
+    clock.setSecond(remainingTimes.sec);
 
-    $('#extended-bar .end-time').text(`${endTimeJpn}`);
-    if (Number(restTime_Hour) > 0) {
-      $('#extended-bar .rest-time').text(`${restTime_Hour}：${restTime_Minute}：${restTime_Second}`);
+    if (Number(remainingTimes.hour) > 0) {
+      $('#extended-bar .rest-time').text(`${remainingTimes.hour}：${remainingTimes.min}：${remainingTimes.sec}`);
     } else {
-      $('#extended-bar .rest-time').text(`${restTime_Minute}：${restTime_Second}`);
+      $('#extended-bar .rest-time').text(`${remainingTimes.min}：${remainingTimes.sec}`);
     }
-  });
+    $('#extended-bar .end-time').text(`${endTimes.jpstr}`);
+  })
 }
 
-function tick() {
-  const $restTime = $('#extended-bar .rest-time');
-  if ($restTime.text() == '放送が終了しました') { // TODO: Too Ugly.
+const invalidate = () => {
+  $('#extended-bar .end-time').text(finMessage);
+  $('#extended-bar .rest-time').text(finMessage);
+}
+
+const setUp = () => {
+  set();
+}
+
+const tick = () => {
+  if (clock.getRemainSec() === 0) {
+    invalidate();
     return;
   }
-  const hour = timeCounter.getHour();
-  let minute = timeCounter.getMinute();
-  let second = timeCounter.getSecond();
+
+  const $restTime = $('#extended-bar .rest-time');
+  const hour = clock.getHour();
 
   if (Number(hour) > 0) {
-    minute = `0${minute}`.slice(-2);
-  }
-  second = `0${second}`.slice(-2);
-
-  if (Number(hour) > 0) {
+    const minute = `0${clock.getMinute()}`.slice(-2);
+    const second = `0${clock.getSecond()}`.slice(-2);
     $restTime.text(`${hour}：${minute}：${second}`);
   } else {
+    const minute = `${clock.getMinute()}`.slice(-2);
+    const second = `0${clock.getSecond()}`.slice(-2);
     $restTime.text(`${minute}：${second}`);
   }
-  timeCounter.subSecond(1);
+
+  clock.subSecond(1);
 }
 
 export default class ExtendedBar {
-  constructor() {
-    timeCounter = new TimeCounter(new Date());
-  }
-
   build(idName) {
     put(idName);
     setUp();
     setInterval(() => { tick() }, 1000);
   }
 
-  reset(response) {
-    const currentTime = Date.now();
-    const currentDate = new Date(currentTime);
-
-    // new Date() は引数にミリ秒を要求するので 1000 倍するために末尾に '000' を付加する．
-    const endTime = Number(`${$(response).find('stream end_time').text()}000`);
-    const endDate = new Date(endTime)
-
-    const endTimeJpn = Time.toJpnString(endDate.getTime());
-    const endTimeJpnLast = $('#extended-bar .end-time').text();
-
-    const restTime_Hour = Time.hourDistance(currentDate, endDate);
-    let restTime_Minute = Time.minuteSurplusDistance(currentDate, endDate);
-    let restTime_Second = Time.secondSurplusDistance(currentDate, endDate);
-
-    if (Number(restTime_Hour) > 0) {
-      restTime_Minute = `0${restTime_Minute}`.slice(-2);
-    }
-    restTime_Second = `0${restTime_Second}`.slice(-2);
-
-    // 終了時刻が更新された場合はタイマーを更新
-    if (endTimeJpnLast !== endTimeJpn) {
-      timeCounter.setHour(restTime_Hour);
-      timeCounter.setMinute(restTime_Minute);
-      timeCounter.setSecond(restTime_Second);
-
-      $('#extended-bar .end-time').text(`${endTimeJpn}`);
-      if (Number(restTime_Hour) > 0) {
-        $('#extended-bar .rest-time').text(`${restTime_Hour}：${restTime_Minute}：${restTime_Second}`);
-      } else {
-        $('#extended-bar .rest-time').text(`${restTime_Minute}：${restTime_Second}`);
-      }
-
-      // 点滅処理 (奇数回繰り返してメッセージを残す)
-      for (let i = 0; i < 9; i++) {
-        let message = '';
-        if (i % 2 === 0) {
-          message = `終了時刻が ${endTimeJpn} へ更新されました`;
-        } else {
-          message = ``;
-        }
-        setTimeout(() => {
-          $('#extended-bar .message').text(message);
-        }, i * 500);
-      }
-    }
-  }
-
-  invalidate() {
-    $('#extended-bar .end-time').text(`放送が終了しました`);
-    $('#extended-bar .rest-time').text(`放送が終了しました`);
+  reset(statusResponse) {
+    set(true, statusResponse);
   }
 
   getRemainSec() {
-    return timeCounter.getRemainSec();
+    return clock.getRemainSec();
   }
 }

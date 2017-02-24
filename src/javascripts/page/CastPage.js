@@ -42,7 +42,6 @@ export default class CastPage extends React.Component {
         if (response.isOpen) {
           extendedBar.reset(response);
         } else {
-          extendedBar.invalidate();
           Api.isOpen(idHolder.communityId)
           .then((response) => {
             if (response.isOpen) {

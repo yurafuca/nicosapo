@@ -1,4 +1,4 @@
-export default class TimeCounter {
+export default class Clock {
   constructor(date) {
     this.second = date.getSeconds();
     this.minute = date.getMinutes();
