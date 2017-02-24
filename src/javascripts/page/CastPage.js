@@ -1,5 +1,6 @@
 import $ from 'jquery'
 import React from 'react';
+import ReactDOM from 'react-dom';
 import Api from "../api/Api";
 import Common from "../common/Common";
 import ExtendedBar from "../modules/ExtendedBar";
@@ -8,19 +9,32 @@ import IdHolder from "../modules/IdHolder";
 
 let isEnabledAutoRedirect = false;
 const idHolder = new IdHolder();
-const extendedBar = new ExtendedBar();
 const secList = [5 * 60, 4 * 60, 3 * 60, 2 * 60, 1 * 60];
+
+function insertAfter(newNode, referenceNode) {
+    referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
+}
 
 export default class CastPage extends React.Component {
   constructor() {
     super();
+    this.state = {
+      castInfos: {
+        isExtended: false,
+        statusResponse: null
+      }
+    };
     this.checkNewCast = this.checkNewCast.bind(this);
     this.appointment(this.checkNewCast);
   }
 
   buildExtendedBar(idName) {
-    const elem = document.getElementById(idName);
-    ReactDOM.render(<ExtendedBar />, elem)
+    console.info('build');
+    const beforeChild = document.getElementById(idName);
+    const child = document.createElement('div');
+    child.id = 'nicosapo_exbar';
+    insertAfter(child, beforeChild);
+    ReactDOM.render(<ExtendedBar castInfos={this.state.castInfos}/>, child);
   }
 
   recieveNotify(isToggledOn) {
@@ -41,7 +55,12 @@ export default class CastPage extends React.Component {
     if (isEnabledAutoRedirect) {
       Api.isOpen(idHolder.liveId).then((response) => {
         if (response.isOpen) {
-          extendedBar.reset(response);
+          // extendedBar.reset(response);
+          const castInfos = {
+            isExtended: true,
+            statusResponse: response
+          }
+          this.setState({ castInfos: castInfos });
         } else {
           Api.isOpen(idHolder.communityId)
           .then((response) => {
