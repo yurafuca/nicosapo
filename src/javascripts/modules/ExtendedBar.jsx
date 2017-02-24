@@ -9,6 +9,21 @@ const _clock = new Clock(new Date());
 
 // TODO: reactDOM.render()の第二引数を append 仕様にする．
 
+const _getEndDate = (statusResponse) => {
+  const end = _getEndTime(statusResponse);
+  const endDate = new Date(end.millisec);
+  return endDate;
+}
+
+const _getEndTime = (statusResponse) => {
+  const $endTime = $(statusResponse).find('stream end_time');
+  const end = {
+    second: Number($endTime.text()),
+    millisec: Number($endTime.text()) * 1000,
+  };
+  return end;
+}
+
 export default class ExtendedBar extends React.Component {
   constructor(props) {
     super(props);
@@ -21,13 +36,55 @@ export default class ExtendedBar extends React.Component {
       isExtended: false,
       updateText: '延長されていません',
     };
-    build();
+    this.build();
     setInterval(() => { this.tick() }, 1000);
   }
 
-  reset(statusResponse) {
-    setParams(true, statusResponse);
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.castInfos.isExtended) {
+      this.reset(nextProps.castInfos.statusResponse);
+    }
   }
+
+  build() {
+    this.setParams(false, null);
+  }
+
+  reset(statusResponse) {
+    this.setParams(true, statusResponse);
+  }
+
+  setParams(isReset = false, statusResponse) {
+      (isReset
+        ? Promise.resolve(statusResponse)
+        : Api.getStatus((new IdHolder()).liveId))
+      .then((response) => {
+        this.setEndText(response);
+        this.setRemainTime(response);
+      })
+    }
+
+  setEndText(statusResponse) {
+    const end = _getEndTime(statusResponse);
+    const endDate = new Date(end.millisec);
+    const endText = Time.toJpnString(endDate);
+    this.setState({ endText: endText });
+  }
+
+  setRemainTime(statusResponse) {
+    const endDate = _getEndDate(statusResponse);
+    const nowDate = new Date(Date.now());
+    const remainHour = Time.hourDistance(nowDate, endDate);
+    const remainMin  = Time.minuteSurplusDistance(nowDate, endDate);
+    const remaninSec = Time.secondSurplusDistance(nowDate, endDate);
+    _clock.setHour(remainHour);
+    _clock.setMinute(remainMin);
+    _clock.setSecond(remaninSec);
+    this.setState({ hour: remainHour });
+    this.setState({ minute: remainMin });
+    this.setState({ second: remaninSec });
+  }
+
 
   getRemainSec() {
     return _clock.getRemainSec();
@@ -38,11 +95,9 @@ export default class ExtendedBar extends React.Component {
       this.setState({ isOpen: false });
       return;
     }
-
     const hour = _clock.getHour();
     let minute;
     let second;
-
     if (Number(hour) > 0) {
       minute = `0${_clock.getMinute()}`.slice(-2);
       second = `0${_clock.getSecond()}`.slice(-2);
@@ -50,11 +105,9 @@ export default class ExtendedBar extends React.Component {
       minute = `${_clock.getMinute()}`.slice(-2);
       second = `0${_clock.getSecond()}`.slice(-2);
     }
-
     this.setState({ hour: hour });
     this.setState({ minute: minute });
     this.setState({ second: second });
-
     _clock.subSecond(1);
   }
 
@@ -64,60 +117,10 @@ export default class ExtendedBar extends React.Component {
     const second = this.state.second;
     return(
       <div id="extended-bar">
-        <div class="time end-time">{(this.state.isOpen ? this.state.endText : '放送が終了しました')}</div>
-        <div class="message">{(this.state.isExtended ? this.state.updateText : '延長されていません')}</div>
-        <div class="time rest-time">{(this.state.hour > 0 ? `${hour}：${minute}：${second}` : `${minute}：${second}`)}</div>
+        <div className="time end-time">{(this.state.isOpen ? this.state.endText : '放送が終了しました')}</div>
+        <div className="message">{(this.state.isExtended ? this.state.updateText : '延長されていません')}</div>
+        <div className="time rest-time">{(this.state.hour > 0 ? `${hour}：${minute}：${second}` : `${minute}：${second}`)}</div>
       </div>
     )
   }
-}
-
-const build = () => {
-  setParams(false, null);
-}
-
-const setParams = (isReset = false, statusResponse) => {
-  (isReset
-    ? Promise.resolve(statusResponse)
-    : Api.getStatus((new IdHolder()).liveId))
-  .then((response) => {
-    _setEndText(response);
-    _setRemainTime(response);
-  })
-}
-
-const _setEndText = (statusResponse) => {
-  const end = _getEndTime(statusResponse);
-  const endDate = new Date(end.millisec);
-  const endText = Time.toJpnString(endDate);
-  this.setState({ endText: endText });
-};
-
-const _getEndTime = (statusResponse) => {
-  const $endTime = $(statusResponse).find('stream end_time');
-  const end = {
-    second: Number($endTime.text()),
-    millisec: Number($endTime.text()) * 1000,
-  };
-  return end;
-}
-
-const _setRemainTime = (statusResponse) => {
-  const endDate = _getEndDate(statusResponse);
-  const nowDate = new Date(Date.now());
-  const remainHour = Time.hourDistance(nowDate, endDate);
-  const remainMin  = Time.minuteSurplusDistance(nowDate, endDate);
-  const remaninSec = Time.secondSurplusDistance(nowDate, endDate);
-  _clock.setHour(remainHour);
-  _clock.setMinute(remainMin);
-  _clock.setSecond(remaninSec);
-  this.setState({ hour: remainHour });
-  this.setState({ minute: remainMin });
-  this.setState({ second: remaninSec });
-};
-
-const _getEndDate = (statusResponse) => {
-  const end = _getEndTime(statusResponse);
-  const endDate = new Date(end.millisec);
-  return endDate();
 }
