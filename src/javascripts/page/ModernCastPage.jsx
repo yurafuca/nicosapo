@@ -21,7 +21,7 @@ export default class ModernCastPage extends CastPage {
   }
 
   buildExtendedBar() {
-    super.buildExtendedBar('#bourbon-block');
+    super.buildExtendedBar('bourbon-block');
   }
 
   stretchExtendedBar() {
