@@ -1,10 +1,10 @@
 import $ from 'jquery'
 import Api from "../api/Api";
 import Time from "../common/Time";
-import TimeCounter from "../common/TimeCounter";
+import Clock from "../common/Clock";
 import IdHolder from "../modules/IdHolder";
 
-const timeCounter = new TimeCounter(new Date());
+const clock = new Clock(new Date());
 const finMessage = '放送が終了しました';
 const idHolder = new IdHolder();
 const $template = $(`
@@ -50,9 +50,9 @@ const set = (isReset, statusResponse) => {
       remainingTimes.min = `0${remainingTimes.min}`.slice(-2);
     }
     remainingTimes.sec = `0${remainingTimes.sec}`.slice(-2);
-    timeCounter.setHour(remainingTimes.hour);
-    timeCounter.setMinute(remainingTimes.min);
-    timeCounter.setSecond(remainingTimes.sec);
+    clock.setHour(remainingTimes.hour);
+    clock.setMinute(remainingTimes.min);
+    clock.setSecond(remainingTimes.sec);
 
     if (Number(remainingTimes.hour) > 0) {
       $('#extended-bar .rest-time').text(`${remainingTimes.hour}：${remainingTimes.min}：${remainingTimes.sec}`);
@@ -73,25 +73,25 @@ const setUp = () => {
 }
 
 const tick = () => {
-  if (timeCounter.getRemainSec() === 0) {
+  if (clock.getRemainSec() === 0) {
     invalidate();
     return;
   }
 
   const $restTime = $('#extended-bar .rest-time');
-  const hour = timeCounter.getHour();
+  const hour = clock.getHour();
 
   if (Number(hour) > 0) {
-    const minute = `0${timeCounter.getMinute()}`.slice(-2);
-    const second = `0${timeCounter.getSecond()}`.slice(-2);
+    const minute = `0${clock.getMinute()}`.slice(-2);
+    const second = `0${clock.getSecond()}`.slice(-2);
     $restTime.text(`${hour}：${minute}：${second}`);
   } else {
-    const minute = `${timeCounter.getMinute()}`.slice(-2);
-    const second = `0${timeCounter.getSecond()}`.slice(-2);
+    const minute = `${clock.getMinute()}`.slice(-2);
+    const second = `0${clock.getSecond()}`.slice(-2);
     $restTime.text(`${minute}：${second}`);
   }
-  
-  timeCounter.subSecond(1);
+
+  clock.subSecond(1);
 }
 
 export default class ExtendedBar {
@@ -106,6 +106,6 @@ export default class ExtendedBar {
   }
 
   getRemainSec() {
-    return timeCounter.getRemainSec();
+    return clock.getRemainSec();
   }
 }
