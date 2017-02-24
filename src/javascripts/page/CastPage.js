@@ -19,7 +19,8 @@ export default class CastPage extends React.Component {
   }
 
   buildExtendedBar(idName) {
-    extendedBar.build(idName);
+    const elem = document.getElementById(idName);
+    ReactDOM.render(<ExtendedBar />, elem)
   }
 
   recieveNotify(isToggledOn) {
