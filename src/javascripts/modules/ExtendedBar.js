@@ -4,7 +4,7 @@ import Time from "../common/Time";
 import TimeCounter from "../common/TimeCounter";
 import IdHolder from "../modules/IdHolder";
 
-let timeCounter;
+const timeCounter = new TimeCounter(new Date());
 const finMessage = '放送が終了しました';
 const idHolder = new IdHolder();
 const $template = $(`
@@ -15,11 +15,11 @@ const $template = $(`
     </div>
 `);
 
-function put(idName) {
+const put = (idName) => {
   $(idName).after($template);
 }
 
-function set(isReset, statusResponse) {
+const set = (isReset, statusResponse) => {
   (isReset
     ? Promise.resolve(statusResponse)
     : Api.getStatus(idHolder.liveId))
@@ -63,38 +63,38 @@ function set(isReset, statusResponse) {
   })
 }
 
-function setUp() {
+const invalidate = () => {
+  $('#extended-bar .end-time').text(finMessage);
+  $('#extended-bar .rest-time').text(finMessage);
+}
+
+const setUp = () => {
   set();
 }
 
-function tick() {
-  const $restTime = $('#extended-bar .rest-time');
+const tick = () => {
   if (timeCounter.getRemainSec() === 0) {
-    console.info('call invalidate');
-    ExtendedBar.invalidate();
+    invalidate();
     return;
   }
+
+  const $restTime = $('#extended-bar .rest-time');
   const hour = timeCounter.getHour();
-  let   minute = `0${timeCounter.getMinute()}`.slice(-2);
-  const second = `0${timeCounter.getSecond()}`.slice(-2);
 
   if (Number(hour) > 0) {
-    minute = `0${timeCounter.getMinute()}`.slice(-2);
-  }
-
-  if (Number(hour) > 0) {
+    const minute = `0${timeCounter.getMinute()}`.slice(-2);
+    const second = `0${timeCounter.getSecond()}`.slice(-2);
     $restTime.text(`${hour}：${minute}：${second}`);
   } else {
+    const minute = `${timeCounter.getMinute()}`.slice(-2);
+    const second = `0${timeCounter.getSecond()}`.slice(-2);
     $restTime.text(`${minute}：${second}`);
   }
+  
   timeCounter.subSecond(1);
 }
 
 export default class ExtendedBar {
-  constructor() {
-    timeCounter = new TimeCounter(new Date());
-  }
-
   build(idName) {
     put(idName);
     setUp();
@@ -103,12 +103,6 @@ export default class ExtendedBar {
 
   reset(statusResponse) {
     set(true, statusResponse);
-  }
-
-  invalidate() {
-    console.info('invalidate');
-    $('#extended-bar .end-time').text(finMessage);
-    $('#extended-bar .rest-time').text(finMessage);
   }
 
   getRemainSec() {
