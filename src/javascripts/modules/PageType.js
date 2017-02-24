@@ -20,7 +20,7 @@ export default class PageType {
       pageType = 'NORMAL_CAST_PAGE';
     }
 
-    console.info(pageType, 'constructor');
+    console.info(pageType);
 
     return pageType;
   }

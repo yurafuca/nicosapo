@@ -18,7 +18,7 @@ export default class NormalCastPage extends CastPage {
     );
   }
 
-  putExtendedBar() {
-    super.putExtendedBar('#watch_player_top_box');
+  buildExtendedBar() {
+    super.buildExtendedBar('#watch_player_top_box');
   }
 }

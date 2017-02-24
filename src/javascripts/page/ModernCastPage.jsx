@@ -1,4 +1,4 @@
-import $ from 'jquery'
+import $ from 'jquery';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import CastPage from '../page/CastPage';
@@ -17,14 +17,14 @@ export default class ModernCastPage extends CastPage {
         <AutoEnterCommunityButton />
       </div>, child
     );
+    this.stretchExtendedBar();
   }
 
-  putExtendedBar() {
-    super.putExtendedBar('#bourbon-block');
+  buildExtendedBar() {
+    super.buildExtendedBar('#bourbon-block');
   }
 
-  setUpExtendedBar() { // TODO: Implement in ExtendedBar.js
-    super.setUpExtendedBar();
+  stretchExtendedBar() {
     $('#extended-bar').css('width', '1024px');
   }
 }

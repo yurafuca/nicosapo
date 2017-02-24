@@ -8,6 +8,7 @@ import ModernCastPage from "./page/ModernCastPage";
 import OfficialCastPage from "./page/OfficialCastPage";
 import CommunityPage from "./page/CommunityPage";
 import ChannelPage from "./page/ChannelPage";
+import CastPage from './page/CastPage'
 const formatNicoPage = new FormatNicoPage();
 
 $(() => {
@@ -24,4 +25,7 @@ $(() => {
   }
   const page = new pages[pageType]();
   page.putButton();
+  if (page instanceof CastPage) {
+    page.buildExtendedBar();
+  }
 });

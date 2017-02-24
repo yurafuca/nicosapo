@@ -6,31 +6,25 @@ import ExtendedBar from "../modules/ExtendedBar";
 import Storage from "../modules/Storage";
 import IdHolder from "../modules/IdHolder";
 
-let isEnabledAutoRedirect = null;
+let isEnabledAutoRedirect = false;
 const idHolder = new IdHolder();
 const extendedBar = new ExtendedBar();
-const secList = [
-  5 * 60,
-  4 * 60,
-  3 * 60,
-  2 * 60,
-  1 * 60
-];
+const secList = [5 * 60, 4 * 60, 3 * 60, 2 * 60, 1 * 60];
 
 export default class CastPage extends React.Component {
   constructor() {
     super();
-    this.putExtendedBar();
-    this.setUpExtendedBar();
-    setInterval(() => { this.countExtendedBar(); }, 1000);
     this.checkNewCast = this.checkNewCast.bind(this);
     this.appointment(this.checkNewCast);
+  }
+
+  buildExtendedBar(idName) {
+    extendedBar.build(idName);
   }
 
   recieveNotify(isToggledOn) {
     isEnabledAutoRedirect = isToggledOn;
   }
-
 
   appointment(appointedFunc) {
     chrome.runtime.sendMessage({
@@ -46,9 +40,9 @@ export default class CastPage extends React.Component {
     if (isEnabledAutoRedirect) {
       Api.isOpen(idHolder.liveId).then((response) => {
         if (response.isOpen) {
-          this.updateExtendedBar(response);
+          extendedBar.reset(response);
         } else {
-          this.invalidateExtendedBar();
+          extendedBar.invalidate();
           Api.isOpen(idHolder.communityId)
           .then((response) => {
             if (response.isOpen) {
@@ -65,27 +59,6 @@ export default class CastPage extends React.Component {
     const baseUrl = 'http://live.nicovideo.jp/watch/';
     const liveUrl = baseUrl + liveId;
     window.location.replace(liveUrl);
-  }
-
-  putExtendedBar(query) {
-    extendedBar.put(query);
-  }
-
-  setUpExtendedBar() {
-    extendedBar.setUp();
-  }
-
-  updateExtendedBar(response) {
-    extendedBar.update(response);
-  }
-
-  invalidateExtendedBar() {
-    extendedBar.invalidate();
-  }
-
-  countExtendedBar() {
-    extendedBar.countDown();
-    this.renderToast();
   }
 
   renderToast() {
