@@ -55,7 +55,6 @@ export default class CastPage extends React.Component {
     if (isEnabledAutoRedirect) {
       Api.isOpen(idHolder.liveId).then((response) => {
         if (response.isOpen) {
-          // extendedBar.reset(response);
           const castInfos = {
             isExtended: true,
             statusResponse: response

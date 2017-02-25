@@ -1,5 +1,6 @@
 import $ from 'jquery'
 import React from 'react';
+import Blink from 'react-blink';
 import Api from "../api/Api";
 import Time from "../common/Time";
 import Clock from "../common/Clock";
@@ -32,17 +33,25 @@ export default class ExtendedBar extends React.Component {
       minute: _clock.getMinute(),
       second: _clock.getSecond(),
       isOpen: true,
+      doBlink: false,
       endText: '年/月/日（曜）時刻',
-      isExtended: false,
-      updateText: '延長されていません',
+      updateText: 'あああ',
     };
     this.build();
     setInterval(() => { this.tick() }, 1000);
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.castInfos.isExtended) {
+    const end = _getEndTime(nextProps.castInfos.statusResponse);
+    const nextEndUnixTime = new Date(end.millisec).getTime();
+    if (nextEndUnixTime !== this.state.endUnixTime) {
+      this.state.endUnixTime = nextEndUnixTime;
       this.reset(nextProps.castInfos.statusResponse);
+      this.setState({ doBlink: true }, () => {
+        setTimeout( () => {
+          this.setState({ doBlink: false })
+        }, 5 * 1000);
+      });
     }
   }
 
@@ -55,14 +64,14 @@ export default class ExtendedBar extends React.Component {
   }
 
   setParams(isReset = false, statusResponse) {
-      (isReset
-        ? Promise.resolve(statusResponse)
-        : Api.getStatus((new IdHolder()).liveId))
-      .then((response) => {
-        this.setEndText(response);
-        this.setRemainTime(response);
-      })
-    }
+    (isReset
+      ? Promise.resolve(statusResponse)
+      : Api.getStatus((new IdHolder()).liveId))
+    .then((response) => {
+      this.setEndText(response);
+      this.setRemainTime(response);
+    })
+  }
 
   setEndText(statusResponse) {
     const end = _getEndTime(statusResponse);
@@ -115,10 +124,16 @@ export default class ExtendedBar extends React.Component {
     const hour   = this.state.hour;
     const minute = this.state.minute;
     const second = this.state.second;
+    let updateText;
+    if (this.state.doBlink) {
+      updateText = <Blink>{this.state.updateText}</Blink>
+    } else {
+      updateText = '延長されていません';
+    }
     return(
       <div id="extended-bar">
         <div className="time end-time">{(this.state.isOpen ? this.state.endText : '放送が終了しました')}</div>
-        <div className="message">{(this.state.isExtended ? this.state.updateText : '延長されていません')}</div>
+        <div className="message">{updateText}</div>
         <div className="time rest-time">{(this.state.hour > 0 ? `${hour}：${minute}：${second}` : `${minute}：${second}`)}</div>
       </div>
     )
