@@ -18,7 +18,7 @@ export default class Blink extends React.Component {
 			return;
 		}
 		this.setState({ visible: !this.state.visible });
-		setTimeout(this.blink.bind(this), 500);
+		setTimeout(this.blink.bind(this), 400);
 	}
 
 	componentDidMount () {
