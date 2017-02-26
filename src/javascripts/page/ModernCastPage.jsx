@@ -1,21 +1,11 @@
-import $ from 'jquery'
+import $ from 'jquery';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import CastPage from '../page/CastPage';
 import AutoRedirectButton from "../buttons/AutoRedirectButton";
 import AutoEnterCommunityButton from "../buttons/AutoEnterCommunityButton";
-import Common from "../common/Common";
-import IdHolder from "../modules/IdHolder";
-
-const idHolder = new IdHolder();
-const autoRedirectButton = new AutoRedirectButton();
-const autoEnterCommunityButton = new AutoEnterCommunityButton();
 
 export default class ModernCastPage extends CastPage {
-  constructor() {
-    super();
-  }
-
   putButton() {
     const parent = document.querySelector('.program-detail div');
     const child = document.createElement('div');
@@ -27,14 +17,14 @@ export default class ModernCastPage extends CastPage {
         <AutoEnterCommunityButton />
       </div>, child
     );
+    this.stretchExBar();
   }
 
-  putExtendedBar() {
-    super.putExtendedBar('#bourbon-block');
+  buildExBar() {
+    super.buildExBar('bourbon-block');
   }
 
-  setUpExtendedBar() {
-    super.setUpExtendedBar();
+  stretchExBar() {
     $('#extended-bar').css('width', '1024px');
   }
 }

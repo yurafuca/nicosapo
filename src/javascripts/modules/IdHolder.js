@@ -38,7 +38,5 @@ export default class IdHolder {
   constructor() {
     this.liveId = getLiveId();
     this.communityId = getCommunityId();
-
-    console.info('(liveId, communityId) = ', this.liveId, this.communityId);
   }
 }

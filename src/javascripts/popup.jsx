@@ -1,7 +1,6 @@
 import $ from 'jquery';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Common from "./common/Common";
 import UserThumbnails from "./components/UserThumbnails";
 import OfficialThumbnails from "./components/OfficialThumbnails";
 import Api from "./api/Api";

@@ -10,7 +10,7 @@ export default class NewArrival {
     this.source = infos;
   }
 
-  /*
+  /**
    * @param Array infos
    * @return Array newArrives
    * videoInfosを引数にとって新しく始まったと推定される放送のリストを返却する

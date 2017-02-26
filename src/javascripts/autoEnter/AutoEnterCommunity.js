@@ -4,7 +4,8 @@ import store from 'store';
 const _listKey = 'autoEnterCommunityList';
 const _notificationTitle = '自動入場（コミュニティ/チャンネル）';
 
-export default class AutoEnterProgram {
+// export default class AutoEnterProgram {
+export default class AutoEnterCommunity {
   exec(id) {
     Api.isOpen(id).then((response) => {
       let storagedData = {};

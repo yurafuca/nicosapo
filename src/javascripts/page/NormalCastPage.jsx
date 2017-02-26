@@ -3,18 +3,8 @@ import ReactDOM from 'react-dom';
 import CastPage from '../page/CastPage';
 import AutoRedirectButton from "../buttons/AutoRedirectButton";
 import AutoEnterCommunityButton from "../buttons/AutoEnterCommunityButton";
-import Common from "../common/Common";
-import IdHolder from "../modules/IdHolder";
-
-const idHolder = new IdHolder();
-const autoRedirectButton = new AutoRedirectButton();
-const autoEnterCommunityButton = new AutoEnterCommunityButton();
 
 export default class NormalCastPage extends CastPage {
-  constructor() {
-    super();
-  }
-
   putButton() {
     const parent = document.getElementsByClassName('meta')[0];
     const child = document.createElement('div');
@@ -28,7 +18,7 @@ export default class NormalCastPage extends CastPage {
     );
   }
 
-  putExtendedBar() {
-    super.putExtendedBar('#watch_player_top_box');
+  buildExBar() {
+    super.buildExBar('watch_player_top_box');
   }
 }

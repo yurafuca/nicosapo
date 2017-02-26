@@ -24,7 +24,7 @@ export default class FormatNicoPage {
       return;
     } else if (pageType == 'NORMAL_CAST_PAGE' || pageType == 'OFFICIAL_CAST_PAGE') {
       this.$watch_title_box_meta.css('width', '1000px');
-      this.$slider_container.css('padding', '0'); // For ExtendedBar
+      this.$slider_container.css('padding', '0'); // For ExBar
       return;
     }
   }
