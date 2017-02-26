@@ -1,12 +1,15 @@
 import $ from 'jquery'
 import React from 'react';
-import Blink from 'react-blink';
+// import Blink from 'react-blink';
+import Blink from '../components/Blink';
 import Api from "../api/Api";
+import Common from '../common/Common'
 import Time from "../common/Time";
 import Clock from "../common/Clock";
 import IdHolder from "../modules/IdHolder";
 
 const _clock = new Clock(new Date());
+const _defaultEndmessage = '延長されていません';
 
 const _getEndDate = (statusResponse) => {
   const end = _getEndTime(statusResponse);
@@ -32,23 +35,28 @@ export default class ExBar extends React.Component {
       second: _clock.getSecond(),
       isOpen: true,
       doBlink: false,
-      endText: '年/月/日（曜）時刻',
-      updateText: 'あああ',
+      endText: 'yy/mm/dd（date) {h}:{m}:{s}',
+      updateText: _defaultEndmessage,
     };
     this.build();
     setInterval(() => { this.tick() }, 1000);
   }
 
+  foo() {
+    console.info('foo!');
+    return 'this is function in ExBar.';
+  }
+
   componentWillReceiveProps(nextProps) {
-    const end = _getEndTime(nextProps.castInfos.statusResponse);
-    const nextEndUnixTime = new Date(end.millisec).getTime();
-    if (nextEndUnixTime !== this.state.endUnixTime) {
-      this.state.endUnixTime = nextEndUnixTime;
-      this.reset(nextProps.castInfos.statusResponse);
-      this.setState({ doBlink: true }, () => {
-        setTimeout( () => {
-          this.setState({ doBlink: false })
-        }, 5 * 1000);
+    this.reset(nextProps.response);
+    const endDate = _getEndDate(nextProps.response);
+    const endText = Time.toJpnString(endDate)
+    if ((endText !== this.state.endText) && (this.state.endText !== _defaultEndmessage)) {
+      this.setState({ endText: endText });
+      this.reset(nextProps.response);
+      this.startBlink();
+      Common.sleep(5000).then(() => {
+        this.stopBlink();
       });
     }
   }
@@ -58,6 +66,7 @@ export default class ExBar extends React.Component {
   }
 
   reset(statusResponse) {
+    console.info('reset');
     this.setParams(true, statusResponse);
   }
 
@@ -92,11 +101,6 @@ export default class ExBar extends React.Component {
     this.setState({ second: remaninSec });
   }
 
-
-  getRemainSec() {
-    return _clock.getRemainSec();
-  }
-
   tick() {
     if (_clock.getRemainSec() === 0) {
       this.setState({ isOpen: false });
@@ -118,15 +122,23 @@ export default class ExBar extends React.Component {
     _clock.subSecond(1);
   }
 
+  startBlink() {
+    this.setState({ doBlink: true });
+  }
+
+  stopBlink() {
+    this.setState({ doBlink: false });
+  }
+
   render() {
     const hour   = this.state.hour;
     const minute = this.state.minute;
     const second = this.state.second;
     let updateText;
     if (this.state.doBlink) {
-      updateText = <Blink>{this.state.updateText}</Blink>
+      updateText = <Blink><span>{this.state.updateText}</span></Blink>;
     } else {
-      updateText = '延長されていません';
+      updateText = this.state.updateText;
     }
     return(
       <div id="extended-bar">
