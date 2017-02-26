@@ -8,8 +8,6 @@ import IdHolder from "../modules/IdHolder";
 
 const _clock = new Clock(new Date());
 
-// TODO: reactDOM.render()の第二引数を append 仕様にする．
-
 const _getEndDate = (statusResponse) => {
   const end = _getEndTime(statusResponse);
   const endDate = new Date(end.millisec);
