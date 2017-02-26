@@ -8,7 +8,7 @@ export default class OfficialCastPage extends CastPage {
     $('.meta').append($noSupport);
   }
 
-  putExtendedBar() {
-    super.buildExtendedBar('watch_player_top_box');
+  putExBar() {
+    super.buildExBar('watch_player_top_box');
   }
 }

@@ -3,7 +3,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Api from "../api/Api";
 import Common from "../common/Common";
-import ExtendedBar from "../modules/ExtendedBar";
+import ExBar from "../modules/ExBar";
 import Storage from "../modules/Storage";
 import IdHolder from "../modules/IdHolder";
 
@@ -28,13 +28,13 @@ export default class CastPage extends React.Component {
     this.appointment(this.checkNewCast);
   }
 
-  buildExtendedBar(idName) {
+  buildExBar(idName) {
     console.info('build');
     const beforeChild = document.getElementById(idName);
     const child = document.createElement('div');
     child.id = 'nicosapo_exbar';
     insertAfter(child, beforeChild);
-    ReactDOM.render(<ExtendedBar castInfos={this.state.castInfos}/>, child);
+    ReactDOM.render(<ExBar castInfos={this.state.castInfos}/>, child);
   }
 
   recieveNotify(isToggledOn) {

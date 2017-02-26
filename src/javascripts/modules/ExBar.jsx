@@ -25,7 +25,7 @@ const _getEndTime = (statusResponse) => {
   return end;
 }
 
-export default class ExtendedBar extends React.Component {
+export default class ExBar extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
