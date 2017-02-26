@@ -26,6 +26,6 @@ $(() => {
   const page = new pages[pageType]();
   page.putButton();
   if (page instanceof CastPage) {
-    page.buildExtendedBar();
+    page.buildExBar();
   }
 });
