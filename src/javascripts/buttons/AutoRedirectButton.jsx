@@ -22,7 +22,7 @@ export default class AutoRedirectButton extends React.Component {
         key: 'options.autoJump.enable'
       },
       (response) => {
-        if (response == 'enable') {
+        if (response == 'enable' || response == null) {
           this.setState({ isToggledOn: true });
         } else {
           this.setState({ isToggledOn: false });
