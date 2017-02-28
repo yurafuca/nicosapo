@@ -24,7 +24,7 @@ export default class UserThumbnails extends React.Component {
       thumbParam.url        = `http://live.nicovideo.jp/watch/${thumbParam.id}`;
       thumbParam.isReserved = this.isReserved($program);
       thumbParam.day        = `${startDayJpn}(${startDateJpn})`;
-      thumbParam.openTime   = $program.find('video open_time_jpstr').text();
+      thumbParam.openTime   = (thumbParam.isReserved) ? ($program.find('video open_time_jpstr').text()) : (undefined);
       thumbParam.text       = thumbParam.title;
       thumbParam.index      = index;
       if (!thumbParam.isReserved || store.get('options.showReserved.enable') == 'enable') {
