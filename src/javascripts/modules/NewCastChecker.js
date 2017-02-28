@@ -29,10 +29,12 @@ export default class NewCastChecker {
   }
 
   checkNewCast() {
+    console.info('check');
     Api.isOpen(idHolder.liveId).then((response) => {
       if (response.isOpen) {
-        _prolongReceiver(response);
-        this.repeat(this.checkNewCast.bind(this));
+        if (_prolongReceiver) {
+          _prolongReceiver(response);
+        }
       } else {
         Api.isOpen(idHolder.communityId).then((response) => {
           if (response.isOpen) {
@@ -40,6 +42,7 @@ export default class NewCastChecker {
           }
         });
       }
+      this.repeat(this.checkNewCast.bind(this));
     });
   }
 }
