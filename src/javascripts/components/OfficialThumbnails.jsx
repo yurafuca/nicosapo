@@ -30,21 +30,23 @@ export default class OfficialThumbnails extends React.Component {
       thumbParam.url        = `http://live.nicovideo.jp/watch/${thumbParam.id}`;
       thumbParam.text       = thumbParam.title;
       thumbParam.index      = index;
+      thumbParam.openTime   = ($program.has('.reserve').length) ? (`20${$program.find('.time').text()} 開場`) : (undefined);
       thumbParams.push(thumbParam);
     });
   }
 
   render() {
     this.setParams();
-    const thumbs = thumbParams.map(thumbParam => {
-      return <Thumbnail
+    const thumbs = thumbParams.map((thumbParam) =>
+      <Thumbnail
         background = {thumbParam.background}
         title      = {thumbParam.title}
         url        = {thumbParam.url}
         id         = {thumbParam.id}
         text       = {thumbParam.text}
-        index      = {thumbParam.index} />
-    });
+        index      = {thumbParam.index}
+        openTime   = {thumbParam.openTime} />
+    );
     return (
       <div id="container">{thumbs}</div>
     );

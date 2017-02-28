@@ -40,8 +40,12 @@ $(document).ready(() => {
     $(this).addClass('selected');
     if ($(this).is('#user-lives')) {
       renderCasts('user');
-    } else {
+    }
+    else if ($(this).is('#official-lives'))  {
       renderCasts('official');
+    }
+    else {
+      renderCasts('future');
     }
   });
 });
@@ -64,10 +68,9 @@ const renderCasts = (liveType) => {
           document.getElementById('communities')
         );
       }
-      if (liveType === 'official') {
+      if (liveType === 'official' || liveType === 'future') {
         ReactDOM.render(
-          <OfficialThumbnails programs={$videoInfos.toArray()
-            }/>,
+          <OfficialThumbnails programs={$videoInfos.toArray()}/>,
           document.getElementById('communities')
         );
       }
