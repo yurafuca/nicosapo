@@ -127,17 +127,6 @@ export default class Settings extends React.Component {
                 <p className='note red'> 音声や動画が頻繁に停止する場合は時間を長めに設定してください </p>
               </div>
               <div>
-                <h3>残り時間が少なくなったとき，プレイヤー左上に通知を表示する</h3>
-                {
-                  this.state.selectableList.toastTimes.map((d) =>
-                    <label>
-                      <input type="checkbox" name="options.toast.minuteList" value={d} checked={((this.state['options.toast.minuteList'].indexOf(d) >= 0) ? true : false)} onChange={this.onChangeCheckBox} />
-                        {d}分前
-                    </label>
-                  )
-                }
-              </div>
-              <div>
                 <h3>自動次枠移動をデフォルトで「ON」にする</h3>
                 <input type="radio" name="options.autoJump.enable" value={'enable'} checked={this.state['options.autoJump.enable'] == 'enable'} onChange={this.onChange} /> 有効
                 <input type="radio" name="options.autoJump.enable" value={'disable'} checked={this.state['options.autoJump.enable'] == 'disable'} onChange={this.onChange} /> 無効
