@@ -188,7 +188,7 @@ export default class Settings extends React.Component {
           <div className="wrapper">
             <h1 className="appicon">作者にカンパする</h1>
             <div className="items">
-              <span className="campa">にこさぽの開発を応援してくださる方はよろしくお願いします．今後の開発の励みになります．😇</span>
+              <span className="campa">にこさぽの開発を応援してくださる方はよろしくお願いします．今後の開発の励みになります．🙏</span>
                 <p> <a target="_blank" href="http://amzn.asia/hqChgj3">Amazon ほしいものリスト - ほしい雑貨</a></p>
                 <p> <a target="_blank" href="http://amzn.asia/8BFBccC">Amazon ほしいものリスト - ほしい本</a></p>
             </div>
