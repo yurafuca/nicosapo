@@ -17,14 +17,14 @@ export default class ModernCastPage extends CastPage {
         <AutoEnterCommunityButton />
       </div>, child
     );
-    this.stretchExBar();
   }
 
   buildExBar() {
     super.buildExBar('bourbon-block');
+    this.stretchExBar();
   }
 
   stretchExBar() {
-    $('#extended-bar').css('width', '1024px');
+    $('#extended-bar').css({'cssText': 'width: 1024px !important;'});
   }
 }
