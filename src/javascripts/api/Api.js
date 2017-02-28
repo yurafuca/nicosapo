@@ -52,12 +52,12 @@ export default class Api {
           resolve(official_lives);
         });
       }
-      // if (liveType == 'future') {
-      //     Api.getFutureOnair().then(function(future_lives) {
-      //         console.info(future_lives);
-      //         resolve(future_lives);
-      //     });
-      // }
+      if (liveType == 'future') {
+          Api.getFutureOnair().then((future_lives) => {
+              console.info(future_lives);
+              resolve(future_lives);
+          });
+      }
     });
   }
 
@@ -198,12 +198,13 @@ export default class Api {
 
   static getFutureOnair(index) {
     return new Promise((resolve) => {
-      const endpoint = "http://live.nicovideo.jp/api/getindexzerostreamlist?status=comingsoon&sort=timeshift_reserved_count&zpage=";
-      const posting = $.get(endpoint + index);
+      const endpoint = "http://live.nicovideo.jp/ranking?type=comingsoon&main_provider_type=official";
+      const posting = $.get(endpoint);
       posting.done((response) => {
-        const feature_lives = response['reserved_stream_list'];
-        if (feature_lives) {
-          resolve(feature_lives);
+        const future_lives = $(response).find('.ranking_video');
+        if (future_lives) {
+          console.info(future_lives);
+          resolve(future_lives);
         }
       });
     });
@@ -215,6 +216,7 @@ export default class Api {
       const posting = $.get(endpoint);
       posting.done((response) => {
         const official_lives = $(response).find('.ranking_video');
+        console.info(official_lives);
         resolve(official_lives);
       });
     });
