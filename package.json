@@ -4,7 +4,8 @@
   "description": "nicosapo - niconama supporter",
   "main": "index.js",
   "scripts": {
-    "build": "webpack --config webpack.config.js --display-error-details"
+    "build": "webpack --config webpack.config.js --display-error-details",
+    "watch": "webpack --config webpack.config.js --display-error-details --watch"
   },
   "repository": "git+https://github.com/tsuyuknow/nicosapo.git",
   "author": "tsuyuknow <tsuyuknow@gmail.com>",
