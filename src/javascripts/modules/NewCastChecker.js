@@ -23,7 +23,7 @@ export default class NewCastChecker {
         purpose: 'getFromLocalStorage',
         key: 'options.redirect.time'
       }, (response) => {
-        const intervalTime = response || 50;
+        const intervalTime = response || 30;
         setTimeout(repeatFunc, intervalTime * 1000);
     });
   }

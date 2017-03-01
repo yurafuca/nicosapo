@@ -8,7 +8,7 @@ export default class Thumbnail extends React.Component {
       <Tooltip id="tooltip">{[
           <span style={{fontSize: '14px'}}>
             {(() => {
-              if (this.props.isReserved)
+              if (this.props.openTime)
                 return <span style={{color:'#adff2f'}}>{this.props.openTime}<br/></span>
             })()}
             {this.props.text}
