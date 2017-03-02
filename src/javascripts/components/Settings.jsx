@@ -117,12 +117,16 @@ export default class Settings extends React.Component {
     return (
       <div>
         <div className="content">
-          <div>
+          <div style={{maxWidth: '100px', float: 'left'}}>
             <div className="wrapper menu float-left">
               <h1 className="appicon">設定項目</h1>
               <div className={this.state.selectedMenu === 'basic' ? 'item selected' : 'item'} data-menu="basic" onClick={this.clickMenu}>基本設定</div>
               <div className={this.state.selectedMenu === 'auto-program' ? 'item selected' : 'item'} data-menu="auto-program" onClick={this.clickMenu}>自動枠移動リスト（番組）</div>
               <div className={this.state.selectedMenu === 'auto-community' ? 'item selected' : 'item'} data-menu="auto-community" onClick={this.clickMenu}>自動枠移動リスト（CH・コミュ）</div>
+            </div>
+            <div className="wrapper menu float-left">
+              <h1 className="appicon">その他</h1>
+              <div className={this.state.selectedMenu === 'help' ? 'item selected' : 'item'} data-menu="help" onClick={this.clickMenu}>にこさぽについて</div>
             </div>
           </div>
           {(() => {
@@ -190,14 +194,6 @@ export default class Settings extends React.Component {
                     <input id="saveAll" type="submit" value="設定を保存する" onClick={this.saveSettings}/>
                     <p id="console" style={{color: '#228b22'}}>{this.state.resultMessage}</p>
                   </div>
-                  <div className="wrapper">
-                    <h1 className="appicon">作者にカンパする</h1>
-                    <div className="items">
-                      <span className="campa">にこさぽの開発を応援してくださる方はよろしくお願いします．今後の開発の励みになります．🙏</span>
-                        <p> <a target="_blank" href="http://amzn.asia/hqChgj3">Amazon ほしいものリスト - ほしい雑貨</a></p>
-                        <p> <a target="_blank" href="http://amzn.asia/8BFBccC">Amazon ほしいものリスト - ほしい本</a></p>
-                    </div>
-                  </div>
                 </div>
               )
             }
@@ -221,6 +217,39 @@ export default class Settings extends React.Component {
                   <h1 className="appicon">自動入場が有効になっているCH・コミュ</h1>
                   <div id="listgroup-community">
                     <AutoEnterList type='program' />
+                  </div>
+                </div>
+              )
+            }
+          })()}
+          {(() => {
+            if (this.state.selectedMenu == 'help') {
+              return(
+                <div className="wrapper">
+                  <h1 className="appicon">にこさぽについて</h1>
+                  <div id="appinfo" style={{textAlign: 'center', margin: '20px auto'}}>
+                    <div id="logo">
+                      <img src="../images/logo.png" style={{width: '500px'}}/>
+                    </div>
+                    <p>ニコニコ生放送の視聴をサポートする Google Chrome Extension</p>
+                    <p>バージョン: {chrome.runtime.getManifest().version}</p>
+                    <p>Twitter: <a href="https://twitter.com/nicosapo_dev">@nicosapo_dev</a></p>
+                    <p>GitHub: <a href="https://github.com/tsuyuno/nicosapo">nicosapo</a></p>
+                  </div>
+
+                </div>
+              )
+            }
+          })()}
+          {(() => {
+            if (this.state.selectedMenu == 'basic') {
+              return(
+                <div className="wrapper">
+                  <h1 className="appicon">作者にカンパする</h1>
+                  <div className="items">
+                    <span className="campa">にこさぽの開発を応援してくださる方はよろしくお願いします．今後の開発の励みになります．😘</span>
+                      <p> <a target="_blank" href="http://amzn.asia/hqChgj3">Amazon ほしいものリスト - ほしい雑貨</a></p>
+                      <p> <a target="_blank" href="http://amzn.asia/8BFBccC">Amazon ほしいものリスト - ほしい本</a></p>
                   </div>
                 </div>
               )

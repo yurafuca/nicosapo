@@ -46,8 +46,14 @@ html {
 	height: 100%;
 }
 body {
+	color: #333;
 	margin: 0;
 	font-family: "Lucida Grande","segoe UI","ヒラギノ丸ゴ ProN W4","Hiragino Maru Gothic ProN",Meiryo,Arial,sans-serif;
+}
+p {
+	font-size: 14px;
+	-webkit-margin-before: 0.5em;
+	-webkit-margin-after: 0.5em;
 }
 .header {
 	padding-top: 10px;
@@ -77,9 +83,13 @@ body {
 	margin-right: auto;
 	margin-left: auto;
 	&.menu {
-		width: 280px;
+		margin-top: 3px;
+		width: 250px;
 		border-radius: 2px;
 		border: solid 1px #D8D8D8;
+		&:last-child {
+			margin-top: 30px;
+		}
 		.appicon {
 			background-color: #F7F7F7;
 			padding: 0 10px;
