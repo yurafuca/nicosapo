@@ -73,6 +73,7 @@ Google Chrome が起動している間，にこさぽは自動入場リストの
 
 ![Alt Text](https://tsuyuno.github.io/resources/nicosapo_autoenter_community_1.png)
 ![Alt Text](https://tsuyuno.github.io/resources/nicosapo_autoenter_community_2.png)
+![Alt Text](https://tsuyuno.github.io/resources/nicosapo_autoenter_community_3.png)
 
 次のページに新たにボタンが追加されます．
 
