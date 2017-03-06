@@ -3,7 +3,7 @@ import store from 'store';
 import NewArrival from "./modules/NewArrival";
 import CommunityHolder from "./modules/CommunityHolder";
 import Api from "./api/Api";
-import AutoEnterRunner from './autoEnter/AutoEnterRunner'
+import AutoEnterRunner from './autoEnter/AutoEnterRunner';
 import './chrome/runtime.onMessage';
 
 const communityHolder = new CommunityHolder();
@@ -11,7 +11,7 @@ const newArrival = new NewArrival();
 const INTERVAL = 60 * 1000;
 
 $(document).ready(() => {
-  chrome.browserAction.setBadgeBackgroundColor({ color: '#ff6200' });
+  initialize();
   refreshBadgeAndDB();
   setInterval(refreshBadgeAndDB, INTERVAL);
   setTimeout(() => {
@@ -21,8 +21,12 @@ $(document).ready(() => {
         .then((new AutoEnterRunner()).run('community'));
     }, INTERVAL);
   }, 1000 * 5);
-  initAutoEnterCommunityList();
 });
+
+const initialize = () => {
+  chrome.browserAction.setBadgeBackgroundColor({ color: '#ff6200' });
+  initAutoEnterCommunityList();
+};
 
 const initAutoEnterCommunityList = () => {
   const list = store.get('autoEnterCommunityList');
@@ -38,21 +42,15 @@ const refreshBadgeAndDB = () => {
     .catch(() => { setBadgeText('x'); })
     .then(() => Api.loadCasts('user'))
     .then(($videoInfos) => {
-      setBadgeText(removeReservation($videoInfos).length);
+      setBadgeText(zero2empty(removeReservation($videoInfos).length));
       $.each(newArrival.get($videoInfos), (index, $infos) => {
         if (communityHolder.isNew($infos)) {
-          /**
-           * Do nothing.
-           * Reason: $infos is a followed community by a user as NEWLY.
-           */
+          /* Do nothing: $infos is a followed community by a user as NEWLY.*/
         } else {
           const communityId = `co${$infos.find('community id').text()}`; // co[0-9]+
           const liveId      = $infos.find('video id').text(); // lv[0-9]+
           if (existsInAutoLists(communityId, liveId)) {
-            /**
-             * Do nothing.
-             * Reason: A new broadCast will be show in a notification later.
-             */
+            /* Do nothing: A new broadCast will be show in a notification later.*/
           } else {
             if (store.get('options.playsound.enable') == 'enable') {
               playSound();
@@ -65,7 +63,6 @@ const refreshBadgeAndDB = () => {
       });
       newArrival.setSource($videoInfos);
     });
-
   Api.getCheckList().then((idList) => {
     communityHolder.setSource(idList); // Get a list of following communities.
   });
@@ -96,15 +93,17 @@ const existsInAutoLists = (communityId, liveId) => {
 }
 
 const showNotification = (newInfos) => {
-  const duration = store.get('options.openingNotification.duration') || 6;
-  const id = $(newInfos).first().find('video id').text();
+  const $newInfos = $(newInfos);
   const options = {
-    body: $(newInfos).first().find('video title').text(),
-    icon: $(newInfos).first().find('community thumbnail').text(),
-    tag: id
+    body: $newInfos.first().find('video title').text(),
+    icon: $newInfos.first().find('community thumbnail').text(),
+    tag:  $newInfos.first().find('video id').text()
   };
+  const duration = store.get('options.openingNotification.duration') || 6;
   const notification = new Notification('放送開始のお知らせ', options);
-  setTimeout(notification.close.bind(notification), duration * 1000);
+  setTimeout(() => {
+    notification.close.bind(notification)
+  }, duration * 1000);
   notification.onclick = () => {
     chrome.tabs.create({
       url: `http://live.nicovideo.jp/watch/${notification.tag}`,
@@ -113,25 +112,16 @@ const showNotification = (newInfos) => {
   };
 }
 
+const zero2empty = (num) => num === 0 ? '' : num;
+
 const setBadgeText = (value) => {
-  new Promise((resolve) => {
-    if (value == 0) {
-      value = '';
-    }
-    chrome.browserAction.setBadgeText({
-      text: String(value)
-    });
-    resolve();
-  });
+  chrome.browserAction.setBadgeText({ text: String(value) });
 };
 
 const removeReservation = ($videoInfos) => {
-  const result = [];
-  $.each($videoInfos, (index, $item) => {
-    const is_reserved = $item.find('video is_reserved').text();
-    if (is_reserved == 'false') {
-      result.push($item);
-    }
-  });
+  const result = $videoInfos.filter(($elem) => {
+    const isReserved = $elem.find('video is_reserved').text();
+    return isReserved == false;
+  }
   return $(result);
 };
