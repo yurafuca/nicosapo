@@ -20,26 +20,6 @@ export default class Api {
     });
   }
 
-  static getSessionId() {
-    return new Promise((resolve, reject) => {
-      const endpoint = 'http://api.ce.nicovideo.jp/api/v1/session.create';
-      $.post(endpoint, (response) => {
-        const status = $(response).find('nicovideo_user_response').attr('status');
-        console.info('response = ', response);
-        let sessionId;
-        switch (status) {
-        case 'ok':
-          sessionId = $(response).find('session').text();
-          resolve(sessionId);
-          break;
-        case "fail":
-          reject(new Error('Request failed: status is "fail".'));
-          break;
-        }
-      });
-    });
-  }
-
   static loadCasts(liveType) {
     return new Promise((resolve, reject) => {
       if (liveType == 'user') {
@@ -58,27 +38,6 @@ export default class Api {
               resolve(future_lives);
           });
       }
-    });
-  }
-
-  // 有料限定∧公式チャンネル の情報が含まれない
-  static getSubscribe(sessionId) {
-    return new Promise((resolve, reject) => {
-      const endpoint = 'http://api.ce.nicovideo.jp/liveapi/v1/user.subscribe?__context=';
-      const request = $.ajax({
-        url: endpoint + Math.floor(Math.random() * 1000),
-        method: 'POST',
-        dataType: 'xml',
-        headers: {
-          'x-nicovita-session': sessionId
-        }
-      });
-      request.done((videoInfos) => {
-        resolve(videoInfos);
-      });
-      request.fail((jqXHR, textStatus) => {
-        reject(new Error(`Request failed: ${textStatus}`));
-      });
     });
   }
 
@@ -178,7 +137,7 @@ export default class Api {
     return new Promise((resolve, reject) => {
       const endpoint = "http://flapi.nicovideo.jp/api/getchecklist";
       const posting = $.get(endpoint);
-      // I dont know why "posting" calls fail(), not done().
+      // Why "posting" calls fail(), not done()?
       posting.fail((data) => {
         const text = $.parseJSON(data.responseText);
         const status = text.status;
@@ -228,7 +187,6 @@ export default class Api {
       const endpoint = 'http://watch.live.nicovideo.jp/api/getplayerstatus?v=';
       const parameter = parameter_nicovideojs.shift();
       $.get(endpoint + param, (response) => {
-        // const status = $(response).find('getplayerstatus').attr('status');
         response.param = parameter;
         resolve(response);
       });
