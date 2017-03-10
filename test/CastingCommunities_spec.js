@@ -1,0 +1,106 @@
+/*global describe, it, before */
+
+import { expect } from 'chai'
+import { jsdom } from 'jsdom'
+const document = jsdom('<div/');
+const window = document.defaultView;
+import jQuery from 'jquery'
+const $ = jQuery(window);
+import CastingCommunities from '../src/javascripts/modules/CastingCommunities'
+
+const castingCommunities = new CastingCommunities();
+const videoInfo = `
+  <video_info>
+    <video>
+      <id></id>
+      <title></title>
+      <open_time></open_time>
+      <open_time_jpstr></open_time_jpstr>
+      <start_time></start_time>
+      <schedule_end_time/>
+      <end_time></end_time>
+      <provider_type>y</provider_type>
+      <related_channel_id/>
+      <hidescore_online></hidescore_online>
+      <hidescore_comment></hidescore_comment>
+      <community_only></community_only>
+      <channel_only></channel_only>
+      <view_counter></view_counter>
+      <comment_count></comment_count>
+      <is_panorama></is_panorama>
+      <_ts_reserved_count></_ts_reserved_count>
+      <timeshift_enabled></timeshift_enabled>
+      <is_hq></is_hq>
+      <is_reserved></is_reserved>
+    </video>
+    <community>
+      <id></id>
+      <name></name>
+      <channel_id/>
+      <global_id></global_id>
+      <thumbnail></thumbnail>
+      <thumbnail_small></thumbnail_small>
+    </community>
+  </video_info>
+`;
+
+const videoInfosHash_previous = {};
+const videoInfosHash_current = {};
+
+describe('CastingComunities', function() {
+    before(function(done) {
+      const $vi1 = new $(videoInfo);
+      $vi1.find('video open_time_jpstr').text('time0');
+      $vi1.find('community id').text('000000');
+
+      const $vi2 = new $(videoInfo);
+      $vi2.find('video open_time_jpstr').text('time1');
+      $vi2.find('community id').text('111111');
+
+      const $vi3 = new $(videoInfo);
+      $vi3.find('video open_time_jpstr').text('time2');
+      $vi3.find('community id').text('222222');
+
+      const $vi4 = new $(videoInfo);
+      $vi4.find('video open_time_jpstr').text('time3');
+      $vi4.find('community id').text('333333');
+
+      const $vi5 = new $(videoInfo);
+      $vi5.find('video open_time_jpstr').text('time4');
+      $vi5.find('community id').text('444444');
+
+      videoInfosHash_previous['000000'] = $vi1;
+      videoInfosHash_previous['111111'] = $vi2;
+      videoInfosHash_previous['222222'] = $vi3;
+
+      videoInfosHash_current['000000'] = $vi1;
+      videoInfosHash_current['111111'] = $vi2;
+      videoInfosHash_current['222222'] = $vi3;
+      videoInfosHash_current['333333'] = $vi4;
+      videoInfosHash_current['444444'] = $vi5;
+
+      castingCommunities.push(videoInfosHash_previous);
+      castingCommunities.push(videoInfosHash_current);
+
+      done();
+    });
+    it('#ALL は現在放送中の id の Object を返却する．', function() {
+      const all = castingCommunities.query('ALL');
+      const ids = Object.keys(all).sort();
+      expect(ids).to.eql([
+        '000000',
+        '111111',
+        '222222',
+        '333333',
+        '444444',
+      ]);
+    });
+    it('#ONLY_JUST_FOLLOWED はフォローしたばかりの id の Array を返却する．', function() {
+      const started_1 = castingCommunities.query('ONLY_JUST_STARTED');
+      const ids = Object.keys(started_1);
+      expect(ids).to.eql([
+        '333333',
+        '444444'
+      ]);
+    });
+});
