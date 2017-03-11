@@ -1,5 +1,5 @@
 /*global describe, it, before, beforeEach */
-import { Db } from '../src/javascripts/background';
+import Db from '../src/javascripts/modules/Db';
 import { expect, assert } from 'chai'
 import store from 'store';
 
