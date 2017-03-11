@@ -24,13 +24,10 @@ export default class CastingCommunities {
    * 開始したコミュニティのリストを返却
    */
   _onlyJustStarted() {
-    if (this.previous === null) {
-      throw new Error(`previous is null.`);
-    }
     if (this.current === null) {
       throw new Error(`current is null.`);
     }
-    const openTimesOfPrevious = Object.keys(this.previous).map((id) => {
+    const openTimesOfPrevious = Object.keys(this.previous || {}).map((id) => {
       return this.previous[id].find('video open_time_jpstr').text(); // => [ 'time1', 'time2', 'time0']
     });
     const openTimesOfCurrent = Object.keys(this.current).map((id) => {

@@ -1,3 +1,5 @@
+import _ from 'lodash'
+
 export default class FollowingCommunities {
   constructor() {
     this.previous = null;
@@ -21,14 +23,12 @@ export default class FollowingCommunities {
 
 
   _onlyJustFollowed() {
-    if (this.previous === null) {
-      throw new Error(`previous is null.`);
-    }
     if (this.current === null) {
       throw new Error(`current is null.`);
     }
     const communities = this.current.filter((communityId) => {
-      return !this.previous.includes(communityId);
+      const empty = [];
+      return !_.includes((this.previous || empty), communityId);
     });
     return communities;
   }
@@ -41,8 +41,8 @@ export default class FollowingCommunities {
     return this.current;
   }
 
-  push($videoInfos) {
+  push(arrayOfId) {
     this.previous = this.current;
-    this.current = $videoInfos;
+    this.current = arrayOfId;
   }
 }
