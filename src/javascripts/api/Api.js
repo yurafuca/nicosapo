@@ -3,7 +3,7 @@ import $ from 'jquery';
 const parameter_nicovideojs = [];
 
 export default class Api {
-  isLogined() {
+  static isLogined() {
     return new Promise((resolve, reject) => {
       const endpoint = 'http://www.nicovideo.jp/api/mylistgroup/list';
       $.post(endpoint, (response) => {
@@ -138,14 +138,17 @@ export default class Api {
       const endpoint = "http://flapi.nicovideo.jp/api/getchecklist";
       const posting = $.get(endpoint);
       // Why "posting" calls fail(), not done()?
-      posting.fail((data) => {
-        const text = $.parseJSON(data.responseText);
-        const status = text.status;
+      // posting.done((data) => {
+      //   console.info(data);
+      // });
+      posting.done((data) => {
+        const json = JSON.parse(data);
+        const status = json.status;
         let checkList = '';
         switch (status) {
         case "OK":
-          checkList = text.community_id;
-          resolve($(checkList));
+          checkList = json.community_id;
+          resolve(checkList);
           break;
         default:
           reject(new Error('Request failed: status is "fail".'));
@@ -159,7 +162,7 @@ export default class Api {
     return new Promise((resolve) => {
       const endpoint = "http://live.nicovideo.jp/ranking?type=comingsoon&main_provider_type=official";
       const posting = $.get(endpoint);
-      posting.done((response) => {
+      posting.fail((response) => {
         const future_lives = $(response).find('.ranking_video');
         if (future_lives) {
           console.info(future_lives);
