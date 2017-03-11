@@ -162,7 +162,7 @@ export default class Api {
     return new Promise((resolve) => {
       const endpoint = "http://live.nicovideo.jp/ranking?type=comingsoon&main_provider_type=official";
       const posting = $.get(endpoint);
-      posting.fail((response) => {
+      posting.done((response) => {
         const future_lives = $(response).find('.ranking_video');
         if (future_lives) {
           console.info(future_lives);
