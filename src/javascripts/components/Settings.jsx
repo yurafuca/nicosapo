@@ -204,7 +204,7 @@ export default class Settings extends React.Component {
                 <div className="wrapper">
                   <h1 className="appicon">自動入場が有効になっている番組</h1>
                   <div id="listgroup-program">
-                    <AutoEnterList type='community' />
+                    <AutoEnterList type='program' />
                   </div>
                 </div>
               )
@@ -216,7 +216,7 @@ export default class Settings extends React.Component {
                 <div className="wrapper">
                   <h1 className="appicon">自動入場が有効になっているCH・コミュ</h1>
                   <div id="listgroup-community">
-                    <AutoEnterList type='program' />
+                    <AutoEnterList type='community' />
                   </div>
                 </div>
               )

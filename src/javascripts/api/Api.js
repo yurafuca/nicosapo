@@ -3,7 +3,7 @@ import $ from 'jquery';
 const parameter_nicovideojs = [];
 
 export default class Api {
-  isLogined() {
+  static isLogined() {
     return new Promise((resolve, reject) => {
       const endpoint = 'http://www.nicovideo.jp/api/mylistgroup/list';
       $.post(endpoint, (response) => {
@@ -17,26 +17,6 @@ export default class Api {
           break;
         }
       }, 'json');
-    });
-  }
-
-  static getSessionId() {
-    return new Promise((resolve, reject) => {
-      const endpoint = 'http://api.ce.nicovideo.jp/api/v1/session.create';
-      $.post(endpoint, (response) => {
-        const status = $(response).find('nicovideo_user_response').attr('status');
-        console.info('response = ', response);
-        let sessionId;
-        switch (status) {
-        case 'ok':
-          sessionId = $(response).find('session').text();
-          resolve(sessionId);
-          break;
-        case "fail":
-          reject(new Error('Request failed: status is "fail".'));
-          break;
-        }
-      });
     });
   }
 
@@ -58,27 +38,6 @@ export default class Api {
               resolve(future_lives);
           });
       }
-    });
-  }
-
-  // 有料限定∧公式チャンネル の情報が含まれない
-  static getSubscribe(sessionId) {
-    return new Promise((resolve, reject) => {
-      const endpoint = 'http://api.ce.nicovideo.jp/liveapi/v1/user.subscribe?__context=';
-      const request = $.ajax({
-        url: endpoint + Math.floor(Math.random() * 1000),
-        method: 'POST',
-        dataType: 'xml',
-        headers: {
-          'x-nicovita-session': sessionId
-        }
-      });
-      request.done((videoInfos) => {
-        resolve(videoInfos);
-      });
-      request.fail((jqXHR, textStatus) => {
-        reject(new Error(`Request failed: ${textStatus}`));
-      });
     });
   }
 
@@ -178,15 +137,18 @@ export default class Api {
     return new Promise((resolve, reject) => {
       const endpoint = "http://flapi.nicovideo.jp/api/getchecklist";
       const posting = $.get(endpoint);
-      // I dont know why "posting" calls fail(), not done().
-      posting.fail((data) => {
-        const text = $.parseJSON(data.responseText);
-        const status = text.status;
+      // Why "posting" calls fail(), not done()?
+      // posting.done((data) => {
+      //   console.info(data);
+      // });
+      posting.done((data) => {
+        const json = JSON.parse(data);
+        const status = json.status;
         let checkList = '';
         switch (status) {
         case "OK":
-          checkList = text.community_id;
-          resolve($(checkList));
+          checkList = json.community_id;
+          resolve(checkList);
           break;
         default:
           reject(new Error('Request failed: status is "fail".'));
@@ -200,7 +162,7 @@ export default class Api {
     return new Promise((resolve) => {
       const endpoint = "http://live.nicovideo.jp/ranking?type=comingsoon&main_provider_type=official";
       const posting = $.get(endpoint);
-      posting.done((response) => {
+      posting.fail((response) => {
         const future_lives = $(response).find('.ranking_video');
         if (future_lives) {
           console.info(future_lives);
@@ -228,7 +190,6 @@ export default class Api {
       const endpoint = 'http://watch.live.nicovideo.jp/api/getplayerstatus?v=';
       const parameter = parameter_nicovideojs.shift();
       $.get(endpoint + param, (response) => {
-        // const status = $(response).find('getplayerstatus').attr('status');
         response.param = parameter;
         resolve(response);
       });

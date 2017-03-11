@@ -36,7 +36,7 @@ export default class AutoEnterRunner {
         (() => {
           setTimeout(() => {
             funcs[i].call(null);
-            console.info('(i, length) = ', i, length);
+            console.info('Checking... %d/%d', i+1, length);
             if (i === length - 1) {
               setTimeout(resolve, INTERVAL);
             }

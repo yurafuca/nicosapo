@@ -33,7 +33,6 @@ export default class AutoEnterCommunity {
         // CLOSED
         storagedData[response.requestId].state = 'offair';
       }
-      console.info('id = ', response.requestId);
       store.set(_listKey, storagedData);
     });
   }

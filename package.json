@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "build": "webpack --config webpack.config.js --display-error-details",
-    "watch": "webpack --config webpack.config.js --display-error-details --watch"
+    "watch": "webpack --config webpack.config.js --display-error-details --watch",
+    "test": "mocha  -r mock-local-storage --compilers js:babel-core/register",
+    "watch-test": "mocha  -r mock-local-storage --compilers js:babel-core/register --watch"
   },
   "repository": "git+https://github.com/tsuyuknow/nicosapo.git",
   "author": "tsuyuknow <tsuyuknow@gmail.com>",
@@ -40,7 +42,9 @@
     "copy-webpack-plugin": "^4.0.1",
     "eslint": "^3.14.0",
     "jquery": "^3.1.1",
+    "jsdom": "^9.11.0",
     "jshint": "^2.9.4",
+    "mock-local-storage": "^1.0.2",
     "regexpu-core": "^4.0.2",
     "webpack": "^1.14.0",
     "webpack-dev-server": "^1.16.2"
