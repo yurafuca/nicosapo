@@ -8,6 +8,6 @@ export default class videoInfoUtil {
 
   static removeReservation($videoInfoList) {
     const result = $videoInfoList.filter(videoInfoUtil.isReserved);
-    return $(result);
+    return result;
   }
 }
