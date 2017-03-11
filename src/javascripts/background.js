@@ -1,127 +1,90 @@
-import $ from 'jquery';
-import store from 'store';
-import NewArrival from "./modules/NewArrival";
-import CommunityHolder from "./modules/CommunityHolder";
-import Api from "./api/Api";
-import AutoEnterRunner from './autoEnter/AutoEnterRunner';
-import './chrome/runtime.onMessage';
+import $ from 'jquery'
+import _ from 'lodash'
+import Api from "./api/Api"
+import Db from './modules/db'
+import Badge from './modules/Badge'
+import Alert from './modules/Alert'
+import VideoInfoUtil from './modules/VideoInfoUtil'
+import FollowingCommunities from './modules/FollowingCommunities'
+import CastingCommunities from './modules/CastingCommunities'
+import Common from './common/Common'
+import AutoEnterRunner from './autoEnter/AutoEnterRunner'
+import './chrome/runtime.onMessage'
 
-const communityHolder = new CommunityHolder();
-const newArrival = new NewArrival();
-const INTERVAL = 60 * 1000;
+const _followingCommunities = new FollowingCommunities();
+const _castingCommunities = new CastingCommunities();
 
 $(document).ready(() => {
-  initialize();
-  refreshBadgeAndDB();
-  setInterval(refreshBadgeAndDB, INTERVAL);
-  setTimeout(() => {
+  Badge.setBackgroundColor('#ff6200');
+  Db.setAll('autoEnterCommunityList', 'state', 'init');
+  Reloader.run();
+  setInterval(Reloader.run, 10 * 1000);
+  Common.sleep(5 * 1000).then(() => {
     setInterval(() => {
       Promise.resolve()
         .then((new AutoEnterRunner()).run('live'))
         .then((new AutoEnterRunner()).run('community'));
-    }, INTERVAL);
-  }, 1000 * 5);
+    }, 60 * 1000);
+  });
 });
 
-const initialize = () => {
-  chrome.browserAction.setBadgeBackgroundColor({ color: '#ff6200' });
-  initAutoEnterCommunityList();
-};
 
-const initAutoEnterCommunityList = () => {
-  const list = store.get('autoEnterCommunityList');
-  for (const id in list) {
-    list[id].state = 'init';
-  }
-  store.set('autoEnterCommunityList', list);
-};
-
-const refreshBadgeAndDB = () => {
-  Promise.resolve()
-    .then(Api.isLogined)
-    .catch(() => { setBadgeText('x'); })
+export class Reloader {
+  static run() {
+    Promise.resolve()
+    .then(() => Api.isLogined())
+    .then(Common.sleep(2000))
+    .catch(() => {
+      Badge.set('x')
+    })
     .then(() => Api.loadCasts('user'))
-    .then(($videoInfos) => {
-      setBadgeText(zero2empty(removeReservation($videoInfos).length));
-      $.each(newArrival.get($videoInfos), (index, $infos) => {
-        if (communityHolder.isNew($infos)) {
-          /* Do nothing: $infos is a followed community by a user as NEWLY.*/
-        } else {
-          const communityId = `co${$infos.find('community id').text()}`; // co[0-9]+
-          const liveId      = $infos.find('video id').text(); // lv[0-9]+
-          if (existsInAutoLists(communityId, liveId)) {
-            /* Do nothing: A new broadCast will be show in a notification later.*/
-          } else {
-            if (store.get('options.playsound.enable') == 'enable') {
-              playSound();
-            }
-            if (store.get('options.popup.enable') == 'enable') {
-              showNotification($infos);
-            }
-          }
-        }
+    .then(($videoInfoList) => {
+      // const list = $videoInfoList;
+      const list = VideoInfoUtil.removeReservation($videoInfoList);
+      Reloader._resetBadge(list);
+      _castingCommunities.push(list);
+      return new Promise((resolve) => {
+        resolve();
       });
-      newArrival.setSource($videoInfos);
+    })
+    .then(() => Api.getCheckList())
+    .then((idList) => {
+      _followingCommunities.push(idList);
+      return new Promise((resolve) => {
+        resolve();
+      });
+    })
+    .then(Reloader._alertEach);
+  }
+
+  static _resetBadge($videoInfoList) {
+    const zero2empty = (num) => num === 0 ? '' : num;
+    const text = zero2empty($videoInfoList.length);
+    Badge.setText(text);
+  }
+
+  static _resetList($videoInfos) {
+    _followingCommunities.push($videoInfos);
+    _castingCommunities.push($videoInfos);
+  }
+
+  static _alertEach() { // TODO: require argument.
+    const justStartedCommunities  = _castingCommunities.query('ONLY_JUST_STARTED');    // Array of jQuery Objects.
+    const justFollowedCommunities = _followingCommunities.query('ONLY_JUST_FOLLOWED'); // Array of Integer.
+    _.each(justStartedCommunities, (community) => {
+      const commuId = community.find('community id').text();
+      const videoId = community.find('video id').text();
+      const number = Number(commuId);
+      if (justFollowedCommunities.includes(number)) {
+        return; // `continue` for lodash.
+      }
+      if (Db.contains('autoEnterCommunityList', commuId)) {
+        return; // `continue` for lodash.
+      }
+      if (Db.contains('autoEnterProgramList', videoId)) {
+        return; // `continue` for lodash.
+      }
+      Alert.fire(community);
     });
-  Api.getCheckList().then((idList) => {
-    communityHolder.setSource(idList); // Get a list of following communities.
-  });
-}
-
-const playSound = () => {
-  const soundFile = store.get('options.soundfile') || 'ta-da.mp3';
-  const volume    = store.get('options.playsound.volume') || 1.0;
-  const audio     = new Audio(`sounds/${soundFile}`);
-  audio.volume    = volume;
-  audio.play();
-}
-
-const existsInAutoLists = (communityId, liveId) => {
-  const communityList = store.get('autoEnterCommunityList');
-  const programList   = store.get('autoEnterProgramList');
-  for (const id in communityList) {
-    if (id === communityId) {
-      return true;
-    }
   }
-  for (const id in programList) {
-    if (id === liveId) {
-      return true;
-    }
-  }
-  return false;
 }
-
-const showNotification = (newInfos) => {
-  const $newInfos = $(newInfos);
-  const options = {
-    body: $newInfos.first().find('video title').text(),
-    icon: $newInfos.first().find('community thumbnail').text(),
-    tag:  $newInfos.first().find('video id').text()
-  };
-  const duration = store.get('options.openingNotification.duration') || 6;
-  const notification = new Notification('放送開始のお知らせ', options);
-  setTimeout(() => {
-    notification.close.bind(notification)
-  }, duration * 1000);
-  notification.onclick = () => {
-    chrome.tabs.create({
-      url: `http://live.nicovideo.jp/watch/${notification.tag}`,
-      active: true
-    });
-  };
-}
-
-const zero2empty = (num) => num === 0 ? '' : num;
-
-const setBadgeText = (value) => {
-  chrome.browserAction.setBadgeText({ text: String(value) });
-};
-
-const removeReservation = ($videoInfos) => {
-  const result = $videoInfos.filter(($elem) => {
-    const isReserved = $elem.find('video is_reserved').text();
-    return isReserved == false;
-  }
-  return $(result);
-};
