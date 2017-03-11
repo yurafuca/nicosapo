@@ -52,11 +52,7 @@ export default class BackgroundReloader {
 
   static _alertEach() { // TODO: require argument.
     const justStartedCommunities  = _castingCommunities.query('ONLY_JUST_STARTED');    // Array of jQuery Objects.
-    console.info(justStartedCommunities);
     const justFollowedCommunities = _followingCommunities.query('ONLY_JUST_FOLLOWED'); // Array of Integer.
-    if (justFollowedCommunities.length > 0) {
-      console.info('justFollow = ', justFollowedCommunities);
-    }
     _.each(justStartedCommunities, (community) => {
       console.info('justStarted');
       const commuId = community.find('community id').text();
