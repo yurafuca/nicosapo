@@ -8,8 +8,8 @@ import './chrome/runtime.onMessage'
 Badge.setBackgroundColor('#ff6200');
 Db.setAll('autoEnterCommunityList', 'state', 'init');
 BackgroundReloader.run();
-setInterval(BackgroundReloader.run, 10 * 1000);
-Common.sleep(5 * 1000).then(() => {
+setInterval(BackgroundReloader.run, 60 * 1000);
+Common.sleep(7 * 1000).then(() => {
   setInterval(() => {
     Promise.resolve()
       .then((new AutoEnterRunner()).run('live'))
