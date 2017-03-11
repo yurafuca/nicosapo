@@ -28,16 +28,16 @@ describe('Db', function() {
     done();
   });
 
-  it('#contains: 無効な target を指定した場合は例外を投げる', function() {
-    expect(function(){ Db.contains(`xxxxxxx`, `ooo`) }).to.throw('xxxxxx is illegal target');
-  });
-
   it('#setAll', function() {
     Db.setAll('autoEnterCommunityList', 'state', 'init');
     const items = store.get('autoEnterCommunityList');
     Object.keys(items).forEach((id) => {
       expect(items[id]).to.contain.all.keys({'state': 'init'});
     });
+  });
+
+  it('#contains: 無効な target を指定した場合は例外を投げる', function() {
+    expect(function(){ Db.contains(`xxxxxxx`, `ooo`) }).to.throw('xxxxxx is illegal target');
   });
 
   it('#contains: キーを含む場合は true を返却する．', function() {
