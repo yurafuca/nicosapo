@@ -1,8 +1,8 @@
 import $ from 'jquery'
 
 export default class videoInfoUtil {
-  static isReserved($videoInfo) {
-    const isReserved = $videoInfo.find('video is_reserved').text();
+  static isReserved(videoInfo) {
+    const isReserved = $(videoInfo).find('video is_reserved').text();
     return !(isReserved === 'true');
   }
 

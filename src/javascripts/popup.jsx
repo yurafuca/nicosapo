@@ -1,4 +1,5 @@
 import $ from 'jquery';
+import store from 'store'
 import React from 'react';
 import ReactDOM from 'react-dom';
 import VideoInfoUtil from './modules/VideoInfoUtil'
@@ -69,10 +70,14 @@ const renderCasts = (liveType) => {
           document.getElementById('communities')
         );
       }
-      if (VideoInfoUtil.removeReservation($videoInfos).length === 0) {
-        ProgressRing.hide();
-        Massages.show('放送中の番組がありません．');
-        return;
+      if (store.get('options.showReserved.enable') !== 'enable') {
+        if (VideoInfoUtil.removeReservation($videoInfos).length === 0) {
+            Massages.show('放送中の番組がありません．');
+          }
+      } else {
+        if ($videoInfos.length === 0) {
+            Massages.show('放送中/予約中の番組がありません．');
+          }
       }
     })
     .then(ProgressRing.hide);
