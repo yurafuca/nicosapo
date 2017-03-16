@@ -1,30 +1,27 @@
 import $ from 'jquery';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import VideoInfoUtil from './modules/VideoInfoUtil'
 import UserThumbnails from "./components/UserThumbnails";
 import OfficialThumbnails from "./components/OfficialThumbnails";
 import Api from "./api/Api";
 
 class Massages {
-  static show(type) {
-    const messages = {
-      NOT_LOGINED: 'ニコニコ動画にログインしていません．ログインしてから再度試してください．',
-      ITEM_IS_ZERO: '放送中の番組がありません．'
-    };
+  static show(text) {
     const $message = $('<div class="message"></div>');
-    $message.text(messages[type]);
+    $message.text(text);
     const $parent = $('#communities');
     $parent.html($message);
   }
 }
 
-class Loading {
-  static start() {
+class ProgressRing {
+  static show() {
     $('#communities').empty();
     $('#communities').addClass('nowloading');
   }
 
-  static done() {
+  static hide() {
     $('#communities').removeClass('nowloading');
   }
 }
@@ -52,16 +49,14 @@ $(document).ready(() => {
 
 const renderCasts = (liveType) => {
   Promise.resolve()
-    .then(Loading.start)
+    .then(ProgressRing.show)
     .then(Api.isLogined)
     .catch(() => {
-      Loading.done();
-      Massages.show('NOT_LOGINED');
-      // reject();
+      ProgressRing.hide();
+      Massages.show('ニコニコ動画にログインしていません．ログインしてから再度試してください．');
     })
     .then(() => Api.loadCasts(liveType))
     .then(($videoInfos) => {
-      // $('#communities').empty();
       if (liveType === 'user') {
         ReactDOM.render(
           <UserThumbnails programs={$videoInfos}/>,
@@ -74,6 +69,11 @@ const renderCasts = (liveType) => {
           document.getElementById('communities')
         );
       }
+      if (VideoInfoUtil.removeReservation($videoInfos).length === 0) {
+        ProgressRing.hide();
+        Massages.show('放送中の番組がありません．');
+        return;
+      }
     })
-    .then(Loading.done);
+    .then(ProgressRing.hide);
 };
