@@ -1,17 +1,26 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 export default class Thumbnail extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = props;
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({ nextProps });
+  }
+
   getToolTip() {
     const tooltip = (
       <Tooltip id="tooltip">{[
           <span style={{fontSize: '14px'}}>
-            {(() => {
-              if (this.props.openTime)
-                return <span style={{color:'#adff2f'}}>{this.props.openTime}<br/></span>
-            })()}
-            {this.props.text}
+            {
+              this.state.openTime
+                ? <span style={{color:'#adff2f'}}>{this.state.openTime}<br/></span>
+                : ''
+            }
+            {this.state.text}
           </span>
         ]}
       </Tooltip>
@@ -23,18 +32,17 @@ export default class Thumbnail extends React.Component {
     return (
       <OverlayTrigger placement="top" animation={false} overlay={this.getToolTip()}>
         <div className="community-hover-wrapper">
-          <div className={"side-corner-tag " + (this.props.isReserved ? 'enabled' : 'disabled')}>
+          <div className={"side-corner-tag " + (this.state.isReserved ? 'enabled' : 'disabled')}>
             <div className="community">
-              <a href={this.props.url} target="_blank">
-                <span className="comu_thumbnail" style={{backgroundImage: this.props.background}}></span>
+              <a href={this.state.url} target="_blank">
+                <span className="comu_thumbnail" style={{backgroundImage: this.state.background}}></span>
               </a>
             </div>
-            {(() => {
-              if (this.props.isReserved)
-                return <p>
-                  <span className="reserved-message">{this.props.day}</span>
-                </p>
-            })()}
+              {
+                this.state.isReserved
+                  ? <p><span className="reserved-message">{this.state.day}</span></p>
+                  : ''
+              }
           </div>
         </div>
       </OverlayTrigger>
@@ -42,7 +50,7 @@ export default class Thumbnail extends React.Component {
   }
 }
 
-ReactDOM.render(
-  <Thumbnail />,
-  document.getElementById('communities')
-);
+// ReactDOM.render(
+//   <Thumbnail />,
+//   document.getElementById('communities')
+// );

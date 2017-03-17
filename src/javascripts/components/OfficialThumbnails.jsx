@@ -1,20 +1,33 @@
 import $ from 'jquery';
 import React from 'react'
-import ReactDOM from 'react-dom';
 import Thumbnail from '../components/Thumbnail';
-
-const thumbParams = [];
 
 export default class OfficialThumbnails extends React.Component {
   constructor(props) {
     super(props);
-    thumbParams.length = 0;
+    this.state = {
+      programs: props.programs || [],
+      thumbParams: []
+    };
+  }
+
+  componentDidMount() {
+    this.setParams();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({ programs: nextProps.programs }, this.setParams);
   }
 
   setParams() {
-    this.props.programs.forEach((program, index) => {
-      const $program    = $(program);
+    if (this.state.programs == null) {
+      this.setState({thumbParams: []});
+      return;
+    }
+    const thumbParams  = [];
+    this.state.programs.forEach((program, index) => {
       const thumbParam  = {};
+      const $program    = $(program);
       const communityId = $program.find('.video_text a').attr('href');
       const regexp      = /http\:\/\/ch.nicovideo.jp\/channel\/(.+)/;
       const resultarr   = regexp.exec(communityId);
@@ -32,23 +45,29 @@ export default class OfficialThumbnails extends React.Component {
       thumbParam.index      = index;
       thumbParam.openTime   = ($program.has('.reserve').length) ? (`20${$program.find('.time').text()} 開場`) : (undefined);
       thumbParams.push(thumbParam);
+      if (index == this.state.programs.length - 1) {
+        this.setState({ thumbParams: thumbParams });
+      }
     });
   }
 
   render() {
-    this.setParams();
-    const thumbs = thumbParams.map((thumbParam) =>
-      <Thumbnail
-        background = {thumbParam.background}
-        title      = {thumbParam.title}
-        url        = {thumbParam.url}
-        id         = {thumbParam.id}
-        text       = {thumbParam.text}
-        index      = {thumbParam.index}
-        openTime   = {thumbParam.openTime} />
-    );
+    if (this.state.thumbParams == null) {
+      return (<div id="container"></div>)
+    }
     return (
-      <div id="container">{thumbs}</div>
+      <div id="container">{
+        this.state.thumbParams.map((thumbParam) =>
+          <Thumbnail
+            background = {thumbParam.background}
+            title      = {thumbParam.title}
+            url        = {thumbParam.url}
+            id         = {thumbParam.id}
+            text       = {thumbParam.text}
+            index      = {thumbParam.index}
+            openTime   = {thumbParam.openTime} />
+        )
+      }</div> // TODO: delete container
     );
   }
 }
