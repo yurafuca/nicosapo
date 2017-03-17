@@ -1,6 +1,5 @@
 import $ from 'jquery'
-import { parseString } from 'xml2js'
-import VideoInfo from '../modules/VideoInfo'
+import VIParser from '../modules/VIParser'
 
 const parameter_nicovideojs = [];
 
@@ -57,61 +56,19 @@ export default class Api {
         });
         $.merge(subscribes, reserved);
         const videoInfoList = [];
-        $.each($(subscribes), (index, item) => {
-          const videoProps     = Api._videoProps(item);
-          const communityProps = Api._communityProps(item);
-          const extProps       = Api._extProps(item);
-          if (extProps.isClosed) {
+        $.each($(subscribes), (index, element) => {
+          if ($($(element).find('img')[0]) === `CLOSED`) {
             return;
           }
-          const videoInfo = $(VideoInfo.getString());
-          videoInfo.find('video title').text(videoProps.title);
-          videoInfo.find('video id').text(videoProps.id);
-          console.info(videoProps.openTimeJp);
-          videoInfo.find('video open_time_jpstr').text(videoProps.openTimeJp);
-          videoInfo.find('community id').text(communityProps.id.replace(/(co|ch)/, ''));
-          videoInfo.find('community thumbnail').text(communityProps.thumbnail);
-          if (item.is_reserved) {
-            videoInfo.find('video is_reserved').text(true);
-          } else {
-            videoInfo.find('video is_reserved').text(false);
-          }
-          videoInfoList.push(videoInfo);
+          const $videoInfo = VIParser.parse(element);
+          videoInfoList.push($videoInfo);
         });
         resolve(videoInfoList);
       });
     });
   }
 
-  static _videoProps(element) {
-    const $target = $(element).find('a').first();
-    const video = {
-      title:      $target.attr('title'),
-      url:        $target.attr('href'),
-      id:         $target.attr('href').match(/(lv\d+)/g)[0],
-      openTimeJp: $(element).find('strong').first().text(),
-    };
-    return video;
-  }
 
-  static _communityProps(element) {
-    const $target = $($(element).find('img')[0]);
-    const community = {
-      url:       $target.attr('src').match(/http\:\/\/icon.nimg.jp\/(channel|community)\//)[0],
-      id:        $target.attr('src').match(/(ch|co)\d+/)[0],
-      thumbnail: '',
-    };
-    community.thumbnail = `${community.url}${community.id}.jpg`;
-    return community;
-  }
-
-  static _extProps(element) {
-    const $target = $($(element).find('img')[0]);
-    const ext = {
-      isClosed:   $target.attr('alt') === 'CLOSED',
-    };
-    return ext;
-  }
 
   static getCheckList() {
     return new Promise((resolve, reject) => {
