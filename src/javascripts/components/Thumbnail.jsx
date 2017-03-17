@@ -15,10 +15,11 @@ export default class Thumbnail extends React.Component {
     const tooltip = (
       <Tooltip id="tooltip">{[
           <span style={{fontSize: '14px'}}>
-            {(() => {
-              if (this.state.openTime)
-                return <span style={{color:'#adff2f'}}>{this.state.openTime}<br/></span>
-            })()}
+            {
+              this.state.openTime
+                ? <span style={{color:'#adff2f'}}>{this.state.openTime}<br/></span>
+                : ''
+            }
             {this.state.text}
           </span>
         ]}
@@ -37,12 +38,11 @@ export default class Thumbnail extends React.Component {
                 <span className="comu_thumbnail" style={{backgroundImage: this.state.background}}></span>
               </a>
             </div>
-            {(() => {
-              if (this.state.isReserved)
-                return <p>
-                  <span className="reserved-message">{this.state.day}</span>
-                </p>
-            })()}
+              {
+                this.state.isReserved
+                  ? <p><span className="reserved-message">{this.state.day}</span></p>
+                  : ''
+              }
           </div>
         </div>
       </OverlayTrigger>

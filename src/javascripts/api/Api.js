@@ -34,7 +34,6 @@ export default class Api {
       }
       if (liveType == 'future') {
           Api.getFutureOnair().then((future_lives) => {
-              console.info(future_lives);
               resolve(future_lives);
           });
       }
@@ -165,8 +164,7 @@ export default class Api {
       posting.done((response) => {
         const future_lives = $(response).find('.ranking_video');
         if (future_lives) {
-          console.info(future_lives);
-          resolve(future_lives);
+          resolve(future_lives.toArray());
         }
       });
     });
@@ -178,8 +176,7 @@ export default class Api {
       const posting = $.get(endpoint);
       posting.done((response) => {
         const official_lives = $(response).find('.ranking_video');
-        console.info(official_lives);
-        resolve(official_lives);
+        resolve(official_lives.toArray());
       });
     });
   }

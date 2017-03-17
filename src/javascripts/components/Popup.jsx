@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import store from 'store'
 import Api from '../api/Api'
 import UserThumbnails from "../components/UserThumbnails";
@@ -9,17 +8,12 @@ const _split = (arr, count) => {
   const splitted = [];
   for (let i = 0; i < Math.ceil(arr.length / count); i++) {
     const j = i * count;
-    const p = arr.slice(j, j + count); // i*cnt 番目から i*cnt+cnt 番目まで取得
-    splitted.push(p);                    // 取得したものを newArr に追加
+    const p = arr.slice(j, j + count);
+    splitted.push(p);
   }
   return splitted;
 }
 
-
-// linkd = [
-//   1: [Array[3]],
-//   2: [Array[6]]
-// ]
 const _link = (arr) => {
   const linked = [];
   for (let i = 0; i < arr.length; i++) {
@@ -66,16 +60,16 @@ export default class Popup extends React.Component {
       })
       .then(() => Api.loadCasts(this.state.selectedTab))
       .then((videoInfoList) => {
-        // パフォーマンス対策．放送データを分割してsetTimeoutで少しずつ処理する．
-        // React は差分描画するので細かく処理すると有利．
-        const splitted = _split(videoInfoList, 18);
+        this.setState({ loading: false });
+        // 体感パフォーマンス対策．放送データを分割してsetTimeoutで段階的に処理する．
+        // 一度に setState するとプログレスリングが一瞬止まる．
+        const splitted = _split(videoInfoList, 30);
         const linked = _link(splitted);
         linked.forEach((item, index) => {
           setTimeout(() => {
             this.setState({ videoInfoList: item });
-          }, index * 5)
+          }, index * 3)
         });
-        this.setState({ loading: false });
       })
     });
   }
@@ -86,13 +80,12 @@ export default class Popup extends React.Component {
     }
     switch(e.target.id) {
       case 'user':
-        this.setState({ selectedTab: 'user', 'videoInfoList': [] }, this.loadCasts());
+        this.setState({ selectedTab: 'user', videoInfoList: [] }, this.loadCasts());
         break;
       case 'official':
-        this.setState({ selectedTab: 'official', 'videoInfoList': null }, this.loadCasts());
+        this.setState({ selectedTab: 'official', videoInfoList: null }, this.loadCasts());
         break;
       case 'future':
-        // this.setState({ 'videoInfoList': null });
         this.setState({ selectedTab: 'future', videoInfoList: null }, this.loadCasts());
         break;
       default:
