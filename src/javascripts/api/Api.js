@@ -27,7 +27,6 @@ export default class Api {
       switch(liveType) {
         case 'user':
           Api.getUserOnair().then(($videoInfos) => {
-            console.info($videoInfos);
             resolve($videoInfos);
           }).catch(reject);
           break;
@@ -57,35 +56,61 @@ export default class Api {
           item.is_reserved = true;
         });
         $.merge(subscribes, reserved);
-        const videoInfos = [];
+        const videoInfoList = [];
         $.each($(subscribes), (index, item) => {
-          const video_title = $(item).find('a').first().attr('title');
-          const video_url = $(item).find('a').first().attr('href');
-          const video_id = video_url.match(/(lv\d+)/g)[0];
-          const img = $($(item).find('img')[0]);
-          if (img.attr('alt') == 'CLOSED') {
+          const videoProps     = Api._videoProps(item);
+          const communityProps = Api._communityProps(item);
+          const extProps       = Api._extProps(item);
+          if (extProps.isClosed) {
             return;
           }
-          const community_thumbnail_base = img.attr('src').match(/http\:\/\/icon.nimg.jp\/(channel|community)\//)[0];
-          const community_id = img.attr('src').match(/(ch|co)\d+/)[0];
-          const community_thumbnail = `${community_thumbnail_base}${community_id}.jpg`;
-          const video_open_time_jpstr = $(item).find('strong').first().text();
           const videoInfo = $(VideoInfo.getString());
-          videoInfo.find('community thumbnail').text(community_thumbnail);
-          videoInfo.find('video title').text(video_title);
-          videoInfo.find('video id').text(video_id);
-          videoInfo.find('video open_time_jpstr').text(video_open_time_jpstr);
-          videoInfo.find('community id').text(community_id.replace(/(co|ch)/, ''));
+          videoInfo.find('video title').text(videoProps.title);
+          videoInfo.find('video id').text(videoProps.id);
+          console.info(videoProps.openTimeJp);
+          videoInfo.find('video open_time_jpstr').text(videoProps.openTimeJp);
+          videoInfo.find('community id').text(communityProps.id.replace(/(co|ch)/, ''));
+          videoInfo.find('community thumbnail').text(communityProps.thumbnail);
           if (item.is_reserved) {
             videoInfo.find('video is_reserved').text(true);
           } else {
             videoInfo.find('video is_reserved').text(false);
           }
-          videoInfos.push(videoInfo);
+          videoInfoList.push(videoInfo);
         });
-        resolve(videoInfos);
+        resolve(videoInfoList);
       });
     });
+  }
+
+  static _videoProps(element) {
+    const $target = $(element).find('a').first();
+    const video = {
+      title:      $target.attr('title'),
+      url:        $target.attr('href'),
+      id:         $target.attr('href').match(/(lv\d+)/g)[0],
+      openTimeJp: $(element).find('strong').first().text(),
+    };
+    return video;
+  }
+
+  static _communityProps(element) {
+    const $target = $($(element).find('img')[0]);
+    const community = {
+      url:       $target.attr('src').match(/http\:\/\/icon.nimg.jp\/(channel|community)\//)[0],
+      id:        $target.attr('src').match(/(ch|co)\d+/)[0],
+      thumbnail: '',
+    };
+    community.thumbnail = `${community.url}${community.id}.jpg`;
+    return community;
+  }
+
+  static _extProps(element) {
+    const $target = $($(element).find('img')[0]);
+    const ext = {
+      isClosed:   $target.attr('alt') === 'CLOSED',
+    };
+    return ext;
   }
 
   static getCheckList() {
