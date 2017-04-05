@@ -5,7 +5,8 @@ const idHolder = new IdHolder();
 const goToCast  = (liveId) => {
   const baseUrl = 'http://live.nicovideo.jp/watch/';
   const liveUrl = baseUrl + liveId;
-  window.location.replace(liveUrl);
+  window.location.href = liveUrl;
+  // window.location.replace(liveUrl);
 }
 let _prolongReceiver = null;
 

@@ -133,19 +133,20 @@ export default class Api {
     const theRequestId = requestId;
     return new Promise((resolve) => {
       Api.getStatus(requestId).then((response) => {
-        const errorCode = $(response).find('error code').text();
-        if (!errorCode || (errorCode === 'require_community_member')) {
-          const $response = $(response);
-          const endTime = $response.find('end_time').text();
-          if (Date.now() < `${endTime}000`) {
-            console.log(`${theRequestId} is ONAIR`);
-            const liveId = $response.find('stream id').text();
-            response.nextLiveId = liveId;
-            response.isOpen = true;
+        const $response = $(response);
+        const errorCode = $response.find('error code').text();
+        if (errorCode) {
+          if (errorCode !== 'require_community_member') {
+            console.log(`${theRequestId} is OFFAIR or ERROR`);
+            response.isOpen = false;
           }
-        } else {
-          console.log(`${theRequestId} is OFFAIR or ERROR`);
-          response.isOpen = false;
+        }
+        const endTime = $response.find('end_time').text();
+        if (Date.now() < `${endTime}000`) {
+          console.log(`${theRequestId} is ONAIR`);
+          const liveId = $response.find('stream id').text();
+          response.nextLiveId = liveId;
+          response.isOpen = true;
         }
         response.requestId = theRequestId;
         resolve(response);
