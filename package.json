@@ -7,6 +7,7 @@
     "build": "webpack --config webpack.config.js --display-error-details",
     "watch": "webpack --config webpack.config.js --display-error-details --watch",
     "test": "mocha  -r mock-local-storage --compilers js:babel-core/register",
+    "release": "webpack --config webpack.config.release.js --display-error-details --optimize-minimize --watch",
     "watch-test": "mocha  -r mock-local-storage --compilers js:babel-core/register --watch"
   },
   "repository": "git+https://github.com/tsuyuknow/nicosapo.git",
