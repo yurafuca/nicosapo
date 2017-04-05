@@ -10,6 +10,7 @@ export default class Sound {
     const volume    = this._getVolume();
     const audio     = new Audio(`sounds/${soundFile}`);
     audio.volume    = volume;
+    console.info('volume = ', volume);
     return audio;
   }
 
