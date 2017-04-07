@@ -18,6 +18,11 @@
 yarn run build
 ```
 
+## TODO
+
+[TODO.md](https://tsuyuno.github.io/nicosapo/TODO.md)
+
+
 ## 機能一覧
 
 1. 放送中の番組を一覧表示
