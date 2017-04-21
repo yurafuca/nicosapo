@@ -9,7 +9,7 @@ const _newCastChecker = new NewCastChecker();
  * 将来的には Button も管理対象にするかもしれない．
  * @author tsuyuno
  */
-export default class Gadgets extends React.Component {
+export default class Widgets extends React.Component {
   constructor(props) {
     super(props);
     this.state = { response: '' };
