@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Gadgets from '../components/Gadgets';
+import Widgets from '../components/Widgets';
 
 let isEnabledAutoRedirect = false;
 
@@ -14,7 +14,7 @@ export default class CastPage extends React.Component {
     const child = document.createElement('div');
     child.id = 'nicosapo_gadgets';
     insertAfter(child, beforeChild);
-    ReactDOM.render(<Gadgets />, child);
+    ReactDOM.render(<Widgets />, child);
   }
 
   recieveNotify(isToggledOn) {

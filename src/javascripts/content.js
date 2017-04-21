@@ -6,6 +6,7 @@ import GatePage from "./page/GatePage";
 import NormalCastPage from "./page/NormalCastPage";
 import ModernCastPage from "./page/ModernCastPage";
 import OfficialCastPage from "./page/OfficialCastPage";
+import TimeShiftPage from './page/TimeShiftPage'
 import CommunityPage from "./page/CommunityPage";
 import ChannelPage from "./page/ChannelPage";
 import CastPage from './page/CastPage'
@@ -20,6 +21,7 @@ $(() => {
     'NORMAL_CAST_PAGE':   NormalCastPage,
     'MODERN_CAST_PAGE':   ModernCastPage,
     'OFFICIAL_CAST_PAGE': OfficialCastPage,
+    'TIME_SHIFT_PAGE':    TimeShiftPage,
     'COMMUNITY_PAGE':     CommunityPage,
     'CHANNEL_PAGE':       ChannelPage,
   }
