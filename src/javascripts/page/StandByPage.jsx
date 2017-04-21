@@ -5,7 +5,6 @@ import AutoRedirectButton from "../buttons/AutoRedirectButton";
 import NewCastChecker from '../modules/NewCastChecker';
 
 const _newCastChecker = new NewCastChecker();
-let isEnabledAutoRedirect = false;
 
 export default class StandByPage extends Page {
   putButton() {
@@ -19,6 +18,5 @@ export default class StandByPage extends Page {
 
   recieveNotify(isToggledOn) {
     console.log('toggled');
-    isEnabledAutoRedirect = isToggledOn;
   }
 }

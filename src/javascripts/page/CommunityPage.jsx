@@ -2,10 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Page from '../page/Page';
 import AutoEnterCommunityButton from "../buttons/AutoEnterCommunityButton";
-import IdHolder from "../modules/IdHolder";
-
-const idHolder = new IdHolder();
-const autoEnterCommunityButton = new AutoEnterCommunityButton();
 
 function insertAfter(newNode, referenceNode) {
     referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
