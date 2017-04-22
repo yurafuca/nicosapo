@@ -27,7 +27,6 @@ export default class AutoRedirectButton extends React.Component {
         } else {
           this.setState({ isToggledOn: false });
         }
-        this.props.notify(this.state.isToggledOn);
       }
     )
   }
@@ -37,12 +36,12 @@ export default class AutoRedirectButton extends React.Component {
   }
 
   toggle() {
+    this.props.notify(!this.state.isToggledOn);
     if (this.state.isToggledOn) {
       this.setState({ isToggledOn: false });
     } else {
       this.setState({ isToggledOn: true });
     }
-    this.props.notify(this.state.isToggledOn);
   }
 
   render() {

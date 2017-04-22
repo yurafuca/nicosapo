@@ -14,10 +14,12 @@ export default class CastPage extends React.Component {
     insertAfter(child, parent);
     ReactDOM.render(
       <Widgets
+        buttonOrder={props.buttonOrder}
         enableARButton={props.enableARButton}
         enableACButton={props.enableACButton}
         enableAPButton={props.enableAPButton}
         enableExBar={props.enableExBar}
+        message={props.message}
         position={props.position}
         requireInline={props.requireInline}
         element4Buttons={props.element4Buttons}/>, child
