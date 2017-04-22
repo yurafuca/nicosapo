@@ -182,13 +182,8 @@ $url_0: url(chrome-extension://__MSG_@@extension_id__/images/icon.png);
 		}
 	}
 }
-.auto_redirect_button {
-}
-#watch_player_box > #extended-bar {
-	width: 960px;
-}
-#player > #extended-bar {
-	width: 1024px;
+#program-main-block  #extended-bar {
+  width: 1024px;
 }
 .auto_enter_community_button > .link {
 	&.switch_is_on {

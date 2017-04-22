@@ -1,4 +1,3 @@
-import $ from 'jquery';
 import CastPage from '../page/CastPage';
 
 export default class ModernCastPage extends CastPage {
@@ -15,9 +14,5 @@ export default class ModernCastPage extends CastPage {
       idName4ExBar   : 'bourbon-block'
     };
     super.putWidgets(props);
-  }
-
-  stretchExBar() {
-    $('#extended-bar').css({'cssText': 'width: 1024px !important;'});
   }
 }
