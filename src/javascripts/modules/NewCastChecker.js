@@ -9,14 +9,19 @@ const goToCast  = (liveId) => {
   // window.location.replace(liveUrl);
 }
 let _prolongReceiver = null;
+let _isEnableChecking = true;
 
 export default class NewCastChecker {
   run() {
     this.repeat(this.checkNewCast.bind(this));
   }
 
-  setProlongReceiver(recieverFunc) {
-    _prolongReceiver = recieverFunc;
+  setProlongReceiver(func) {
+    _prolongReceiver = func;
+  }
+
+  setMode(isEnable) {
+    _isEnableChecking = isEnable;
   }
 
   repeat(repeatFunc) {
@@ -37,11 +42,13 @@ export default class NewCastChecker {
           _prolongReceiver(response);
         }
       } else {
-        Api.isOpen(idHolder.communityId).then((response) => {
-          if (response.isOpen) {
-            goToCast(response.nextLiveId);
-          }
-        });
+        if (_isEnableChecking) {
+          Api.isOpen(idHolder.communityId).then((response) => {
+            if (response.isOpen) {
+              goToCast(response.nextLiveId);
+            }
+          });
+        }
       }
       this.repeat(this.checkNewCast.bind(this));
     });
