@@ -1,15 +1,14 @@
-import $ from 'jquery'
 import CastPage from '../page/CastPage'
 
 export default class TimeShiftPage extends CastPage {
-  putButton() {
-    // TimeShiftPage dosen't need auto-buttons.
-    const $noSupport = $(`<span></span>`);
-    $noSupport.text(`/* タイムシフトでは各種ボタンと情報バーが無効になります */`);
-    $('.meta').append($noSupport);
-  }
-
-  buildExBar() {
-    // TimeShiftPage dosen't need an exbar.
+  putWidgets() {
+      const props = {
+        buttonOrder : `MESSAGE`,
+        message     : `/* にこさぽ: タイムシフトでは各種ボタンと情報バーが無効になります */`,
+        position    : `APPEND`,
+        enableExBar : false,
+        idName4ExBar: 'watch_player_top_box'
+      };
+      super.putWidgets(props);
   }
 }

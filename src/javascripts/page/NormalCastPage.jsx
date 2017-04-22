@@ -1,24 +1,18 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
 import CastPage from '../page/CastPage';
-import AutoRedirectButton from "../buttons/AutoRedirectButton";
-import AutoEnterCommunityButton from "../buttons/AutoEnterCommunityButton";
 
 export default class NormalCastPage extends CastPage {
-  putButton() {
-    const parent = document.getElementsByClassName('meta')[0];
-    const child = document.createElement('div');
-    child.id = 'nicosapo_buttons';
-    parent.appendChild(child);
-    ReactDOM.render(
-      <div style={{display: 'inline-block'}}>
-        <AutoRedirectButton notify={super.recieveNotify} />
-        <AutoEnterCommunityButton />
-      </div>, child
-    );
-  }
-
-  buildExBar() {
-    super.buildExBar('watch_player_top_box');
+  putWidgets() {
+    const props = {
+      buttonOrder    : `DEFAULT`,
+      enableARButton : true,
+      enableACButton : true,
+      enableAPButton : false,
+      enableExBar    : true,
+      position       : `APPEND`,
+      requireInline  : true,
+      element4Buttons: document.getElementsByClassName('meta')[0],
+      idName4ExBar   : 'watch_player_top_box'
+    };
+    super.putWidgets(props);
   }
 }

@@ -1,18 +1,18 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import Page from '../page/Page';
-import AutoEnterCommunityButton from "../buttons/AutoEnterCommunityButton";
+import CastPage from '../page/CastPage';
 
-function insertAfter(newNode, referenceNode) {
-    referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
-}
-
-export default class CommunityPage extends Page {
-  putButton() {
-    const beforeChild = document.getElementById('comSetting_hide');
-    const child = document.createElement('div');
-    child.id = 'nicosapo_buttons';
-    insertAfter(child, beforeChild);
-    ReactDOM.render(<AutoEnterCommunityButton />, child);
+export default class CommunityPage extends CastPage {
+  putWidgets() {
+    const props = {
+      buttonOrder    : `DEFAULT`,
+      enableARButton : false,
+      enableACButton : true,
+      enableAPButton : false,
+      enableExBar    : false,
+      position       : `AFTER`,
+      requireInline  : true,
+      element4Buttons: document.getElementById('comSetting_hide'),
+      idName4ExBar   : `siteHeader` // TODO: temp
+    };
+    super.putWidgets(props);
   }
 }
