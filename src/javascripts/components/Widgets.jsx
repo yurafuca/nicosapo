@@ -4,6 +4,7 @@ import ExBar from '../components/ExBar';
 import NewCastChecker from '../modules/NewCastChecker';
 import AutoRedirectButton from '../buttons/AutoRedirectButton';
 import AutoEnterCommunityButton from '../buttons/AutoEnterCommunityButton';
+import AutoEnterProgramButton from '../buttons/AutoEnterProgramButton';
 
 const _newCastChecker = new NewCastChecker();
 
@@ -19,11 +20,22 @@ export default class Widgets extends React.Component {
   constructor(props) {
     super(props);
     this.state = { response: '' };
-    _newCastChecker.setProlongReceiver(this._prolongReceiver.bind(this));
-    _newCastChecker.run();
   }
 
   putButtons() {
+    /**
+     * MESSAGE
+     */
+    if (this.props.buttonOrder === `MESSAGE`) {
+      const parent = document.getElementsByClassName('meta')[0];
+      const child = document.createElement('span');
+      child.textContent = this.props.message;
+      parent.appendChild(child);
+      return;
+    }
+    /**
+     * DEFAULT
+     */
     const parent = this.props.element4Buttons;
     const child = document.createElement('div');
     child.id = 'nicosapo_buttons';
@@ -48,6 +60,8 @@ export default class Widgets extends React.Component {
   _getButtons() {
     const buttonDoms = [];
     if (this.props.enableARButton) {
+      _newCastChecker.setProlongReceiver(this._prolongReceiver.bind(this)); // TODO: ugly
+      _newCastChecker.run(); // TODO: ugly
       buttonDoms.push(<AutoRedirectButton notify={this._recieveNotify} />)
     }
     if (this.props.enableACButton) {
