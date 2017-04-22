@@ -20,7 +20,7 @@ yarn run build
 
 ## TODO
 
-[TODO.md](https://tsuyuno.github.io/nicosapo/TODO.md)
+[TODO.md](https://github.com/tsuyuno/nicosapo/blob/develop/TODO.md)
 
 
 ## 機能一覧
