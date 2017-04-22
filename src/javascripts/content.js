@@ -26,8 +26,5 @@ $(() => {
     'CHANNEL_PAGE':       ChannelPage,
   }
   const page = new pages[pageType]();
-  page.putButton();
-  if (page instanceof CastPage) {
-    page.buildExBar();
-  }
+  page.putWidgets();
 });

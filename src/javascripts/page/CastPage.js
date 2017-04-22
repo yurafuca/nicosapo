@@ -2,22 +2,27 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Widgets from '../components/Widgets';
 
-let isEnabledAutoRedirect = false;
-
 function insertAfter(newNode, referenceNode) {
-    referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
+  referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
 }
 
 export default class CastPage extends React.Component {
-  buildExBar(idName) {
-    const beforeChild = document.getElementById(idName);
+  putWidgets(props) {
+    const parent = document.getElementById(props.idName4ExBar);
     const child = document.createElement('div');
     child.id = 'nicosapo_gadgets';
-    insertAfter(child, beforeChild);
-    ReactDOM.render(<Widgets />, child);
-  }
-
-  recieveNotify(isToggledOn) {
-    isEnabledAutoRedirect = isToggledOn;
+    insertAfter(child, parent);
+    ReactDOM.render(
+      <Widgets
+        buttonOrder={props.buttonOrder}
+        enableARButton={props.enableARButton}
+        enableACButton={props.enableACButton}
+        enableAPButton={props.enableAPButton}
+        enableExBar={props.enableExBar}
+        message={props.message}
+        position={props.position}
+        requireInline={props.requireInline}
+        element4Buttons={props.element4Buttons}/>, child
+    );
   }
 }
