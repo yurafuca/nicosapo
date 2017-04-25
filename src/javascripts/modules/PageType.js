@@ -53,12 +53,13 @@ export default class PageType {
 
   // TODO: 自身の生放送中に判定が正しくなくなる
   static _isNormalCastPage() {
-    const $targetDom = $('#watch_zapping_box');
-    if ($targetDom.length > 0) {
-      return true;
-    } else {
-      return false;
-    }
+    const zappingBox = document.getElementById('watch_zapping_box');
+    const normalBroadCastArea = document.getElementById('nicolivebroadcaster_container');
+    const modernBroadCastArea = document.getElementById('program-provider-block');
+    if (zappingBox != null) return true;
+    if (normalBroadCastArea != null) return true;
+    if (modernBroadCastArea != null) return true;
+    return false;
   }
 
   static _isStandByPage() {
