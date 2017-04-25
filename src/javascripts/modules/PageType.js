@@ -11,7 +11,7 @@ export default class PageType {
       pageType = 'MODERN_CAST_PAGE';
     } else if (this._isOfficialCastPage()) {
       pageType = 'OFFICIAL_CAST_PAGE';
-    } else if (this._isNormalCastPage()) { // Must to be called finally.
+    } else if (this._isNormalCastPage()) {
       pageType = 'NORMAL_CAST_PAGE';
     /**
      * NonCastPages
@@ -51,6 +51,7 @@ export default class PageType {
     }
   }
 
+  // TODO: 自身の生放送中に判定が正しくなくなる
   static _isNormalCastPage() {
     const $targetDom = $('#watch_zapping_box');
     if ($targetDom.length > 0) {

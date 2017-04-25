@@ -54,11 +54,7 @@ export default class Popup extends React.Component {
 
   loadCasts() {
     this.setState({ loading: true }, () => {
-      Api.isLogined()
-      .catch(() => {
-        this.setState({ loading: 'show',isLogined: false });
-      })
-      .then(() => Api.loadCasts(this.state.selectedTab))
+Api.loadCasts(this.state.selectedTab)
       .then((videoInfoList) => {
         this.setState({ loading: false });
         // 体感パフォーマンス対策．放送データを分割してsetTimeoutで段階的に処理する．
