@@ -190,6 +190,10 @@ h3 {
 	top: -6px;
 	left: 5px;
 }
+
+/**
+ * GitHub
+ */
 .listgroup {
 	list-style: none;
 	//Instead of the line below you could use @include border-radius($radius, $vertical-radius)
@@ -336,6 +340,10 @@ a {
 	//Instead of the line below you could use @include border-radius($radius, $vertical-radius)
 	border-radius: 3px;
 }
+/**
+ * End GitHub
+ */
+
 img {
 	border-style: none;
 }

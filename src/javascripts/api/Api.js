@@ -153,4 +153,23 @@ export default class Api {
       });
     });
   }
+
+  static foo() {
+    return new Promise((resolve) => {
+      const query =
+        'http://api.search.nicovideo.jp/api/v2/live/contents/search?q=%E6%96%99%E7%90%86%0D%0A'
+        + '&targets=tags'
+        + '&fields=contentId,title,communityIcon,description,start_time,live_end_time,comment_counter,score_timeshift_reserved,provider_type,tags,member_only,viewCounter,timeshift_enabled'
+        + '&_context=apiguide'
+        + '&filters%5BliveStatus%5D%5B0%5D=past'
+        + '&filters%5BstartTime%5D%5Bgte%5D=2017-05-18T00:00:00-09:00'
+        + '&filters%5BstartTime%5D%5Blt%5D=2030-04-01T00:00:00-09:00'
+        + '&_sort=-viewCounter'
+        + '&_limit=100';
+      $.get(query, (response) => {
+        console.info(response);
+        resolve(response);
+      });
+    });
+  }
 }
