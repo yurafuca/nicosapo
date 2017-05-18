@@ -3,6 +3,7 @@ import store from 'store'
 import Api from '../api/Api'
 import UserThumbnails from "../components/UserThumbnails";
 import OfficialThumbnails from "../components/OfficialThumbnails";
+import SearchContent from "../components/SearchContent";
 
 const _split = (arr, count) => {
   const splitted = [];
@@ -54,7 +55,7 @@ export default class Popup extends React.Component {
 
   loadCasts() {
     this.setState({ loading: true }, () => {
-Api.loadCasts(this.state.selectedTab)
+      Api.loadCasts(this.state.selectedTab)
       .then((videoInfoList) => {
         this.setState({ loading: false });
         // 体感パフォーマンス対策．放送データを分割してsetTimeoutで段階的に処理する．
@@ -84,6 +85,9 @@ Api.loadCasts(this.state.selectedTab)
       case 'future':
         this.setState({ selectedTab: 'future', videoInfoList: null }, this.loadCasts());
         break;
+      case 'search':
+        this.setState({ selectedTab: 'search', videoInfoList: null }, this.loadCasts());
+        break;
       default:
         this.setState({ selectedTab: 'user' }, this.loadCasts());
         break;
@@ -109,6 +113,7 @@ Api.loadCasts(this.state.selectedTab)
             <div id="user" className={this.state.selectedTab === 'user' ? `tab selected` : `tab non-selected`} onClick={this.toggleTab}>フォロー中</div>
             <div id="official" className={this.state.selectedTab === 'official' ? `tab selected` : `tab non-selected`} onClick={this.toggleTab}>公式</div>
             <div id="future" className={this.state.selectedTab === 'future' ? `tab selected` : `tab non-selected`} onClick={this.toggleTab}>未来の公式</div>
+            <div id="search" className={this.state.selectedTab === 'search' ? `tab selected` : `tab non-selected`} onClick={this.toggleTab}>検索</div>
           </div>
           <div id="communities" className={this.state.loading ? 'nowloading' : ''}>
             {(() => {
@@ -133,6 +138,9 @@ Api.loadCasts(this.state.selectedTab)
               }
               if (this.state.selectedTab === 'official' || this.state.selectedTab === 'future') {
                 return ( <OfficialThumbnails programs={ this.state.videoInfoList }/> );
+              }
+              if (this.state.selectedTab === 'search') {
+                return ( <SearchContent/> );
               }
             })()}
           </div>
