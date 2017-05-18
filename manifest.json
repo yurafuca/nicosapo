@@ -25,7 +25,8 @@
         "http://flapi.nicovideo.jp/api/",
         "http://watch.live.nicovideo.jp/",
         "http://live2.nicovideo.jp/",
-        "http://live.nicovideo.jp/gate/"
+        "http://live.nicovideo.jp/gate/",
+        "http://api.search.nicovideo.jp/"
     ],
     "background": {
         "scripts": [
