@@ -51,6 +51,7 @@
     }],
     "options_page": "html/options.html",
     "web_accessible_resources": [
-        "images/icon.png"
+        "images/icon.png",
+        "images/radio.png"
     ]
 }

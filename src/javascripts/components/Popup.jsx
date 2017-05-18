@@ -3,6 +3,7 @@ import store from 'store'
 import Api from '../api/Api'
 import UserThumbnails from "../components/UserThumbnails";
 import OfficialThumbnails from "../components/OfficialThumbnails";
+import Toggle from 'react-bootstrap-toggle'
 
 const _split = (arr, count) => {
   const splitted = [];
@@ -41,9 +42,11 @@ export default class Popup extends React.Component {
     };
     this.loadCasts = this.loadCasts.bind(this);
     this.toggleTab = this.toggleTab.bind(this);
+    this.onToggleRadio = this.onToggleRadio.bind(this);
   }
 
   componentDidMount() {
+    this.setState({enableRadioMode: false});
     this.loadCasts('user');
     if (store.get('options.showReserved.enable') == 'enable') {
       this.setState({ showReserve: false });
@@ -90,6 +93,11 @@ Api.loadCasts(this.state.selectedTab)
     }
   }
 
+  onToggleRadio() {
+    this.setState({ enableRadioMode: !this.state.enableRadioMode });
+    store.set('enabledRadioMode', this.state.enableRadioMode);
+  }
+
   render() {
     return (
       <div id="wrapper">
@@ -102,8 +110,17 @@ Api.loadCasts(this.state.selectedTab)
           </a>
           <a className='menu-button' href='http://live.nicovideo.jp/my' target='_blank'>
             <span className="octicon mega-octicon octicon-radio-tower"></span>
-              <span className="title">マイページ</span>
-            </a>
+            <span className="title">マイページ</span>
+          </a>
+          <Toggle
+            onClick={this.onToggleRadio}
+            on={'ラジオモードON'}
+            off={'ラジオモードOFF'}
+            size='sm'
+            onstyle="success"
+            offstyle="danger"
+            active={this.state.enableRadioMode || false}
+          />
           </div>
           <div id="tab-container">
             <div id="user" className={this.state.selectedTab === 'user' ? `tab selected` : `tab non-selected`} onClick={this.toggleTab}>フォロー中</div>
