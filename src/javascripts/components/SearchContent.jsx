@@ -30,7 +30,7 @@ export default class SearchContent extends React.Component {
         const thumbParam = {};
         thumbParam.url = `http://live.nicovideo.jp/watch/${data.contentId}`;
         thumbParam.thumbnail = data.communityIcon;
-        thumbParam.description = Common.wordWrap(data.description, 34);
+        thumbParam.description = data.description.replace(/\<br\ \/\>/g, ' ');
         thumbParam.title = data.title;
         thumbParams.push(thumbParam);
       }
