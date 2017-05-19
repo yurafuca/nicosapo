@@ -8,9 +8,9 @@ export default class ListItem extends React.Component {
         <div className="list-group-text-block float-left">
           <img alt=""
             className="avatar"
-            height="40"
+            height="60"
             src={this.props.thumbnail}
-            width="40" />
+            width="60" />
           <span className="meta-title">
             <a href=""
               target="_blank"
@@ -19,6 +19,9 @@ export default class ListItem extends React.Component {
               {this.props.title}
             </a>
           </span>
+          <span className="meta-description text-small text-gray">
+            {this.props.description}
+          </span><br/>
           <span className="meta-description text-small text-gray">
             {this.props.description}
           </span>
