@@ -19,6 +19,9 @@ $color_matterhorn_approx: #4d394b;
 $color_celeste_approx: #ccc;
 $color_red_devil_approx: #820e0e;
 $color_dark_burgundy_approx: #740d0d;
+$color_alabaster_approx: #fcfcfc;
+$color_gallery_approx: #eee;
+
 
 %extend_1 {
 	color: $white;
@@ -203,6 +206,8 @@ a {
 	border-radius: 3px;
 }
 .listgroup-item {
+	font-family: 'Noto Sans Japanese';
+
 	min-height: inherit;
 	padding: 10px;
 	font-size: 13px;
@@ -295,7 +300,7 @@ a {
 	}
 }
 a {
-	color: #4078c0;
+	color: #0366d6;
 	text-decoration: none;
 	&:hover {
 		text-decoration: underline;
@@ -320,15 +325,24 @@ a {
 	}
 	.meta-title {
 		display: block;
-		font-weight: bold;
+		// font-weight: bold;
+		height: 20px;
+		overflow: hidden;
+		font-weight: 600;
 		color: black;
 		.short {
 			white-space: nowrap;
 			text-overflow: ellipsis;
 			width: 100px;
 		}
+		.developer-app-name {
+			color: #0366d6 !important;
+		}
 	}
 	.meta-description {
+		font-size: 0.9em;
+		height: 18px;
+		overflow: hidden;
 		display: inline-block;
 	}
 }
