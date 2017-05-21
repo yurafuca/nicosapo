@@ -14,10 +14,10 @@ export default class SearchContent extends React.Component {
       thumbParams: [],
       isLoading: true,
       resultCount: 0,
-      query: store.get('query') || '',
-      queried: store.get('query') || '',
-      favoriteQueries: store.get('favoriteQueries') || [],
-      sortMode: store.get('sortMode') || 'startTime-dsc',
+      query_current: store.get('search.query.last') || '雑談',
+      query_last: store.get('search.query.last') || '',
+      query_favorite: store.get('search.query.favorite') || [],
+      sortMode: store.get('search.sortMode') || 'startTime-dsc',
     };
     this.search = this.search.bind(this);
     this.setQuery = this.setQuery.bind(this);
@@ -29,7 +29,7 @@ export default class SearchContent extends React.Component {
   }
 
   componentDidMount() {
-    this.setParams(this.state.query, this.state.sortMode);
+    this.setParams(this.state.query_current, this.state.sortMode);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -61,45 +61,44 @@ export default class SearchContent extends React.Component {
   }
 
   handleChange(event) {
-    this.setState({query: event.target.value});
+    this.setState({query_current: event.target.value});
   }
 
   handleKeyPress(event) {
     if (event.key == 'Enter') {
-      store.set('query', this.state.query);
       event.preventDefault();
       this.search();
     }
   }
 
   registFavorite(e) {
-    const q = this.state.query;
-    const queries = this.state.favoriteQueries.filter((query) => q !== query);
+    const q = this.state.query_current;
+    const queries = this.state.query_favorite.filter((query) => q !== query);
     queries.push(q);
-    this.setState({ favoriteQueries: queries });
-    store.set('favoriteQueries', queries);
+    this.setState({ query_favorite: queries });
+    store.set('search.query.favorite', queries);
   }
 
   changeSortMode(e) {
     this.setState({ sortMode: e.target.value }, this.search);
-    store.set('sortMode', e.target.value);
+    store.set('search.sortMode', e.target.value);
   }
 
   setQuery(e) {
-    store.set('query', e.currentTarget.getAttribute('data-query'));
-    this.setState({query: e.currentTarget.getAttribute('data-query')}, this.search);
+    this.setState({query_current: e.currentTarget.getAttribute('data-query')}, this.search);
   }
 
   removeQuery() {
-    const q = this.state.queried;
-    const queries = this.state.favoriteQueries.filter((query) => q !== query);
-    this.setState({ favoriteQueries: queries });
-    store.set('favoriteQueries', queries);
+    const q = this.state.query_last;
+    const queries = this.state.query_favorite.filter((query) => q !== query);
+    this.setState({ query_favorite: queries });
+    store.set('search.query.favorite', queries);
   }
 
   search() {
-    this.setState({ thumbParams: [], isLoading: true, queried: this.state.query });
-    this.setParams(this.state.query, this.state.sortMode);
+    this.setState({ thumbParams: [], isLoading: true, query_last: this.state.query_current });
+    store.set('search.query.last', this.state.query_current);
+    this.setParams(this.state.query_current, this.state.sortMode);
   }
 
   render() {
@@ -114,26 +113,26 @@ export default class SearchContent extends React.Component {
             <option value="commentCounter-dsc">コメント数が多い順</option>
             <option value="commentCounter-asc">コメント数が少ない順</option>
           </select>
-          <input type="text" id="search-input" value={this.state.query} placeholder="キーワードを入力" onChange={this.handleChange} onKeyDown={this.handleKeyPress}/>
+          <input type="text" id="search-input" value={this.state.query_current} placeholder="キーワードを入力" onChange={this.handleChange} onKeyDown={this.handleKeyPress}/>
           <input type="button" id="search-button" value="検索" onClick={this.search}/>
           <span id="regist-favorite" onClick={this.registFavorite}>お気に入りに登録</span>
         </form>
         <div id="favorite-query-list">
           <span className="favorite-query-head">お気に入り</span>
-          {this.state.favoriteQueries.map((query) =>
+          {this.state.query_favorite.map((query) =>
             <span
               className="favorite-query"
               onClick={this.setQuery}
               data-query={query}>
               {query}
-              <span className={this.state.queried==query ? '' : 'none'}>
+              <span className={this.state.query_last==query ? '' : 'none'}>
                 <span className="query-remove" onClick={this.removeQuery}>削除</span>
               </span>
             </span>
           )}
         </div>
         <div id="result">
-          <span>{this.state.queried} に該当する放送が {this.state.resultCount} 件{this.state.resultCount>=100 ? '以上' : ''}見つかりました．</span>
+          <span>{this.state.query_last} に該当する放送が {this.state.resultCount} 件{this.state.resultCount>=100 ? '以上' : ''}見つかりました．</span>
         </div>
         <div id="container" className={this.state.isLoading ? 'nowloading' : ''}>
           {this.state.thumbParams.map((thumbParam) =>
