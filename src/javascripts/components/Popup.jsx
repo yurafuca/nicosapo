@@ -89,7 +89,7 @@ export default class Popup extends React.Component {
         this.setState({ selectedTab: 'future', videoInfoList: null }, this.loadCasts());
         break;
       case 'search':
-        this.setState({ selectedTab: 'search', videoInfoList: null }, this.loadCasts());
+        this.setState({ selectedTab: 'search', videoInfoList: null, loading: false }, this.loadCasts());
         break;
       default:
         this.setState({ selectedTab: 'user' }, this.loadCasts());
