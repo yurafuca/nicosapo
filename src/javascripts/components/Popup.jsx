@@ -116,16 +116,7 @@ export default class Popup extends React.Component {
             <span className="octicon mega-octicon octicon-radio-tower"></span>
             <span className="title">マイページ</span>
           </a>
-          <Toggle
-            onClick={this.onToggleRadio}
-            on={'ラジオモードON'}
-            off={'ラジオモードOFF'}
-            size='sm'
-            onstyle="success"
-            offstyle="danger"
-            active={this.state.enableRadioMode || false}
-          />
-          </div>
+          </div>
           <div id="tab-container">
             <div id="user" className={this.state.selectedTab === 'user' ? `tab selected` : `tab non-selected`} onClick={this.toggleTab}>フォロー中</div>
             <div id="official" className={this.state.selectedTab === 'official' ? `tab selected` : `tab non-selected`} onClick={this.toggleTab}>公式</div>
