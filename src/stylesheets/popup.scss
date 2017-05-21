@@ -21,6 +21,9 @@ $color_red_devil_approx: #820e0e;
 $color_dark_burgundy_approx: #740d0d;
 $color_alabaster_approx: #fcfcfc;
 $color_gallery_approx: #eee;
+$color_pastel_green_approx: #8add6d;
+$color_apple_approx: #5ca941;
+$color_mantis_approx: #79d858;
 
 
 %extend_1 {
@@ -319,6 +322,8 @@ a {
 	// padding-left: 50px;
 	padding-left: 70px;
 	line-height: 20px;
+	overflow: hidden;
+	width: 436px;
 	img {
 		position: absolute;
 		top: 0;
@@ -341,8 +346,14 @@ a {
 		}
 	}
 	.meta-description {
-		font-size: 0.9em;
+		height: 20px;
+		overflow: hidden;
+		display: inline-block;
+	}
+	.meta-status {
+		font-size: 0.7em;
 		height: 18px;
+		color: #bbb;
 		overflow: hidden;
 		display: inline-block;
 	}
@@ -363,6 +374,16 @@ a {
  */
 
 
+#result {
+	font-family: 'Noto Sans Japanese';
+	padding: 3px 0;
+	border-bottom: solid 1px #E5E5E5;
+	margin: 0 auto;
+	text-align: center;
+	font-weight: 600;
+	// width: 350px;
+}
+
 .username {
 	margin-left: 2px;
 	color: $color_mine_shaft_approx;
@@ -373,17 +394,120 @@ a {
 	text-shadow: 0 1px 0 $white;
 }
 #search-container {
-	background: red;
+	font-family: 'Noto Sans Japanese';
+	background: #F5F5F5;
 	color: white;
+	margin-bottom: 0;
+	border-bottom: solid 1px #E5E5E5;
+}
+#search-sort {
+	display: inline-block;
+	position: absolute;
+height: 28px;
+width: 140px;
+font-size: 0.8em;
+color: #333;
 }
 #search-input {
-	background: yellow;
-	color: white;
+	display: inline-block;
+	background: white;
+	color: #333;
+	vertical-align: middle;
+	// width: 400px;
+	    width: 260px;
+			margin-left: 140px;
+	height: 28px;
+	padding: 0 5px;
 }
 #search-button {
+	display: inline-block;
 	background: blue;
 	color: white;
 	vertical-align: middle;
+
+	vertical-align: middle;
+	color: white;
+	padding: 3px 13px;
+	border: solid 1px $color_apple_approx;
+	// border-radius: 0 3px 3px 0;
+	background-image: linear-gradient($color_pastel_green_approx, $color_apple_approx);
+	// text-shadow: 0 -1px 0 $black_15;
+	&:hover {
+		background-image: linear-gradient($color_mantis_approx, $color_apple_approx);
+		cursor: pointer;
+	}
+}
+#favorite-query-list {
+	font-family: 'Noto Sans Japanese';
+	background: #F1F8FF;
+	border-bottom: solid 1px #ddd;
+	padding: 2px;
+}
+.favorite-query-head {
+	cursor: default;
+	padding: 2px 5px;
+	color: #333;
+	border-right: solid 1px #ddd;
+	// font-weight: 600;
+}
+.favorite-query {
+	cursor: pointer;
+	color: #0366d6;
+	// font-size: 0.9em;
+	padding: 2px 5px;
+	border-right: solid 1px #ddd;
+	&:first-child {
+		border-left: solid 1px #ddd;
+	}
+	&:hover {
+		background: #DDEEFF;
+	}
+}
+.selected-query {
+	background: #0366d6;
+	color: white;
+	padding-right: 10px;
+	&:hover {
+		background: #0251ab;
+	}
+}
+.query-remove {
+	background: #0366d6;
+	color: #F1F8FF;
+	font-size: 11px !important;
+	padding: 0 5px;
+	border-radius: 999px;
+	position: relative;
+	display: inline-block;
+	height: 16px;
+	top: -1px;
+	margin-left: 8px;
+	margin-right: 4px;
+	&:hover {
+		color: white;
+		background: #D02D3A;
+	}
+}
+#regist-favorite {
+	position: absolute;
+	top: 77px;
+	right: 62px;
+	color: #777;
+	cursor: pointer;
+	background: #eee;
+	padding: 0 3px;
+	border-radius: 2px;
+	&:hover {
+		// color: #999;
+		background: #ddd;
+	}
+	&:active {
+		background: #ccc;
+		// color: #bbb;
+	}
+}
+.none {
+	display: none;
 }
 .community-hover-wrapper {
 	margin: 5px 0 0 5px;
