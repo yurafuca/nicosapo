@@ -126,12 +126,13 @@ export default class ExBar extends React.Component {
     this.setState({ doBlink: false });
   }
 
+  // <div className="radio-badge-wrapper">
+  //   <div className="radio-badge"></div>
+  // </div>
+
   render() {
     return(
       <div>
-        <div className="radio-badge-wrapper">
-          <div className="radio-badge"></div>
-        </div>
         <div id="extended-bar">
           <div className="time end-time">
             {
