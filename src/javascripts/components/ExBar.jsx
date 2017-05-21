@@ -126,31 +126,38 @@ export default class ExBar extends React.Component {
     this.setState({ doBlink: false });
   }
 
+  // <div className="radio-badge-wrapper">
+  //   <div className="radio-badge"></div>
+  // </div>
+
   render() {
     return(
-      <div id="extended-bar">
-        <div className="time end-time">
-          {
-            (this.state.isOpen) ?
-            (this.state.endText) :
-            ('放送が終了しました')
-          }
-        </div>
-        <div className="message">
-          {
-             (this.state.doBlink) ?
-             (<Blink><span style={{color: '#FFEE66'}}>{this.state.updateText}</span></Blink>) :
-             (this.state.updateText)
-           }
-         </div>
-        <div className="time rest-time">
-          {
-            (this.state.hour > 0) ?
-            (`${this.state.hour}：${this.state.minute}：${this.state.second}`) :
-            (`${this.state.minute}：${this.state.second}`)
-          }
+      <div>
+        <div id="extended-bar">
+          <div className="time end-time">
+            {
+              (this.state.isOpen) ?
+              (this.state.endText) :
+              ('放送が終了しました')
+            }
+          </div>
+          <div className="message">
+            {
+               (this.state.doBlink) ?
+               (<Blink><span style={{color: '#FFEE66'}}>{this.state.updateText}</span></Blink>) :
+               (this.state.updateText)
+             }
+           </div>
+          <div className="time rest-time">
+            {
+              (this.state.hour > 0) ?
+              (`${this.state.hour}：${this.state.minute}：${this.state.second}`) :
+              (`${this.state.minute}：${this.state.second}`)
+            }
+          </div>
         </div>
       </div>
+
     )
   }
 }

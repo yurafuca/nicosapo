@@ -236,3 +236,21 @@ $url_0: url(chrome-extension://__MSG_@@extension_id__/images/icon.png);
 		}
 	}
 }
+.radio-badge-wrapper {
+	background-image: linear-gradient(rgb(51, 204, 86) 0%, rgb(40, 167, 69) 100%);
+	width: 50px;
+	height: 50px;
+	border-radius: 50px;
+
+}
+.radio-badge {
+	height: 40px;
+	width: 40px;
+	border-radius: 50px;
+	background-size: 35px;
+	position: relative;
+	top: 7px;
+	left: 7px;
+	background-repeat: no-repeat;
+	background-image: url(chrome-extension://__MSG_@@extension_id__/images/radio.png), linear-gradient(to bottom, #33CC56 0%, #28A745 100%);
+}
