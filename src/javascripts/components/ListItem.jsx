@@ -22,8 +22,8 @@ export default class ListItem extends React.Component {
           <span className="meta-description text-small text-gray">
             {this.props.description}
           </span><br/>
-          <span className="meta-description text-small text-gray">
-            {this.props.description}
+          <span className="meta-status text-small text-gray">
+             {this.props.viewCounter} 来場者 · {this.props.commentCounter} コメント · {this.props.lapsedTime} 分経過
           </span>
         </div>
       </div>
