@@ -7,7 +7,7 @@ export default class AutoScrollButton extends React.Component {
     super();
     this.state           = { isToggledOn: null };
     this._className      = 'auto_scroll_button';
-    this._balloonMessage = `プレイヤーの位置まで画面を自動でスクロールします．`,
+    this._balloonMessage = `新しいページが開かれたとき，プレイヤーの位置まで画面を自動でスクロールします．`,
     this._balloonPos     = 'up';
     this._balloonLength  = 'xlarge';
     this.onClick         = this.onClick.bind(this);
