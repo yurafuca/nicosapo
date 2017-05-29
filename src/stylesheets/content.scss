@@ -38,6 +38,33 @@ $font_9: EmojiSymbols;
 //urls
 $url_0: url(chrome-extension://__MSG_@@extension_id__/images/icon.png);
 
+@font-face {
+  font-family: 'Material Icons';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Material Icons'), local('MaterialIcons-Regular'), url(https://fonts.gstatic.com/s/materialicons/v22/2fcrYFNaTjcS6g4U3t-Y5ZjZjT5FdEJ140U2DJYC3mY.woff2) format('woff2');
+}
+
+.material-icons {
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-feature-settings: 'liga';
+  -webkit-font-smoothing: antialiased;
+}
+
+.rotate180 {
+	transform: rotateX(180deg);
+}
+
 //for bug of nicolive
 .icon_follow {
 	position: relative;
@@ -120,11 +147,18 @@ $url_0: url(chrome-extension://__MSG_@@extension_id__/images/icon.png);
 		margin-right: 5px;
 		margin-left: 5px;
 		&.switch_is_on {
-			border: solid 1px $color_tia_maria_approx;
-			background-image: linear-gradient(to bottom,$color_meteor_approx,$color_tia_maria_approx);
+			border: solid 1px #a34514;
+			background-image: linear-gradient(#e36320,#b94e17);
 			&:hover {
-				background-image: linear-gradient(to bottom,$color_pizazz_approx,$color_blaze_orange_approx);
+				filter: brightness(105%);
+				background-image: linear-gradient(#e36320,#b94e17);
 				cursor: pointer;
+			}
+			&:active {
+				color: $white;
+				border-color: #a34514;
+				//Instead of the line below you could use @include box-shadow($shadow-1, $shadow-2, $shadow-3, $shadow-4, $shadow-5, $shadow-6, $shadow-7, $shadow-8, $shadow-9, $shadow-10)
+				box-shadow: inset 0 2px 4px $black_15;
 			}
 		}
 		&.switch_is_off {
@@ -133,6 +167,11 @@ $url_0: url(chrome-extension://__MSG_@@extension_id__/images/icon.png);
 			&:hover {
 				background-image: linear-gradient(to bottom,$color_storm_dust_approx,$color_tundora_approx);
 				cursor: pointer;
+			}
+			&:active {
+				background-color: $color_alto_approx;
+				//Instead of the line below you could use @include box-shadow($shadow-1, $shadow-2, $shadow-3, $shadow-4, $shadow-5, $shadow-6, $shadow-7, $shadow-8, $shadow-9, $shadow-10)
+				box-shadow: inset 0 1px 6px $black_20;
 			}
 		}
 	}
@@ -185,15 +224,43 @@ $url_0: url(chrome-extension://__MSG_@@extension_id__/images/icon.png);
 #program-main-block  #extended-bar {
   width: 1024px;
 }
+.auto_scroll_button .material-icons {
+	font-size: 18px;
+	position: relative;
+	top: 4px;
+}
+.auto_scroll_button > .link {
+	&.switch_is_on {
+		color: $white;
+		background-image: linear-gradient(#5074be, #3b5c9f);
+		border: solid 1px #34518d;
+		&:hover {
+			color: $white;
+			background-image: linear-gradient(#5074be, #3b5c9f);
+			border: solid 1px #34518d;
+		}
+		&:active {
+			color: $white;
+			border-color: $color_la_palma_approx;
+			//Instead of the line below you could use @include box-shadow($shadow-1, $shadow-2, $shadow-3, $shadow-4, $shadow-5, $shadow-6, $shadow-7, $shadow-8, $shadow-9, $shadow-10)
+			box-shadow: inset 0 2px 4px $black_15;
+		}
+	}
+	&.switch_is_off:active {
+		background-color: $color_alto_approx;
+		//Instead of the line below you could use @include box-shadow($shadow-1, $shadow-2, $shadow-3, $shadow-4, $shadow-5, $shadow-6, $shadow-7, $shadow-8, $shadow-9, $shadow-10)
+		box-shadow: inset 0 1px 6px $black_20;
+	}
+}
 .auto_enter_community_button > .link {
 	&.switch_is_on {
 		color: $white;
-		background-image: linear-gradient($color_mantis_approx, $color_apple_approx);
-		border: solid 1px $color_apple_approx;
+		background-image: linear-gradient(#78c35e, #5cad40);
+		border: solid 1px #529a3a;
 		&:hover {
 			color: $white;
-			background-image: linear-gradient($color_mantis_approx, $color_apple_approx);
-			border: solid 1px $color_apple_approx;
+			background-image: linear-gradient(#78c35e, #5cad40);
+			border: solid 1px #529a3a;
 		}
 		&:active {
 			color: $white;
