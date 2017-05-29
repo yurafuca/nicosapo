@@ -31,6 +31,15 @@ function getCommunityId() {
     return communityId;
   }
 
+  const communityUrl3 = window.location.href;
+  const re3 = /http:\/\/com\.nicovideo\.jp\/community\/(co[0-9]+)/;
+
+  // コミュニティページ
+  if (re3.exec(communityUrl3)) {
+    const communityId = re3.exec(communityUrl3)[1];
+    return communityId;
+  }
+
   return null;
 }
 

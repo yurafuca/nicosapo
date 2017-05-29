@@ -1,24 +1,18 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import Page from '../page/Page';
-import AutoRedirectButton from "../buttons/AutoRedirectButton";
-import NewCastChecker from '../modules/NewCastChecker';
+import CastPage from '../page/CastPage';
 
-const _newCastChecker = new NewCastChecker();
-let isEnabledAutoRedirect = false;
-
-export default class StandByPage extends Page {
-  putButton() {
-    const parent = document.getElementById('watch_like_buttons');
-    const child = document.createElement('div');
-    child.id = 'nicosapo_buttons';
-    parent.appendChild(child);
-    ReactDOM.render(<AutoRedirectButton notify={this.recieveNotify} />, child);
-    _newCastChecker.run();
-  }
-
-  recieveNotify(isToggledOn) {
-    console.log('toggled');
-    isEnabledAutoRedirect = isToggledOn;
+export default class StandByPage extends CastPage {
+  putWidgets() {
+    const props = {
+      buttonOrder    : `DEFAULT`,
+      enableARButton : true,
+      enableACButton : false,
+      enableAPButton : false,
+      enableExBar    : false,
+      position       : `APPEND`,
+      requireInline  : true,
+      element4Buttons: document.getElementById('watch_like_buttons'),
+      idName4ExBar   : `siteHeader` // TODO: temp
+    };
+    super.putWidgets(props);
   }
 }

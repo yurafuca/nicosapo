@@ -1,12 +1,13 @@
-import React from 'react';
+import $ from 'jquery'
+import React from 'react'
+import store from 'store'
 
-export default class AutoRedirectButton extends React.Component {
+export default class AutoScrollButton extends React.Component {
   constructor() {
     super();
     this.state           = { isToggledOn: null };
-    this._className      = 'auto_redirect_button';
-    this._label          = `自動次枠移動`;
-    this._balloonMessage = `このページを開いたままにしておくと，新しい枠で放送が始まったとき自動で枠へ移動します．`;
+    this._className      = 'auto_scroll_button';
+    this._balloonMessage = `プレイヤーの位置まで画面を自動でスクロールします．`,
     this._balloonPos     = 'up';
     this._balloonLength  = 'xlarge';
     this.onClick         = this.onClick.bind(this);
@@ -19,11 +20,12 @@ export default class AutoRedirectButton extends React.Component {
   setUp() {
     chrome.runtime.sendMessage({
         purpose: 'getFromLocalStorage',
-        key: 'options.autoJump.enable'
+        key: 'options.autoScroll.enable'
       },
       (response) => {
         if (response == 'enable' || response == null) {
           this.setState({ isToggledOn: true });
+          this.scroll();
         } else {
           this.setState({ isToggledOn: false });
         }
@@ -31,12 +33,25 @@ export default class AutoRedirectButton extends React.Component {
     )
   }
 
+  scroll() {
+    const anchor = $("#watch_title_box");
+    if (anchor) {
+      setTimeout(() => {
+        $(window).scrollTop(anchor.offset().top);
+      }, 1000);
+    }
+  }
+
   onClick(e) {
     this.toggle();
   }
 
   toggle() {
-    this.props.notify(!this.state.isToggledOn);
+    chrome.runtime.sendMessage({
+      purpose: 'saveToLocalStorage',
+      key: 'options.autoScroll.enable',
+      value: !this.state.isToggledOn ? 'enable' : 'disable'
+    });
     if (this.state.isToggledOn) {
       this.setState({ isToggledOn: false });
     } else {
@@ -51,7 +66,7 @@ export default class AutoRedirectButton extends React.Component {
             data-balloon={this._balloonMessage}
             data-balloon-pos={this._balloonPos}
             data-balloon-length={this._balloonLength}>
-            {(this.state.isToggledOn ? `${this._label}ON` : `${this._label}OFF`)}
+            <i className="material-icons rotate180">publish</i>
           </a>
       </span>
     );

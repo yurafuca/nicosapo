@@ -1,18 +1,18 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import Page from '../page/Page';
-import AutoEnterProgramButton from "../buttons/AutoEnterProgramButton";
+import CastPage from '../page/CastPage';
 
-function prependChild(newNode, parentNode) {
-    parentNode.insertBefore(newNode, parentNode.firstChild);
-}
-
-export default class GatePage extends Page {
-  putButton() {
-    const parent = document.getElementsByClassName('gate_title')[0];
-    const child = document.createElement('div');
-    child.id = 'nicosapo_buttons';
-    prependChild(child, parent);
-    ReactDOM.render(<AutoEnterProgramButton />, child);
+export default class GatePage extends CastPage {
+  putWidgets() {
+    const props = {
+      buttonOrder    : `DEFAULT`,
+      enableARButton : false,
+      enableACButton : false,
+      enableAPButton : true,
+      enableExBar    : false,
+      position       : `PREPEND`,
+      requireInline  : true,
+      element4Buttons: document.getElementsByClassName('gate_title')[0],
+      idName4ExBar   : `siteHeader` // TODO: temp
+    };
+    super.putWidgets(props);
   }
 }

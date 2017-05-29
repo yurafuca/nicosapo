@@ -153,4 +153,31 @@ export default class Api {
       });
     });
   }
+
+  static search(query, sortMode) {
+    return new Promise((resolve) => {
+      const sortModes = {
+        'startTime-dsc': 'startTime',
+        'startTime-asc': '%2bstartTime',
+        'viewCounter-dsc': 'viewCounter',
+        'viewCounter-asc': '%2bviewCounter',
+        'commentCounter-dsc': 'commentCounter',
+        'commentCounter-asc': '%2bcommentCounter'
+      };
+      const q =
+        `http://api.search.nicovideo.jp/api/v2/live/contents/search?q=${query}`
+        + '&targets=tags'
+        + '&fields=contentId,title,communityIcon,description,start_time,live_end_time,comment_counter,score_timeshift_reserved,provider_type,tags,member_only,viewCounter,timeshift_enabled'
+        + '&_context=nicosapo'
+        + '&filters%5BliveStatus%5D%5B0%5D=onair'
+        + '&filters%5BstartTime%5D%5Bgte%5D=2017-05-18T00:00:00-09:00'
+        + '&filters%5BstartTime%5D%5Blt%5D=2030-04-01T00:00:00-09:00'
+        + `&_sort=${sortModes[sortMode]}`
+        + '&_limit=100';
+      $.get(q, (response) => {
+        console.info(response);
+        resolve(response);
+      });
+    });
+  }
 }
