@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import ExBar from '../components/ExBar';
 import NewCastChecker from '../modules/NewCastChecker';
+import AutoScrollButton from '../buttons/AutoScrollButton';
 import AutoRedirectButton from '../buttons/AutoRedirectButton';
 import AutoEnterCommunityButton from '../buttons/AutoEnterCommunityButton';
 import AutoEnterProgramButton from '../buttons/AutoEnterProgramButton';
@@ -62,13 +63,14 @@ export default class Widgets extends React.Component {
     if (this.props.enableARButton) {
       _newCastChecker.setProlongReceiver(this._prolongReceiver.bind(this)); // TODO: ugly
       _newCastChecker.run(); // TODO: ugly
-      buttonDoms.push(<AutoRedirectButton notify={this._recieveNotify} />)
+      buttonDoms.push(<AutoScrollButton />);
+      buttonDoms.push(<AutoRedirectButton notify={this._recieveNotify} />);
     }
     if (this.props.enableACButton) {
       buttonDoms.push(<AutoEnterCommunityButton />)
     }
     if (this.props.enableAPButton) {
-      buttonDoms.push(<AutoEnterProgramButton />)
+      buttonDoms.push(<AutoEnterProgramButton />);
     }
     let wrapper = null;
     if (this.props.requireInline) {
