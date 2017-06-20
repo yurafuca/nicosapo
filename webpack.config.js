@@ -11,7 +11,7 @@ module.exports = [
         options: "./src/javascripts/options.jsx"
     },
     output: {
-        path: './dist/assets/javascripts',
+        path: path.resolve(__dirname, './dist/assets/javascripts'),
         filename: '[name].js'
     },
     module: {
@@ -43,7 +43,6 @@ module.exports = [
     devtool: 'source-map',
     resolve: {
       extensions: [
-        "",
         ".js",
         ".jsx",
         ".scss",
@@ -57,14 +56,14 @@ module.exports = [
       options: './src/stylesheets/options.scss',
     },
     output: {
-      path: './dist/assets/stylesheets/',
+      path: path.resolve(__dirname, './dist/assets/stylesheets/'),
       filename: '[name].css'
     },
     module: {
       loaders: [
         {
           test: /\.scss$/,
-          loader: ExtractTextPlugin.extract("style-loader", "css-loader!sass-loader")
+          loader:  ExtractTextPlugin.extract({ fallback: 'style-loader', use: 'css-loader' })
         }
       ]
     },
