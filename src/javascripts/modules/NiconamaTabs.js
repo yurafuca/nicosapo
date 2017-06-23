@@ -1,37 +1,49 @@
 import store from 'store'
+import _ from 'lodash';
 
 const KEY = `NiconamaTabs`;
-
-chrome.tabs.onCreated.addListener((tab) => {
-  NiconamaTabs._add(tab.id);
-});
-
-chrome.tabs.onRemoved.addListener((tabId) => {
-  NiconamaTabs._remove(tabId);
-});
-
 
 export default class NiconamaTabs {
   static openingList() {
     return store.get(KEY);
   }
 
-  static isOpening(tabId) {
-    const tabIds = store.get(KEY);
-    return tabIds.includes(tabId);
+  static getTabId(castId) {
+    const tabIds = store.get(KEY) || {};
+    let result = null;
+    Object.keys(tabIds).forEach((_tabId) => {
+      if (tabIds[_tabId] === castId) {
+        result = _tabId;
+      }
+    });
+    return result;
   }
 
-  static _add(tabId) {
+  static add(tabId, castId) {
+    if (castId == null) {
+      return;
+    }
     console.log(`[nicosapo] Add ${tabId} to opening tab`);
-    const tabIds = store.get(KEY);
-    tabIds.push(tabId);
+    const tabIds = store.get(KEY) || {};
+    tabIds[tabId] = castId;
     store.set(KEY, tabIds);
   }
 
-  static _remove(tabId) {
+  static remove(tabId) {
     console.log(`[nicosapo] Remove ${tabId} from opening tab`);
-    let tabIds = store.get(KEY);
-    tabIds = tabIds.filter((id) => { return id != tabId; });
+    const tabIds = store.get(KEY) || {};
+    delete tabIds[tabId];
+    // tabIds = tabIds.filter((id) => id != tabId);
     store.set(KEY, tabIds);
+  }
+
+  static isCastPage(url) {
+    const re = /http:\/\/live2?\.nicovideo\.jp\/watch\/lv([0-9]+)/;
+    if (re.exec(url)) {
+      const liveId = `lv${re.exec(url)[1]}`;
+      return liveId;
+    } else {
+      return null;
+    }
   }
 }
