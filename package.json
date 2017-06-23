@@ -32,6 +32,7 @@
     "react-bootstrap": "^0.31.0",
     "react-bootstrap-toggle": "^2.0.6",
     "react-dom": "^15.4.1",
+    "sass-loader": "^6.0.6",
     "sloc": "^0.2.0",
     "store": "^2.0.4",
     "style-loader": "^0.18.2",
