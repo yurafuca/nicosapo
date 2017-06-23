@@ -1,6 +1,5 @@
 {
     "extends": "eslint:recommended",
-    "global-strict": ["error", "always"],
     "env": {
         "browser": true,
         "es6": true
