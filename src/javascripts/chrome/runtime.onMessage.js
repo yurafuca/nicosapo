@@ -3,17 +3,12 @@ import NiconamaTabs from '../modules/NiconamaTabs'
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.purpose == 'NiconamaTabs.add') {
-    NiconamaTabs.add(request.id);
+    NiconamaTabs.add(sender.tab.id, request.id);
   } 
 
   if (request.purpose == 'NiconamaTabs.remove') {
-    NiconamaTabs.remove(request.id);
+    NiconamaTabs.remove(sender.tab.id);
   }
-
-  if (request.purpose == 'NiconamaTabs.isOpening') {
-    const isOpening = NiconamaTabs.isOpening(request.id);
-    sendResponse(isOpening);
-  } 
 
   if (request.purpose == 'getFromLocalStorage') {
     sendResponse(store.get(request.key));
