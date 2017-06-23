@@ -1,6 +1,20 @@
-import store from 'store';
+import store from 'store'
+import NiconamaTabs from '../modules/NiconamaTabs'
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.purpose == 'NiconamaTabs.add') {
+    NiconamaTabs.add(request.id);
+  } 
+
+  if (request.purpose == 'NiconamaTabs.remove') {
+    NiconamaTabs.remove(request.id);
+  }
+
+  if (request.purpose == 'NiconamaTabs.isOpening') {
+    const isOpening = NiconamaTabs.isOpening(request.id);
+    sendResponse(isOpening);
+  } 
+
   if (request.purpose == 'getFromLocalStorage') {
     sendResponse(store.get(request.key));
     return;
