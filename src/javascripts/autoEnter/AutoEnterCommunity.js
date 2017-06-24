@@ -36,18 +36,17 @@ export default class AutoEnterCommunity {
                 setTimeout((notification) => { notification.close(); }, duration * 1000);
                 return;
               }
+              chrome.tabs.create({ url: `http://live.nicovideo.jp/watch/${id}` }, () => {
+                const options = {
+                  type: 'basic',
+                  title: _notificationTitle,
+                  message: storagedData[id].title,
+                  iconUrl: storagedData[id].thumbnail
+                };
+                chrome.notifications.create(id, options);
+              });
             });
           }
-
-          chrome.tabs.create({ url: `http://live.nicovideo.jp/watch/${id}` }, () => {
-            const options = {
-              type: 'basic',
-              title: _notificationTitle,
-              message: storagedData[id].title,
-              iconUrl: storagedData[id].thumbnail
-            };
-            chrome.notifications.create(id, options);
-          });
         } else if (lastState === 'onair' || lastState === 'init') {
           storagedData[response.requestId].state = 'onair';
         }
