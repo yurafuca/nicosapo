@@ -27,5 +27,5 @@ Common.sleep(7 * 1000).then(() => {
     Promise.resolve()
       .then((new AutoEnterRunner()).run('live'))
       .then((new AutoEnterRunner()).run('community'));
-  }, 10 * 1000);
+  }, 60 * 1000);
 });
