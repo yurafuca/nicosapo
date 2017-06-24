@@ -37,12 +37,13 @@ module.exports = [
         { from: 'src/images', to: '../images' },
         { from: 'src/octicons', to: '../octicons' },
         { from: 'src/sounds', to: '../sounds' },
-       { from: 'manifest.json', to: '../manifest.json' }
+        { from: 'manifest.json', to: '../manifest.json' },
+        { from: 'src/stylesheets/balloon.min.css', to: '../stylesheets/balloon.min.css' },
+        { from: 'src/stylesheets/animate.min.css', to: '../stylesheets/animate.min.css' }
       ])
     ],
     resolve: {
       extensions: [
-        "",
         ".js",
         ".jsx",
         ".scss",
@@ -53,19 +54,22 @@ module.exports = [
     entry: {
       popup: './src/stylesheets/popup.scss',
       content: './src/stylesheets/content.scss',
-      options: './src/stylesheets/options.scss',
-      'balloon.min': './src/stylesheets/balloon.min.css', 
-      'animate.min': './src/stylesheets/animate.min.css', 
+      options: './src/stylesheets/options.scss'
     },
     output: {
       path: path.resolve(__dirname, './dist/assets/stylesheets/'),
       filename: '[name].css'
     },
     module: {
-      loaders: [
+     rules: [
         {
           test: /\.scss$/,
-          loader:  ExtractTextPlugin.extract({ fallback: 'style-loader', use: 'css-loader' })
+          use: ExtractTextPlugin.extract(
+            {
+              fallback: "style-loader",
+              use: ["css-loader", "sass-loader?outputStyle=expanded"]
+            }
+          )
         }
       ]
     },
