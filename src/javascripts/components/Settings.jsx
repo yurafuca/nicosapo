@@ -90,11 +90,11 @@ export default class Settings extends React.Component {
   }
 
   reflectSettings() {
-    for (const key in store.getAll()) {
+    store.each((value, key) => {
       const state = {};
-      state[key] = store.get(key);
+      state[key] = value;
       this.setState(state);
-    }
+    });
   }
 
   saveSettings() {
