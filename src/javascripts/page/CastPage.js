@@ -1,12 +1,21 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Widgets from '../components/Widgets';
+import IdHolder from '../modules/IdHolder'
 
 function insertAfter(newNode, referenceNode) {
   referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
 }
 
 export default class CastPage extends React.Component {
+  constructor() {
+    super();
+    chrome.runtime.sendMessage({
+      purpose: 'NiconamaTabs.add',
+      id: (new IdHolder()).communityId
+    });
+  }
+
   putWidgets(props) {
     const parent = document.getElementById(props.idName4ExBar);
     const child = document.createElement('div');

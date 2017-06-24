@@ -37,7 +37,9 @@ module.exports = [
         { from: 'src/images', to: '../images' },
         { from: 'src/octicons', to: '../octicons' },
         { from: 'src/sounds', to: '../sounds' },
-       { from: 'manifest.json', to: '../manifest.json' }
+        { from: 'manifest.json', to: '../manifest.json' },
+        { from: 'src/stylesheets/balloon.min.css', to: '../stylesheets/balloon.min.css' },
+        { from: 'src/stylesheets/animate.min.css', to: '../stylesheets/animate.min.css' },
       ])
     ],
     devtool: 'source-map',
@@ -60,10 +62,15 @@ module.exports = [
       filename: '[name].css'
     },
     module: {
-      loaders: [
+      rules: [
         {
           test: /\.scss$/,
-          loader:  ExtractTextPlugin.extract({ fallback: 'style-loader', use: 'css-loader' })
+          use: ExtractTextPlugin.extract(
+            {
+              fallback: "style-loader",
+              use: ["css-loader", "sass-loader?outputStyle=expanded"]
+            }
+          )
         }
       ]
     },
