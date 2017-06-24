@@ -1,9 +1,14 @@
 import Db from './modules/db'
 import Badge from './modules/Badge'
+import NiconamaTabs from './modules/NiconamaTabs'
 import BackgroundReloader from './modules/BackgroundReloader'
 import Common from './common/Common'
 import AutoEnterRunner from './autoEnter/AutoEnterRunner'
 import './chrome/runtime.onMessage'
+
+chrome.tabs.onRemoved.addListener((tabId) => {
+  NiconamaTabs.remove(tabId);
+});
 
 Badge.setBackgroundColor('#ff6200');
 Db.setAll('autoEnterCommunityList', 'state', 'init');

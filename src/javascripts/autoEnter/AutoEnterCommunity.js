@@ -28,12 +28,10 @@ export default class AutoEnterCommunity {
               if (response) {
                 const communityData = store.get('autoEnterCommunityList')[id];
                 const options = {
-                  body: `放送が始まりましたが，自動次枠移動が有効になっているため，自動入場をキャンセルしました．`,
+                  body: `自動入場をキャンセルしました．この放送を開いている自動次枠移動が ON のタブがあります．`,
                   icon: communityData.thumbnail
                 };
-                const duration = store.get('options.openingNotification.duration') || 6;
-                const notification = new Notification(communityData.title, options);
-                setTimeout((notification) => { notification.close(); }, duration * 1000);
+                new Notification(communityData.title, options);
                 return;
               }
               chrome.tabs.create({ url: `http://live.nicovideo.jp/watch/${id}` }, () => {
