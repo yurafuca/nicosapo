@@ -1,6 +1,14 @@
 import IdHolder from "../modules/IdHolder";
 import Api from "../api/Api";
 
+chrome.extension.onMessage.addListener((request, sender, sendResponse) => {
+  console.log(request);
+  console.log(_isEnableChecking);
+  if (request == `isEnableChecking`) {
+    sendResponse(_isEnableChecking);
+  }
+});
+
 const idHolder = new IdHolder();
 const goToCast  = (liveId) => {
   const baseUrl = 'http://live.nicovideo.jp/watch/';

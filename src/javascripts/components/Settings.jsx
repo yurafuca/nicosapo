@@ -90,11 +90,11 @@ export default class Settings extends React.Component {
   }
 
   reflectSettings() {
-    for (const key in store.getAll()) {
+    store.each((value, key) => {
       const state = {};
-      state[key] = store.get(key);
+      state[key] = value;
       this.setState(state);
-    }
+    });
   }
 
   saveSettings() {
@@ -229,12 +229,14 @@ export default class Settings extends React.Component {
                   <h1 className="appicon">にこさぽについて</h1>
                   <div id="appinfo" style={{textAlign: 'center', margin: '20px auto'}}>
                     <div id="logo">
-                      <img src="../images/logo.png" style={{width: '500px'}}/>
+                      <a target="_blank" href="https://goo.gl/UWX5H2">
+                        <img src="../images/logo.png" style={{ width: '500px' }} />
+                      </a>
                     </div>
                     <p>ニコニコ生放送の視聴をサポートする Google Chrome Extension</p>
                     <p>バージョン: {chrome.runtime.getManifest().version}</p>
                     <p>Twitter: <a href="https://twitter.com/nicosapo_dev">@nicosapo_dev</a></p>
-                    <p>GitHub: <a href="https://github.com/tsuyuno/nicosapo">nicosapo</a></p>
+                    <p>GitHub: <a href="https://github.com/yurafuca/nicosapo">nicosapo</a></p>
                   </div>
 
                 </div>
@@ -249,7 +251,7 @@ export default class Settings extends React.Component {
                   <div className="items">
                     <span className="campa">にこさぽの開発を応援してくださる方はよろしくお願いします．今後の開発の励みになります．😘</span>
                       <p> <a target="_blank" href="http://amzn.asia/hqChgj3">Amazon ほしいものリスト - ほしい雑貨</a></p>
-                      <p> <a target="_blank" href="http://amzn.asia/8BFBccC">Amazon ほしいものリスト - ほしい本</a></p>
+                      <p> <a target="_blank" href="https://www.amazon.co.jp/gp/registry/wishlist/3FRW92E46KYCC/ref=cm_wl_upd_nojs_succ_ei?sort=priority&view=nullC">Amazon ほしいものリスト - ほしい本</a></p>
                   </div>
                 </div>
               )

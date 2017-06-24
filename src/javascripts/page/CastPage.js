@@ -1,28 +1,13 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import Widgets from '../components/Widgets';
+import IdHolder from '../modules/IdHolder'
+import Page from '../page/Page'
 
-function insertAfter(newNode, referenceNode) {
-  referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
-}
-
-export default class CastPage extends React.Component {
-  putWidgets(props) {
-    const parent = document.getElementById(props.idName4ExBar);
-    const child = document.createElement('div');
-    child.id = 'nicosapo_gadgets';
-    insertAfter(child, parent);
-    ReactDOM.render(
-      <Widgets
-        buttonOrder={props.buttonOrder}
-        enableARButton={props.enableARButton}
-        enableACButton={props.enableACButton}
-        enableAPButton={props.enableAPButton}
-        enableExBar={props.enableExBar}
-        message={props.message}
-        position={props.position}
-        requireInline={props.requireInline}
-        element4Buttons={props.element4Buttons}/>, child
-    );
+export default class CastPage extends Page {
+  constructor() {
+    super();
+    console.log('castpage');
+    chrome.runtime.sendMessage({
+      purpose: 'NiconamaTabs.add',
+      id: (new IdHolder()).communityId
+    });
   }
 }
