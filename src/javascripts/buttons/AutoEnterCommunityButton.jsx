@@ -14,7 +14,7 @@ export default class AutoEnterCommunityButton extends React.Component {
     this._label          = `(このコミュニティに) 自動入場`;
     this._balloonMessage = `このコミュニティ・チャンネルが放送を始めたとき自動で枠を新しいタブで開きます．
                             [⚠️負荷軽減のため最大登録数は5を目安にしてください]
-                            [💡自動次枠移動が ON の状態でも移動先の枠が新しいタブで開かれます]`;
+                            [💡自動次枠移動を ON にすると自動入場しません]`;
     this._balloonPos    = 'up';
     this._balloonLength = 'xlarge';
     this.onClick        = this.onClick.bind(this);
