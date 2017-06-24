@@ -31,7 +31,10 @@ export default class AutoEnterCommunity {
                   body: `自動入場をキャンセルしました．この放送を開いている自動次枠移動が ON のタブがあります．`,
                   icon: communityData.thumbnail
                 };
-                new Notification(communityData.title, options);
+                const notification = new Notification(communityData.title, options);
+                notification.onclick = () => {
+                  chrome.tabs.update(Number(tabId), { active: true });
+                };
                 return;
               }
               chrome.tabs.create({ url: `http://live.nicovideo.jp/watch/${id}` }, () => {
