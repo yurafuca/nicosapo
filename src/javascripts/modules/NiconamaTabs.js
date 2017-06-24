@@ -37,6 +37,10 @@ export default class NiconamaTabs {
     store.set(KEY, tabIds);
   }
 
+  static clear() {
+    store.set(KEY, {});
+  }
+
   static isCastPage(url) {
     const re = /http:\/\/live2?\.nicovideo\.jp\/watch\/lv([0-9]+)/;
     if (re.exec(url)) {

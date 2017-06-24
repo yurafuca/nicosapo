@@ -1,6 +1,6 @@
-import CastPage from '../page/CastPage';
+import NonCastPagee from '../page/NonCastPage';
 
-export default class CommunityPage extends CastPage {
+export default class CommunityPage extends NonCastPagee {
   putWidgets() {
     const props = {
       buttonOrder    : `DEFAULT`,
