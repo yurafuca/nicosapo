@@ -6,6 +6,14 @@ import Common from './common/Common'
 import AutoEnterRunner from './autoEnter/AutoEnterRunner'
 import './chrome/runtime.onMessage'
 
+chrome.runtime.onInstalled.addListener(() => {
+  NiconamaTabs.clear();
+});
+
+chrome.runtime.onStartup.addListener(() => {
+  NiconamaTabs.clear();
+});
+
 chrome.tabs.onRemoved.addListener((tabId) => {
   NiconamaTabs.remove(tabId);
 });
@@ -19,5 +27,5 @@ Common.sleep(7 * 1000).then(() => {
     Promise.resolve()
       .then((new AutoEnterRunner()).run('live'))
       .then((new AutoEnterRunner()).run('community'));
-  }, 60 * 1000);
+  }, 10 * 1000);
 });

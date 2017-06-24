@@ -1,6 +1,6 @@
-import CastPage from '../page/CastPage';
+import NonCastPage from '../page/NonCastPage';
 
-export default class GatePage extends CastPage {
+export default class GatePage extends NonCastPage {
   putWidgets() {
     const props = {
       buttonOrder    : `DEFAULT`,

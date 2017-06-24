@@ -1,6 +1,6 @@
-import CastPage from '../page/CastPage';
+import NonCastPage from '../page/NonCastPage';
 
-export default class ChannelPage extends CastPage {
+export default class ChannelPage extends NonCastPage {
   putWidgets() {
     const props = {
       buttonOrder    : `DEFAULT`,
