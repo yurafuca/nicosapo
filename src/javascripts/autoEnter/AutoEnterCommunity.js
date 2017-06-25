@@ -31,7 +31,7 @@ export default class AutoEnterCommunity {
         const lastState = storagedData[response.requestId].state;
         if (lastState === 'offair') {
           storagedData[response.requestId].state = 'onair';
-
+          store.set(_listKey, storagedData);
           // 自動次枠移動が有効になっている場合は無視する．
           const tabId = NiconamaTabs.getTabId(id);
           if (tabId) {
@@ -48,7 +48,7 @@ export default class AutoEnterCommunity {
                 notification.onclick = () => {
                   chrome.tabs.update(Number(tabId), { active: true });
                 };
-                return;
+                store.set(_listKey, storagedData);
               } else {
                 _move(storagedData, id);
               }
@@ -58,10 +58,12 @@ export default class AutoEnterCommunity {
           }
         } else if (lastState === 'onair' || lastState === 'init') {
           storagedData[response.requestId].state = 'onair';
+          store.set(_listKey, storagedData);
         }
       } else {
         // CLOSED
         storagedData[response.requestId].state = 'offair';
+        store.set(_listKey, storagedData);
       }
       store.set(_listKey, storagedData);
     });
