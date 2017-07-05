@@ -22,12 +22,8 @@ const _move = (storagedData, id) => {
 export default class AutoEnterCommunity {
   exec(id) {
     Api.isOpen(id).then((response) => {
-      let storagedData = {};
-      if (store.get(_listKey)) {
-        storagedData = store.get(_listKey);
-      }
+      const storagedData = store.get(_listKey) || {};
       if (response.isOpen) {
-        // OPENED
         const lastState = storagedData[response.requestId].state;
         if (lastState === 'offair') {
           storagedData[response.requestId].state = 'onair';
@@ -54,12 +50,15 @@ export default class AutoEnterCommunity {
               }
             });
           } else {
+            storagedData[response.requestId].state = 'onair';
+            store.set(_listKey, storagedData);
             _move(storagedData, id);
           }
-        } else if (lastState === 'onair' || lastState === 'init') {
-          storagedData[response.requestId].state = 'onair';
-          store.set(_listKey, storagedData);
         }
+
+        
+
+
       } else {
         // CLOSED
         storagedData[response.requestId].state = 'offair';
