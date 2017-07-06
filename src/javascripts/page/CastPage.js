@@ -7,46 +7,50 @@ export default class CastPage extends Page {
     super();
     this.communityId = (new IdHolder()).communityId;
 
-    /**
-     * 自動スクロールが有効ならスクロール位置を復元する
-     */
-    chrome.runtime.sendMessage({
+    this._getScrollOption((response) => {
+      if (response == 'enable' || response == null) {
+        this._getTabStatus((response) => {
+          if (response == null || response.castId != this.communityId) {
+            this._setTabStatus(this.communityId, response ? response.scrollTop : 0);
+          } else {
+            setTimeout(this._scroll(response.scrollTop), 3 * 1000);
+          }
+        });
+      }
+    });
+
+    window.addEventListener('scroll', (e) => {
+      this._setTabStatus(this.communityId, document.body.scrollTop);
+    });
+  }
+
+  _getScrollOption(callback) {
+    const option = {
       purpose: 'getFromLocalStorage',
       key: 'options.autoScroll.enable'
-    },
-      (response) => {
-        if (response == 'enable' || response == null) {
-          /**
-           * 次枠移動を使用した場合はスクロール位置を復元する
-           * そうでなければ NiconamaTabs に登録する
-           */
-          chrome.runtime.sendMessage({ purpose: 'NiconamaTabs.get' }, (response) => {
-            if (response == null || response.castId != this.communityId) {
-              chrome.runtime.sendMessage({
-                purpose: 'NiconamaTabs.add',
-                id: this.communityId,
-                scrollTop: response ? response.scrollTop : 0
-              });
-            } else {
-              setTimeout(() => {
-                const scrollTop = response.scrollTop;
-                $('html,body').animate({ scrollTop: scrollTop }, 200, 'swing');
-              }, 3 * 1000);
-            }
-          });
-        }
-      }
-    )
-
-    /**
-     * スクロール位置を localStorage で保持する
-     */
-    window.addEventListener('scroll', (e) => {
-      chrome.runtime.sendMessage({
-        purpose: 'NiconamaTabs.add',
-        id: this.communityId,
-        scrollTop: document.body.scrollTop
-      });
+    };
+    chrome.runtime.sendMessage(option, (response) => {
+      callback(response);
     });
- }
+  }
+
+  _getTabStatus(callback) {
+    const option = { purpose: `NiconamaTabs.get`};
+    chrome.runtime.sendMessage(option, (response) => {
+      callback(response);
+    });
+  }
+
+  _setTabStatus(communityId, scrollTop) {
+    const option = {
+      purpose: 'NiconamaTabs.add',
+      id: communityId,
+      scrollTop: scrollTop
+    }
+    chrome.runtime.sendMessage(option);
+  }
+
+  _scroll(scrollTop) {
+    $('html,body').animate({ scrollTop: scrollTop }, 200, 'swing');
+  }
 }
