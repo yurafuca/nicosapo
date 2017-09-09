@@ -3,7 +3,6 @@ import store from 'store'
 import Api from '../api/Api'
 import UserThumbnails from "../components/UserThumbnails";
 import OfficialThumbnails from "../components/OfficialThumbnails";
-import Toggle from 'react-bootstrap-toggle'
 import SearchContent from "../components/SearchContent";
 
 const _split = (arr, count) => {

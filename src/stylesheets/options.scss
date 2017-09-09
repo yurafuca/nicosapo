@@ -200,12 +200,31 @@ h3 {
 	border-radius: 3px;
 }
 .listgroup-item {
+	font-family: 'Noto Sans Japanese';
+  height: 60px;
 	min-height: inherit;
 	padding: 10px;
 	font-size: 13px;
 	line-height: 26px;
 	color: $color_tapa_approx;
 	border-bottom: 1px solid $mercury;
+	&.card-style {
+		position: relative;
+		height: 75px;
+		width: 50%;
+		display: inline-block;
+		.list-group-text-block {
+			padding-left: 65px;
+		}
+		.list-group-text-block .meta-title {
+
+		}
+		.form-switcher {
+			position: absolute;
+			top: 20px;
+			right: 10px;
+		}
+	}
 	&:last-child {
 		border-bottom: 0;
 	}
@@ -372,4 +391,42 @@ img {
 .nudge-down.BtnGroup {
 	position: relative;
 	top: 6px;
+}
+
+
+.float-left {
+	float: left;
+}
+
+
+/**
+ * Switcher
+ */
+.form-switcher .switcher {
+	z-index: 999;
+  // transition: box-shadow 0.07s linear, border-color 0.01s linear 0.07s !important;	
+	transition: none !important;
+}
+
+.form-switcher .switcher:after {
+	// transition: all 0.07s linear !important;
+	transition: none !important;
+	&:active {
+	}
+}
+
+.form-switcher .switcher:hover:active:after {
+  width: 21px !important;
+}
+
+.form-switcher input[type="checkbox"]:checked + .switcher:hover:active:after {
+  -moz-transform: translateX(18px) !important;
+  -ms-transform: translateX(18px) !important;
+  -webkit-transform: translateX(18px) !important;
+  transform: translateX(18px) !important;
+}
+
+.form-switcher input[type="checkbox"]:checked + .switcher:active {
+  border-color: #13a153;
+  box-shadow: 0px 0px 0px 13px #13a153 inset;
 }

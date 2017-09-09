@@ -190,7 +190,8 @@ export default class Api {
         const title     = $e.find(`.title`).text();
         const thumbnail = $e.find('.thmb img').attr(`src`);
         const id        = $e.find(`.thmb a`).attr(`href`).replace('/community/', ``);
-        const community = { title: title, thumbnail: thumbnail, id: id };
+        const url       = `http://com.nicovideo.jp/community/${id}`;
+        const community = { title: title, thumbnail: thumbnail, id: id, url: url };
         result.push(community);
       });
       return result;

@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import store from 'store';
+import NotificationList from '../components/NotificationList';
 import AutoEnterList from '../components/AutoEnterList';
 
 function compare(a, b) {
@@ -121,6 +122,7 @@ export default class Settings extends React.Component {
             <div className="wrapper menu float-left">
               <h1 className="appicon">設定項目</h1>
               <div className={this.state.selectedMenu === 'basic' ? 'item selected' : 'item'} data-menu="basic" onClick={this.clickMenu}>基本設定</div>
+              <div className={this.state.selectedMenu === 'notification' ? 'item selected' : 'item'} data-menu="notification" onClick={this.clickMenu}>通知の個別設定</div>
               <div className={this.state.selectedMenu === 'auto-program' ? 'item selected' : 'item'} data-menu="auto-program" onClick={this.clickMenu}>自動枠移動リスト（番組）</div>
               <div className={this.state.selectedMenu === 'auto-community' ? 'item selected' : 'item'} data-menu="auto-community" onClick={this.clickMenu}>自動枠移動リスト（CH・コミュ）</div>
             </div>
@@ -193,6 +195,18 @@ export default class Settings extends React.Component {
                   <div>
                     <input id="saveAll" type="submit" value="設定を保存する" onClick={this.saveSettings}/>
                     <p id="console" style={{color: '#228b22'}}>{this.state.resultMessage}</p>
+                  </div>
+                </div>
+              )
+            }
+          })()}
+          {(() => {
+            if (this.state.selectedMenu == 'notification') {
+              return(
+                <div className="wrapper">
+                  <h1 className="appicon">通知の個別設定</h1>
+                  <div id="listgroup-community">
+                    <NotificationList />
                   </div>
                 </div>
               )
