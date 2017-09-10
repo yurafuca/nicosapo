@@ -217,7 +217,15 @@ h3 {
 			padding-left: 65px;
 		}
 		.list-group-text-block .meta-title {
-
+			line-height: 16px;
+			margin-bottom: 3px;
+		}
+		.meta-description {
+			margin-left: 2px;
+			vertical-align: middle;
+		}
+		.octicon {
+			font-size: 14px;
 		}
 		.form-switcher {
 			position: absolute;
@@ -429,4 +437,8 @@ img {
 .form-switcher input[type="checkbox"]:checked + .switcher:active {
   border-color: #13a153;
   box-shadow: 0px 0px 0px 13px #13a153 inset;
+}
+
+.text-vividgray {
+    color: #586069 !important;
 }

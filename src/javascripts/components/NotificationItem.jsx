@@ -25,6 +25,7 @@ export default class NotificationItem extends React.Component {
               {this.props.title}
             </a>
           </span>
+          <span className="octicon octicon-location text-vividgray" color="red"></span>
           <span className="meta-description text-small text-gray">
             {this.props.id}
           </span>
