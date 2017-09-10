@@ -3,6 +3,7 @@ import Api from '../api/Api'
 import Time from '../common/Time'
 import AutoEnterEmpty from '../components/AutoEnterEmpty'
 import NotificationItem from '../components/NotificationItem'
+import Button from '../components/Button'
 
 export default class NotificationList extends React.Component {
   constructor(props) {
@@ -77,7 +78,14 @@ export default class NotificationList extends React.Component {
       items = <AutoEnterEmpty />
     }
     return (
-      <div>{items}</div>
+      <div>
+        <div style={{ 'marginTop': '15px', 'marginBottom': '10px' }}>
+          <Button isPrimary={true}  style={{ 'marginLeft': '10px' }} text="設定を保存する" />
+          <Button isPrimary={false} style={{ 'marginLeft': '15px', 'float': 'right' }} text="すべて無効にする" />
+          <Button isPrimary={false} style={{ 'marginLeft': '15px', 'float': 'right' }} text="すべて有効にする" />
+        </div>
+        {items}
+      </div>
     )
   }
 }

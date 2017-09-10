@@ -22,16 +22,12 @@ module.exports = [
                 exclude: /node_modules/,
                 query: {
                     cacheDirectory: true,
-                    presets: [
-                      'react',
-                      'es2015'
-                    ]
+                    presets: ['react', 'es2015']
                 }
           },
           {
             test: /\.css$/,
-            include: /node_modules/,
-            loaders: ['style-loader', 'css-loader'],
+            loaders: ['style-loader', 'css-loader?modules'],
           }
         ]
     },
