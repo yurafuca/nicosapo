@@ -1,4 +1,5 @@
 import _ from 'lodash'
+import store from 'store'
 import Api from "../api/Api"
 import Common from '../common/Common'
 import Db from '../modules/db'
@@ -59,15 +60,11 @@ export default class BackgroundReloader {
       const videoId = community.find('video id').text();
       const number = Number(commuId);
       console.info(videoId);
-      if (justFollowedCommunities.includes(number)) {
-        return; // `continue` for lodash.
-      }
-      if (Db.contains('autoEnterCommunityList', commuId)) {
-        return; // `continue` for lodash.
-      }
-      if (Db.contains('autoEnterProgramList', videoId)) {
-        return; // `continue` for lodash.
-      }
+      const distributors = store.get(`excludedDistributors`);
+      if (distributors.hasOwnProperty(commuId)) {   console.log(commuId, 'ignored.');        return; }// `continue` for lodash.
+      if (justFollowedCommunities.includes(number))       return; // `continue` for lodash.
+      if (Db.contains('autoEnterCommunityList', commuId)) return; // `continue` for lodash.
+      if (Db.contains('autoEnterProgramList', videoId))   return; // `continue` for lodash.
       Alert.fire(community);
     });
   }
