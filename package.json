@@ -34,6 +34,7 @@
     "react-dom": "^15.4.1",
     "react-toggle": "^4.0.1",
     "sass-loader": "^6.0.6",
+    "scrollmonitor": "^1.2.3",
     "sloc": "^0.2.0",
     "store": "^2.0.4",
     "style-loader": "^0.18.2",
