@@ -151,23 +151,23 @@ export default class Settings extends React.Component {
                     </div>
                     <div className="item">
                       <h3>自動次枠移動をデフォルトで「ON」にする</h3>
-                      <input type="radio" name="options.autoJump.enable" value={'enable'} checked={this.state['options.autoJump.enable'] == 'enable'} onChange={this.onChange} /> 有効
-                      <input type="radio" name="options.autoJump.enable" value={'disable'} checked={this.state['options.autoJump.enable'] == 'disable'} onChange={this.onChange} /> 無効
+                      <label><input type="radio" name="options.autoJump.enable" value={'enable'} checked={this.state['options.autoJump.enable'] == 'enable'} onChange={this.onChange} /> 有効</label>
+                      <label><input type="radio" name="options.autoJump.enable" value={'disable'} checked={this.state['options.autoJump.enable'] == 'disable'} onChange={this.onChange} /> 無効</label>
                     </div>
                     <div className="item">
                       <h3>予約番組をポップアップに表示する</h3>
-                      <input type="radio" name="options.showReserved.enable" value={'enable'} checked={this.state['options.showReserved.enable'] == 'enable'} onChange={this.onChange} /> 有効
-                      <input type="radio" name="options.showReserved.enable" value={'disable'} checked={this.state['options.showReserved.enable'] == 'disable'} onChange={this.onChange} /> 無効
+                      <label><input type="radio" name="options.showReserved.enable" value={'enable'} checked={this.state['options.showReserved.enable'] == 'enable'} onChange={this.onChange} /> 有効</label>
+                      <label><input type="radio" name="options.showReserved.enable" value={'disable'} checked={this.state['options.showReserved.enable'] == 'disable'} onChange={this.onChange} /> 無効</label>
                     </div>
                     <div className="item">
                       <h3>通知を放送開始時に表示する</h3>
-                      <input type="radio" name="options.popup.enable" value={'enable'} checked={this.state['options.popup.enable'] == 'enable'} onChange={this.onChange} /> 有効
-                      <input type="radio" name="options.popup.enable" value={'disable'} checked={this.state['options.popup.enable'] == 'disable'} onChange={this.onChange} /> 無効
+                      <label><input type="radio" name="options.popup.enable" value={'enable'} checked={this.state['options.popup.enable'] == 'enable'} onChange={this.onChange} /> 有効</label>
+                      <label><input type="radio" name="options.popup.enable" value={'disable'} checked={this.state['options.popup.enable'] == 'disable'} onChange={this.onChange} /> 無効</label>
                     </div>
                     <div className="item">
                       <h3>音を放送開始時に鳴らす</h3>
-                      <input type="radio" name="options.playsound.enable" value={'enable'} checked={this.state['options.playsound.enable'] == 'enable'} onChange={this.onChange} /> 有効
-                      <input type="radio" name="options.playsound.enable" value={'disable'} checked={this.state['options.playsound.enable'] == 'disable'} onChange={this.onChange} /> 無効
+                      <label><input type="radio" name="options.playsound.enable" value={'enable'} checked={this.state['options.playsound.enable'] == 'enable'} onChange={this.onChange} /> 有効</label>
+                      <label><input type="radio" name="options.playsound.enable" value={'disable'} checked={this.state['options.playsound.enable'] == 'disable'} onChange={this.onChange} /> 無効</label>
                     </div>
                     <div className="item">
                       <h3>通知の表示位置</h3>
