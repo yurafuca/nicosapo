@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import store from 'store';
 import NotificationList from '../components/NotificationList';
 import AutoEnterList from '../components/AutoEnterList';
+import Button from '../components/Button'
 
 function compare(a, b) {
   if( a < b ) return -1;
@@ -193,8 +194,9 @@ export default class Settings extends React.Component {
                     </div>
                   </div>
                   <div>
-                    <input id="saveAll" type="submit" value="設定を保存する" onClick={this.saveSettings}/>
-                    <p id="console" style={{color: '#228b22'}}>{this.state.resultMessage}</p>
+                    <Button id="save-all" onClick={this.saveSettings} isPrimary={true} style={{ marginLeft: `290px` }} text="設定を保存する" />
+                    {/*<input id="saveAll" type="submit" value="設定を保存する" onClick={this.saveSettings}/>*/}
+                    <p id="console" style={{color: '#24963e'}}>{this.state.resultMessage}</p>
                   </div>
                 </div>
               )
