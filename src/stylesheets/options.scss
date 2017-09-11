@@ -46,7 +46,7 @@ html {
 	height: 100%;
 }
 body {
-	color: #333;
+	color: #24292e;
 	margin: 0;
 	font-family: "Lucida Grande","segoe UI","ヒラギノ丸ゴ ProN W4","Hiragino Maru Gothic ProN",Meiryo,Arial,sans-serif;
 }
@@ -91,13 +91,13 @@ p {
 			margin-top: 30px;
 		}
 		.appicon {
-			background-color: #F7F7F7;
+			background-color: #f6f8fa;
 			padding: 0 10px;
 			line-height: 38px;
 		}
 		.item {
 			position: relative;
-			color: #4078c0;
+			color: #0366d6;
 			font-size: 13px;
 			line-height: 30px;
 			padding-left: 10px;
@@ -109,7 +109,7 @@ p {
 		    left: 0;
 		    width: 2px;
 		    content: "";
-		    background-color: #d26911;
+		    background-color: #e36209;
 			}
 			&:last-child {
 				border: none;
@@ -158,15 +158,15 @@ p {
 }
 .note {
 	display: inline;
-	color: $forest_green;
+	color: #24963e;
 	margin-left: 5px;
 }
 .red {
-	color: $color_thunderbird_approx;
+	color: #cb2431;
 }
 h1 {
 	font-family: 'Noto Sans Japanese';
-	color: #444;
+	color: #24292e;
 	font-size: 20px;
 	padding: 0 10px 4px 10px;
 	font-weight: 400;
@@ -176,7 +176,7 @@ h1 {
 }
 h3 {
 	font-family: 'Noto Sans Japanese';
-	color: #444;
+	color: #24292e;
 	font-weight: 500;
 	font-size: 13px;
 	margin: 0.3em 0;
@@ -319,7 +319,7 @@ h3 {
 	}
 }
 a {
-	color: $color_steel_blue_approx;
+	color: #0366d6;
 	text-decoration: none;
 	&:hover {
 		text-decoration: underline;
@@ -441,4 +441,14 @@ img {
 
 .text-vividgray {
     color: #586069 !important;
+}
+
+.switcher-label {
+		position: absolute;
+    top: 4px;
+    right: 50px;
+		white-space: nowrap;
+		font-size: 12px;
+		font-size: 11px;
+    color: #888;
 }
