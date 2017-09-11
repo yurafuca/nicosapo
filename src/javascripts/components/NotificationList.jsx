@@ -162,9 +162,12 @@ export default class NotificationList extends React.Component {
       const modal = <div id="modal" className={classes}>{ message }</div>
       items.push(modal);
     }
-    const status  = this.state.loading ? <div><span>コミュニティを読み込み中...（{this.state.currentPage} ページ目）</span></div> : '';
+    const status  = this.state.loading ? <div><span>コミュニティを読み込んでいます．しばらくお待ち下さい...（{this.state.currentPage} ページ目）</span></div> : '';
     return (
       <div>
+        <div>
+          <p style={{ marginBottom: '2px', fontSize: '12px', marginTop: '10px', color: `#767676` }}>通知を表示するコミュニティを個別に設定します．「基本設定 > 通知を放送開始時に表示する」 の設定が優先されます．チャンネルの個別設定には対応していません．</p>
+        </div>
         <div style={{ 'marginTop': '15px', 'marginBottom': '10px' }}>
           <Button id="save"        onClick={this.saveAll} isPrimary={true}  style={{ 'marginLeft': '10px' }} text="設定を保存する" />
           <Button id="exclude-all" onClick={this.excludeAll} isPrimary={false} style={{ 'marginLeft': '15px', 'float': 'right' }} octicon="diff-removed" text="すべて無効にする" />
