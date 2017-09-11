@@ -39,6 +39,8 @@ module.exports = [
         { from: 'src/octicons', to: '../octicons' },
         { from: 'src/sounds', to: '../sounds' },
         { from: 'manifest.json', to: '../manifest.json' },
+        { from: 'src/stylesheets/modal.css', to: '../stylesheets/modal.css' },
+        { from: 'src/stylesheets/switcher.css', to: '../stylesheets/switcher.css' },
         { from: 'src/stylesheets/balloon.min.css', to: '../stylesheets/balloon.min.css' },
         { from: 'src/stylesheets/animate.min.css', to: '../stylesheets/animate.min.css' },
       ])
