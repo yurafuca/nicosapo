@@ -7,8 +7,8 @@ export default class NotificationItem extends React.Component {
       <div className="listgroup-item card-style">
         <div className="nudge-down BtnGroup float-right">
           <div className="form-switcher">
-            <input type="checkbox" name={this.props.name} id={this.props.name} data-id={this.props.id} onClick={this.props.onClick} checked={this.props.isExcluded}></input>
-              <label className="switcher" htmlFor={this.props.name}></label>
+            <input type="checkbox" name={this.props.name} id={this.props.name} data-id={this.props.id} onChange={this.props.onChange} checked={!this.props.isExcluded}></input>
+            <label className="switcher" htmlFor={this.props.name}></label>
           </div>
         </div>
         <div className="list-group-text-block float-left">
