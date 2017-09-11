@@ -180,4 +180,29 @@ export default class Api {
       });
     });
   }
+
+  static getFollowingCommunities(pageNum) {
+    const parser = (httpResponse) => {
+      const result = [];
+      const $frame = $($(httpResponse).find('.com_frm'));
+      $.each($frame, (i, element) => {
+        const $e        = $(element);
+        const title     = $e.find(`.title`).text();
+        const thumbnail = $e.find('.thmb img').attr(`src`);
+        const id        = $e.find(`.thmb a`).attr(`href`).replace('/community/', ``);
+        const url       = `http://com.nicovideo.jp/community/${id}`;
+        const community = { title: title, thumbnail: thumbnail, id: id, url: url };
+        result.push(community);
+      });
+      return result;
+    };
+    return new Promise((resolve) => {
+      const endpoint = `http://com.nicovideo.jp/community`;
+      const query    = `?page=${pageNum}`;
+      $.get(endpoint + query, (response) => {
+        const parsedResponse = parser(response);
+        resolve(parsedResponse);
+      });
+    });
+  }
 }

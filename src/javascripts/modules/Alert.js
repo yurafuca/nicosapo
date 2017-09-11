@@ -5,10 +5,12 @@ import store from 'store'
 
 export default class Alert {
   static fire($info) {
-    if (store.get('options.playsound.enable') == 'enable') {
+    const play = store.get('options.playsound.enable');
+    if (play == 'enable' || play == null) {
       Alert._ding();
     }
-    if (store.get('options.popup.enable') == 'enable') {
+    const popup = store.get('options.popup.enable');
+    if (popup == 'enable' || popup == null) {
       Alert._popup($info);
     }
   }

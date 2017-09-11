@@ -1,0 +1,552 @@
+/**
+ * IMPORTANT
+ * 
+ * iOS Switcher uses Bootstrap grid (http://getbootstrap.com/css/#grid)
+ */
+/* line 21, ../sass/switcher.scss */
+.form-switcher input[type="checkbox"] {
+  display: none;
+}
+/* line 23, ../sass/switcher.scss */
+.form-switcher input[type="checkbox"]:disabled + .switcher {
+  opacity: 0.6;
+  cursor: not-allowed;
+  -moz-box-shadow: 0px 0px 0px transparent !important;
+  -webkit-box-shadow: 0px 0px 0px transparent !important;
+  box-shadow: 0px 0px 0px transparent !important;
+}
+/* line 28, ../sass/switcher.scss */
+.form-switcher input[type="checkbox"]:checked:disabled + .switcher {
+  border-color: #cccccc !important;
+  -moz-box-shadow: 0px 0px 0px 15px #cccccc inset !important;
+  -webkit-box-shadow: 0px 0px 0px 15px #cccccc inset !important;
+  box-shadow: 0px 0px 0px 15px #cccccc inset !important;
+}
+/* line 32, ../sass/switcher.scss */
+.form-switcher input[type="checkbox"]:checked + .switcher {
+  -moz-transition: box-shadow 0.2s ease-out, border-color 0.2s ease-out 0.02s;
+  -o-transition: box-shadow 0.2s ease-out, border-color 0.2s ease-out 0.02s;
+  -webkit-transition: box-shadow 0.2s ease-out, border-color 0.2s ease-out;
+  -webkit-transition-delay: 0s, 0.02s;
+  transition: box-shadow 0.2s ease-out, border-color 0.2s ease-out 0.02s;
+}
+/* line 36, ../sass/switcher.scss */
+.form-switcher .switcher {
+  background: #ffffff;
+  border: 2px solid #e6e6e6;
+  padding: 0;
+  position: relative;
+  display: block;
+  cursor: pointer;
+  -moz-border-radius: 100px;
+  -webkit-border-radius: 100px;
+  border-radius: 100px;
+  -moz-transition: box-shadow 0.2s ease-out 0.02s, border-color 0.2s ease-out;
+  -o-transition: box-shadow 0.2s ease-out 0.02s, border-color 0.2s ease-out;
+  -webkit-transition: box-shadow 0.2s ease-out, border-color 0.2s ease-out;
+  -webkit-transition-delay: 0.02s, 0s;
+  transition: box-shadow 0.2s ease-out 0.02s, border-color 0.2s ease-out;
+}
+/* line 45, ../sass/switcher.scss */
+.form-switcher .switcher:after {
+  background: #ffffff;
+  position: absolute;
+  top: 0;
+  left: 0;
+  content: "";
+  -moz-transform: translateX(0);
+  -ms-transform: translateX(0);
+  -webkit-transform: translateX(0);
+  transform: translateX(0);
+  -moz-transition: all 0.2s ease-out;
+  -o-transition: all 0.2s ease-out;
+  -webkit-transition: all 0.2s ease-out;
+  transition: all 0.2s ease-out;
+  -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  -moz-border-radius: 100px;
+  -webkit-border-radius: 100px;
+  border-radius: 100px;
+}
+/* line 9, ../sass/_switcher-mixin.scss */
+.form-switcher .switcher {
+  width: 43px;
+  height: 25px;
+}
+/* line 12, ../sass/_switcher-mixin.scss */
+.form-switcher .switcher:hover:active {
+  -moz-box-shadow: 0px 0px 0px 13px #e6e6e6 inset;
+  -webkit-box-shadow: 0px 0px 0px 13px #e6e6e6 inset;
+  box-shadow: 0px 0px 0px 13px #e6e6e6 inset;
+}
+/* line 14, ../sass/_switcher-mixin.scss */
+.form-switcher .switcher:hover:active:after {
+  width: 28.35px !important;
+}
+/* line 18, ../sass/_switcher-mixin.scss */
+.form-switcher .switcher:after {
+  height: 21px;
+  width: 21px;
+}
+/* line 25, ../sass/_switcher-mixin.scss */
+.form-switcher input[type="checkbox"]:disabled + .switcher:after {
+  height: 21px !important;
+  width: 21px !important;
+}
+/* line 31, ../sass/_switcher-mixin.scss */
+.form-switcher input[type="checkbox"]:disabled:checked + .switcher:after {
+  -moz-transform: translateX(18px) !important;
+  -ms-transform: translateX(18px) !important;
+  -webkit-transform: translateX(18px) !important;
+  transform: translateX(18px) !important;
+}
+/* line 35, ../sass/_switcher-mixin.scss */
+.form-switcher input[type="checkbox"]:checked + .switcher {
+  border-color: #16b85f;
+  -moz-box-shadow: 0px 0px 0px 12.5px #16b85f inset;
+  -webkit-box-shadow: 0px 0px 0px 12.5px #16b85f inset;
+  box-shadow: 0px 0px 0px 12.5px #16b85f inset;
+}
+/* line 38, ../sass/_switcher-mixin.scss */
+.form-switcher input[type="checkbox"]:checked + .switcher:after {
+  -moz-transform: translateX(18px);
+  -ms-transform: translateX(18px);
+  -webkit-transform: translateX(18px);
+  transform: translateX(18px);
+}
+/* line 42, ../sass/_switcher-mixin.scss */
+.form-switcher input[type="checkbox"]:checked + .switcher:hover:active:after {
+  -moz-transform: translateX(10.65px);
+  -ms-transform: translateX(10.65px);
+  -webkit-transform: translateX(10.65px);
+  transform: translateX(10.65px);
+}
+/* line 9, ../sass/_switcher-mixin.scss */
+.form-switcher.form-switcher-sm .switcher {
+  width: 31px;
+  height: 18px;
+}
+/* line 12, ../sass/_switcher-mixin.scss */
+.form-switcher.form-switcher-sm .switcher:hover:active {
+  -moz-box-shadow: 0px 0px 0px 13px #e6e6e6 inset;
+  -webkit-box-shadow: 0px 0px 0px 13px #e6e6e6 inset;
+  box-shadow: 0px 0px 0px 13px #e6e6e6 inset;
+}
+/* line 14, ../sass/_switcher-mixin.scss */
+.form-switcher.form-switcher-sm .switcher:hover:active:after {
+  width: 18.9px !important;
+}
+/* line 18, ../sass/_switcher-mixin.scss */
+.form-switcher.form-switcher-sm .switcher:after {
+  height: 14px;
+  width: 14px;
+}
+/* line 25, ../sass/_switcher-mixin.scss */
+.form-switcher.form-switcher-sm input[type="checkbox"]:disabled + .switcher:after {
+  height: 14px !important;
+  width: 14px !important;
+}
+/* line 31, ../sass/_switcher-mixin.scss */
+.form-switcher.form-switcher-sm input[type="checkbox"]:disabled:checked + .switcher:after {
+  -moz-transform: translateX(13px) !important;
+  -ms-transform: translateX(13px) !important;
+  -webkit-transform: translateX(13px) !important;
+  transform: translateX(13px) !important;
+}
+/* line 35, ../sass/_switcher-mixin.scss */
+.form-switcher.form-switcher-sm input[type="checkbox"]:checked + .switcher {
+  border-color: #16b85f;
+  -moz-box-shadow: 0px 0px 0px 9px #16b85f inset;
+  -webkit-box-shadow: 0px 0px 0px 9px #16b85f inset;
+  box-shadow: 0px 0px 0px 9px #16b85f inset;
+}
+/* line 38, ../sass/_switcher-mixin.scss */
+.form-switcher.form-switcher-sm input[type="checkbox"]:checked + .switcher:after {
+  -moz-transform: translateX(13px);
+  -ms-transform: translateX(13px);
+  -webkit-transform: translateX(13px);
+  transform: translateX(13px);
+}
+/* line 42, ../sass/_switcher-mixin.scss */
+.form-switcher.form-switcher-sm input[type="checkbox"]:checked + .switcher:hover:active:after {
+  -moz-transform: translateX(8.1px);
+  -ms-transform: translateX(8.1px);
+  -webkit-transform: translateX(8.1px);
+  transform: translateX(8.1px);
+}
+/* line 9, ../sass/_switcher-mixin.scss */
+.form-switcher.form-switcher-lg .switcher {
+  width: 53px;
+  height: 30px;
+}
+/* line 12, ../sass/_switcher-mixin.scss */
+.form-switcher.form-switcher-lg .switcher:hover:active {
+  -moz-box-shadow: 0px 0px 0px 13px #e6e6e6 inset;
+  -webkit-box-shadow: 0px 0px 0px 13px #e6e6e6 inset;
+  box-shadow: 0px 0px 0px 13px #e6e6e6 inset;
+}
+/* line 14, ../sass/_switcher-mixin.scss */
+.form-switcher.form-switcher-lg .switcher:hover:active:after {
+  width: 35.1px !important;
+}
+/* line 18, ../sass/_switcher-mixin.scss */
+.form-switcher.form-switcher-lg .switcher:after {
+  height: 26px;
+  width: 26px;
+}
+/* line 25, ../sass/_switcher-mixin.scss */
+.form-switcher.form-switcher-lg input[type="checkbox"]:disabled + .switcher:after {
+  height: 26px !important;
+  width: 26px !important;
+}
+/* line 31, ../sass/_switcher-mixin.scss */
+.form-switcher.form-switcher-lg input[type="checkbox"]:disabled:checked + .switcher:after {
+  -moz-transform: translateX(23px) !important;
+  -ms-transform: translateX(23px) !important;
+  -webkit-transform: translateX(23px) !important;
+  transform: translateX(23px) !important;
+}
+/* line 35, ../sass/_switcher-mixin.scss */
+.form-switcher.form-switcher-lg input[type="checkbox"]:checked + .switcher {
+  border-color: #16b85f;
+  -moz-box-shadow: 0px 0px 0px 15px #16b85f inset;
+  -webkit-box-shadow: 0px 0px 0px 15px #16b85f inset;
+  box-shadow: 0px 0px 0px 15px #16b85f inset;
+}
+/* line 38, ../sass/_switcher-mixin.scss */
+.form-switcher.form-switcher-lg input[type="checkbox"]:checked + .switcher:after {
+  -moz-transform: translateX(23px);
+  -ms-transform: translateX(23px);
+  -webkit-transform: translateX(23px);
+  transform: translateX(23px);
+}
+/* line 42, ../sass/_switcher-mixin.scss */
+.form-switcher.form-switcher-lg input[type="checkbox"]:checked + .switcher:hover:active:after {
+  -moz-transform: translateX(13.9px);
+  -ms-transform: translateX(13.9px);
+  -webkit-transform: translateX(13.9px);
+  transform: translateX(13.9px);
+}
+@media (max-width: 767px) {
+  /* line 9, ../sass/_switcher-mixin.scss */
+  .form-switcher.form-switcher-sm-phone .switcher {
+    width: 31px;
+    height: 18px;
+  }
+  /* line 12, ../sass/_switcher-mixin.scss */
+  .form-switcher.form-switcher-sm-phone .switcher:hover:active {
+    -moz-box-shadow: 0px 0px 0px 13px #e6e6e6 inset;
+    -webkit-box-shadow: 0px 0px 0px 13px #e6e6e6 inset;
+    box-shadow: 0px 0px 0px 13px #e6e6e6 inset;
+  }
+  /* line 14, ../sass/_switcher-mixin.scss */
+  .form-switcher.form-switcher-sm-phone .switcher:hover:active:after {
+    width: 18.9px !important;
+  }
+  /* line 18, ../sass/_switcher-mixin.scss */
+  .form-switcher.form-switcher-sm-phone .switcher:after {
+    height: 14px;
+    width: 14px;
+  }
+  /* line 25, ../sass/_switcher-mixin.scss */
+  .form-switcher.form-switcher-sm-phone input[type="checkbox"]:disabled + .switcher:after {
+    height: 14px !important;
+    width: 14px !important;
+  }
+  /* line 31, ../sass/_switcher-mixin.scss */
+  .form-switcher.form-switcher-sm-phone input[type="checkbox"]:disabled:checked + .switcher:after {
+    -moz-transform: translateX(13px) !important;
+    -ms-transform: translateX(13px) !important;
+    -webkit-transform: translateX(13px) !important;
+    transform: translateX(13px) !important;
+  }
+  /* line 35, ../sass/_switcher-mixin.scss */
+  .form-switcher.form-switcher-sm-phone input[type="checkbox"]:checked + .switcher {
+    border-color: #16b85f;
+    -moz-box-shadow: 0px 0px 0px 9px #16b85f inset;
+    -webkit-box-shadow: 0px 0px 0px 9px #16b85f inset;
+    box-shadow: 0px 0px 0px 9px #16b85f inset;
+  }
+  /* line 38, ../sass/_switcher-mixin.scss */
+  .form-switcher.form-switcher-sm-phone input[type="checkbox"]:checked + .switcher:after {
+    -moz-transform: translateX(13px);
+    -ms-transform: translateX(13px);
+    -webkit-transform: translateX(13px);
+    transform: translateX(13px);
+  }
+  /* line 42, ../sass/_switcher-mixin.scss */
+  .form-switcher.form-switcher-sm-phone input[type="checkbox"]:checked + .switcher:hover:active:after {
+    -moz-transform: translateX(8.1px);
+    -ms-transform: translateX(8.1px);
+    -webkit-transform: translateX(8.1px);
+    transform: translateX(8.1px);
+  }
+  /* line 9, ../sass/_switcher-mixin.scss */
+  .form-switcher.form-switcher-md-phone .switcher {
+    width: 43px;
+    height: 25px;
+  }
+  /* line 12, ../sass/_switcher-mixin.scss */
+  .form-switcher.form-switcher-md-phone .switcher:hover:active {
+    -moz-box-shadow: 0px 0px 0px 13px #e6e6e6 inset;
+    -webkit-box-shadow: 0px 0px 0px 13px #e6e6e6 inset;
+    box-shadow: 0px 0px 0px 13px #e6e6e6 inset;
+  }
+  /* line 14, ../sass/_switcher-mixin.scss */
+  .form-switcher.form-switcher-md-phone .switcher:hover:active:after {
+    width: 28.35px !important;
+  }
+  /* line 18, ../sass/_switcher-mixin.scss */
+  .form-switcher.form-switcher-md-phone .switcher:after {
+    height: 21px;
+    width: 21px;
+  }
+  /* line 25, ../sass/_switcher-mixin.scss */
+  .form-switcher.form-switcher-md-phone input[type="checkbox"]:disabled + .switcher:after {
+    height: 21px !important;
+    width: 21px !important;
+  }
+  /* line 31, ../sass/_switcher-mixin.scss */
+  .form-switcher.form-switcher-md-phone input[type="checkbox"]:disabled:checked + .switcher:after {
+    -moz-transform: translateX(18px) !important;
+    -ms-transform: translateX(18px) !important;
+    -webkit-transform: translateX(18px) !important;
+    transform: translateX(18px) !important;
+  }
+  /* line 35, ../sass/_switcher-mixin.scss */
+  .form-switcher.form-switcher-md-phone input[type="checkbox"]:checked + .switcher {
+    border-color: #16b85f;
+    -moz-box-shadow: 0px 0px 0px 12.5px #16b85f inset;
+    -webkit-box-shadow: 0px 0px 0px 12.5px #16b85f inset;
+    box-shadow: 0px 0px 0px 12.5px #16b85f inset;
+  }
+  /* line 38, ../sass/_switcher-mixin.scss */
+  .form-switcher.form-switcher-md-phone input[type="checkbox"]:checked + .switcher:after {
+    -moz-transform: translateX(18px);
+    -ms-transform: translateX(18px);
+    -webkit-transform: translateX(18px);
+    transform: translateX(18px);
+  }
+  /* line 42, ../sass/_switcher-mixin.scss */
+  .form-switcher.form-switcher-md-phone input[type="checkbox"]:checked + .switcher:hover:active:after {
+    -moz-transform: translateX(10.65px);
+    -ms-transform: translateX(10.65px);
+    -webkit-transform: translateX(10.65px);
+    transform: translateX(10.65px);
+  }
+  /* line 9, ../sass/_switcher-mixin.scss */
+  .form-switcher.form-switcher-lg-phone .switcher {
+    width: 53px;
+    height: 30px;
+  }
+  /* line 12, ../sass/_switcher-mixin.scss */
+  .form-switcher.form-switcher-lg-phone .switcher:hover:active {
+    -moz-box-shadow: 0px 0px 0px 13px #e6e6e6 inset;
+    -webkit-box-shadow: 0px 0px 0px 13px #e6e6e6 inset;
+    box-shadow: 0px 0px 0px 13px #e6e6e6 inset;
+  }
+  /* line 14, ../sass/_switcher-mixin.scss */
+  .form-switcher.form-switcher-lg-phone .switcher:hover:active:after {
+    width: 35.1px !important;
+  }
+  /* line 18, ../sass/_switcher-mixin.scss */
+  .form-switcher.form-switcher-lg-phone .switcher:after {
+    height: 26px;
+    width: 26px;
+  }
+  /* line 25, ../sass/_switcher-mixin.scss */
+  .form-switcher.form-switcher-lg-phone input[type="checkbox"]:disabled + .switcher:after {
+    height: 26px !important;
+    width: 26px !important;
+  }
+  /* line 31, ../sass/_switcher-mixin.scss */
+  .form-switcher.form-switcher-lg-phone input[type="checkbox"]:disabled:checked + .switcher:after {
+    -moz-transform: translateX(23px) !important;
+    -ms-transform: translateX(23px) !important;
+    -webkit-transform: translateX(23px) !important;
+    transform: translateX(23px) !important;
+  }
+  /* line 35, ../sass/_switcher-mixin.scss */
+  .form-switcher.form-switcher-lg-phone input[type="checkbox"]:checked + .switcher {
+    border-color: #16b85f;
+    -moz-box-shadow: 0px 0px 0px 15px #16b85f inset;
+    -webkit-box-shadow: 0px 0px 0px 15px #16b85f inset;
+    box-shadow: 0px 0px 0px 15px #16b85f inset;
+  }
+  /* line 38, ../sass/_switcher-mixin.scss */
+  .form-switcher.form-switcher-lg-phone input[type="checkbox"]:checked + .switcher:after {
+    -moz-transform: translateX(23px);
+    -ms-transform: translateX(23px);
+    -webkit-transform: translateX(23px);
+    transform: translateX(23px);
+  }
+  /* line 42, ../sass/_switcher-mixin.scss */
+  .form-switcher.form-switcher-lg-phone input[type="checkbox"]:checked + .switcher:hover:active:after {
+    -moz-transform: translateX(13.9px);
+    -ms-transform: translateX(13.9px);
+    -webkit-transform: translateX(13.9px);
+    transform: translateX(13.9px);
+  }
+}
+@media (max-width: 991px) {
+  /* line 9, ../sass/_switcher-mixin.scss */
+  .form-switcher.form-switcher-sm-tablet .switcher {
+    width: 31px;
+    height: 18px;
+  }
+  /* line 12, ../sass/_switcher-mixin.scss */
+  .form-switcher.form-switcher-sm-tablet .switcher:hover:active {
+    -moz-box-shadow: 0px 0px 0px 13px #e6e6e6 inset;
+    -webkit-box-shadow: 0px 0px 0px 13px #e6e6e6 inset;
+    box-shadow: 0px 0px 0px 13px #e6e6e6 inset;
+  }
+  /* line 14, ../sass/_switcher-mixin.scss */
+  .form-switcher.form-switcher-sm-tablet .switcher:hover:active:after {
+    width: 18.9px !important;
+  }
+  /* line 18, ../sass/_switcher-mixin.scss */
+  .form-switcher.form-switcher-sm-tablet .switcher:after {
+    height: 14px;
+    width: 14px;
+  }
+  /* line 25, ../sass/_switcher-mixin.scss */
+  .form-switcher.form-switcher-sm-tablet input[type="checkbox"]:disabled + .switcher:after {
+    height: 14px !important;
+    width: 14px !important;
+  }
+  /* line 31, ../sass/_switcher-mixin.scss */
+  .form-switcher.form-switcher-sm-tablet input[type="checkbox"]:disabled:checked + .switcher:after {
+    -moz-transform: translateX(13px) !important;
+    -ms-transform: translateX(13px) !important;
+    -webkit-transform: translateX(13px) !important;
+    transform: translateX(13px) !important;
+  }
+  /* line 35, ../sass/_switcher-mixin.scss */
+  .form-switcher.form-switcher-sm-tablet input[type="checkbox"]:checked + .switcher {
+    border-color: #16b85f;
+    -moz-box-shadow: 0px 0px 0px 9px #16b85f inset;
+    -webkit-box-shadow: 0px 0px 0px 9px #16b85f inset;
+    box-shadow: 0px 0px 0px 9px #16b85f inset;
+  }
+  /* line 38, ../sass/_switcher-mixin.scss */
+  .form-switcher.form-switcher-sm-tablet input[type="checkbox"]:checked + .switcher:after {
+    -moz-transform: translateX(13px);
+    -ms-transform: translateX(13px);
+    -webkit-transform: translateX(13px);
+    transform: translateX(13px);
+  }
+  /* line 42, ../sass/_switcher-mixin.scss */
+  .form-switcher.form-switcher-sm-tablet input[type="checkbox"]:checked + .switcher:hover:active:after {
+    -moz-transform: translateX(8.1px);
+    -ms-transform: translateX(8.1px);
+    -webkit-transform: translateX(8.1px);
+    transform: translateX(8.1px);
+  }
+  /* line 9, ../sass/_switcher-mixin.scss */
+  .form-switcher.form-switcher-md-tablet .switcher {
+    width: 43px;
+    height: 25px;
+  }
+  /* line 12, ../sass/_switcher-mixin.scss */
+  .form-switcher.form-switcher-md-tablet .switcher:hover:active {
+    -moz-box-shadow: 0px 0px 0px 13px #e6e6e6 inset;
+    -webkit-box-shadow: 0px 0px 0px 13px #e6e6e6 inset;
+    box-shadow: 0px 0px 0px 13px #e6e6e6 inset;
+  }
+  /* line 14, ../sass/_switcher-mixin.scss */
+  .form-switcher.form-switcher-md-tablet .switcher:hover:active:after {
+    width: 28.35px !important;
+  }
+  /* line 18, ../sass/_switcher-mixin.scss */
+  .form-switcher.form-switcher-md-tablet .switcher:after {
+    height: 21px;
+    width: 21px;
+  }
+  /* line 25, ../sass/_switcher-mixin.scss */
+  .form-switcher.form-switcher-md-tablet input[type="checkbox"]:disabled + .switcher:after {
+    height: 21px !important;
+    width: 21px !important;
+  }
+  /* line 31, ../sass/_switcher-mixin.scss */
+  .form-switcher.form-switcher-md-tablet input[type="checkbox"]:disabled:checked + .switcher:after {
+    -moz-transform: translateX(18px) !important;
+    -ms-transform: translateX(18px) !important;
+    -webkit-transform: translateX(18px) !important;
+    transform: translateX(18px) !important;
+  }
+  /* line 35, ../sass/_switcher-mixin.scss */
+  .form-switcher.form-switcher-md-tablet input[type="checkbox"]:checked + .switcher {
+    border-color: #16b85f;
+    -moz-box-shadow: 0px 0px 0px 12.5px #16b85f inset;
+    -webkit-box-shadow: 0px 0px 0px 12.5px #16b85f inset;
+    box-shadow: 0px 0px 0px 12.5px #16b85f inset;
+  }
+  /* line 38, ../sass/_switcher-mixin.scss */
+  .form-switcher.form-switcher-md-tablet input[type="checkbox"]:checked + .switcher:after {
+    -moz-transform: translateX(18px);
+    -ms-transform: translateX(18px);
+    -webkit-transform: translateX(18px);
+    transform: translateX(18px);
+  }
+  /* line 42, ../sass/_switcher-mixin.scss */
+  .form-switcher.form-switcher-md-tablet input[type="checkbox"]:checked + .switcher:hover:active:after {
+    -moz-transform: translateX(10.65px);
+    -ms-transform: translateX(10.65px);
+    -webkit-transform: translateX(10.65px);
+    transform: translateX(10.65px);
+  }
+  /* line 9, ../sass/_switcher-mixin.scss */
+  .form-switcher.form-switcher-lg-tablet .switcher {
+    width: 53px;
+    height: 30px;
+  }
+  /* line 12, ../sass/_switcher-mixin.scss */
+  .form-switcher.form-switcher-lg-tablet .switcher:hover:active {
+    -moz-box-shadow: 0px 0px 0px 13px #e6e6e6 inset;
+    -webkit-box-shadow: 0px 0px 0px 13px #e6e6e6 inset;
+    box-shadow: 0px 0px 0px 13px #e6e6e6 inset;
+  }
+  /* line 14, ../sass/_switcher-mixin.scss */
+  .form-switcher.form-switcher-lg-tablet .switcher:hover:active:after {
+    width: 35.1px !important;
+  }
+  /* line 18, ../sass/_switcher-mixin.scss */
+  .form-switcher.form-switcher-lg-tablet .switcher:after {
+    height: 26px;
+    width: 26px;
+  }
+  /* line 25, ../sass/_switcher-mixin.scss */
+  .form-switcher.form-switcher-lg-tablet input[type="checkbox"]:disabled + .switcher:after {
+    height: 26px !important;
+    width: 26px !important;
+  }
+  /* line 31, ../sass/_switcher-mixin.scss */
+  .form-switcher.form-switcher-lg-tablet input[type="checkbox"]:disabled:checked + .switcher:after {
+    -moz-transform: translateX(23px) !important;
+    -ms-transform: translateX(23px) !important;
+    -webkit-transform: translateX(23px) !important;
+    transform: translateX(23px) !important;
+  }
+  /* line 35, ../sass/_switcher-mixin.scss */
+  .form-switcher.form-switcher-lg-tablet input[type="checkbox"]:checked + .switcher {
+    border-color: #16b85f;
+    -moz-box-shadow: 0px 0px 0px 15px #16b85f inset;
+    -webkit-box-shadow: 0px 0px 0px 15px #16b85f inset;
+    box-shadow: 0px 0px 0px 15px #16b85f inset;
+  }
+  /* line 38, ../sass/_switcher-mixin.scss */
+  .form-switcher.form-switcher-lg-tablet input[type="checkbox"]:checked + .switcher:after {
+    -moz-transform: translateX(23px);
+    -ms-transform: translateX(23px);
+    -webkit-transform: translateX(23px);
+    transform: translateX(23px);
+  }
+  /* line 42, ../sass/_switcher-mixin.scss */
+  .form-switcher.form-switcher-lg-tablet input[type="checkbox"]:checked + .switcher:hover:active:after {
+    -moz-transform: translateX(13.9px);
+    -ms-transform: translateX(13.9px);
+    -webkit-transform: translateX(13.9px);
+    transform: translateX(13.9px);
+  }
+}

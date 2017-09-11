@@ -46,7 +46,7 @@ html {
 	height: 100%;
 }
 body {
-	color: #333;
+	color: #24292e;
 	margin: 0;
 	font-family: "Lucida Grande","segoe UI","ヒラギノ丸ゴ ProN W4","Hiragino Maru Gothic ProN",Meiryo,Arial,sans-serif;
 }
@@ -91,13 +91,13 @@ p {
 			margin-top: 30px;
 		}
 		.appicon {
-			background-color: #F7F7F7;
+			background-color: #f6f8fa;
 			padding: 0 10px;
 			line-height: 38px;
 		}
 		.item {
 			position: relative;
-			color: #4078c0;
+			color: #0366d6;
 			font-size: 13px;
 			line-height: 30px;
 			padding-left: 10px;
@@ -109,7 +109,7 @@ p {
 		    left: 0;
 		    width: 2px;
 		    content: "";
-		    background-color: #d26911;
+		    background-color: #e36209;
 			}
 			&:last-child {
 				border: none;
@@ -158,15 +158,15 @@ p {
 }
 .note {
 	display: inline;
-	color: $forest_green;
+	color: #24963e;
 	margin-left: 5px;
 }
 .red {
-	color: $color_thunderbird_approx;
+	color: #cb2431;
 }
 h1 {
 	font-family: 'Noto Sans Japanese';
-	color: #444;
+	color: #24292e;
 	font-size: 20px;
 	padding: 0 10px 4px 10px;
 	font-weight: 400;
@@ -176,7 +176,7 @@ h1 {
 }
 h3 {
 	font-family: 'Noto Sans Japanese';
-	color: #444;
+	color: #24292e;
 	font-weight: 500;
 	font-size: 13px;
 	margin: 0.3em 0;
@@ -200,12 +200,39 @@ h3 {
 	border-radius: 3px;
 }
 .listgroup-item {
+	font-family: 'Noto Sans Japanese';
+  height: 60px;
 	min-height: inherit;
 	padding: 10px;
 	font-size: 13px;
 	line-height: 26px;
 	color: $color_tapa_approx;
 	border-bottom: 1px solid $mercury;
+	&.card-style {
+		position: relative;
+		height: 75px;
+		width: 50%;
+		display: inline-block;
+		.list-group-text-block {
+			padding-left: 65px;
+		}
+		.list-group-text-block .meta-title {
+			line-height: 16px;
+			margin-bottom: 3px;
+		}
+		.meta-description {
+			margin-left: 2px;
+			vertical-align: middle;
+		}
+		.octicon {
+			font-size: 14px;
+		}
+		.form-switcher {
+			position: absolute;
+			top: 20px;
+			right: 10px;
+		}
+	}
 	&:last-child {
 		border-bottom: 0;
 	}
@@ -292,7 +319,7 @@ h3 {
 	}
 }
 a {
-	color: $color_steel_blue_approx;
+	color: #0366d6;
 	text-decoration: none;
 	&:hover {
 		text-decoration: underline;
@@ -372,4 +399,56 @@ img {
 .nudge-down.BtnGroup {
 	position: relative;
 	top: 6px;
+}
+
+
+.float-left {
+	float: left;
+}
+
+
+/**
+ * Switcher
+ */
+.form-switcher .switcher {
+	z-index: 999;
+  // transition: box-shadow 0.07s linear, border-color 0.01s linear 0.07s !important;	
+	transition: none !important;
+}
+
+.form-switcher .switcher:after {
+	// transition: all 0.07s linear !important;
+	transition: none !important;
+	&:active {
+	}
+}
+
+.form-switcher .switcher:hover:active:after {
+  width: 21px !important;
+}
+
+.form-switcher input[type="checkbox"]:checked + .switcher:hover:active:after {
+  -moz-transform: translateX(18px) !important;
+  -ms-transform: translateX(18px) !important;
+  -webkit-transform: translateX(18px) !important;
+  transform: translateX(18px) !important;
+}
+
+.form-switcher input[type="checkbox"]:checked + .switcher:active {
+  border-color: #13a153;
+  box-shadow: 0px 0px 0px 13px #13a153 inset;
+}
+
+.text-vividgray {
+    color: #586069 !important;
+}
+
+.switcher-label {
+		position: absolute;
+    top: 4px;
+    right: 50px;
+		white-space: nowrap;
+		font-size: 12px;
+		font-size: 11px;
+    color: #888;
 }

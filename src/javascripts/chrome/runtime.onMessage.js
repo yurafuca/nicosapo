@@ -57,6 +57,20 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     return;
   }
 
+  if (request.purpose === `get`) {
+    sendResponse(store.get(request.key));
+  }
+
+  if (request.purpose === `save`) {
+    store.set(request.key, request.value);
+    sendResponse();
+  }
+
+  if (request.purpose === `remove`) {
+    store.remove(request.key);
+    sendResponse();
+  }
+
   if (request.purpose == 'removeFromNestedLocalStorage') {
     let storagedData = {};
     if (store.get(request.key)) {
