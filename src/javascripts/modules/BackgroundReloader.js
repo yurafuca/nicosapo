@@ -63,7 +63,7 @@ export default class BackgroundReloader {
       const prefixedId = thumbnail.replace(/http:\/\/icon\.nimg\.jp\/(channe|community)\//, '').replace(/\.(jpg|png)/, '');
       console.info(prefixedId);
       const distributors = store.get(`excludedDistributors`);
-      if (distributors.hasOwnProperty(prefixedId))        return; // `continue` for lodash.
+      if (distributors && distributors.hasOwnProperty(prefixedId))        return; // `continue` for lodash.
       if (justFollowedCommunities.includes(number))       return; // `continue` for lodash.
       if (Db.contains('autoEnterCommunityList', commuId)) return; // `continue` for lodash.
       if (Db.contains('autoEnterProgramList', videoId))   return; // `continue` for lodash.
