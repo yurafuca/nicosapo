@@ -252,6 +252,7 @@ export default class Settings extends React.Component {
                     <p>ニコニコ生放送の視聴をサポートする Google Chrome Extension</p>
                     <p>バージョン: {chrome.runtime.getManifest().version}</p>
                     <p>Twitter: <a href="https://twitter.com/nicosapo_dev">@nicosapo_dev</a></p>
+                    <p>Author: <a href="https://twitter.com/yurafuca">@yurafuca</a></p>
                     <p>GitHub: <a href="https://github.com/yurafuca/nicosapo">nicosapo</a></p>
                   </div>
 
