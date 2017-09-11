@@ -1,7 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import store from 'store';
+import NotificationList from '../components/NotificationList';
 import AutoEnterList from '../components/AutoEnterList';
+import Button from '../components/Button'
 
 function compare(a, b) {
   if( a < b ) return -1;
@@ -121,6 +123,7 @@ export default class Settings extends React.Component {
             <div className="wrapper menu float-left">
               <h1 className="appicon">設定項目</h1>
               <div className={this.state.selectedMenu === 'basic' ? 'item selected' : 'item'} data-menu="basic" onClick={this.clickMenu}>基本設定</div>
+              <div className={this.state.selectedMenu === 'notification' ? 'item selected' : 'item'} data-menu="notification" onClick={this.clickMenu}>通知の個別設定</div>
               <div className={this.state.selectedMenu === 'auto-program' ? 'item selected' : 'item'} data-menu="auto-program" onClick={this.clickMenu}>自動枠移動リスト（番組）</div>
               <div className={this.state.selectedMenu === 'auto-community' ? 'item selected' : 'item'} data-menu="auto-community" onClick={this.clickMenu}>自動枠移動リスト（CH・コミュ）</div>
             </div>
@@ -148,23 +151,23 @@ export default class Settings extends React.Component {
                     </div>
                     <div className="item">
                       <h3>自動次枠移動をデフォルトで「ON」にする</h3>
-                      <input type="radio" name="options.autoJump.enable" value={'enable'} checked={this.state['options.autoJump.enable'] == 'enable'} onChange={this.onChange} /> 有効
-                      <input type="radio" name="options.autoJump.enable" value={'disable'} checked={this.state['options.autoJump.enable'] == 'disable'} onChange={this.onChange} /> 無効
+                      <label><input type="radio" name="options.autoJump.enable" value={'enable'} checked={this.state['options.autoJump.enable'] == 'enable'} onChange={this.onChange} /> 有効</label>
+                      <label><input type="radio" name="options.autoJump.enable" value={'disable'} checked={this.state['options.autoJump.enable'] == 'disable'} onChange={this.onChange} /> 無効</label>
                     </div>
                     <div className="item">
                       <h3>予約番組をポップアップに表示する</h3>
-                      <input type="radio" name="options.showReserved.enable" value={'enable'} checked={this.state['options.showReserved.enable'] == 'enable'} onChange={this.onChange} /> 有効
-                      <input type="radio" name="options.showReserved.enable" value={'disable'} checked={this.state['options.showReserved.enable'] == 'disable'} onChange={this.onChange} /> 無効
+                      <label><input type="radio" name="options.showReserved.enable" value={'enable'} checked={this.state['options.showReserved.enable'] == 'enable'} onChange={this.onChange} /> 有効</label>
+                      <label><input type="radio" name="options.showReserved.enable" value={'disable'} checked={this.state['options.showReserved.enable'] == 'disable'} onChange={this.onChange} /> 無効</label>
                     </div>
                     <div className="item">
                       <h3>通知を放送開始時に表示する</h3>
-                      <input type="radio" name="options.popup.enable" value={'enable'} checked={this.state['options.popup.enable'] == 'enable'} onChange={this.onChange} /> 有効
-                      <input type="radio" name="options.popup.enable" value={'disable'} checked={this.state['options.popup.enable'] == 'disable'} onChange={this.onChange} /> 無効
+                      <label><input type="radio" name="options.popup.enable" value={'enable'} checked={this.state['options.popup.enable'] == 'enable'} onChange={this.onChange} /> 有効</label>
+                      <label><input type="radio" name="options.popup.enable" value={'disable'} checked={this.state['options.popup.enable'] == 'disable'} onChange={this.onChange} /> 無効</label>
                     </div>
                     <div className="item">
                       <h3>音を放送開始時に鳴らす</h3>
-                      <input type="radio" name="options.playsound.enable" value={'enable'} checked={this.state['options.playsound.enable'] == 'enable'} onChange={this.onChange} /> 有効
-                      <input type="radio" name="options.playsound.enable" value={'disable'} checked={this.state['options.playsound.enable'] == 'disable'} onChange={this.onChange} /> 無効
+                      <label><input type="radio" name="options.playsound.enable" value={'enable'} checked={this.state['options.playsound.enable'] == 'enable'} onChange={this.onChange} /> 有効</label>
+                      <label><input type="radio" name="options.playsound.enable" value={'disable'} checked={this.state['options.playsound.enable'] == 'disable'} onChange={this.onChange} /> 無効</label>
                     </div>
                     <div className="item">
                       <h3>通知の表示位置</h3>
@@ -191,8 +194,21 @@ export default class Settings extends React.Component {
                     </div>
                   </div>
                   <div>
-                    <input id="saveAll" type="submit" value="設定を保存する" onClick={this.saveSettings}/>
-                    <p id="console" style={{color: '#228b22'}}>{this.state.resultMessage}</p>
+                    <Button id="save-all" onClick={this.saveSettings} isPrimary={true} style={{ marginLeft: `290px` }} text="設定を保存する" />
+                    {/*<input id="saveAll" type="submit" value="設定を保存する" onClick={this.saveSettings}/>*/}
+                    <p id="console" style={{color: '#24963e'}}>{this.state.resultMessage}</p>
+                  </div>
+                </div>
+              )
+            }
+          })()}
+          {(() => {
+            if (this.state.selectedMenu == 'notification') {
+              return(
+                <div className="wrapper">
+                  <h1 className="appicon">通知の個別設定</h1>
+                  <div id="listgroup-community">
+                    <NotificationList />
                   </div>
                 </div>
               )
@@ -236,6 +252,7 @@ export default class Settings extends React.Component {
                     <p>ニコニコ生放送の視聴をサポートする Google Chrome Extension</p>
                     <p>バージョン: {chrome.runtime.getManifest().version}</p>
                     <p>Twitter: <a href="https://twitter.com/nicosapo_dev">@nicosapo_dev</a></p>
+                    <p>Author: <a href="https://twitter.com/yurafuca">@yurafuca</a></p>
                     <p>GitHub: <a href="https://github.com/yurafuca/nicosapo">nicosapo</a></p>
                   </div>
 

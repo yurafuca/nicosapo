@@ -4,37 +4,43 @@ import _ from 'lodash';
 const KEY = `NiconamaTabs`;
 
 export default class NiconamaTabs {
-  static openingList() {
+  static get(tabId) {
+    const list = NiconamaTabs.list();
+    return list[tabId];
+  }
+
+  static list() {
     return store.get(KEY);
   }
 
   static getTabId(castId) {
-    const tabIds = store.get(KEY) || {};
+    const list = store.get(KEY) || {};
     let result = null;
-    Object.keys(tabIds).forEach((_tabId) => {
-      if (tabIds[_tabId] === castId) {
-        result = _tabId;
+    Object.keys(list).forEach((tabId) => {
+      if (list[tabId].castId === castId) {
+        result = tabId;
       }
     });
     return result;
   }
 
-  static add(tabId, castId) {
+  static add(tabId, castId, scrollTop) {
     if (castId == null) {
       return;
     }
     console.log(`[nicosapo] Add ${tabId} to opening tab`);
-    const tabIds = store.get(KEY) || {};
-    tabIds[tabId] = castId;
-    store.set(KEY, tabIds);
+    const list = store.get(KEY) || {};
+    const item = { castId: castId, scrollTop: scrollTop };
+    list[tabId] = item;
+    store.set(KEY, list);
   }
 
   static remove(tabId) {
     console.log(`[nicosapo] Remove ${tabId} from opening tab`);
-    const tabIds = store.get(KEY) || {};
-    delete tabIds[tabId];
+    const list = store.get(KEY) || {};
+    delete list[tabId];
     // tabIds = tabIds.filter((id) => id != tabId);
-    store.set(KEY, tabIds);
+    store.set(KEY, list);
   }
 
   static clear() {

@@ -3,11 +3,15 @@ import NiconamaTabs from '../modules/NiconamaTabs'
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.purpose == 'NiconamaTabs.add') {
-    NiconamaTabs.add(sender.tab.id, request.id);
+    NiconamaTabs.add(sender.tab.id, request.id, request.scrollTop);
   } 
 
   if (request.purpose == 'NiconamaTabs.remove') {
     NiconamaTabs.remove(sender.tab.id);
+  }
+
+  if (request.purpose == 'NiconamaTabs.get') {
+    sendResponse(NiconamaTabs.get(sender.tab.id));
   }
 
   if (request.purpose == 'getFromLocalStorage') {
@@ -51,6 +55,20 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     }
     store.set(request.key, storagedData);
     return;
+  }
+
+  if (request.purpose === `get`) {
+    sendResponse(store.get(request.key));
+  }
+
+  if (request.purpose === `save`) {
+    store.set(request.key, request.value);
+    sendResponse();
+  }
+
+  if (request.purpose === `remove`) {
+    store.remove(request.key);
+    sendResponse();
   }
 
   if (request.purpose == 'removeFromNestedLocalStorage') {
