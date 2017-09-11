@@ -18,8 +18,17 @@ export default class Button extends React.Component {
 
   render() {
     const classNames = styles.button + ' ' + (this.props.isPrimary ? styles.primary : styles.normal);
+    const octicon = (name) => {
+      if (name == null) return;
+      const className = `octicon octicon-${name}`;
+      return <span className={className} style={{ marginRight: '5px' }}></span>;
+    }
+    const icon = octicon(this.props.octicon);
     return (
-      <button className={classNames} style={this.m(this.props.style)}>{this.props.text}</button>
+      <button className={classNames} style={this.m(this.props.style)} onClick={this.props.onClick}>
+        {icon ? icon : ''}
+        {this.props.text}
+      </button>
       // <button style={style.button}>test</button>
     )
   }
