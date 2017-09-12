@@ -162,7 +162,7 @@ export default class NotificationList extends React.Component {
       const modal = <div id="modal" className={classes}>{ message }</div>
       items.push(modal);
     }
-    const status  = this.state.loading ? <div><span>コミュニティを読み込んでいます．しばらくお待ち下さい...（{this.state.currentPage} ページ目）</span></div> : '';
+    const status  = this.state.loading ? <div><span>コミュニティを読み込んでいます．しばらくお待ちください...（{this.state.currentPage} ページ目）</span></div> : '';
     return (
       <div>
         <div>

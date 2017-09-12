@@ -44,10 +44,17 @@ export default class Popup extends React.Component {
     this.loadCasts = this.loadCasts.bind(this);
     this.toggleTab = this.toggleTab.bind(this);
     this.onToggleRadio = this.onToggleRadio.bind(this);
+
+    Api.isLogined()
+    .then(() => {
+      this.setState({ isLogined: true });
+    })
+    .catch(() => {
+      this.setState({ isLogined: false, loading: false });
+    });
   }
 
   componentDidMount() {
-    this.setState({enableRadioMode: false});
     this.loadCasts('user');
     if (store.get('options.showReserved.enable') == 'enable') {
       this.setState({ showReserve: false });
@@ -127,21 +134,21 @@ export default class Popup extends React.Component {
             {(() => {
               if (this.state.noCast) {
                 return (
-                  <div class="message"> {
+                  <div className="message"> {
                     this.state.showReserve
                       ? '放送中/予約中の番組がありません．'
                       : '放送中の番組がありません．'
                   } </div>
                 )
               }
-              if (this.state.isLogined === false) {
-                return (
-                  <div class="message">
-                    'ニコニコ動画にログインしていません．ログインしてから再度試してください．'
-                  </div>
-                );
-              }
               if (this.state.selectedTab === 'user') {
+                if (this.state.isLogined === false) {
+                  return (
+                    <div className="message">
+                      ニコニコ動画にログインしていません．ログインしてから再度お試しください．
+                  </div>
+                  );
+                }
                 return ( <UserThumbnails programs={ this.state.videoInfoList }/> );
               }
               if (this.state.selectedTab === 'official' || this.state.selectedTab === 'future') {
