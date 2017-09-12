@@ -54,6 +54,11 @@ body {
 	//Instead of the line below you could use @include border-radius($radius, $vertical-radius)
 	border-radius: 3px;
 }
+#dummy-tooltip {
+	position: absolute;
+	top: -999px !important;
+	left: -999px !important;
+}
 .tooltip-inner {
 	font-family: 'Noto Sans Japanese';
 	max-width: 270px !important;

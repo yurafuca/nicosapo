@@ -56,6 +56,8 @@ export default class UserThumbnails extends React.Component {
       <div id="container">{
         this.state.thumbParams.map((thumbParam) =>
           <Thumbnail
+            key        = {thumbParam.id}
+            preload    = {thumbParam.index == 0}
             background = {thumbParam.background}
             title      = {thumbParam.title}
             url        = {thumbParam.url}
