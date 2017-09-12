@@ -124,8 +124,8 @@ export default class Settings extends React.Component {
               <h1 className="appicon">設定項目</h1>
               <div className={this.state.selectedMenu === 'basic' ? 'item selected' : 'item'} data-menu="basic" onClick={this.clickMenu}>基本設定</div>
               <div className={this.state.selectedMenu === 'notification' ? 'item selected' : 'item'} data-menu="notification" onClick={this.clickMenu}>通知の個別設定</div>
-              <div className={this.state.selectedMenu === 'auto-program' ? 'item selected' : 'item'} data-menu="auto-program" onClick={this.clickMenu}>自動枠移動リスト（番組）</div>
-              <div className={this.state.selectedMenu === 'auto-community' ? 'item selected' : 'item'} data-menu="auto-community" onClick={this.clickMenu}>自動枠移動リスト（CH・コミュ）</div>
+              <div className={this.state.selectedMenu === 'auto-program' ? 'item selected' : 'item'} data-menu="auto-program" onClick={this.clickMenu}>自動入場リスト（番組）</div>
+              <div className={this.state.selectedMenu === 'auto-community' ? 'item selected' : 'item'} data-menu="auto-community" onClick={this.clickMenu}>自動入場リスト（CH・コミュ）</div>
             </div>
             <div className="wrapper menu float-left">
               <h1 className="appicon">その他</h1>
