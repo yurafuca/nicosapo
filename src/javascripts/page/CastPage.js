@@ -13,7 +13,7 @@ export default class CastPage extends Page {
           if (response == null || response.castId != this.communityId) {
             this._setTabStatus(this.communityId, response ? response.scrollTop : 0);
           } else {
-            setTimeout(this._scroll(response.scrollTop), 3 * 1000);
+            setTimeout(this._scroll.bind(this, response.scrollTop), 5 * 1000);
           }
         });
       }
