@@ -14,18 +14,21 @@ function compare(a, b) {
 export default class Settings extends React.Component {
   constructor(props) {
     super(props);
-    this.state            = this.getInitialState();
-    this.onCHange         = this.onChange.bind(this);
-    this.saveSettings     = this.saveSettings.bind(this);
-    this.onChange         = this.onChange.bind(this);
-    this.onChangeCheckBox = this.onChangeCheckBox.bind(this);
-    this.reflectSettings  = this.reflectSettings.bind(this);
-    this.playSound        = this.playSound.bind(this);
-    this.clickMenu        = this.clickMenu.bind(this);
+    this.state                = this.getInitialState();
+    this.onCHange             = this.onChange.bind(this);
+    this.saveSettings         = this.saveSettings.bind(this);
+    this.onChange             = this.onChange.bind(this);
+    this.onChangeCheckBox     = this.onChangeCheckBox.bind(this);
+    this.reflectSettings      = this.reflectSettings.bind(this);
+    this.playSound            = this.playSound.bind(this);
+    this.clickMenu            = this.clickMenu.bind(this);
+    this.repossessionSettings = this.repossessionSettings.bind(this);
+    this.timer                = null;
   }
 
   getInitialState() {
     const state = {
+      settings: {},
       selectedMenu: 'basic',
       resultMessage: '',
       selectableList: {
@@ -49,6 +52,12 @@ export default class Settings extends React.Component {
       'options.playsound.volume':              1.0
     };
     return state;
+  }
+
+  repossessionSettings() {
+    const settings = {};
+    store.each((value, key) => { settings[key] = value; });
+    this.setState({ settings: settings });
   }
 
   componentDidMount() {
@@ -111,8 +120,12 @@ export default class Settings extends React.Component {
   }
 
   clickMenu(e) {
-    console.info(e.target.dataset.menu);
-    this.setState({ selectedMenu: e.target.dataset.menu});
+    const menu = e.target.dataset.menu;
+    this.setState({ selectedMenu: menu });
+    if (menu == 'bug-report')
+      this.timer = setInterval(this.repossessionSettings, 500);
+    else
+      clearInterval(this.timer);
   }
 
   render() {
@@ -129,6 +142,7 @@ export default class Settings extends React.Component {
             </div>
             <div className="wrapper menu float-left">
               <h1 className="appicon">その他</h1>
+              <div className={this.state.selectedMenu === 'bug-report' ? 'item selected' : 'item'} data-menu="bug-report" onClick={this.clickMenu}>不具合報告用に設定を取得</div>
               <div className={this.state.selectedMenu === 'help' ? 'item selected' : 'item'} data-menu="help" onClick={this.clickMenu}>にこさぽについて</div>
             </div>
           </div>
@@ -239,6 +253,27 @@ export default class Settings extends React.Component {
             }
           })()}
           {(() => {
+            if (this.state.selectedMenu == 'bug-report') {
+              return(
+                <div className="wrapper">
+                  <h1 className="appicon">不具合報告用に設定を取得</h1>
+                  <div>
+                    <p style={{ marginBottom: '2px', fontSize: '12px', marginTop: '10px' }}>不具合報告をしたとき，作者から現在の設定を貼るように指示があった場合は，下記を貼り付けてください．</p>
+                    <div style={{ border: 'solid 1px #D8D8D8', backgroundColor: '#f6f8fa', padding: '10px', marginTop: '20px', fontFamily: 'Menlo, Monaco, Consolas, "Courier New", monospace', wordWrap: 'break-word' }}>
+                      BEGIN &gt;&gt;&gt;
+                      {Object.keys(this.state.settings).map((key) =>
+                        <p key={key}>
+                          <span>{key}: {JSON.stringify(this.state.settings[key])}</span>
+                        </p>
+                      )}
+                      &gt;&gt;&gt; END
+                    </div>
+                  </div>
+                </div>
+              )
+            }
+          })()}
+          {(() => {
             if (this.state.selectedMenu == 'help') {
               return(
                 <div className="wrapper">
@@ -279,3 +314,4 @@ export default class Settings extends React.Component {
     )
   }
 }
+
