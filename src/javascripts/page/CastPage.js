@@ -20,7 +20,7 @@ export default class CastPage extends Page {
     });
 
     window.addEventListener('scroll', (e) => {
-      this._setTabStatus(this.communityId, document.body.scrollTop);
+      this._setTabStatus(this.communityId, document.scrollingElement.scrollTop);
     });
   }
 
