@@ -1,3 +1,4 @@
+import store from 'store'
 import Db from './modules/db'
 import Badge from './modules/Badge'
 import NiconamaTabs from './modules/NiconamaTabs'
@@ -16,6 +17,21 @@ chrome.runtime.onStartup.addListener(() => {
 
 chrome.tabs.onRemoved.addListener((tabId) => {
   NiconamaTabs.remove(tabId);
+});
+
+chrome.idle.onStateChanged.addListener((newState) => {
+  switch(newState) {
+    case 'active':
+      store.set('state.alert.cancel', false);
+      break;
+    case 'locked':
+      if (store.get('options.alert.cancel.onLocked') === true)
+        store.set('state.alert.cancel', true);
+      break;
+    case 'idle':
+      // Ignore.
+      break;
+  }
 });
 
 Badge.setBackgroundColor('#ff6200');
