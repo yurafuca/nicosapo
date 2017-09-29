@@ -22,11 +22,11 @@ chrome.tabs.onRemoved.addListener((tabId) => {
 chrome.idle.onStateChanged.addListener((newState) => {
   switch(newState) {
     case 'active':
-      store.set('state.alert.cancel', false);
+      store.set('state.autoEnter.cancel', false);
       break;
     case 'locked':
-      if (store.get('options.alert.cancel.onLocked') === true)
-        store.set('state.alert.cancel', true);
+      if (store.get('options.autoEnter.cancel.onLocked') === true)
+        store.set('state.autoEnter.cancel', true);
       break;
     case 'idle':
       // Ignore.
