@@ -19,18 +19,29 @@ chrome.tabs.onRemoved.addListener((tabId) => {
   NiconamaTabs.remove(tabId);
 });
 
+const idleMinute = store.get('options.idle.minute');
+chrome.idle.setDetectionInterval(idleMinute * 60);
+// chrome.idle.setDetectionInterval(15);
+
 chrome.idle.onStateChanged.addListener((newState) => {
+  const cancelList = store.get('options.autoEnter.cancelList');
   switch(newState) {
-    case 'active':
+    case 'active': {
       store.set('state.autoEnter.cancel', false);
       break;
-    case 'locked':
-      if (store.get('options.autoEnter.cancel.onLocked') === true)
+    }
+    case 'locked': {
+      const isCanceled = cancelList.includes('onLocked');
+      if (isCanceled)
         store.set('state.autoEnter.cancel', true);
       break;
-    case 'idle':
-      // Ignore.
+    }
+    case 'idle': {
+      const isCanceled = cancelList.includes('onIdled');
+      if (isCanceled)
+        store.set('state.autoEnter.cancel', true);
       break;
+    }
   }
 });
 
@@ -40,8 +51,12 @@ BackgroundReloader.run();
 setInterval(BackgroundReloader.run, 60 * 1000);
 Common.sleep(7 * 1000).then(() => {
   setInterval(() => {
-    Promise.resolve()
-      .then((new AutoEnterRunner()).run('live'))
-      .then((new AutoEnterRunner()).run('community'));
+    if (!store.get('state.autoEnter.cancel')) {
+      Promise.resolve()
+        .then((new AutoEnterRunner()).run('live'))
+        .then((new AutoEnterRunner()).run('community'));
+    } else {
+      console.log('Canceled auto enter.');
+    }
   }, 60 * 1000);
 });
