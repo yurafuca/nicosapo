@@ -47,6 +47,7 @@ export default class Settings extends React.Component {
       'options.soundfile':                    'ta-da.mp3',
       'options.autoJump.enable':              'enable',
       'options.showReserved.enable':          'disable',
+      'options.autoEnter.forceCancel':        false,
       'options.popup.enable':                 'enable',
       'options.playsound.enable':             'enable',
       'options.openingNotification.duration':  6,
@@ -85,9 +86,11 @@ export default class Settings extends React.Component {
       if (e.target.checked)
         stateItem.push(e.target.value);
     } else {
-      stateItem = e.target.value;
+      let value = e.target.value;
+      if (value === 'true' || value === 'false') value = JSON.parse(value);
+      stateItem = value;
     }
-    this.setState({ [e.target.name]: stateItem });
+    this.setState({ [e.target.name]: stateItem }, this.saveSettings);
   }
 
   onChangeCheckBox(e) {
@@ -99,6 +102,7 @@ export default class Settings extends React.Component {
       minuteList.push(selectValue);
       minuteList.sort(compare);
     }
+    this.saveSettings();
   }
 
   playSound() {
@@ -141,7 +145,7 @@ export default class Settings extends React.Component {
     return (
       <div>
         <div className="content">
-          <div style={{maxWidth: '100px', float: 'left'}}>
+          <div style={{maxWidth: '200px', float: 'left'}}>
             <div className="wrapper menu float-left">
               <h1 className="appicon">基本設定</h1>
               <div className={this.state.selectedMenu === 'auto' ? 'item selected' : 'item'} data-menu="auto" onClick={this.clickMenu}>自動枠移動・自動入場</div>
@@ -159,6 +163,7 @@ export default class Settings extends React.Component {
               <div className={this.state.selectedMenu === 'bug-report' ? 'item selected' : 'item'} data-menu="bug-report" onClick={this.clickMenu}>不具合報告用に設定を取得</div>
               <div className={this.state.selectedMenu === 'help' ? 'item selected' : 'item'} data-menu="help" onClick={this.clickMenu}>にこさぽについて</div>
             </div>
+            <p id="console" style={{ color: '#24963e', marginTop: '10px', float: 'left' }}>{this.state.resultMessage}</p>
           </div>
           {(() => {
             if (this.state.selectedMenu == 'auto') {
@@ -198,11 +203,16 @@ export default class Settings extends React.Component {
                         )}
                       </select>
                     </div>
+                    <div className="item">
+                      <h3>自動入場の状態を強制的に指定する</h3>
+                      現在の自動入場の状態は  {this.state['options.autoEnter.forceCancel'] == false ?
+                      <Button name="options.autoEnter.forceCancel" value={true} onClick={this.onChange} isPrimary={true} octicon="check" style={{ marginBottom: `25px`, marginTop: `5px` }} text=" 通常どおり入場" />
+                      :
+                      <Button name="options.autoEnter.forceCancel" value={false} onClick={this.onChange} octicon="circle-slash" className="danger" style={{ marginBottom: `25px`, marginTop: `5px` }} text=" すべてキャンセル" />
+                      } です
+                    </div>
                   </div>
                   <div>
-                    <Button id="save-all" onClick={this.saveSettings} isPrimary={true} style={{ marginLeft: `290px`, marginTop: `20px` }} text="設定を保存する" />
-                    {/*<input id="saveAll" type="submit" value="設定を保存する" onClick={this.saveSettings}/>*/}
-                    <p id="console" style={{color: '#24963e'}}>{this.state.resultMessage}</p>
                   </div>
                 </div>
               )
@@ -248,11 +258,6 @@ export default class Settings extends React.Component {
                       <button className="soundtest" onClick={this.playSound}>音量テスト</button>
                     </div>
                   </div>
-                  <div>
-                    <Button id="save-all" onClick={this.saveSettings} isPrimary={true} style={{ marginLeft: `290px`, marginTop: `20px` }} text="設定を保存する" />
-                    {/*<input id="saveAll" type="submit" value="設定を保存する" onClick={this.saveSettings}/>*/}
-                    <p id="console" style={{color: '#24963e'}}>{this.state.resultMessage}</p>
-                  </div>
                 </div>
               )
             }
@@ -268,11 +273,6 @@ export default class Settings extends React.Component {
                       <label><input type="radio" name="options.showReserved.enable" value={'enable'} checked={this.state['options.showReserved.enable'] == 'enable'} onChange={this.onChange} /> 有効</label>
                       <label><input type="radio" name="options.showReserved.enable" value={'disable'} checked={this.state['options.showReserved.enable'] == 'disable'} onChange={this.onChange} /> 無効</label>
                     </div>
-                  </div>
-                  <div>
-                    <Button id="save-all" onClick={this.saveSettings} isPrimary={true} style={{ marginLeft: `290px`, marginTop: `20px` }} text="設定を保存する" />
-                    {/*<input id="saveAll" type="submit" value="設定を保存する" onClick={this.saveSettings}/>*/}
-                    <p id="console" style={{color: '#24963e'}}>{this.state.resultMessage}</p>
                   </div>
                 </div>
               )

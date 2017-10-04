@@ -19,9 +19,8 @@ chrome.tabs.onRemoved.addListener((tabId) => {
   NiconamaTabs.remove(tabId);
 });
 
-const idleMinute = store.get('options.idle.minute');
-chrome.idle.setDetectionInterval(idleMinute * 60);
-// chrome.idle.setDetectionInterval(15);
+const idleMinute = store.get('options.idle.minute') || 10;
+chrome.idle.setDetectionInterval(Number(idleMinute) * 60);
 
 chrome.idle.onStateChanged.addListener((newState) => {
   const cancelList = store.get('options.autoEnter.cancelList');
@@ -51,7 +50,9 @@ BackgroundReloader.run();
 setInterval(BackgroundReloader.run, 60 * 1000);
 Common.sleep(7 * 1000).then(() => {
   setInterval(() => {
-    if (!store.get('state.autoEnter.cancel')) {
+    const isForceCancel = store.get('options.autoEnter.forceCancel') || false;
+    const isAutoCancel  = store.get('state.autoEnter.cancel') || false;
+    if (!isForceCancel && !isAutoCancel) {
       Promise.resolve()
         .then((new AutoEnterRunner()).run('live'))
         .then((new AutoEnterRunner()).run('community'));

@@ -50,3 +50,17 @@
     background-color: #28a745;
     background-image: linear-gradient(-180deg, #34d058 0%, #28a745 90%);
 }
+
+.danger:hover {
+    background-color: #b31313;
+    background-image: linear-gradient(#d44e4e, #b31313) !important;
+    background-position: 0 -0.5em;
+    border-color: #890f0f;
+}
+
+.danger {
+    color: #fff;
+    background-color: #911;
+    background-image: linear-gradient(#ec5757, #c71616) !important;
+    border-color: #911;
+}
