@@ -17,7 +17,8 @@ export default class Button extends React.Component {
   }
 
   render() {
-    const classNames = styles.button + ' ' + (this.props.isPrimary ? styles.primary : styles.normal);
+    let classNames = styles.button + ' ' + (this.props.isPrimary ? styles.primary : styles.normal);
+    if (this.props.className && this.props.className.indexOf('danger') != -1) classNames = styles.button + ' ' + styles.danger;
     const octicon = (name) => {
       if (name == null) return;
       const className = `octicon octicon-${name}`;
@@ -25,7 +26,7 @@ export default class Button extends React.Component {
     }
     const icon = octicon(this.props.octicon);
     return (
-      <button className={classNames} style={this.m(this.props.style)} onClick={this.props.onClick}>
+      <button className={classNames} style={this.m(this.props.style)} onClick={this.props.onClick} value={this.props.value} name={this.props.name}>
         {icon ? icon : ''}
         {this.props.text}
       </button>

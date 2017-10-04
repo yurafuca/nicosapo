@@ -29,10 +29,11 @@ export default class Settings extends React.Component {
   getInitialState() {
     const state = {
       settings: {},
-      selectedMenu: 'basic',
+      selectedMenu: 'auto',
       resultMessage: '',
       selectableList: {
-        minuteList: [15, 20, 25, 30, 25, 40, 50, 60, 70, 80, 90, 100, 110, 120],
+        minuteList: [15, 20, 25, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120],
+        idleMinuteList: [3, 5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120],
         soundFiles: [
           {path: 'ta-da.mp3',   text: 'Ta-da!'},
           {path: 'ding.mp3',    text: 'Ding'},
@@ -45,11 +46,14 @@ export default class Settings extends React.Component {
       'options.redirect.time':                30,
       'options.soundfile':                    'ta-da.mp3',
       'options.autoJump.enable':              'enable',
-      'options.showReserved.enable':          'enable',
+      'options.showReserved.enable':          'disable',
+      'options.autoEnter.forceCancel':        false,
       'options.popup.enable':                 'enable',
       'options.playsound.enable':             'enable',
       'options.openingNotification.duration':  6,
-      'options.playsound.volume':              1.0
+      'options.playsound.volume':              1.0,
+      'options.autoEnter.cancelList':              [],
+      'options.idle.minute':                   20
     };
     return state;
   }
@@ -76,9 +80,17 @@ export default class Settings extends React.Component {
     if (e.target.name === 'options.soundfile') {
       new Audio(`../sounds/${e.target.value}`).play();
     }
-    const state = {};
-    state[e.target.name] = e.target.value;
-    this.setState(state);
+    let stateItem = this.state[e.target.name];
+    if (e.target.type === 'checkbox') {
+      stateItem = stateItem.filter((v) => v != e.target.value);
+      if (e.target.checked)
+        stateItem.push(e.target.value);
+    } else {
+      let value = e.target.value;
+      if (value === 'true' || value === 'false') value = JSON.parse(value);
+      stateItem = value;
+    }
+    this.setState({ [e.target.name]: stateItem }, this.saveSettings);
   }
 
   onChangeCheckBox(e) {
@@ -90,6 +102,7 @@ export default class Settings extends React.Component {
       minuteList.push(selectValue);
       minuteList.sort(compare);
     }
+    this.saveSettings();
   }
 
   playSound() {
@@ -132,11 +145,16 @@ export default class Settings extends React.Component {
     return (
       <div>
         <div className="content">
-          <div style={{maxWidth: '100px', float: 'left'}}>
+          <div style={{maxWidth: '200px', float: 'left'}}>
             <div className="wrapper menu float-left">
-              <h1 className="appicon">設定項目</h1>
-              <div className={this.state.selectedMenu === 'basic' ? 'item selected' : 'item'} data-menu="basic" onClick={this.clickMenu}>基本設定</div>
-              <div className={this.state.selectedMenu === 'notification' ? 'item selected' : 'item'} data-menu="notification" onClick={this.clickMenu}>通知の個別設定</div>
+              <h1 className="appicon">基本設定</h1>
+              <div className={this.state.selectedMenu === 'auto' ? 'item selected' : 'item'} data-menu="auto" onClick={this.clickMenu}>自動枠移動・自動入場</div>
+              <div className={this.state.selectedMenu === 'notification' ? 'item selected' : 'item'} data-menu="notification" onClick={this.clickMenu}>通知</div>
+              <div className={this.state.selectedMenu === 'popup' ? 'item selected' : 'item'} data-menu="popup" onClick={this.clickMenu}>ポップアップ</div>
+            </div>
+            <div className="wrapper menu float-left">
+              <h1 className="appicon">リストの管理</h1>
+              <div className={this.state.selectedMenu === 'specify-notification' ? 'item selected' : 'item'} data-menu="specify-notification" onClick={this.clickMenu}>通知の個別設定</div>
               <div className={this.state.selectedMenu === 'auto-program' ? 'item selected' : 'item'} data-menu="auto-program" onClick={this.clickMenu}>自動入場リスト（番組）</div>
               <div className={this.state.selectedMenu === 'auto-community' ? 'item selected' : 'item'} data-menu="auto-community" onClick={this.clickMenu}>自動入場リスト（CH・コミュ）</div>
             </div>
@@ -145,15 +163,17 @@ export default class Settings extends React.Component {
               <div className={this.state.selectedMenu === 'bug-report' ? 'item selected' : 'item'} data-menu="bug-report" onClick={this.clickMenu}>不具合報告用に設定を取得</div>
               <div className={this.state.selectedMenu === 'help' ? 'item selected' : 'item'} data-menu="help" onClick={this.clickMenu}>にこさぽについて</div>
             </div>
+            <p id="console" style={{ color: '#24963e', marginTop: '10px', float: 'left' }}>{this.state.resultMessage}</p>
           </div>
           {(() => {
-            if (this.state.selectedMenu == 'basic') {
+            if (this.state.selectedMenu == 'auto') {
               return(
                 <div className="wrapper">
-                  <h1 className="appicon">基本設定</h1>
+                  <h1 className="appicon">自動枠移動・自動入場</h1>
                   <div className="items">
                     <div className="item">
                       <h3>自動次枠移動の更新間隔</h3>
+                      <p className='note green' style={{ marginBottom : '0.6em' }}> 音声や動画が頻繁に停止する場合は時間を長めに設定してください </p>
                       <select name="options.redirect.time"  onChange={this.onChange} value={this.state['options.redirect.time']}>
                         {this.state.selectableList.minuteList.map((d) =>
                           <option value={d}>
@@ -161,7 +181,6 @@ export default class Settings extends React.Component {
                           </option>
                         )}
                       </select>
-                      <p className='note red'> 音声や動画が頻繁に停止する場合は時間を長めに設定してください </p>
                     </div>
                     <div className="item">
                       <h3>自動次枠移動をデフォルトで「ON」にする</h3>
@@ -169,10 +188,42 @@ export default class Settings extends React.Component {
                       <label><input type="radio" name="options.autoJump.enable" value={'disable'} checked={this.state['options.autoJump.enable'] == 'disable'} onChange={this.onChange} /> 無効</label>
                     </div>
                     <div className="item">
-                      <h3>予約番組をポップアップに表示する</h3>
-                      <label><input type="radio" name="options.showReserved.enable" value={'enable'} checked={this.state['options.showReserved.enable'] == 'enable'} onChange={this.onChange} /> 有効</label>
-                      <label><input type="radio" name="options.showReserved.enable" value={'disable'} checked={this.state['options.showReserved.enable'] == 'disable'} onChange={this.onChange} /> 無効</label>
+                      <h3>PCをロックした状態，または離席状態のときは自動入場をキャンセルする</h3>
+                      <p className='note green' style={{ marginBottom : '0.3em' }}>離席時や就寝時に放送の音声が再生されることを防ぎます．</p>
+                      <label><input type="checkbox" name="options.autoEnter.cancelList" onChange={this.onChange} value="onLocked" checked={this.state['options.autoEnter.cancelList'].includes('onLocked')}/>ロック状態のときに有効</label>
+                      <label><input type="checkbox" name="options.autoEnter.cancelList" onChange={this.onChange} value="onIdled" checked={this.state['options.autoEnter.cancelList'].includes('onIdled')}/>離席状態のときに有効</label><br/>
                     </div>
+                    <div className="item">
+                      <h3>離席状態になるまでの時間</h3>
+                      <select name="options.idle.minute"  onChange={this.onChange} value={this.state['options.idle.minute']}>
+                        {this.state.selectableList.idleMinuteList.map((d) =>
+                          <option value={d}>
+                            {d}分
+                          </option>
+                        )}
+                      </select>
+                    </div>
+                    <div className="item">
+                      <h3>自動入場の状態を強制的に指定する</h3>
+                      現在の自動入場の状態は  {this.state['options.autoEnter.forceCancel'] == false ?
+                      <Button name="options.autoEnter.forceCancel" value={true} onClick={this.onChange} isPrimary={true} octicon="check" style={{ marginBottom: `25px`, marginTop: `5px` }} text=" 通常どおり入場" />
+                      :
+                      <Button name="options.autoEnter.forceCancel" value={false} onClick={this.onChange} octicon="circle-slash" className="danger" style={{ marginBottom: `25px`, marginTop: `5px` }} text=" すべてキャンセル" />
+                      } です
+                    </div>
+                  </div>
+                  <div>
+                  </div>
+                </div>
+              )
+            }
+          })()}
+          {(() => {
+            if (this.state.selectedMenu == 'notification') {
+              return(
+                <div className="wrapper">
+                  <h1 className="appicon">通知</h1>
+                  <div className="items">
                     <div className="item">
                       <h3>通知を放送開始時に表示する</h3>
                       <label><input type="radio" name="options.popup.enable" value={'enable'} checked={this.state['options.popup.enable'] == 'enable'} onChange={this.onChange} /> 有効</label>
@@ -185,7 +236,7 @@ export default class Settings extends React.Component {
                     </div>
                     <div className="item">
                       <h3>通知の表示位置</h3>
-                      <p style={{color:'#767676'}}>Google Chrome の仕様上変更できません．</p>
+                      <p className="note" style={{ fontSize: '13px' }}>Google Chrome の仕様上変更できません．</p>
                     </div>
                     <div className="item">
                       <h3>「放送開始のお知らせ」通知の表示時間</h3>
@@ -194,12 +245,12 @@ export default class Settings extends React.Component {
                     </div>
                     <div className="item">
                       <h3>通知音</h3>
+                      <p className='note green' style={{ marginBottom : '0.6em' }}>選択するとサンプル音が鳴ります</p>
                       <select name="options.soundfile" onChange={this.onChange} value={this.state['options.soundfile']}>
                         {this.state.selectableList.soundFiles.map((d) =>
                           <option value={d.path}>{d.text}</option>
                         )}
                       </select>
-                      <p className='note'>選択するとサンプル音が鳴ります</p>
                     </div>
                     <div className="item">
                       <h3>通知音のボリューム</h3>
@@ -207,17 +258,28 @@ export default class Settings extends React.Component {
                       <button className="soundtest" onClick={this.playSound}>音量テスト</button>
                     </div>
                   </div>
-                  <div>
-                    <Button id="save-all" onClick={this.saveSettings} isPrimary={true} style={{ marginLeft: `290px` }} text="設定を保存する" />
-                    {/*<input id="saveAll" type="submit" value="設定を保存する" onClick={this.saveSettings}/>*/}
-                    <p id="console" style={{color: '#24963e'}}>{this.state.resultMessage}</p>
+                </div>
+              )
+            }
+          })()}
+          {(() => {
+            if (this.state.selectedMenu == 'popup') {
+              return(
+                <div className="wrapper">
+                  <h1 className="appicon">ポップアップ</h1>
+                  <div className="items">
+                    <div className="item">
+                      <h3>予約番組をポップアップに表示する</h3>
+                      <label><input type="radio" name="options.showReserved.enable" value={'enable'} checked={this.state['options.showReserved.enable'] == 'enable'} onChange={this.onChange} /> 有効</label>
+                      <label><input type="radio" name="options.showReserved.enable" value={'disable'} checked={this.state['options.showReserved.enable'] == 'disable'} onChange={this.onChange} /> 無効</label>
+                    </div>
                   </div>
                 </div>
               )
             }
           })()}
           {(() => {
-            if (this.state.selectedMenu == 'notification') {
+            if (this.state.selectedMenu == 'specify-notification') {
               return(
                 <div className="wrapper">
                   <h1 className="appicon">通知の個別設定</h1>
@@ -296,7 +358,7 @@ export default class Settings extends React.Component {
             }
           })()}
           {(() => {
-            if (this.state.selectedMenu == 'basic') {
+            if (this.state.selectedMenu == 'auto') {
               return(
                 <div className="wrapper">
                   <h1 className="appicon">作者にカンパする</h1>
