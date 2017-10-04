@@ -43,7 +43,6 @@ export default class NewCastChecker {
   }
 
   checkNewCast() {
-    console.info('check');
     Api.isOpen(idHolder.liveId).then((response) => {
       if (response.isOpen) {
         if (_prolongReceiver) {

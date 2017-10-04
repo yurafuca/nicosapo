@@ -166,7 +166,7 @@ export default class NotificationList extends React.Component {
     return (
       <div>
         <div>
-          <p style={{ marginBottom: '2px', fontSize: '12px', marginTop: '10px', color: `#767676` }}>通知を表示するコミュニティを個別に設定します．「基本設定 > 通知を放送開始時に表示する」 の設定が優先されます．チャンネルの個別設定には対応していません．</p>
+          <p style={{ marginBottom: '2px', fontSize: '12px', marginTop: '10px', color: `#767676` }}>通知を表示するコミュニティを個別に設定します．「基本設定 > 自動枠移動・自動入場 > 通知を放送開始時に表示する」 の設定が優先されます．チャンネルの個別設定には対応していません．</p>
         </div>
         <div style={{ 'marginTop': '15px', 'marginBottom': '10px' }}>
           <Button id="save"        onClick={this.saveAll} isPrimary={true}  style={{ 'marginLeft': '10px' }} text="設定を保存する" />
