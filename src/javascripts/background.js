@@ -21,15 +21,18 @@ chrome.tabs.onRemoved.addListener((tabId) => {
 
 const idleMinute = store.get('options.idle.minute') || 10;
 chrome.idle.setDetectionInterval(Number(idleMinute) * 60);
+// chrome.idle.setDetectionInterval(15);
 
 chrome.idle.onStateChanged.addListener((newState) => {
   const cancelList = store.get('options.autoEnter.cancelList');
   switch(newState) {
     case 'active': {
+            console.log('active >>>>>>>>>>>>>>>>>');
       store.set('state.autoEnter.cancel', false);
       break;
     }
     case 'locked': {
+            console.log('locked ==============');
       const isCanceled = cancelList.includes('onLocked');
       if (isCanceled)
         store.set('state.autoEnter.cancel', true);
@@ -52,12 +55,15 @@ Common.sleep(7 * 1000).then(() => {
   setInterval(() => {
     const isForceCancel = store.get('options.autoEnter.forceCancel') || false;
     const isAutoCancel  = store.get('state.autoEnter.cancel') || false;
+    console.log(isForceCancel);
+    console.log(isAutoCancel);
     if (!isForceCancel && !isAutoCancel) {
+      console.log('enter');
       Promise.resolve()
         .then((new AutoEnterRunner()).run('live'))
         .then((new AutoEnterRunner()).run('community'));
     } else {
       console.log('Canceled auto enter.');
     }
-  }, 60 * 1000);
+  }, 2 * 1000);
 });
