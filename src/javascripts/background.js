@@ -21,31 +21,39 @@ chrome.tabs.onRemoved.addListener((tabId) => {
 
 const idleMinute = store.get('options.idle.minute') || 10;
 chrome.idle.setDetectionInterval(Number(idleMinute) * 60);
-// chrome.idle.setDetectionInterval(15);
 
 chrome.idle.onStateChanged.addListener((newState) => {
-  const cancelList = store.get('options.autoEnter.cancelList');
   switch(newState) {
     case 'active': {
-            console.log('active >>>>>>>>>>>>>>>>>');
       store.set('state.autoEnter.cancel', false);
       break;
     }
     case 'locked': {
-            console.log('locked ==============');
-      const isCanceled = cancelList.includes('onLocked');
-      if (isCanceled)
-        store.set('state.autoEnter.cancel', true);
+      // Ignore.
+      // Reason: Chrome 61 cannot detect "locked" correctly.
       break;
     }
     case 'idle': {
-      const isCanceled = cancelList.includes('onIdled');
+      const isCanceled = store.get('options.autoEnter.cancel.onIdle');
       if (isCanceled)
         store.set('state.autoEnter.cancel', true);
       break;
     }
   }
 });
+
+chrome.contextMenus.removeAll(() => {
+  chrome.contextMenus.create({
+    type: 'checkbox',
+    title: '自動入場を一時的に無効にする',
+    contexts: ['browser_action'],
+    checked: store.get('options.autoEnter.forceCancel'),
+    onclick: function () {
+      const currentValue = store.get('options.autoEnter.forceCancel');
+      store.set('options.autoEnter.forceCancel', !currentValue);
+    }
+  });
+})
 
 Badge.setBackgroundColor('#ff6200');
 Db.setAll('autoEnterCommunityList', 'state', 'init');
@@ -55,15 +63,12 @@ Common.sleep(7 * 1000).then(() => {
   setInterval(() => {
     const isForceCancel = store.get('options.autoEnter.forceCancel') || false;
     const isAutoCancel  = store.get('state.autoEnter.cancel') || false;
-    console.log(isForceCancel);
-    console.log(isAutoCancel);
     if (!isForceCancel && !isAutoCancel) {
-      console.log('enter');
       Promise.resolve()
         .then((new AutoEnterRunner()).run('live'))
         .then((new AutoEnterRunner()).run('community'));
     } else {
       console.log('Canceled auto enter.');
     }
-  }, 2 * 1000);
+  }, 60 * 1000);
 });

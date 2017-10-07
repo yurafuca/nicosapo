@@ -18,7 +18,6 @@ const INTERVAL = 6 * 1000;
 
 export default class AutoEnterRunner {
   run(requestType) {
-    console.log('----run----')
     new Promise((resolve) => {
       let storagedData = {};
       if (store.get(_keys[requestType])) {
