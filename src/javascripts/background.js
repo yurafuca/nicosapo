@@ -45,7 +45,7 @@ chrome.idle.onStateChanged.addListener((newState) => {
 chrome.contextMenus.removeAll(() => {
   chrome.contextMenus.create({
     type: 'checkbox',
-    title: '自動入場を一時的に無効にする',
+    title: '自動入場を手動で無効にする',
     contexts: ['browser_action'],
     checked: store.get('options.autoEnter.forceCancel'),
     onclick: function () {

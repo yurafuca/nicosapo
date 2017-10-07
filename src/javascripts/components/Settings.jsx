@@ -189,7 +189,7 @@ export default class Settings extends React.Component {
                       <label><input type="radio" name="options.autoJump.enable" value={'disable'} checked={this.state['options.autoJump.enable'] == 'disable'} onChange={this.onChange} /> 無効</label>
                     </div>
                     <div className="item">
-                      <h3>自動入場を離席状態のときに無効にする</h3>
+                      <h3>自動入場を離席状態のときに自動で無効にする</h3>
                       <p className='note green' style={{ marginBottom : '0.3em' }}>離席時や就寝時に放送の音声が再生されることを防ぎます．</p>
                       <label><input type="radio" name="options.autoEnter.cancel.onIdle" onChange={this.onChange} value={false} checked={!this.state['options.autoEnter.cancel.onIdle']}/>無効にしない（通常どおり入場）</label>
                       <label><input type="radio" name="options.autoEnter.cancel.onIdle" onChange={this.onChange} value={true} checked={this.state['options.autoEnter.cancel.onIdle']}/>無効にする</label><br/>
