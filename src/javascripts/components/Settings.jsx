@@ -52,7 +52,8 @@ export default class Settings extends React.Component {
       'options.playsound.enable':             'enable',
       'options.openingNotification.duration':  6,
       'options.playsound.volume':              1.0,
-      'options.autoEnter.cancelList':              [],
+      // 'options.autoEnter.cancelList':       [],
+      'options.autoEnter.cancel.onIdle':       false,
       'options.idle.minute':                   20
     };
     return state;
@@ -188,10 +189,10 @@ export default class Settings extends React.Component {
                       <label><input type="radio" name="options.autoJump.enable" value={'disable'} checked={this.state['options.autoJump.enable'] == 'disable'} onChange={this.onChange} /> 無効</label>
                     </div>
                     <div className="item">
-                      <h3>PCをロックした状態，または離席状態のときは自動入場をキャンセルする</h3>
+                      <h3>自動入場を離席状態のときに無効にする</h3>
                       <p className='note green' style={{ marginBottom : '0.3em' }}>離席時や就寝時に放送の音声が再生されることを防ぎます．</p>
-                      <label><input type="checkbox" name="options.autoEnter.cancelList" onChange={this.onChange} value="onLocked" checked={this.state['options.autoEnter.cancelList'].includes('onLocked')}/>ロック状態のときに有効</label>
-                      <label><input type="checkbox" name="options.autoEnter.cancelList" onChange={this.onChange} value="onIdled" checked={this.state['options.autoEnter.cancelList'].includes('onIdled')}/>離席状態のときに有効</label><br/>
+                      <label><input type="radio" name="options.autoEnter.cancel.onIdle" onChange={this.onChange} value={false} checked={!this.state['options.autoEnter.cancel.onIdle']}/>無効にしない（通常どおり入場）</label>
+                      <label><input type="radio" name="options.autoEnter.cancel.onIdle" onChange={this.onChange} value={true} checked={this.state['options.autoEnter.cancel.onIdle']}/>無効にする</label><br/>
                     </div>
                     <div className="item">
                       <h3>離席状態になるまでの時間</h3>
@@ -202,14 +203,6 @@ export default class Settings extends React.Component {
                           </option>
                         )}
                       </select>
-                    </div>
-                    <div className="item">
-                      <h3>自動入場の状態を強制的に指定する</h3>
-                      現在の自動入場の状態は  {this.state['options.autoEnter.forceCancel'] == false ?
-                      <Button name="options.autoEnter.forceCancel" value={true} onClick={this.onChange} isPrimary={true} octicon="check" style={{ marginBottom: `25px`, marginTop: `5px` }} text=" 通常どおり入場" />
-                      :
-                      <Button name="options.autoEnter.forceCancel" value={false} onClick={this.onChange} octicon="circle-slash" className="danger" style={{ marginBottom: `25px`, marginTop: `5px` }} text=" すべてキャンセル" />
-                      } です
                     </div>
                   </div>
                   <div>
@@ -360,7 +353,7 @@ export default class Settings extends React.Component {
           {(() => {
             if (this.state.selectedMenu == 'auto') {
               return(
-                <div className="wrapper">
+                <div className="wrapper" style={{ marginTop: '20px' }}>
                   <h1 className="appicon">作者にカンパする</h1>
                   <div className="items">
                     <span className="campa">にこさぽの開発を応援してくださる方はよろしくお願いします．今後の開発の励みになります．😘</span>
