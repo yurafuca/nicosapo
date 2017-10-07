@@ -23,26 +23,37 @@ const idleMinute = store.get('options.idle.minute') || 10;
 chrome.idle.setDetectionInterval(Number(idleMinute) * 60);
 
 chrome.idle.onStateChanged.addListener((newState) => {
-  const cancelList = store.get('options.autoEnter.cancelList');
   switch(newState) {
     case 'active': {
       store.set('state.autoEnter.cancel', false);
       break;
     }
     case 'locked': {
-      const isCanceled = cancelList.includes('onLocked');
-      if (isCanceled)
-        store.set('state.autoEnter.cancel', true);
+      // Ignore.
+      // Reason: Chrome 61 cannot detect "locked" correctly.
       break;
     }
     case 'idle': {
-      const isCanceled = cancelList.includes('onIdled');
+      const isCanceled = store.get('options.autoEnter.cancel.onIdle');
       if (isCanceled)
         store.set('state.autoEnter.cancel', true);
       break;
     }
   }
 });
+
+chrome.contextMenus.removeAll(() => {
+  chrome.contextMenus.create({
+    type: 'checkbox',
+    title: '自動入場を手動で無効にする',
+    contexts: ['browser_action'],
+    checked: store.get('options.autoEnter.forceCancel'),
+    onclick: function () {
+      const currentValue = store.get('options.autoEnter.forceCancel');
+      store.set('options.autoEnter.forceCancel', !currentValue);
+    }
+  });
+})
 
 Badge.setBackgroundColor('#ff6200');
 Db.setAll('autoEnterCommunityList', 'state', 'init');
