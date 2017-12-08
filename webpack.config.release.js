@@ -43,7 +43,11 @@ module.exports = [
         { from: 'src/stylesheets/switcher.css', to: '../stylesheets/switcher.css' },
         { from: 'src/stylesheets/balloon.min.css', to: '../stylesheets/balloon.min.css' },
         { from: 'src/stylesheets/animate.min.css', to: '../stylesheets/animate.min.css' },
-      ])
+      ]),
+      new webpack.DefinePlugin({
+        'process.env.NODE_ENV': JSON.stringify('production')
+      }),
+      new webpack.optimize.UglifyJsPlugin()
     ],
     resolve: {
       extensions: [
