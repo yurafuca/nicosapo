@@ -1,4 +1,4 @@
-import _ from 'lodash'
+import _ from "lodash";
 
 export default class FollowingCommunities {
   constructor() {
@@ -8,7 +8,7 @@ export default class FollowingCommunities {
 
   query(q) {
     let result = null;
-    switch(q) {
+    switch (q) {
       case `ALL`:
         result = this._all();
         break;
@@ -21,14 +21,13 @@ export default class FollowingCommunities {
     return result;
   }
 
-
   _onlyJustFollowed() {
     if (this.current === null) {
       throw new Error(`current is null.`);
     }
-    const communities = this.current.filter((communityId) => {
+    const communities = this.current.filter(communityId => {
       const empty = [];
-      return !_.includes((this.previous || empty), communityId);
+      return !_.includes(this.previous || empty, communityId);
     });
     return communities;
   }

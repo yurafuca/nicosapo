@@ -39,10 +39,6 @@
     "react/jsx-uses-vars": "error"
   },
   "parserOptions": {
-    "sourceType": "module",
-    "ecmaFeatures": {
-      "experimentalObjectRestSpread": true,
-      "jsx": true
-    }
+    "sourceType": "module"
   }
 }

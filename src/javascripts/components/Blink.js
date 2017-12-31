@@ -1,5 +1,5 @@
-import blacklist from 'blacklist';
-import React from 'react';
+import blacklist from "blacklist";
+import React from "react";
 
 let _isMounted;
 
@@ -13,7 +13,7 @@ export default class Blink extends React.Component {
     return { visible: true };
   }
 
-  blink () {
+  blink() {
     if (!_isMounted) {
       return;
     }
@@ -21,7 +21,7 @@ export default class Blink extends React.Component {
     setTimeout(this.blink.bind(this), 400);
   }
 
-  componentDidMount () {
+  componentDidMount() {
     _isMounted = true;
     this.blink();
   }
@@ -30,11 +30,9 @@ export default class Blink extends React.Component {
     _isMounted = false;
   }
 
-  render () {
-    const props = blacklist(this.props, 'children', 'duration');
-    props.style = { visibility: this.state.visible ? 'visible' : 'hidden' };
-    return (
-      <span style={props.style}>{this.props.children}</span>
-    );
+  render() {
+    const props = blacklist(this.props, "children", "duration");
+    props.style = { visibility: this.state.visible ? "visible" : "hidden" };
+    return <span style={props.style}>{this.props.children}</span>;
   }
 }

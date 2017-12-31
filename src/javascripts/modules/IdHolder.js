@@ -1,7 +1,7 @@
-import $ from 'jquery'
+import $ from "jquery";
 
 function getLiveId() {
-  const url = $('meta[property="og:url"]').attr('content');
+  const url = $('meta[property="og:url"]').attr("content");
   const re = /http:\/\/live\.nicovideo\.jp\/watch\/lv([0-9]+)/;
 
   if (re.exec(url)) {
@@ -13,7 +13,7 @@ function getLiveId() {
 }
 
 function getCommunityId() {
-  const communityUrl1 = $('meta[property="og:image"]').attr('content');
+  const communityUrl1 = $('meta[property="og:image"]').attr("content");
   const re1 = /http:\/\/icon\.nimg\.jp\/(community|channel).*((ch|co)[0-9]+)\.jpg.*/;
 
   // ユーザ放送
@@ -22,7 +22,7 @@ function getCommunityId() {
     return communityId;
   }
 
-  const communityUrl2 = $('a.ch_name').attr('href');
+  const communityUrl2 = $("a.ch_name").attr("href");
   const re2 = /http:\/\/(com|ch)\.nicovideo\.jp\/(community|channel)\/([\x21-\x7e]+)/;
 
   // チャンネル放送/公式放送

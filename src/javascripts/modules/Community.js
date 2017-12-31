@@ -1,12 +1,12 @@
-import $ from 'jquery';
+import $ from "jquery";
 
 export default class Community {
   constructor() {
     this.content = $(this._xml());
     this.table = {
-      id:        `id`,
-      thumbnail: `thumbnail`,
-    }
+      id: `id`,
+      thumbnail: `thumbnail`
+    };
   }
 
   set(prop, value) {
@@ -31,6 +31,6 @@ export default class Community {
         <thumbnail></thumbnail>
         <thumbnail_small></thumbnail_small>
       </community>
-    `
+    `;
   }
 }

@@ -1,35 +1,35 @@
-import store from 'store'
-import NiconamaTabs from '../modules/NiconamaTabs'
+import store from "store";
+import NiconamaTabs from "../modules/NiconamaTabs";
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if (request.purpose == 'NiconamaTabs.add') {
+  if (request.purpose == "NiconamaTabs.add") {
     NiconamaTabs.add(sender.tab.id, request.id, request.scrollTop);
-  } 
+  }
 
-  if (request.purpose == 'NiconamaTabs.remove') {
+  if (request.purpose == "NiconamaTabs.remove") {
     NiconamaTabs.remove(sender.tab.id);
   }
 
-  if (request.purpose == 'NiconamaTabs.get') {
+  if (request.purpose == "NiconamaTabs.get") {
     sendResponse(NiconamaTabs.get(sender.tab.id));
   }
 
-  if (request.purpose == 'getFromLocalStorage') {
+  if (request.purpose == "getFromLocalStorage") {
     sendResponse(store.get(request.key));
     return;
   }
 
-  if (request.purpose == 'saveToLocalStorage') {
+  if (request.purpose == "saveToLocalStorage") {
     store.set(request.key, request.value);
     return;
   }
 
-  if (request.purpose == 'removeFromLocalStorage') {
+  if (request.purpose == "removeFromLocalStorage") {
     store.remove(request.key);
     return;
   }
 
-  if (request.purpose == 'getFromNestedLocalStorage') {
+  if (request.purpose == "getFromNestedLocalStorage") {
     let storagedData = {};
     if (store.get(request.key)) {
       storagedData = store.get(request.key);
@@ -38,7 +38,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   }
 
   // localStorage->{id->{state, test, ...}, id->{state, test, ...}}
-  if (request.purpose == 'saveToNestedLocalStorage') {
+  if (request.purpose == "saveToNestedLocalStorage") {
     let storagedData = {};
     if (store.get(request.key)) {
       storagedData = store.get(request.key);
@@ -71,12 +71,15 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     sendResponse();
   }
 
-  if (request.purpose == 'removeFromNestedLocalStorage') {
+  if (request.purpose == "removeFromNestedLocalStorage") {
     let storagedData = {};
     if (store.get(request.key)) {
       storagedData = store.get(request.key);
     }
-    console.info('[nicosapo] Delete storagedData[innerKey] ', storagedData[request.innerKey]);
+    console.info(
+      "[nicosapo] Delete storagedData[innerKey] ",
+      storagedData[request.innerKey]
+    );
     delete storagedData[request.innerKey];
     store.set(request.key, storagedData);
     return;

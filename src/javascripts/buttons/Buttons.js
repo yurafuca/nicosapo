@@ -1,15 +1,14 @@
-import $ from 'jquery'
+import $ from "jquery";
 import IdHolder from "../modules/IdHolder";
 
-export default class Buttons
-{
+export default class Buttons {
   constructor() {
-      this.$template = $(`
+    this.$template = $(`
           <span class="on_off_button">
               <a class="link"></a>
           </span>
       `);
-      this.$balloon = this.$template.find('.link');
+    this.$balloon = this.$template.find(".link");
   }
 
   _make() {
@@ -17,11 +16,11 @@ export default class Buttons
   }
 
   getClassName() {
-      // Must to be Override.
+    // Must to be Override.
   }
 
   getDom() {
-      // Must to be Override.
+    // Must to be Override.
   }
 
   toggleOn() {

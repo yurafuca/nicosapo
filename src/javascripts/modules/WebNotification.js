@@ -1,18 +1,31 @@
-import $ from 'jquery'
-import store from 'store'
+import $ from "jquery";
+import store from "store";
 
 export default class WebNotification {
   show(videoInfo) {
     const $newInfos = $(videoInfo);
     const options = {
-      body: $newInfos.first().find('video title').text(),
-      icon: $newInfos.first().find('community thumbnail').text(),
-      tag:  $newInfos.first().find('video id').text()
+      body: $newInfos
+        .first()
+        .find("video title")
+        .text(),
+      icon: $newInfos
+        .first()
+        .find("community thumbnail")
+        .text(),
+      tag: $newInfos
+        .first()
+        .find("video id")
+        .text()
     };
-    const duration = store.get('options.openingNotification.duration') || 6;
-    const notification = new Notification('放送開始のお知らせ', options);
-    setTimeout(() => { this._timeOut(notification) }, duration * 1000);
-    notification.onclick = (e) => { this._onClick(e) };
+    const duration = store.get("options.openingNotification.duration") || 6;
+    const notification = new Notification("放送開始のお知らせ", options);
+    setTimeout(() => {
+      this._timeOut(notification);
+    }, duration * 1000);
+    notification.onclick = e => {
+      this._onClick(e);
+    };
   }
 
   _timeOut(notificatin) {

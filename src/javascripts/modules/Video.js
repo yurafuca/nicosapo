@@ -1,14 +1,14 @@
-import $ from 'jquery';
+import $ from "jquery";
 
 export default class Video {
   constructor() {
     this.content = $(this._xml());
     this.table = {
-      title:      `title`,
-      id:         `id`,
+      title: `title`,
+      id: `id`,
       openTimeJp: `open_time_jpstr`,
-      isReserved: `is_reserved`,
-    }
+      isReserved: `is_reserved`
+    };
   }
 
   set(prop, value) {
@@ -47,6 +47,6 @@ export default class Video {
         <is_hq></is_hq>
         <is_reserved></is_reserved>
       </video>
-    `
+    `;
   }
 }

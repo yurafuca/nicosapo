@@ -1,31 +1,37 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React from "react";
+import ReactDOM from "react-dom";
 
 export default class AutoEnterItem extends React.Component {
   render() {
     return (
       <div className="listgroup-item clearfix">
         <div className="nudge-down BtnGroup float-right">
-          <a href=""
+          <a
+            href=""
             className="btn btn-sm btn-danger BtnGroup-item"
             rel="facebox"
             data-id={this.props.id}
             data-type={this.props.type}
-            onClick={this.props.onClick.bind(this, this.props.id)}>
+            onClick={this.props.onClick.bind(this, this.props.id)}
+          >
             削除
           </a>
         </div>
         <div className="list-group-text-block float-left">
-          <img alt=""
+          <img
+            alt=""
             className="avatar"
             height="40"
             src={this.props.thumbnail}
-            width="40" />
+            width="40"
+          />
           <span className="meta-title">
-            <a href=""
+            <a
+              href=""
               target="_blank"
               className="developer-app-name"
-              href={this.props.url}>
+              href={this.props.url}
+            >
               {this.props.title}
             </a>
           </span>

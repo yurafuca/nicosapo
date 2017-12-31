@@ -9,7 +9,6 @@ import OfficialCastPage from "./page/OfficialCastPage";
 import TimeShiftPage from "./page/TimeShiftPage";
 import CommunityPage from "./page/CommunityPage";
 import ChannelPage from "./page/ChannelPage";
-import CastPage from "./page/CastPage";
 
 const formatNicoPage = new FormatNicoPage();
 

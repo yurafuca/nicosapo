@@ -1,4 +1,3 @@
-import Page from '../page/Page'
+import Page from "../page/Page";
 
-export default class NonCastPage extends Page {
-}
+export default class NonCastPage extends Page {}

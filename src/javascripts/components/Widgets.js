@@ -1,11 +1,11 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import ExBar from '../components/ExBar';
-import NewCastChecker from '../modules/NewCastChecker';
-import AutoScrollButton from '../buttons/AutoScrollButton';
-import AutoRedirectButton from '../buttons/AutoRedirectButton';
-import AutoEnterCommunityButton from '../buttons/AutoEnterCommunityButton';
-import AutoEnterProgramButton from '../buttons/AutoEnterProgramButton';
+import React from "react";
+import ReactDOM from "react-dom";
+import ExBar from "../components/ExBar";
+import NewCastChecker from "../modules/NewCastChecker";
+import AutoScrollButton from "../buttons/AutoScrollButton";
+import AutoRedirectButton from "../buttons/AutoRedirectButton";
+import AutoEnterCommunityButton from "../buttons/AutoEnterCommunityButton";
+import AutoEnterProgramButton from "../buttons/AutoEnterProgramButton";
 
 const _newCastChecker = new NewCastChecker();
 
@@ -20,7 +20,7 @@ function prependChild(newNode, parentNode) {
 export default class Widgets extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { response: '' };
+    this.state = { response: "" };
   }
 
   putButtons() {
@@ -28,8 +28,8 @@ export default class Widgets extends React.Component {
      * MESSAGE
      */
     if (this.props.buttonOrder === `MESSAGE`) {
-      const parent = document.getElementsByClassName('meta')[0];
-      const child = document.createElement('span');
+      const parent = document.getElementsByClassName("meta")[0];
+      const child = document.createElement("span");
       child.textContent = this.props.message;
       parent.appendChild(child);
       return;
@@ -38,9 +38,9 @@ export default class Widgets extends React.Component {
      * DEFAULT
      */
     const parent = this.props.element4Buttons;
-    const child = document.createElement('div');
-    child.id = 'nicosapo_buttons';
-    switch(this.props.position) {
+    const child = document.createElement("div");
+    child.id = "nicosapo_buttons";
+    switch (this.props.position) {
       case `APPEND`:
         parent.appendChild(child);
         break;
@@ -67,18 +67,18 @@ export default class Widgets extends React.Component {
       buttonDoms.push(<AutoRedirectButton notify={this._recieveNotify} />);
     }
     if (this.props.enableACButton) {
-      buttonDoms.push(<AutoEnterCommunityButton />)
+      buttonDoms.push(<AutoEnterCommunityButton />);
     }
     if (this.props.enableAPButton) {
       buttonDoms.push(<AutoEnterProgramButton />);
     }
     let wrapper = null;
     if (this.props.requireInline) {
-      wrapper = <div style={{display: 'inline-block'}}>{buttonDoms}</div>;
+      wrapper = <div style={{ display: "inline-block" }}>{buttonDoms}</div>;
     } else {
       wrapper = <div>{buttonDoms}</div>;
     }
-    return(wrapper);
+    return wrapper;
   }
 
   _prolongReceiver(response) {
@@ -94,7 +94,9 @@ export default class Widgets extends React.Component {
   }
 
   render() {
-    const exBar = (this.props.enableExBar) ? <ExBar response={this.state.response}/> : null;
-    return(exBar);
+    const exBar = this.props.enableExBar ? (
+      <ExBar response={this.state.response} />
+    ) : null;
+    return exBar;
   }
 }
