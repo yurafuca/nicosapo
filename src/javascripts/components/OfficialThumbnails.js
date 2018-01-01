@@ -1,31 +1,38 @@
 import $ from "jquery";
 import React from "react";
+import GeneralThumbnails from "./GeneralThumbnails";
 import Thumbnail from "../components/Thumbnail";
 
-export default class OfficialThumbnails extends React.Component {
+export default class OfficialThumbnails extends GeneralThumbnails {
   constructor(props) {
     super(props);
     this.state = {
-      programs: props.programs || [],
+      loading: true,
+      programs: [],
       thumbParams: []
     };
+    this.setParams = this.setParams.bind(this);
   }
 
   componentDidMount() {
-    this.setParams();
+    super.loadCasts(this.props.genre, this.setParams);
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setState({ programs: nextProps.programs }, this.setParams);
+    this.setState({ loading: true, thumbParams: [] }, () => {
+      super.loadCasts(nextProps.genre, this.setParams);
+    });
+
+    // this.setState({ programs: nextProps.programs }, this.setParams);
   }
 
-  setParams() {
-    if (this.state.programs == null) {
+  setParams(programs) {
+    if (programs == null) {
       this.setState({ thumbParams: [] });
       return;
     }
     const thumbParams = [];
-    this.state.programs.forEach((program, index) => {
+    programs.forEach((program, index) => {
       const thumbParam = {};
       const $program = $(program);
       const communityId = $program.find(".video_text a").attr("href");
@@ -47,8 +54,28 @@ export default class OfficialThumbnails extends React.Component {
         ? `20${$program.find(".time").text()} 開場`
         : undefined;
       thumbParams.push(thumbParam);
-      if (index == this.state.programs.length - 1) {
-        this.setState({ thumbParams: thumbParams });
+      if (index == programs.length - 1) {
+        this.setState({
+          thumbParams: thumbParams.slice(0, 99),
+          loading: false
+        });
+        // setTimeout(() => {
+        //   this.setState({
+        //     thumbParams: thumbParams.slice(0, thumbParams.length - 1)
+        //   });
+        // }, 1000);
+        // const step = 6;
+        // let endId = 0;
+        // const timer = setInterval(() => {
+        //   this.setState({
+        //     thumbParams: thumbParams.slice(0, endId + step),
+        //     loading: false
+        //   });
+        //   endId += step;
+        //   if (endId >= 31) {
+        //     clearInterval(timer);
+        //   }
+        // }, 10);
       }
     });
   }
@@ -58,7 +85,7 @@ export default class OfficialThumbnails extends React.Component {
       return <div id="container" />;
     }
     return (
-      <div id="container">
+      <div id="container" className={this.state.loading ? "nowloading" : ""}>
         {this.state.thumbParams.map(thumbParam => (
           <Thumbnail
             key={thumbParam.id}

@@ -1,61 +1,57 @@
 {
-    "name": "にこさぽ （ニコ生サポート）",
-    "short_name": "にこさぽ",
-    "manifest_version": 2,
-    "version": "2.5.2",
-    "browser_action": {
-        "default_icon": "images/icon.png",
-        "default_title": "放送中の番組を確認する",
-        "default_popup": "html/popup.html"
-    },
-    "description": "[ニコニコ生放送] 自動枠移動（新配信（β）対応） / 自動入場 / 放送中の番組を一覧表示 / デスクトップ通知 / 延長通知 / 番組の残り時間を表示 をサポートします．",
-    "icons": {
-        "16": "images/icon.png",
-        "32": "images/icon.png",
-        "64": "images/icon.png"
-    },
-    "permissions": [
-        "alarms",
-        "notifications",
-        "tabs",
-        "idle",
-        "contextMenus",
-        "http://www.nicovideo.jp/",
-        "https://secure.nicovideo.jp/",
-        "http://live.nicovideo.jp/",
-        "http://api.ce.nicovideo.jp/",
-        "http://icon.nimg.jp/community/",
-        "http://flapi.nicovideo.jp/api/",
-        "http://watch.live.nicovideo.jp/",
-        "http://live2.nicovideo.jp/",
-        "http://live.nicovideo.jp/gate/",
-        "http://api.search.nicovideo.jp/"
-    ],
-    "background": {
-        "scripts": [
-            "javascripts/background.js"
-        ]
-    },
-    "content_scripts": [{
-        "matches": [
-            "http://live.nicovideo.jp/watch/*",
-            "http://live2.nicovideo.jp/watch/*",
-            "http://live.nicovideo.jp/gate/*",
-            "http://com.nicovideo.jp/community/*",
-            "http://ch.nicovideo.jp/*"
-        ],
-        "js": [
-            "javascripts/content.js"
-        ],
-        "css": [
-            "stylesheets/content.css",
-            "stylesheets/balloon.min.css",
-            "stylesheets/animate.min.css"
-        ]
-    }],
-    "options_page": "html/options.html",
-    "web_accessible_resources": [
-        "images/icon.png",
-        "images/radio.png"
-    ]
+  "name": "にこさぽ （ニコ生サポート）",
+  "short_name": "にこさぽ",
+  "manifest_version": 2,
+  "version": "2.5.2",
+  "browser_action": {
+    "default_icon": "images/icon.png",
+    "default_title": "放送中の番組を確認する",
+    "default_popup": "html/popup.html"
+  },
+  "description":
+    "[ニコニコ生放送] 自動枠移動（新配信（β）対応） / 自動入場 / 放送中の番組を一覧表示 / デスクトップ通知 / 延長通知 / 番組の残り時間を表示 をサポートします．",
+  "icons": {
+    "16": "images/icon.png",
+    "32": "images/icon.png",
+    "64": "images/icon.png"
+  },
+  "permissions": [
+    "alarms",
+    "notifications",
+    "tabs",
+    "idle",
+    "contextMenus",
+    "http://www.nicovideo.jp/",
+    "https://secure.nicovideo.jp/",
+    "http://live.nicovideo.jp/",
+    "http://api.ce.nicovideo.jp/",
+    "http://icon.nimg.jp/community/",
+    "http://flapi.nicovideo.jp/api/",
+    "http://watch.live.nicovideo.jp/",
+    "http://live2.nicovideo.jp/",
+    "http://live.nicovideo.jp/gate/",
+    "http://api.search.nicovideo.jp/"
+  ],
+  "background": {
+    "scripts": ["javascripts/background.js"]
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "http://live.nicovideo.jp/watch/*",
+        "http://live2.nicovideo.jp/watch/*",
+        "http://live.nicovideo.jp/gate/*",
+        "http://com.nicovideo.jp/community/*",
+        "http://ch.nicovideo.jp/*"
+      ],
+      "js": ["javascripts/content.js"],
+      "css": [
+        "stylesheets/content.css",
+        "stylesheets/balloon.min.css",
+        "stylesheets/animate.min.css"
+      ]
+    }
+  ],
+  "options_page": "html/options.html",
+  "web_accessible_resources": ["images/icon.png", "images/radio.png"]
 }

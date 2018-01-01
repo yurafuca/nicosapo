@@ -1,28 +1,32 @@
 import $ from "jquery";
 import React from "react";
 import store from "store";
+import GeneralThumbnails from "./GeneralThumbnails";
 import Thumbnail from "../components/Thumbnail";
 
-export default class UserThumbnails extends React.Component {
+export default class UserThumbnails extends GeneralThumbnails {
   constructor(props) {
     super(props);
     this.state = {
-      programs: props.programs || [],
+      loading: true,
+      programs: [],
       thumbParams: []
     };
+    this.setParams = this.setParams.bind(this);
   }
 
   componentDidMount() {
-    this.setParams();
+    // this.setParams();
+    super.loadCasts("user", this.setParams);
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setState({ programs: nextProps.programs }, this.setParams);
+    // this.setState({ programs: nextProps.programs }, this.setParams);
   }
 
-  setParams() {
+  setParams(programs) {
     const thumbParams = [];
-    this.state.programs.forEach((program, index) => {
+    programs.forEach((program, index) => {
       const thumbParam = {};
       const $program = $(program);
       const thumbnailUrl = $program.find("community thumbnail").text();
@@ -51,8 +55,11 @@ export default class UserThumbnails extends React.Component {
       ) {
         thumbParams.push(thumbParam);
       }
-      if (index == this.state.programs.length - 1) {
-        this.setState({ thumbParams: thumbParams });
+      if (index == programs.length - 1) {
+        this.setState({
+          thumbParams: thumbParams,
+          loading: false
+        });
       }
     });
   }
@@ -66,7 +73,7 @@ export default class UserThumbnails extends React.Component {
 
   render() {
     return (
-      <div id="container">
+      <div id="container" className={this.state.loading ? "nowloading" : ""}>
         {this.state.thumbParams.map(thumbParam => (
           <Thumbnail
             key={thumbParam.id}
@@ -82,7 +89,7 @@ export default class UserThumbnails extends React.Component {
             index={thumbParam.index}
           />
         ))}
-      </div> // TODO: delete container
+      </div>
     );
   }
 }

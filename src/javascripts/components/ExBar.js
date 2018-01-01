@@ -128,10 +128,6 @@ export default class ExBar extends React.Component {
     this.setState({ doBlink: false });
   }
 
-  // <div className="radio-badge-wrapper">
-  //   <div className="radio-badge"></div>
-  // </div>
-
   render() {
     return (
       <div>

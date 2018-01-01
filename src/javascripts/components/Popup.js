@@ -5,57 +5,24 @@ import UserThumbnails from "../components/UserThumbnails";
 import OfficialThumbnails from "../components/OfficialThumbnails";
 import SearchContent from "../components/SearchContent";
 
-const _split = (arr, count) => {
-  const splitted = [];
-  for (let i = 0; i < Math.ceil(arr.length / count); i++) {
-    const j = i * count;
-    const p = arr.slice(j, j + count);
-    splitted.push(p);
-  }
-  return splitted;
-};
-
-const _link = arr => {
-  const linked = [];
-  for (let i = 0; i < arr.length; i++) {
-    const inner = [];
-    if (i > 0) {
-      for (let j = 0; j < linked[i - 1].length; j++) {
-        inner.push(linked[i - 1][j]);
-      }
-    }
-
-    for (let j = 0; j < arr[i].length; j++) {
-      inner.push(arr[i][j]);
-    }
-    linked.push(inner);
-  }
-  return linked;
-};
-
 export default class Popup extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedTab: "user",
-      loading: true,
-      videoInfoList: []
+      selectedTab: "user"
     };
-    this.loadCasts = this.loadCasts.bind(this);
     this.toggleTab = this.toggleTab.bind(this);
-    this.onToggleRadio = this.onToggleRadio.bind(this);
 
     Api.isLogined()
       .then(() => {
         this.setState({ isLogined: true });
       })
       .catch(() => {
-        this.setState({ isLogined: false, loading: false });
+        // this.setState({ isLogined: false, loading: false });
       });
   }
 
   componentDidMount() {
-    this.loadCasts("user");
     if (store.get("options.showReserved.enable") == "enable") {
       this.setState({ showReserve: false });
     } else {
@@ -63,21 +30,12 @@ export default class Popup extends React.Component {
     }
   }
 
-  loadCasts() {
-    this.setState({ loading: true }, () => {
-      Api.loadCasts(this.state.selectedTab).then(videoInfoList => {
-        this.setState({ loading: false });
-        // 体感パフォーマンス対策．放送データを分割してsetTimeoutで段階的に処理する．
-        // 一度に setState するとプログレスリングが一瞬止まる．
-        const splitted = _split(videoInfoList, 30);
-        const linked = _link(splitted);
-        linked.forEach((item, index) => {
-          setTimeout(() => {
-            this.setState({ videoInfoList: item });
-          }, index * 3);
-        });
-      });
-    });
+  shouldComponentUpdate(nextProps, nextState) {
+    const selectedTab = {
+      prev: this.state.selectedTab,
+      next: nextState.selectedTab
+    };
+    return true;
   }
 
   toggleTab(e) {
@@ -86,38 +44,25 @@ export default class Popup extends React.Component {
     }
     switch (e.target.id) {
       case "user":
-        this.setState(
-          { selectedTab: "user", videoInfoList: [] },
-          this.loadCasts()
-        );
+        this.setState({ selectedTab: "user", videoInfoList: [] });
         break;
       case "official":
-        this.setState(
-          { selectedTab: "official", videoInfoList: null },
-          this.loadCasts()
-        );
+        this.setState({ selectedTab: "official", videoInfoList: [] });
         break;
       case "future":
-        this.setState(
-          { selectedTab: "future", videoInfoList: null },
-          this.loadCasts()
-        );
+        this.setState({ selectedTab: "future", videoInfoList: [] });
         break;
       case "search":
-        this.setState(
-          { selectedTab: "search", videoInfoList: null, loading: false },
-          this.loadCasts()
-        );
+        this.setState({
+          selectedTab: "search",
+          videoInfoList: [],
+          loading: false
+        });
         break;
       default:
-        this.setState({ selectedTab: "user" }, this.loadCasts());
+        this.setState({ selectedTab: "user" });
         break;
     }
-  }
-
-  onToggleRadio() {
-    this.setState({ enableRadioMode: !this.state.enableRadioMode });
-    store.set("enabledRadioMode", this.state.enableRadioMode);
   }
 
   render() {
@@ -208,13 +153,13 @@ export default class Popup extends React.Component {
                   </div>
                 );
               }
-              return <UserThumbnails programs={this.state.videoInfoList} />;
+              return <UserThumbnails />;
             }
             if (
               this.state.selectedTab === "official" ||
               this.state.selectedTab === "future"
             ) {
-              return <OfficialThumbnails programs={this.state.videoInfoList} />;
+              return <OfficialThumbnails genre={this.state.selectedTab} />;
             }
             if (this.state.selectedTab === "search") {
               return <SearchContent />;

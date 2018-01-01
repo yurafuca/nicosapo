@@ -110,7 +110,7 @@ export default class SearchContent extends React.Component {
 
   render() {
     return (
-      <div>
+      <div id="container" className={this.state.isLoading ? "nowloading" : ""}>
         <form id="search-container">
           <select
             id="search-sort"
@@ -168,10 +168,7 @@ export default class SearchContent extends React.Component {
               : ""}見つかりました．
           </span>
         </div>
-        <div
-          id="container"
-          className={this.state.isLoading ? "nowloading" : ""}
-        >
+        <div>
           {this.state.thumbParams.map(thumbParam => (
             <ListItem
               title={thumbParam.title}
