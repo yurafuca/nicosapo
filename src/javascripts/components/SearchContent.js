@@ -110,7 +110,7 @@ export default class SearchContent extends React.Component {
 
   render() {
     return (
-      <div id="container" className={this.state.isLoading ? "nowloading" : ""}>
+      <div>
         <form id="search-container">
           <select
             id="search-sort"
@@ -143,43 +143,46 @@ export default class SearchContent extends React.Component {
             お気に入りに登録
           </span>
         </form>
-        <div id="favorite-query-list">
-          <span className="favorite-query-head">お気に入り</span>
-          {this.state.query_favorite.map(query => (
-            <span
-              className="favorite-query"
-              onClick={this.setQuery}
-              data-query={query}
-            >
-              {query}
-              <span className={this.state.query_last == query ? "" : "none"}>
-                <span className="query-remove" onClick={this.removeQuery}>
-                  削除
+        <div
+          id="container"
+          className={this.state.isLoading ? "nowloading search" : "search"}
+        >
+          <div id="favorite-query-list">
+            <span className="favorite-query-head">お気に入り</span>
+            {this.state.query_favorite.map(query => (
+              <span
+                className="favorite-query"
+                onClick={this.setQuery}
+                data-query={query}
+              >
+                {query}
+                <span className={this.state.query_last == query ? "" : "none"}>
+                  <span className="query-remove" onClick={this.removeQuery}>
+                    削除
+                  </span>
                 </span>
               </span>
+            ))}
+          </div>
+          <div id="result">
+            <span>
+              {this.state.query_last} に該当する放送が {this.state.resultCount}{" "}
+              件{this.state.resultCount >= 100 ? "以上" : ""}見つかりました．
             </span>
-          ))}
-        </div>
-        <div id="result">
-          <span>
-            {this.state.query_last} に該当する放送が {this.state.resultCount} 件{this
-              .state.resultCount >= 100
-              ? "以上"
-              : ""}見つかりました．
-          </span>
-        </div>
-        <div>
-          {this.state.thumbParams.map(thumbParam => (
-            <ListItem
-              title={thumbParam.title}
-              url={thumbParam.url}
-              description={thumbParam.description}
-              thumbnail={thumbParam.thumbnail}
-              viewCounter={thumbParam.viewCounter}
-              commentCounter={thumbParam.commentCounter}
-              lapsedTime={thumbParam.lapsedTime}
-            />
-          ))}
+          </div>
+          <div>
+            {this.state.thumbParams.map(thumbParam => (
+              <ListItem
+                title={thumbParam.title}
+                url={thumbParam.url}
+                description={thumbParam.description}
+                thumbnail={thumbParam.thumbnail}
+                viewCounter={thumbParam.viewCounter}
+                commentCounter={thumbParam.commentCounter}
+                lapsedTime={thumbParam.lapsedTime}
+              />
+            ))}
+          </div>
         </div>
       </div>
     );
