@@ -43,17 +43,19 @@ $url_1: url(/images/icon.png);
 html {
   display: table;
   background: red;
-  height: 300px;
 }
 body {
   display: table-cell;
-  min-width: 458px;
+  // width: 458px !important;
   margin: 0;
   padding: 0;
   color: $color_mine_shaft_approx;
   border: 1px solid $color_iron_approx;
   //Instead of the line below you could use @include border-radius($radius, $vertical-radius)
   border-radius: 3px;
+}
+#nicosapo {
+  // width: 458px;
 }
 #dummy-tooltip {
   position: absolute;
@@ -131,15 +133,17 @@ a {
   }
 }
 #communities {
-  min-height: 65px;
   padding-bottom: 5px;
-  #container {
-    overflow-y: scroll;
-    width: 473px;
-    max-height: 520px;
-    &.search {
-      max-height: 492px;
-    }
+}
+#container {
+  overflow-y: scroll;
+  width: 473px;
+
+  // width: 458px;
+
+  max-height: 520px;
+  &.search {
+    max-height: 492px;
   }
 }
 .nowloading {
@@ -520,8 +524,7 @@ a {
     background: #ddd;
   }
   &:active {
-    background: #ccc;
-    // color: #bbb;
+    background: #ccc; // color: #bbb;
   }
 }
 .none {

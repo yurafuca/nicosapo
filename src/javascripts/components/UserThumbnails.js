@@ -72,9 +72,10 @@ export default class UserThumbnails extends GeneralThumbnails {
   }
 
   render() {
-    return (
-      <div id="container" className={this.state.loading ? "nowloading" : ""}>
-        {this.state.thumbParams.map(thumbParam => (
+    let content;
+    if (this.state.thumbParams.length > 0) {
+      content = this.state.thumbParams.map(thumbParam => {
+        return (
           <Thumbnail
             key={thumbParam.id}
             preload={thumbParam.index == 0}
@@ -88,7 +89,14 @@ export default class UserThumbnails extends GeneralThumbnails {
             openTime={thumbParam.openTime}
             index={thumbParam.index}
           />
-        ))}
+        );
+      });
+    } else {
+      content = <div className="message">放送中/予約中の番組がありません</div>;
+    }
+    return (
+      <div id="container" className={this.state.loading ? "nowloading" : ""}>
+        {content}
       </div>
     );
   }
