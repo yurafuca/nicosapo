@@ -137,16 +137,14 @@ export default class SearchContent extends React.Component {
             type="button"
             id="search-button"
             value="検索"
+            className="button primary"
             onClick={this.search}
           />
           <span id="regist-favorite" onClick={this.registFavorite}>
             お気に入りに登録
           </span>
         </form>
-        <div
-          id="container"
-          className={this.state.isLoading ? "nowloading search" : "search"}
-        >
+        <div id="container" className="search lowloading">
           <div id="favorite-query-list">
             <span className="favorite-query-head">お気に入り</span>
             {this.state.query_favorite.map(query => (
@@ -164,13 +162,18 @@ export default class SearchContent extends React.Component {
               </span>
             ))}
           </div>
-          <div id="result">
+          <div id="search-result-message">
             <span>
               {this.state.query_last} に該当する放送が {this.state.resultCount}{" "}
               件{this.state.resultCount >= 100 ? "以上" : ""}見つかりました．
             </span>
           </div>
-          <div>
+          <div id="search-result">
+            {this.state.isLoading && (
+              <video autoPlay loop className="loading">
+                <source src="/images/loading.mp4" />
+              </video>
+            )}
             {this.state.thumbParams.map(thumbParam => (
               <ListItem
                 title={thumbParam.title}

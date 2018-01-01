@@ -93,7 +93,11 @@ export default class UserThumbnails extends GeneralThumbnails {
     } else if (this.state.loading) {
       content = "";
     } else {
-      content = <div className="message">放送中/予約中の番組がありません</div>;
+      content = (
+        <div className="message">
+          フォロー中の コミュニティ・チャンネル が放送している番組がありません．
+        </div>
+      );
     }
     return (
       <div id="container" className="nowloading">

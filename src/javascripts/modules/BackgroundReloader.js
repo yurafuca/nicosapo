@@ -17,7 +17,7 @@ export default class BackgroundReloader {
     Promise.resolve()
       .then(() => Api.isLogined())
       .catch(() => {
-        Badge.set("x");
+        Badge.setText("error");
       })
       .then(Common.sleep(2000))
       .then(() => Api.loadCasts("user"))

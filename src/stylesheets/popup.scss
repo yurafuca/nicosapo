@@ -237,8 +237,6 @@ a {
 }
 .listgroup-item {
   font-family: "Noto Sans Japanese";
-
-  min-height: inherit;
   padding: 10px;
   font-size: 13px;
   line-height: 26px;
@@ -400,7 +398,7 @@ a {
  * End GitHub
  */
 
-#result {
+#search-result-message {
   font-family: "Noto Sans Japanese";
   padding: 3px 0;
   border-bottom: solid 1px #e5e5e5;
@@ -408,6 +406,10 @@ a {
   text-align: center;
   font-weight: 600;
   // width: 350px;
+}
+#search-result {
+  position: relative;
+  min-height: 65px;
 }
 
 .username {
@@ -447,27 +449,27 @@ a {
 }
 #search-button {
   display: inline-block;
-  background: blue;
-  color: white;
+  // color: white;
   vertical-align: middle;
 
-  vertical-align: middle;
-  color: white;
+  // vertical-align: middle;
+  // color: white;
   padding: 3px 13px;
-  border: solid 1px $color_apple_approx;
+  border-radius: 0;
+  // border: solid 1px $color_apple_approx;
   // border-radius: 0 3px 3px 0;
-  background-image: linear-gradient(
-    $color_pastel_green_approx,
-    $color_apple_approx
-  );
-  // text-shadow: 0 -1px 0 $black_15;
-  &:hover {
-    background-image: linear-gradient(
-      $color_mantis_approx,
-      $color_apple_approx
-    );
-    cursor: pointer;
-  }
+  // background-image: linear-gradient(
+  //   $color_pastel_green_approx,
+  //   $color_apple_approx
+  // );
+  // // text-shadow: 0 -1px 0 $black_15;
+  // &:hover {
+  //   background-image: linear-gradient(
+  //     $color_mantis_approx,
+  //     $color_apple_approx
+  //   );
+  //   cursor: pointer;
+  // }
 }
 #favorite-query-list {
   font-family: "Noto Sans Japanese";
@@ -523,7 +525,7 @@ a {
 #regist-favorite {
   position: absolute;
   top: 77px;
-  right: 78px;
+  right: 80px;
   color: #777;
   cursor: pointer;
   background: #eee;

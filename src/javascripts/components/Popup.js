@@ -9,6 +9,7 @@ export default class Popup extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      isLogined: true,
       selectedTab: "user",
       programs: []
     };
@@ -19,7 +20,7 @@ export default class Popup extends React.Component {
         this.setState({ programs: programs });
       })
       .catch(() => {
-        // this.setState({ isLogined: false, loading: false });
+        this.setState({ isLogined: false, loading: false });
       });
   }
 

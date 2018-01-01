@@ -6,22 +6,13 @@ const parameter_nicovideojs = [];
 export default class Api {
   static isLogined() {
     return new Promise((resolve, reject) => {
-      const endpoint = "http://www.nicovideo.jp/api/mylistgroup/list";
-      $.post(
-        endpoint,
-        response => {
-          const status = $(response).attr("status");
-          switch (status) {
-            case "ok":
-              resolve(true);
-              break;
-            case "fail":
-              reject(false);
-              break;
-          }
-        },
-        "json"
-      );
+      Api.loadCasts("user")
+        .then(programs => {
+          resolve(true);
+        })
+        .catch(() => {
+          reject(false);
+        });
     });
   }
 
@@ -51,7 +42,7 @@ export default class Api {
 
   // jQuery オブジェクトでなく JSON を返したい
   static getUserOnair() {
-    return new Promise(resolve => {
+    return new Promise((resolve, reject) => {
       const endpoint = "http://live.nicovideo.jp/my";
       $.post(endpoint)
         .done(response => {
@@ -77,7 +68,7 @@ export default class Api {
           resolve(videoInfoList);
         })
         .fail((jqXHR, textStatus, errorThrown) => {
-          console.log(jqXHR, textStatus, errorThrown);
+          reject(errorThrown);
         });
     });
   }
