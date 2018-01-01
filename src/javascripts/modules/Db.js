@@ -1,8 +1,11 @@
-import store from 'store'
+import store from "store";
 
 export default class Db {
   static contains(target, value) {
-    const acceptableTargets = [ 'autoEnterCommunityList', 'autoEnterProgramList' ];
+    const acceptableTargets = [
+      "autoEnterCommunityList",
+      "autoEnterProgramList"
+    ];
     if (acceptableTargets.includes(target) === false) {
       throw new Error(`${target} is illegal target`);
     }

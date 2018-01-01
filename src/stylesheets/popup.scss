@@ -1,20 +1,18 @@
-@import url(http://fonts.googleapis.com/css?family=Pacifico);
-@import url(http://fonts.googleapis.com/earlyaccess/notosansjapanese.css);
-@import url(http://fonts.googleapis.com/css?family=Lato:300,400,700);
+@import url("/fonts/notosansjapanese.css");
 
 //colors
 $color_mine_shaft_approx: #333;
 $color_iron_approx: #d8d8d8;
-$black_80: rgba(0,0,0,0.8);
+$black_80: rgba(0, 0, 0, 0.8);
 $color_lochmara_approx: #08c;
 $gray: gray;
 $color_wild_sand_approx: #f5f5f5;
-$white: #fff;//
+$white: #fff; //
 $color_alto_approx: #dcdcdc;
 $color_hot_cinnamon_approx: #d26911;
-$black_20: rgba(0, 0, 0, 0.20);
+$black_20: rgba(0, 0, 0, 0.2);
 $black: black;
-$black_15: rgba(0,0,0,0.15);
+$black_15: rgba(0, 0, 0, 0.15);
 $color_matterhorn_approx: #4d394b;
 $color_celeste_approx: #ccc;
 $color_red_devil_approx: #820e0e;
@@ -25,12 +23,11 @@ $color_pastel_green_approx: #8add6d;
 $color_apple_approx: #5ca941;
 $color_mantis_approx: #79d858;
 
-
 %extend_1 {
-	color: $white;
-	background-color: $color_red_devil_approx;
-	background-image: none;
-	border-color: $color_dark_burgundy_approx;
+  color: $white;
+  background-color: $color_red_devil_approx;
+  background-image: none;
+  border-color: $color_dark_burgundy_approx;
 }
 
 //fonts
@@ -42,592 +39,631 @@ $url_0: url(/images/loading.gif);
 $url_1: url(/images/icon.png);
 
 html {
-	display: table;
-}
-body {
-	display: table-cell;
-	min-width: 458px;
-	margin: 0;
-	padding: 0;
-	color: $color_mine_shaft_approx;
-	border: 1px solid $color_iron_approx;
-	//Instead of the line below you could use @include border-radius($radius, $vertical-radius)
-	border-radius: 3px;
-}
-#dummy-tooltip {
-	position: absolute;
-	top: -999px !important;
-	left: -999px !important;
-}
-.tooltip-inner {
-	font-family: 'Noto Sans Japanese';
-	max-width: 270px !important;
-	padding: 7px 9px !important;
-	background: $black_80 !important;
-}
-a {
-	text-decoration: none;
-	&:hover {
-		span {
-			color: $color_lochmara_approx !important;
-			text-decoration: none !important;
-		}
-		.screen_name {
-			color: $gray !important;
-			text-decoration: none !important;
-		}
-	}
-}
-#menu {
-	font-family: 'Noto Sans Japanese';
-	padding-top: 3px;
-	padding-bottom: 3px;
-	font-weight: 500;
-	background: $color_wild_sand_approx;
-	border-bottom: 1px solid $color_iron_approx;
-}
-#tab-container {
-	font-size: 0;
-}
-.tab {
-	font-family: 'Noto Sans Japanese';
-	font-size: 13px;
-	width: 25.0%;
-	height: 27px;
-	line-height: 23px;
-	font-weight: 500;
-	//Instead of the line below you could use @include text-shadow($shadow-1, $shadow-2, $shadow-3, $shadow-4, $shadow-5, $shadow-6, $shadow-7, $shadow-8, $shadow-9, $shadow-10)
-	text-shadow: 0 1px 0 $white;
-	background: #fcfcfc;
-	border-left: solid 1px $color_iron_approx;
-	display: inline-block;
-	border-bottom: 1px solid $color_alto_approx;
-	text-align: center;
-	//Instead of the line below you could use @include box-sizing($bs)
-	box-sizing: border-box;
-	vertical-align: middle;
-	&:first-child {
-		border-left: 0;
-	}
-	&.selected {
-		cursor: default;
-		background: $white;
-		border-bottom: solid 1px transparent;
-		border-top: solid 2px $color_hot_cinnamon_approx;
-	}
-	&.non-selected {
-		cursor: pointer;
-		line-height: 23px;
-		padding: 2px;
-		&:hover {
-			background: $color_wild_sand_approx;
-		}
-		&:active {
-			background-color: $color_alto_approx;
-			//Instead of the line below you could use @include box-shadow($shadow-1, $shadow-2, $shadow-3, $shadow-4, $shadow-5, $shadow-6, $shadow-7, $shadow-8, $shadow-9, $shadow-10)
-			box-shadow: inset 0 1px 6px $black_20;
-		}
-	}
-}
-#communities {
-	min-height: 65px;
-	padding-bottom: 5px;
-}
-.nowloading {
-	min-height: 65px;
-	background-image: $url_0;
-	background-size: 65px;
-	background-repeat: no-repeat;
-	background-position: center;
-}
-.message {
-	width: auto;
-	font-size: 18px;
-	margin: 10px;
-}
-.menu-button {
-	position: relative;
-	top: 5px;
-	float: right;
-	vertical-align: middle;
-	color: $color_mine_shaft_approx;
-	margin-right: 6px;
-	padding: 3px 10px;
-	border: solid 1px #d5d5d5;
-	//Instead of the line below you could use @include border-radius($radius, $vertical-radius)
-	border-radius: 3px;
-	background-image: linear-gradient(#fcfcfc, #eee);
-	&:hover {
-		background-image: linear-gradient(#eee, $color_alto_approx);
-		text-decoration: none;
-		> span {
-			color: $black !important;
-			text-decoration: none;
-		}
-	}
-	&:active {
-		background-color: $color_alto_approx;
-		//Instead of the line below you could use @include box-shadow($shadow-1, $shadow-2, $shadow-3, $shadow-4, $shadow-5, $shadow-6, $shadow-7, $shadow-8, $shadow-9, $shadow-10)
-		box-shadow: inset 0 1px 6px $black_20;
-		> span {
-			color: $black !important;
-			text-decoration: none;
-		}
-	}
-	> span {
-		color: inherit;
-		//Instead of the line below you could use @include text-shadow($shadow-1, $shadow-2, $shadow-3, $shadow-4, $shadow-5, $shadow-6, $shadow-7, $shadow-8, $shadow-9, $shadow-10)
-		text-shadow: 0 1px 0 $white;
-		&.octicon {
-			position: relative;
-			top: 1px;
-			font-size: 17px !important;
-		}
-		&.title {
-			font-size: 12px;
-			font-weight: 500;
-		}
-	}
-}
-.avator {
-	position: relative;
-	top: -1px;
-	float: left;
-	background-image: $url_1;
-	background-size: 27px;
-	background-repeat: no-repeat;
-	background-position: center;
-	height: 37px;
-	width: 40px;
-	margin-left: 2px;
-	//Instead of the line below you could use @include border-radius($radius, $vertical-radius)
-	border-radius: 3px 0 0 0;
+  display: table;
 }
 
+body {
+  display: table-cell;
+  // width: 458px !important;
+  min-width: 458px;
+  margin: 0;
+  padding: 0;
+  color: $color_mine_shaft_approx;
+}
+#nicosapo {
+  // width: 458px;
+  margin: 0px 2px;
+  border: 1px solid #d8d8d8;
+  border-radius: 3px;
+}
+#dummy-tooltip {
+  position: absolute;
+  top: -999px !important;
+  left: -999px !important;
+}
+.tooltip-inner {
+  font-family: "Noto Sans Japanese";
+  max-width: 270px !important;
+  padding: 7px 9px !important;
+  background: $black_80 !important;
+}
+a {
+  text-decoration: none;
+  &:hover {
+    span {
+      color: $color_lochmara_approx !important;
+      text-decoration: none !important;
+    }
+    .screen_name {
+      color: $gray !important;
+      text-decoration: none !important;
+    }
+  }
+}
+#menu {
+  font-family: "Noto Sans Japanese";
+  padding-top: 3px;
+  padding-bottom: 3px;
+  font-weight: 500;
+  background: $color_wild_sand_approx;
+  border-bottom: 1px solid $color_iron_approx;
+}
+#tab-container {
+  font-size: 0;
+}
+.tab {
+  font-family: "Noto Sans Japanese";
+  font-size: 13px;
+  width: 25%;
+  height: 27px;
+  line-height: 23px;
+  font-weight: 500;
+  //Instead of the line below you could use @include text-shadow($shadow-1, $shadow-2, $shadow-3, $shadow-4, $shadow-5, $shadow-6, $shadow-7, $shadow-8, $shadow-9, $shadow-10)
+  text-shadow: 0 1px 0 $white;
+  background: #fcfcfc;
+  border-left: solid 1px $color_iron_approx;
+  display: inline-block;
+  border-bottom: 1px solid $color_alto_approx;
+  text-align: center;
+  //Instead of the line below you could use @include box-sizing($bs)
+  box-sizing: border-box;
+  vertical-align: middle;
+  &:first-child {
+    border-left: 0;
+  }
+  &.selected {
+    cursor: default;
+    background: $white;
+    border-bottom: solid 1px transparent;
+    border-top: solid 2px $color_hot_cinnamon_approx;
+  }
+  &.non-selected {
+    cursor: pointer;
+    line-height: 23px;
+    padding: 2px;
+    &:hover {
+      background: $color_wild_sand_approx;
+    }
+    &:active {
+      background-color: $color_alto_approx;
+      //Instead of the line below you could use @include box-shadow($shadow-1, $shadow-2, $shadow-3, $shadow-4, $shadow-5, $shadow-6, $shadow-7, $shadow-8, $shadow-9, $shadow-10)
+      box-shadow: inset 0 1px 6px $black_20;
+    }
+  }
+}
+#communities {
+  min-height: 65px; // padding-bottom: 5px;
+}
+#container {
+  position: relative;
+  overflow-y: scroll;
+  width: 473px;
+
+  // width: 458px;
+
+  max-height: 520px;
+  &.search {
+    max-height: 492px;
+  }
+}
+.nowloading {
+  min-height: 65px;
+  background-image: $url_0;
+  background-size: 65px;
+  background-repeat: no-repeat;
+  background-position: center;
+
+  background: none;
+  background-size: 0;
+}
+.loading {
+  position: absolute;
+  top: 20%;
+  left: 47%;
+  width: 60px;
+  z-index: 1;
+}
+.message {
+  width: auto;
+  font-size: 18px;
+  margin: 10px;
+}
+.menu-button {
+  position: relative;
+  top: 5px;
+  float: right;
+  vertical-align: middle;
+  color: $color_mine_shaft_approx;
+  margin-right: 6px;
+  padding: 3px 10px;
+  border: solid 1px #d5d5d5;
+  //Instead of the line below you could use @include border-radius($radius, $vertical-radius)
+  border-radius: 3px;
+  background-image: linear-gradient(#fcfcfc, #eee);
+  &:hover {
+    background-image: linear-gradient(#eee, $color_alto_approx);
+    text-decoration: none;
+    > span {
+      color: $black !important;
+      text-decoration: none;
+    }
+  }
+  &:active {
+    background-color: $color_alto_approx;
+    //Instead of the line below you could use @include box-shadow($shadow-1, $shadow-2, $shadow-3, $shadow-4, $shadow-5, $shadow-6, $shadow-7, $shadow-8, $shadow-9, $shadow-10)
+    box-shadow: inset 0 1px 6px $black_20;
+    > span {
+      color: $black !important;
+      text-decoration: none;
+    }
+  }
+  > span {
+    color: inherit;
+    //Instead of the line below you could use @include text-shadow($shadow-1, $shadow-2, $shadow-3, $shadow-4, $shadow-5, $shadow-6, $shadow-7, $shadow-8, $shadow-9, $shadow-10)
+    text-shadow: 0 1px 0 $white;
+    &.octicon {
+      position: relative;
+      top: 1px;
+      font-size: 17px !important;
+    }
+    &.title {
+      font-size: 12px;
+      font-weight: 500;
+    }
+  }
+}
+.avator {
+  position: relative;
+  top: -1px;
+  float: left;
+  background-image: $url_1;
+  background-size: 27px;
+  background-repeat: no-repeat;
+  background-position: center;
+  height: 37px;
+  width: 40px;
+  margin-left: 2px;
+  //Instead of the line below you could use @include border-radius($radius, $vertical-radius)
+  border-radius: 3px 0 0 0;
+}
 
 /**
  * GitHub
  */
 .listgroup {
-	list-style: none;
-	//Instead of the line below you could use @include border-radius($radius, $vertical-radius)
-	border-radius: 3px;
+  list-style: none;
+  //Instead of the line below you could use @include border-radius($radius, $vertical-radius)
+  border-radius: 3px;
 }
 .listgroup-item {
-	font-family: 'Noto Sans Japanese';
-
-	min-height: inherit;
-	padding: 10px;
-	font-size: 13px;
-	line-height: 26px;
-	color: #767676;
-	border-bottom: 1px solid #e5e5e5;
-	&:last-child {
-		border-bottom: 0;
-	}
+  font-family: "Noto Sans Japanese";
+  padding: 10px;
+  font-size: 13px;
+  line-height: 26px;
+  color: #767676;
+  border-bottom: 1px solid #e5e5e5;
+  &:last-child {
+    border-bottom: 0;
+  }
 }
 .listgroup-item::before {
-	display: table;
-	content: "";
+  display: table;
+  content: "";
 }
 .float-right {
-	float: right !important;
+  float: right !important;
 }
 .BtnGroup {
-	display: inline-block;
-	vertical-align: middle;
+  display: inline-block;
+  vertical-align: middle;
 }
 .BtnGroup::before {
-	display: table;
-	content: "";
+  display: table;
+  content: "";
 }
 .BtnGroup-item {
-	position: relative;
-	float: left;
-	border-right-width: 0;
-	//Instead of the line below you could use @include border-radius($radius, $vertical-radius)
-	border-radius: 0;
-	&:last-child {
-		border-right-width: 1px;
-		//Instead of the line below you could use @include border-top-right-radius($radius)
-		border-top-right-radius: 3px;
-		//Instead of the line below you could use @include border-bottom-right-radius($radius)
-		border-bottom-right-radius: 3px;
-	}
-	&:first-child {
-		//Instead of the line below you could use @include border-top-left-radius($radius)
-		border-top-left-radius: 3px;
-		//Instead of the line below you could use @include border-bottom-left-radius($radius)
-		border-bottom-left-radius: 3px;
-	}
+  position: relative;
+  float: left;
+  border-right-width: 0;
+  //Instead of the line below you could use @include border-radius($radius, $vertical-radius)
+  border-radius: 0;
+  &:last-child {
+    border-right-width: 1px;
+    //Instead of the line below you could use @include border-top-right-radius($radius)
+    border-top-right-radius: 3px;
+    //Instead of the line below you could use @include border-bottom-right-radius($radius)
+    border-bottom-right-radius: 3px;
+  }
+  &:first-child {
+    //Instead of the line below you could use @include border-top-left-radius($radius)
+    border-top-left-radius: 3px;
+    //Instead of the line below you could use @include border-bottom-left-radius($radius)
+    border-bottom-left-radius: 3px;
+  }
 }
 .btn {
-	position: relative;
-	display: inline-block;
-	padding: 6px 12px;
-	font-size: 14px;
-	font-weight: 600;
-	line-height: 20px;
-	color: #333;
-	white-space: nowrap;
-	vertical-align: middle;
-	cursor: pointer;
-	//Instead of the line below you could use @include user-select($select)
-	user-select: none;
-	background-color: #eee;
-	background-image: linear-gradient(#fcfcfc, #eee);
-	border: 1px solid #d5d5d5;
-	//Instead of the line below you could use @include border-radius($radius, $vertical-radius)
-	border-radius: 3px;
-	appearance: none;
-	&:hover {
-		text-decoration: none;
-	}
-	&:active {
-		text-decoration: none;
-	}
+  position: relative;
+  display: inline-block;
+  padding: 6px 12px;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+  color: #333;
+  white-space: nowrap;
+  vertical-align: middle;
+  cursor: pointer;
+  //Instead of the line below you could use @include user-select($select)
+  user-select: none;
+  background-color: #eee;
+  background-image: linear-gradient(#fcfcfc, #eee);
+  border: 1px solid #d5d5d5;
+  //Instead of the line below you could use @include border-radius($radius, $vertical-radius)
+  border-radius: 3px;
+  appearance: none;
+  &:hover {
+    text-decoration: none;
+  }
+  &:active {
+    text-decoration: none;
+  }
 }
 .btn-sm {
-	padding: 3px 10px;
-	font-size: 12px;
-	line-height: 20px;
+  padding: 3px 10px;
+  font-size: 12px;
+  line-height: 20px;
 }
 .btn-danger {
-	color: #911;
-	&:hover {
-		color: $white;
-		background-color: #911;
-		background-image: linear-gradient(#ec5757, #c71616);
-		border-color: #911;
-	}
-	&:active {
-		@extend %extend_1;
-	}
-	&.selected {
-		@extend %extend_1;
-	}
+  color: #911;
+  &:hover {
+    color: $white;
+    background-color: #911;
+    background-image: linear-gradient(#ec5757, #c71616);
+    border-color: #911;
+  }
+  &:active {
+    @extend %extend_1;
+  }
+  &.selected {
+    @extend %extend_1;
+  }
 }
 a {
-	color: #0366d6;
-	text-decoration: none;
-	&:hover {
-		text-decoration: underline;
-	}
-	&:active {
-		text-decoration: underline;
-	}
+  color: #0366d6;
+  text-decoration: none;
+  &:hover {
+    text-decoration: underline;
+  }
+  &:active {
+    text-decoration: underline;
+  }
 }
 .BtnGroup::after {
-	display: table;
-	clear: both;
-	content: "";
+  display: table;
+  clear: both;
+  content: "";
 }
 .list-group-text-block {
-	position: relative;
-	// padding-left: 50px;
-	padding-left: 70px;
-	line-height: 20px;
-	overflow: hidden;
-	width: 436px;
-	img {
-		position: absolute;
-		top: 0;
-		left: 0;
-	}
-	.meta-title {
-		display: block;
-		// font-weight: bold;
-		height: 20px;
-		overflow: hidden;
-		font-weight: 600;
-		color: black;
-		.short {
-			white-space: nowrap;
-			text-overflow: ellipsis;
-			width: 100px;
-		}
-		.developer-app-name {
-			color: #0366d6 !important;
-		}
-	}
-	.meta-description {
-		height: 20px;
-		overflow: hidden;
-		display: inline-block;
-	}
-	.meta-status {
-		font-size: 0.7em;
-		height: 18px;
-		color: #bbb;
-		overflow: hidden;
-		display: inline-block;
-	}
+  position: relative;
+  // padding-left: 50px;
+  padding-left: 70px;
+  line-height: 20px;
+  overflow: hidden;
+  width: 436px;
+  img {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+  .meta-title {
+    display: block;
+    // font-weight: bold;
+    height: 20px;
+    overflow: hidden;
+    font-weight: 600;
+    color: black;
+    .short {
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      width: 100px;
+    }
+    .developer-app-name {
+      color: #0366d6 !important;
+    }
+  }
+  .meta-description {
+    height: 20px;
+    overflow: hidden;
+    display: inline-block;
+  }
+  .meta-status {
+    font-size: 0.7em;
+    height: 18px;
+    color: #bbb;
+    overflow: hidden;
+    display: inline-block;
+  }
 }
 .float-left {
-	float: left !important;
+  float: left !important;
 }
 .avatar {
-	display: inline-block;
-	overflow: hidden;
-	line-height: 1;
-	vertical-align: middle;
-	//Instead of the line below you could use @include border-radius($radius, $vertical-radius)
-	border-radius: 3px;
-}//
+  display: inline-block;
+  overflow: hidden;
+  line-height: 1;
+  vertical-align: middle;
+  //Instead of the line below you could use @include border-radius($radius, $vertical-radius)
+  border-radius: 3px;
+} //
 /**
  * End GitHub
  */
 
-
-#result {
-	font-family: 'Noto Sans Japanese';
-	padding: 3px 0;
-	border-bottom: solid 1px #E5E5E5;
-	margin: 0 auto;
-	text-align: center;
-	font-weight: 600;
-	// width: 350px;
+#search-result-message {
+  font-family: "Noto Sans Japanese";
+  padding: 3px 0;
+  border-bottom: solid 1px #e5e5e5;
+  margin: 0 auto;
+  text-align: center;
+  font-weight: 600;
+  // width: 350px;
+}
+#search-result {
+  position: relative;
+  min-height: 65px;
 }
 
 .username {
-	margin-left: 2px;
-	color: $color_mine_shaft_approx;
-	font-size: 14px;
-	line-height: 38px;
-	font-weight: 500;
-	//Instead of the line below you could use @include text-shadow($shadow-1, $shadow-2, $shadow-3, $shadow-4, $shadow-5, $shadow-6, $shadow-7, $shadow-8, $shadow-9, $shadow-10)
-	text-shadow: 0 1px 0 $white;
+  margin-left: 2px;
+  color: $color_mine_shaft_approx;
+  font-size: 14px;
+  line-height: 38px;
+  font-weight: 500;
+  //Instead of the line below you could use @include text-shadow($shadow-1, $shadow-2, $shadow-3, $shadow-4, $shadow-5, $shadow-6, $shadow-7, $shadow-8, $shadow-9, $shadow-10)
+  text-shadow: 0 1px 0 $white;
 }
 #search-container {
-	font-family: 'Noto Sans Japanese';
-	background: #F5F5F5;
-	color: white;
-	margin-bottom: 0;
-	border-bottom: solid 1px #E5E5E5;
+  font-family: "Noto Sans Japanese";
+  background: #f5f5f5;
+  color: white;
+  margin-bottom: 0;
+  border-bottom: solid 1px #e5e5e5;
 }
 #search-sort {
-	display: inline-block;
-	position: absolute;
-height: 28px;
-width: 140px;
-font-size: 0.8em;
-color: #333;
+  display: inline-block;
+  position: absolute;
+  height: 28px;
+  width: 140px;
+  font-size: 0.8em;
+  color: #333;
 }
 #search-input {
-	display: inline-block;
-	background: white;
-	color: #333;
-	vertical-align: middle;
-	// width: 400px;
-	    width: 260px;
-			margin-left: 140px;
-	height: 28px;
-	padding: 0 5px;
+  display: inline-block;
+  background: white;
+  color: #333;
+  vertical-align: middle;
+  // width: 400px;
+  width: 260px;
+  margin-left: 140px;
+  height: 28px;
+  padding: 0 5px;
 }
 #search-button {
-	display: inline-block;
-	background: blue;
-	color: white;
-	vertical-align: middle;
+  display: inline-block;
+  // color: white;
+  vertical-align: middle;
 
-	vertical-align: middle;
-	color: white;
-	padding: 3px 13px;
-	border: solid 1px $color_apple_approx;
-	// border-radius: 0 3px 3px 0;
-	background-image: linear-gradient($color_pastel_green_approx, $color_apple_approx);
-	// text-shadow: 0 -1px 0 $black_15;
-	&:hover {
-		background-image: linear-gradient($color_mantis_approx, $color_apple_approx);
-		cursor: pointer;
-	}
+  // vertical-align: middle;
+  // color: white;
+  padding: 3px 13px;
+  border-radius: 0;
+  // border: solid 1px $color_apple_approx;
+  // border-radius: 0 3px 3px 0;
+  // background-image: linear-gradient(
+  //   $color_pastel_green_approx,
+  //   $color_apple_approx
+  // );
+  // // text-shadow: 0 -1px 0 $black_15;
+  // &:hover {
+  //   background-image: linear-gradient(
+  //     $color_mantis_approx,
+  //     $color_apple_approx
+  //   );
+  //   cursor: pointer;
+  // }
 }
 #favorite-query-list {
-	font-family: 'Noto Sans Japanese';
-	background: #F1F8FF;
-	border-bottom: solid 1px #ddd;
-	padding: 2px;
+  font-family: "Noto Sans Japanese";
+  background: #f1f8ff;
+  border-bottom: solid 1px #ddd;
+  padding: 2px;
 }
 .favorite-query-head {
-	cursor: default;
-	padding: 2px 5px;
-	color: #333;
-	border-right: solid 1px #ddd;
-	// font-weight: 600;
+  cursor: default;
+  padding: 2px 5px;
+  color: #333;
+  border-right: solid 1px #ddd;
+  // font-weight: 600;
 }
 .favorite-query {
-	cursor: pointer;
-	color: #0366d6;
-	// font-size: 0.9em;
-	padding: 2px 5px;
-	border-right: solid 1px #ddd;
-	&:first-child {
-		border-left: solid 1px #ddd;
-	}
-	&:hover {
-		background: #DDEEFF;
-	}
+  cursor: pointer;
+  color: #0366d6;
+  // font-size: 0.9em;
+  padding: 2px 5px;
+  border-right: solid 1px #ddd;
+  &:first-child {
+    border-left: solid 1px #ddd;
+  }
+  &:hover {
+    background: #ddeeff;
+  }
 }
 .selected-query {
-	background: #0366d6;
-	color: white;
-	padding-right: 10px;
-	&:hover {
-		background: #0251ab;
-	}
+  background: #0366d6;
+  color: white;
+  padding-right: 10px;
+  &:hover {
+    background: #0251ab;
+  }
 }
 .query-remove {
-	background: #0366d6;
-	color: #F1F8FF;
-	font-size: 11px !important;
-	padding: 0 5px;
-	border-radius: 999px;
-	position: relative;
-	display: inline-block;
-	height: 16px;
-	top: -1px;
-	margin-left: 8px;
-	margin-right: 4px;
-	&:hover {
-		color: white;
-		background: #D02D3A;
-	}
+  background: #0366d6;
+  color: #f1f8ff;
+  font-size: 11px !important;
+  padding: 0 5px;
+  border-radius: 999px;
+  position: relative;
+  display: inline-block;
+  height: 16px;
+  top: -1px;
+  margin-left: 8px;
+  margin-right: 4px;
+  &:hover {
+    color: white;
+    background: #d02d3a;
+  }
 }
 #regist-favorite {
-	position: absolute;
-	top: 77px;
-	right: 62px;
-	color: #777;
-	cursor: pointer;
-	background: #eee;
-	padding: 0 3px;
-	border-radius: 2px;
-	&:hover {
-		// color: #999;
-		background: #ddd;
-	}
-	&:active {
-		background: #ccc;
-		// color: #bbb;
-	}
+  position: absolute;
+  top: 77px;
+  right: 80px;
+  color: #777;
+  cursor: pointer;
+  background: #eee;
+  padding: 0 3px;
+  border-radius: 2px;
+  &:hover {
+    // color: #999;
+    background: #ddd;
+  }
+  &:active {
+    background: #ccc; // color: #bbb;
+  }
 }
 .none {
-	display: none;
+  display: none;
 }
 .community-hover-wrapper {
-	margin: 5px 0 0 5px;
-	display: inline-block;
-	&:hover {
-		-webkit-filter: brightness(0.8);
-	}
+  // margin: 5px 0 0 5px;
+  margin: 5px 0 5px 5px;
+  display: inline-block;
+  &:hover {
+    -webkit-filter: brightness(0.8);
+  }
 }
 .reserved-message {
-	position: absolute;
-	display: inline-block;
-	//Instead of the line below you could use @include box-shadow($shadow-1, $shadow-2, $shadow-3, $shadow-4, $shadow-5, $shadow-6, $shadow-7, $shadow-8, $shadow-9, $shadow-10)
-	box-shadow: 0 0 10px $black_20;
-	text-align: center;
-	text-transform: uppercase;
-	top: 0;
-	left: 0;
-	background: $color_matterhorn_approx;
-	background: $black_80;
-	width: 70px;
-	padding: 0;
-	//Instead of the line below you could use @include border-radius($radius, $vertical-radius)
-	border-radius: 3px 3px 0 0;
+  position: absolute;
+  display: inline-block;
+  // Instead of the line below you could use @include box-shadow($shadow-1, $shadow-2, $shadow-3, $shadow-4, $shadow-5, $shadow-6, $shadow-7, $shadow-8, $shadow-9, $shadow-10)
+  box-shadow: 0 0 10px $black_20;
+  text-align: center;
+  text-transform: uppercase;
+  top: 0;
+  left: 0;
+  background: $color_matterhorn_approx;
+  background: $black_80;
+  width: 70px;
+  padding: 0;
+  // Instead of the line below you could use @include border-radius($radius, $vertical-radius)
+  border-radius: 3px 3px 0 0;
 }
 .community {
-	display: inline-block;
-	//Instead of the line below you could use @include border-radius($radius, $vertical-radius)
-	border-radius: 3px;
+  display: inline-block;
+  // Instead of the line below you could use @include border-radius($radius, $vertical-radius)
+  border-radius: 3px;
 }
 .community_long {
-	display: list-item;
-	margin-bottom: 10px;
-	padding-bottom: 10px;
-	border-bottom: 1px solid $color_celeste_approx;
-	.comu_thumbnail {
-		float: left;
-	}
+  display: list-item;
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid $color_celeste_approx;
+  .comu_thumbnail {
+    float: left;
+  }
 }
 .comu_thumbnail {
-	display: block;
-	width: 70px;
-	height: 70px;
-	background-size: 70px;
-	//Instead of the line below you could use @include border-radius($radius, $vertical-radius)
-	border-radius: 3px;
+  display: block;
+  width: 70px;
+  height: 70px;
+  background-size: 70px;
+  // Instead of the line below you could use @include border-radius($radius, $vertical-radius)
+  border-radius: 3px;
 }
 .large {
-	background-size: contain;
-	background-position: 50% 0;
-	min-width: 70px;
-	max-width: 100px;
-	height: 70px;
+  background-size: contain;
+  background-position: 50% 0;
+  min-width: 70px;
+  max-width: 100px;
+  height: 70px;
 }
 .tooltip.in {
-	opacity: 1.0 !important;
+  opacity: 1 !important;
 }
 .side-corner-tag.enabled {
-	position: relative;
-	color: $white;
-	display: inline-block;
-	overflow: hidden;
-	font-family: $font_0, $font_1;
-	font-weight: 900;
-	//Instead of the line below you could use @include text-shadow($shadow-1, $shadow-2, $shadow-3, $shadow-4, $shadow-5, $shadow-6, $shadow-7, $shadow-8, $shadow-9, $shadow-10)
-	text-shadow: 0 -1px 0 $black_15;
-	p {
-		display: inline;
-	}
-	&:hover {
-		cursor: pointer;
-	}
+  position: relative;
+  color: $white;
+  display: inline-block;
+  overflow: hidden;
+  font-family: $font_0, $font_1;
+  font-weight: 900;
+  // Instead of the line below you could use @include text-shadow($shadow-1, $shadow-2, $shadow-3, $shadow-4, $shadow-5, $shadow-6, $shadow-7, $shadow-8, $shadow-9, $shadow-10)
+  text-shadow: 0 -1px 0 $black_15;
+  p {
+    display: inline;
+  }
+  &:hover {
+    cursor: pointer;
+  }
 }
-/** toggle group **/
+/* * toggle group * */
 .toggle {
-	left: 20px;
-	top: -3px;
-	height: 25px !important;
+  left: 20px;
+  top: -3px;
+  height: 25px !important;
 }
 .toggle-group {
-	.toggle-on {
-		background: #419641;
-		box-shadow: 0px 3px 1px #398539, 0px 3px 1px #419641 inset;
-	}
-	.toggle-off {
-		color: #eee;
-		background: #444;
-		box-shadow: inset 0 3px 5px rgba(0,0,0,.125);
-	}
-	.toggle-handle {
-		background-image: linear-gradient($color_alabaster_approx, $color_gallery_approx);
-	}
+  .toggle-on {
+    background: #419641;
+    box-shadow: 0px 3px 1px #398539, 0px 3px 1px #419641 inset;
+  }
+  .toggle-off {
+    color: #eee;
+    background: #444;
+    box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+  }
+  .toggle-handle {
+    background-image: linear-gradient(
+      $color_alabaster_approx,
+      $color_gallery_approx
+    );
+  }
 }
 .btn-danger {
-	border-color: #666 !important;
-	.toggle-handle {
-		background-image: linear-gradient($color_alabaster_approx, $color_gallery_approx);
-		border-radius: 3px 0 0 3px;
-	}
+  border-color: #666 !important;
+  .toggle-handle {
+    background-image: linear-gradient(
+      $color_alabaster_approx,
+      $color_gallery_approx
+    );
+    border-radius: 3px 0 0 3px;
+  }
 }
 .btn-success {
-	.toggle-handle {
-		background-image: linear-gradient($color_alabaster_approx, $color_gallery_approx);
-		border-radius: 0 3px 3px 0;
-	}
+  .toggle-handle {
+    background-image: linear-gradient(
+      $color_alabaster_approx,
+      $color_gallery_approx
+    );
+    border-radius: 0 3px 3px 0;
+  }
 }
 .btn-sm {
-	line-height: 1.2 !important;
+  line-height: 1.2 !important;
 }
 .toggle-off.btn {
-    padding-left: 20px !important;
+  padding-left: 20px !important;
 }
 .tumbnail:hover {
 }
 .float-left {
-	float: left;
+  float: left;
 }
-
-

@@ -1,6 +1,6 @@
-import $ from 'jquery'
-import Video from '../modules/Video'
-import Community from '../modules/Community'
+import $ from "jquery";
+import Video from "../modules/Video";
+import Community from "../modules/Community";
 
 export default class VideoInfo {
   constructor() {
