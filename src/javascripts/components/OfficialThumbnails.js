@@ -14,10 +14,6 @@ export default class OfficialThumbnails extends GeneralThumbnails {
     this.setParams = this.setParams.bind(this);
   }
 
-  componentDidMount() {
-    super.loadCasts(this.props.genre, this.setParams);
-  }
-
   componentWillReceiveProps(nextProps) {
     this.setState({ loading: true, thumbParams: [] }, () => {
       super.loadCasts(nextProps.genre, this.setParams);
@@ -56,36 +52,24 @@ export default class OfficialThumbnails extends GeneralThumbnails {
       thumbParams.push(thumbParam);
       if (index == programs.length - 1) {
         this.setState({
-          thumbParams: thumbParams.slice(0, 99),
+          thumbParams: thumbParams,
           loading: false
         });
-        // setTimeout(() => {
-        //   this.setState({
-        //     thumbParams: thumbParams.slice(0, thumbParams.length - 1)
-        //   });
-        // }, 1000);
-        // const step = 6;
-        // let endId = 0;
-        // const timer = setInterval(() => {
-        //   this.setState({
-        //     thumbParams: thumbParams.slice(0, endId + step),
-        //     loading: false
-        //   });
-        //   endId += step;
-        //   if (endId >= 31) {
-        //     clearInterval(timer);
-        //   }
-        // }, 10);
       }
     });
   }
-
   render() {
     if (this.state.thumbParams == null) {
       return <div id="container" />;
     }
     return (
-      <div id="container" className={this.state.loading ? "nowloading" : ""}>
+      <div id="container" className="nowloading">
+        {this.state.loading && (
+          <video autoPlay loop className="loading">
+            <source src="/images/loading.mp4" />
+          </video>
+        )}
+        {/* <div className="nowloading" style={{ border: "solid 10px red" }} /> */}
         {this.state.thumbParams.map(thumbParam => (
           <Thumbnail
             key={thumbParam.id}

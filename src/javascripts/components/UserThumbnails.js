@@ -9,18 +9,17 @@ export default class UserThumbnails extends GeneralThumbnails {
     super(props);
     this.state = {
       loading: true,
-      programs: [],
       thumbParams: []
     };
     this.setParams = this.setParams.bind(this);
   }
 
   componentDidMount() {
-    // this.setParams();
-    super.loadCasts("user", this.setParams);
+    // this.setParams(this.props.programs);
   }
 
   componentWillReceiveProps(nextProps) {
+    this.setParams(nextProps.programs);
     // this.setState({ programs: nextProps.programs }, this.setParams);
   }
 
@@ -91,11 +90,18 @@ export default class UserThumbnails extends GeneralThumbnails {
           />
         );
       });
+    } else if (this.state.loading) {
+      content = "";
     } else {
       content = <div className="message">放送中/予約中の番組がありません</div>;
     }
     return (
-      <div id="container" className={this.state.loading ? "nowloading" : ""}>
+      <div id="container" className="nowloading">
+        {this.state.loading && (
+          <video autoPlay loop className="loading">
+            <source src="/images/loading.mp4" />
+          </video>
+        )}
         {content}
       </div>
     );

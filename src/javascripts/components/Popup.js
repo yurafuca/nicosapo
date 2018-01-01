@@ -9,13 +9,14 @@ export default class Popup extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedTab: "user"
+      selectedTab: "user",
+      programs: []
     };
     this.toggleTab = this.toggleTab.bind(this);
 
-    Api.isLogined()
-      .then(() => {
-        this.setState({ isLogined: true });
+    Api.loadCasts("user")
+      .then(programs => {
+        this.setState({ programs: programs });
       })
       .catch(() => {
         // this.setState({ isLogined: false, loading: false });
@@ -63,6 +64,13 @@ export default class Popup extends React.Component {
         this.setState({ selectedTab: "user" });
         break;
     }
+    Api.loadCasts(e.target.id)
+      .then(programs => {
+        this.setState({ programs: programs });
+      })
+      .catch(() => {
+        // this.setState({ isLogined: false, loading: false });
+      });
   }
 
   render() {
@@ -116,7 +124,7 @@ export default class Popup extends React.Component {
           </div>
         );
       } else {
-        content = <UserThumbnails />;
+        content = <UserThumbnails programs={this.state.programs} />;
       }
     } else if (
       this.state.selectedTab === "official" ||
@@ -131,10 +139,14 @@ export default class Popup extends React.Component {
       <div id="wrapper">
         {menu}
         <div id="tab-container">{tabs}</div>
-        <div
-          id="communities"
-          className={this.state.loading ? "nowloading" : ""}
-        >
+        <div id="communities">
+          {/* <div
+            style={{ height: "200px", width: "200px" }}
+            className="nowloading"
+          /> */}
+          {/* <video autoPlay loop className="loading">
+            <source src="/images/loading.mp4" />
+          </video> */}
           {content}
         </div>
       </div>

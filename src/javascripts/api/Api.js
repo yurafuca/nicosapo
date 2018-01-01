@@ -53,28 +53,32 @@ export default class Api {
   static getUserOnair() {
     return new Promise(resolve => {
       const endpoint = "http://live.nicovideo.jp/my";
-      $.post(endpoint, response => {
-        const $html = $(response);
-        const subscribes = $html.find(
-          "[id$=subscribeItemsWrap] > .liveItems > [class^='liveItem']"
-        );
-        const reserved = $html.find(
-          "[id$=subscribeReservedItemsWrap] > .liveItems > [class^='liveItem']"
-        );
-        $.each($(reserved), (index, item) => {
-          item.is_reserved = true;
+      $.post(endpoint)
+        .done(response => {
+          const $html = $(response);
+          const subscribes = $html.find(
+            "[id$=subscribeItemsWrap] > .liveItems > [class^='liveItem']"
+          );
+          const reserved = $html.find(
+            "[id$=subscribeReservedItemsWrap] > .liveItems > [class^='liveItem']"
+          );
+          $.each($(reserved), (index, item) => {
+            item.is_reserved = true;
+          });
+          $.merge(subscribes, reserved);
+          const videoInfoList = [];
+          $.each($(subscribes), (index, element) => {
+            if ($($(element).find("img")[0]) === `CLOSED`) {
+              return;
+            }
+            const $videoInfo = VIParser.parse(element);
+            videoInfoList.push($videoInfo);
+          });
+          resolve(videoInfoList);
+        })
+        .fail((jqXHR, textStatus, errorThrown) => {
+          console.log(jqXHR, textStatus, errorThrown);
         });
-        $.merge(subscribes, reserved);
-        const videoInfoList = [];
-        $.each($(subscribes), (index, element) => {
-          if ($($(element).find("img")[0]) === `CLOSED`) {
-            return;
-          }
-          const $videoInfo = VIParser.parse(element);
-          videoInfoList.push($videoInfo);
-        });
-        resolve(videoInfoList);
-      });
     });
   }
 

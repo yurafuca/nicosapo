@@ -1,6 +1,4 @@
-@import url(http://fonts.googleapis.com/css?family=Pacifico);
-@import url(http://fonts.googleapis.com/earlyaccess/notosansjapanese.css);
-@import url(http://fonts.googleapis.com/css?family=Lato:300,400,700);
+@import url("/fonts/notosansjapanese.css");
 
 //colors
 $color_mine_shaft_approx: #333;
@@ -42,20 +40,21 @@ $url_1: url(/images/icon.png);
 
 html {
   display: table;
-  background: red;
 }
+
 body {
   display: table-cell;
   // width: 458px !important;
+  min-width: 458px;
   margin: 0;
   padding: 0;
   color: $color_mine_shaft_approx;
-  border: 1px solid $color_iron_approx;
-  //Instead of the line below you could use @include border-radius($radius, $vertical-radius)
-  border-radius: 3px;
 }
 #nicosapo {
   // width: 458px;
+  margin: 0px 2px;
+  border: 1px solid #d8d8d8;
+  border-radius: 3px;
 }
 #dummy-tooltip {
   position: absolute;
@@ -133,9 +132,10 @@ a {
   }
 }
 #communities {
-  padding-bottom: 5px;
+  min-height: 65px; // padding-bottom: 5px;
 }
 #container {
+  position: relative;
   overflow-y: scroll;
   width: 473px;
 
@@ -152,6 +152,16 @@ a {
   background-size: 65px;
   background-repeat: no-repeat;
   background-position: center;
+
+  background: none;
+  background-size: 0;
+}
+.loading {
+  position: absolute;
+  top: 20%;
+  left: 47%;
+  width: 60px;
+  z-index: 1;
 }
 .message {
   width: auto;
@@ -531,7 +541,8 @@ a {
   display: none;
 }
 .community-hover-wrapper {
-  margin: 5px 0 0 5px;
+  // margin: 5px 0 0 5px;
+  margin: 5px 0 5px 5px;
   display: inline-block;
   &:hover {
     -webkit-filter: brightness(0.8);

@@ -4,7 +4,6 @@ import { OverlayTrigger, Tooltip } from "react-bootstrap";
 export default class Thumbnail extends React.Component {
   constructor(props) {
     super(props);
-    this.state = props;
   }
 
   componentDidMount() {
@@ -16,9 +15,9 @@ export default class Thumbnail extends React.Component {
   }
 
   render() {
-    const info = this.state.openTime ? (
+    const info = this.props.openTime ? (
       <span style={{ color: "#adff2f" }}>
-        {this.state.openTime}
+        {this.props.openTime}
         <br />
       </span>
     ) : (
@@ -28,7 +27,7 @@ export default class Thumbnail extends React.Component {
       <Tooltip id="tooltip">
         <span style={{ fontSize: "14px" }}>
           {info}
-          {this.state.text}
+          {this.props.text}
         </span>
       </Tooltip>
     );
@@ -39,20 +38,20 @@ export default class Thumbnail extends React.Component {
           <div
             className={
               "side-corner-tag " +
-              (this.state.isReserved ? "enabled" : "disabled")
+              (this.props.isReserved ? "enabled" : "disabled")
             }
           >
             <div className="community">
-              <a href={this.state.url} target="_blank">
+              <a href={this.props.url} target="_blank">
                 <span
                   className="comu_thumbnail"
-                  style={{ backgroundImage: this.state.background }}
+                  style={{ backgroundImage: this.props.background }}
                 />
               </a>
             </div>
-            {this.state.isReserved ? (
+            {this.props.isReserved ? (
               <p>
-                <span className="reserved-message">{this.state.day}</span>
+                <span className="reserved-message">{this.props.day}</span>
               </p>
             ) : (
               ""
