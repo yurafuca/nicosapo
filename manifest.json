@@ -2,14 +2,14 @@
   "name": "にこさぽ （ニコ生サポート）",
   "short_name": "にこさぽ",
   "manifest_version": 2,
-  "version": "2.5.3",
+  "version": "2.5.4",
   "browser_action": {
     "default_icon": "images/icon.png",
     "default_title": "放送中の番組を確認する",
     "default_popup": "html/popup.html"
   },
   "description":
-    "[ニコニコ生放送] 自動枠移動（新配信（β）対応） / 自動入場 / 放送中の番組を一覧表示 / デスクトップ通知 / 延長通知 / 番組の残り時間を表示 をサポートします．",
+    "[ニコニコ生放送] 自動枠移動 / ニコ生アラート / 自動入場 / 放送中の番組を一覧表示 / デスクトップ通知 / 延長通知 / 番組の残り時間を表示 をサポートします．",
   "icons": {
     "16": "images/icon.png",
     "32": "images/icon.png",
