@@ -41,9 +41,7 @@ export default class BackgroundReloader {
   }
 
   static _resetBadge($videoInfoList) {
-    const zero2empty = num => (num === 0 ? "" : num);
-    const text = zero2empty($videoInfoList.length);
-    Badge.setText(text);
+    Badge.setText($videoInfoList.length);
   }
 
   static _resetList($videoInfos) {
