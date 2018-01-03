@@ -142,6 +142,7 @@ a {
   // width: 458px;
 
   max-height: 520px;
+  padding-bottom: 5px;
   &.search {
     max-height: 492px;
   }
@@ -543,8 +544,7 @@ a {
   display: none;
 }
 .community-hover-wrapper {
-  // margin: 5px 0 0 5px;
-  margin: 5px 0 5px 5px;
+  margin: 5px 0 0 5px;
   display: inline-block;
   &:hover {
     -webkit-filter: brightness(0.8);
