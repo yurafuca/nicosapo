@@ -663,10 +663,7 @@ export default class Settings extends React.Component {
                     </p>
                     <p>
                       {" "}
-                      <a
-                        target="_blank"
-                        href="https://www.amazon.co.jp/gp/registry/wishlist/3FRW92E46KYCC/ref=cm_wl_upd_nojs_succ_ei?sort=priority&view=nullC"
-                      >
+                      <a target="_blank" href="http://amzn.asia/3CJmj5o">
                         Amazon ほしいものリスト - ほしい本
                       </a>
                     </p>
