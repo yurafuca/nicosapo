@@ -4,6 +4,7 @@ import store from "store";
 import NotificationList from "../components/NotificationList";
 import AutoEnterList from "../components/AutoEnterList";
 import Button from "../components/Button";
+import Badge from "../modules/Badge";
 
 function compare(a, b) {
   if (a < b) return -1;
@@ -69,7 +70,8 @@ export default class Settings extends React.Component {
       "options.playsound.volume": 1.0,
       // 'options.autoEnter.cancelList':       [],
       "options.autoEnter.cancel.onIdle": false,
-      "options.idle.minute": 20
+      "options.idle.minute": 20,
+      "options.hideBadge.enable": "disable"
     };
     return state;
   }
@@ -97,6 +99,9 @@ export default class Settings extends React.Component {
   onChange(e) {
     if (e.target.name === "options.soundfile") {
       new Audio(`../sounds/${e.target.value}`).play();
+    }
+    if (e.target.name === "options.hideBadge.enable") {
+      Badge.refresh();
     }
     let stateItem = this.state[e.target.name];
     if (e.target.type === "checkbox") {
@@ -193,7 +198,7 @@ export default class Settings extends React.Component {
                 data-menu="popup"
                 onClick={this.clickMenu}
               >
-                ポップアップ
+                ポップアップ・バッジ
               </div>
             </div>
             <div className="wrapper menu float-left">
@@ -489,7 +494,7 @@ export default class Settings extends React.Component {
             if (this.state.selectedMenu == "popup") {
               return (
                 <div className="wrapper">
-                  <h1 className="appicon">ポップアップ</h1>
+                  <h1 className="appicon">ポップアップ・バッジ</h1>
                   <div className="items">
                     <div className="item">
                       <h3>予約番組をポップアップに表示する</h3>
@@ -518,6 +523,33 @@ export default class Settings extends React.Component {
                           onChange={this.onChange}
                         />{" "}
                         無効
+                      </label>
+                    </div>
+                    <div className="item">
+                      <h3>放送中の番組数が 0 のとき，バッジを非表示にする</h3>
+                      <label>
+                        <input
+                          type="radio"
+                          name="options.hideBadge.enable"
+                          value={"enable"}
+                          checked={
+                            this.state["options.hideBadge.enable"] == "enable"
+                          }
+                          onChange={this.onChange}
+                        />{" "}
+                        非表示にする
+                      </label>
+                      <label>
+                        <input
+                          type="radio"
+                          name="options.hideBadge.enable"
+                          value={"disable"}
+                          checked={
+                            this.state["options.hideBadge.enable"] == "disable"
+                          }
+                          onChange={this.onChange}
+                        />{" "}
+                        「0」と表示する
                       </label>
                     </div>
                   </div>
@@ -656,15 +688,13 @@ export default class Settings extends React.Component {
                       にこさぽの開発を応援してくださる方はよろしくお願いします．今後の開発の励みになります．😘
                     </span>
                     <p>
-                      {" "}
-                      <a target="_blank" href="http://amzn.asia/hqChgj3">
-                        Amazon ほしいものリスト - ほしい雑貨
+                      <a target="_blank" href="http://amzn.asia/3CJmj5o">
+                        Amazon ほしいものリスト - ほしい本
                       </a>
                     </p>
                     <p>
-                      {" "}
-                      <a target="_blank" href="http://amzn.asia/3CJmj5o">
-                        Amazon ほしいものリスト - ほしい本
+                      <a target="_blank" href="http://amzn.asia/hqChgj3">
+                        Amazon ほしいものリスト - ほしい雑貨
                       </a>
                     </p>
                   </div>
