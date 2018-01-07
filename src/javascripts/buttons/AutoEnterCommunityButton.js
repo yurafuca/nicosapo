@@ -23,7 +23,9 @@ export default class AutoEnterCommunityButton extends React.Component {
         </font>
         <br />
         <strong>📢注意: </strong>
-        <font color="#24963e">自動次枠移動を ON にすると自動入場しません</font>
+        <font color="#24963e">
+          自動次枠移動を オン にすると自動入場しません
+        </font>
       </span>
     );
     this._popoverPos = "up";
