@@ -47,8 +47,8 @@
       "js": ["javascripts/content.js"],
       "css": [
         "stylesheets/content.css",
-        "stylesheets/balloon.min.css",
-        "stylesheets/animate.min.css"
+        "stylesheets/bootstrap-popover.css",
+        "stylesheets/balloon.min.css"
       ]
     }
   ],

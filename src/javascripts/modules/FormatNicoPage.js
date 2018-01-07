@@ -21,7 +21,8 @@ export default class FormatNicoPage {
         break;
       case "MODERN_CAST_PAGE":
         $(".program-detail").css("width", "930px");
-        $("#program-social-block").css("bottom", "30px");
+        $("#program-social-block").css("bottom", "35px");
+        $("#program-social-block").css("top", "auto");
         break;
       case "NORMAL_CAST_PAGE": // Fall through.
       case "OFFICIAL_CAST_PAGE": // Fall through.

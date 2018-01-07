@@ -93,7 +93,7 @@ $url_0: url(chrome-extension://__MSG_@@extension_id__/images/icon.png);
 }
 
 #nicosapo_buttons {
-  display: inline-block;
+  display: inline;
 }
 #nicosapo-toast {
   font-family: $font_0, $font_1, $font_2, $font_3, $font_4, $font_5, $font_6,
@@ -131,7 +131,7 @@ $url_0: url(chrome-extension://__MSG_@@extension_id__/images/icon.png);
   display: inline-block;
 }
 .on_off_button {
-  display: inline-block;
+  display: inline;
   text-align: center;
   font-weight: normal !important;
   > a {
@@ -293,5 +293,5 @@ $url_0: url(chrome-extension://__MSG_@@extension_id__/images/icon.png);
     linear-gradient(to bottom, #33cc56 0%, #28a745 100%);
 }
 #program-social-block {
-  bottom: 30px;
+  bottom: 100px;
 }
