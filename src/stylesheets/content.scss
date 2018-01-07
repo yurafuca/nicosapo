@@ -1,22 +1,22 @@
 //colors
 $black_80: rgba(0, 0, 0, 0.8);
 $white: white;
-$white_30: rgba(255, 255, 255, .3);
+$white_30: rgba(255, 255, 255, 0.3);
 $color_tia_maria_approx: #c63e1b;
 $color_meteor_approx: #dc7519;
 $color_pizazz_approx: #fe8900;
 $color_blaze_orange_approx: #ff6101;
 $color_tundora_approx: #444;
 $color_log_cabin_approx: #222;
-$black:  black;
+$black: black;
 $color_storm_dust_approx: #666;
 $color_gallery_approx: #f0f0f0;
 $color_alto_approx: #dcdcdc;
-$black_20: rgba(0, 0, 0, 0.20);
+$black_20: rgba(0, 0, 0, 0.2);
 $color_mantis_approx: #79d858;
 $color_apple_approx: #569e3d;
 $color_la_palma_approx: #417e26;
-$black_15: rgba(0,0,0,0.15);
+$black_15: rgba(0, 0, 0, 0.15);
 $color_alabaster_approx: #fcfcfc;
 $color_carnation_approx: #ec5757;
 $color_monza_approx: #c71616;
@@ -39,14 +39,16 @@ $font_9: EmojiSymbols;
 $url_0: url(chrome-extension://__MSG_@@extension_id__/images/icon.png);
 
 @font-face {
-  font-family: 'Material Icons';
+  font-family: "Material Icons";
   font-style: normal;
   font-weight: 400;
-  src: local('Material Icons'), local('MaterialIcons-Regular'), url(https://fonts.gstatic.com/s/materialicons/v22/2fcrYFNaTjcS6g4U3t-Y5ZjZjT5FdEJ140U2DJYC3mY.woff2) format('woff2');
+  src: local("Material Icons"), local("MaterialIcons-Regular"),
+    url(https://fonts.gstatic.com/s/materialicons/v22/2fcrYFNaTjcS6g4U3t-Y5ZjZjT5FdEJ140U2DJYC3mY.woff2)
+      format("woff2");
 }
 
 .material-icons {
-  font-family: 'Material Icons';
+  font-family: "Material Icons";
   font-weight: normal;
   font-style: normal;
   font-size: 24px;
@@ -57,267 +59,239 @@ $url_0: url(chrome-extension://__MSG_@@extension_id__/images/icon.png);
   white-space: nowrap;
   word-wrap: normal;
   direction: ltr;
-  -webkit-font-feature-settings: 'liga';
+  -webkit-font-feature-settings: "liga";
   -webkit-font-smoothing: antialiased;
 }
 
 .rotate180 {
-	transform: rotateX(180deg);
+  transform: rotateX(180deg);
 }
 
 //for bug of nicolive
 .icon_follow {
-	position: relative;
-	display: inline-block;
-	width: 14px;
-	height: 14px;
-	vertical-align: top;
+  position: relative;
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  vertical-align: top;
 }
 
 //format
 #watch_title_box .meta {
-	overflow: visible !important;
+  overflow: visible !important;
 }
 
 //react-bootstrap
 .tooltip-inner {
-	max-width: 270px !important;
-	padding: 7px 9px !important;
-	background: $black_80 !important;
-	z-index: 999 !important;
+  max-width: 270px !important;
+  padding: 7px 9px !important;
+  background: $black_80 !important;
+  z-index: 999 !important;
 }
 .tooltip.in {
-	opacity: 1.0 !important;
+  opacity: 1 !important;
 }
 
 #nicosapo_buttons {
-	display: inline-block;
+  display: inline-block;
 }
 #nicosapo-toast {
-	font-family: $font_0, $font_1, $font_2, $font_3, $font_4, $font_5, $font_6, $font_7, $font_8, $font_9;
-	position: absolute;
-	z-index: 999;
-	top: 79px;
-	left: 25px;
-	background-color: $black_80;
-	color: $white;
-	//Instead of the line below you could use @include border-radius($radius, $vertical-radius)
-	border-radius: 4px;
-	font-size: 18px;
-	font-weight: 700;
-	padding: 3px 7px 3px 3px;
-	border: solid 1px $white_30;
+  font-family: $font_0, $font_1, $font_2, $font_3, $font_4, $font_5, $font_6,
+    $font_7, $font_8, $font_9;
+  position: absolute;
+  z-index: 999;
+  top: 79px;
+  left: 25px;
+  background-color: $black_80;
+  color: $white;
+  //Instead of the line below you could use @include border-radius($radius, $vertical-radius)
+  border-radius: 4px;
+  font-size: 18px;
+  font-weight: 700;
+  padding: 3px 7px 3px 3px;
+  border: solid 1px $white_30;
 }
 #nicosapo-toast-icon {
-	display: inline-block;
-	background-image: $url_0;
-	background-size: 27px;
-	background-repeat: no-repeat;
-	background-position: center;
-	height: 37px;
-	width: 40px;
-	opacity: 0.8 !important;
-	filter: alpha(opacity=80);
-	vertical-align: middle;
+  display: inline-block;
+  background-image: $url_0;
+  background-size: 27px;
+  background-repeat: no-repeat;
+  background-position: center;
+  height: 37px;
+  width: 40px;
+  opacity: 0.8 !important;
+  filter: alpha(opacity=80);
+  vertical-align: middle;
 }
 #nicosapo-toast-text {
-	opacity: 0.8 !important;
-	position: relative;
-	top: 3px;
-	vertical-align: middle;
-	display: inline-block;
+  opacity: 0.8 !important;
+  position: relative;
+  top: 3px;
+  vertical-align: middle;
+  display: inline-block;
 }
 .on_off_button {
-	display: inline-block;
-	text-align: center;
-	font-weight: normal !important;
-	> a {
-		color: $white !important;
-		text-decoration: none !important;
-		font-weight: normal !important;
-		:hover {
-			font-weight: normal !important;
-		}
-	}
-	> .link {
-		//Instead of the line below you could use @include border-radius($radius, $vertical-radius)
-		border-radius: 2px;
-		font-size: 12px;
-		padding: 1px 10px;
-		margin-right: 5px;
-		margin-left: 5px;
-		&.switch_is_on {
-			border: solid 1px #a34514;
-			background-image: linear-gradient(#e36320,#b94e17);
-			&:hover {
-				filter: brightness(105%);
-				background-image: linear-gradient(#e36320,#b94e17);
-				cursor: pointer;
-			}
-			&:active {
-				color: $white;
-				border-color: #a34514;
-				//Instead of the line below you could use @include box-shadow($shadow-1, $shadow-2, $shadow-3, $shadow-4, $shadow-5, $shadow-6, $shadow-7, $shadow-8, $shadow-9, $shadow-10)
-				box-shadow: inset 0 2px 4px $black_15;
-			}
-		}
-		&.switch_is_off {
-			background-image: linear-gradient(to bottom,$color_tundora_approx,$color_log_cabin_approx);
-			border: solid 1px $black;
-			&:hover {
-				background-image: linear-gradient(to bottom,$color_storm_dust_approx,$color_tundora_approx);
-				cursor: pointer;
-			}
-			&:active {
-				background-color: $color_alto_approx;
-				//Instead of the line below you could use @include box-shadow($shadow-1, $shadow-2, $shadow-3, $shadow-4, $shadow-5, $shadow-6, $shadow-7, $shadow-8, $shadow-9, $shadow-10)
-				box-shadow: inset 0 1px 6px $black_20;
-			}
-		}
-	}
+  display: inline-block;
+  text-align: center;
+  font-weight: normal !important;
+  > a {
+    color: $white !important;
+    text-decoration: none !important;
+    font-weight: normal !important;
+    :hover {
+      font-weight: normal !important;
+    }
+  }
+  > .link {
+    //Instead of the line below you could use @include border-radius($radius, $vertical-radius)
+    border-radius: 2px;
+    font-size: 12px;
+    padding: 2px 10px;
+    margin-right: 5px;
+    margin-left: 5px;
+    &.switch_is_on {
+      background-color: #3181ff;
+      &:hover {
+        filter: brightness(95%);
+        cursor: pointer;
+      }
+      &:active {
+        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+      }
+    }
+    &.switch_is_off {
+      background-color: #303030;
+      &:hover {
+        filter: brightness(95%);
+        cursor: pointer;
+      }
+      &:active {
+        box-shadow: inset 0 1px 6px rgba(0, 0, 0, 0.3);
+      }
+    }
+  }
+}
+.auto_scroll_button > .link {
+  margin-left: 10px;
+}
+.auto_enter_community_button > .link {
+  &.switch_is_on {
+    color: $white;
+    background-color: #35b26b;
+  }
+}
+.auto_enter_program_button > .link {
+  &.switch_is_off {
+    background-image: linear-gradient(
+      $color_alabaster_approx,
+      $color_gallery_approx
+    );
+    color: $color_log_cabin_approx !important;
+    &:hover {
+      background-image: linear-gradient(
+        $color_gallery_approx,
+        $color_alto_approx
+      );
+    }
+    &:active {
+      background-color: $color_alto_approx;
+      // Instead of the line below you could use @include box-shadow($shadow-1, $shadow-2, $shadow-3, $shadow-4, $shadow-5, $shadow-6, $shadow-7, $shadow-8, $shadow-9, $shadow-10)
+      box-shadow: inset 0 1px 6px $black_20;
+    }
+  }
+  &.switch_is_on {
+    color: $white;
+    background-image: linear-gradient(
+      $color_carnation_approx,
+      $color_monza_approx
+    );
+    &:hover {
+      color: $white;
+      background-image: linear-gradient(
+        $color_carnation_approx,
+        $color_monza_approx
+      );
+    }
+    &:active {
+      color: $white;
+      background-color: $color_red_devil_approx;
+      background-image: none;
+      border-color: $color_dark_burgundy_approx;
+    }
+  }
 }
 #extended-bar {
-	font-family: $font_0, $font_1, $font_2, $font_3, $font_4, $font_5, $font_6, $font_7, $font_8, $font_9;
-	width: 960px;
-	text-align: right;
-	background-color: $color_log_cabin_approx;
-	color: $color_gallery_approx;
-	margin: 0 auto;
-	//Instead of the line below you could use @include box-sizing($bs)
-	box-sizing: border-box;
-	margin-top: 10px;
-	padding: 10px 20px 4px;
-	font-size: 12px;
-	> * {
-		cursor: default;
-		color: $white;
-		display: inline-block;
-		margin-right: 30px;
-	}
-	.time {
-		color: $white;
-	}
-	.message {
-		color: $white;
-	}
-	> {
-		.message {
-			float: left;
-			&:before {
-				content: '➡️ 延長検知: ';
-			}
-		}
-		.rest-time {
-			float: right;
-			&:before {
-				content: '⏱ 残り時間: ';
-			}
-		}
-		.time:last-child {
-			margin-right: 0;
-		}
-		.end-time:before {
-			content: '🏳 終了時刻: ';
-		}
-	}
+  font-family: $font_0, $font_1, $font_2, $font_3, $font_4, $font_5, $font_6,
+    $font_7, $font_8, $font_9;
+  width: 960px;
+  text-align: right;
+  background-color: $color_log_cabin_approx;
+  color: $color_gallery_approx;
+  margin: 0 auto;
+  // Instead of the line below you could use @include box-sizing($bs)
+  box-sizing: border-box;
+  margin-top: 10px;
+  padding: 10px 20px 4px;
+  font-size: 12px;
+  > * {
+    cursor: default;
+    color: $white;
+    display: inline-block;
+    margin-right: 30px;
+  }
+  .time {
+    color: $white;
+  }
+  .message {
+    color: $white;
+  }
+  >  {
+    .message {
+      float: left;
+      &:before {
+        content: "➡️ 延長検知: ";
+      }
+    }
+    .rest-time {
+      float: right;
+      &:before {
+        content: "⏱ 残り時間: ";
+      }
+    }
+    .time:last-child {
+      margin-right: 0;
+    }
+    .end-time:before {
+      content: "🏳 終了時刻: ";
+    }
+  }
 }
-#program-main-block  #extended-bar {
+#program-main-block #extended-bar {
   width: 1024px;
 }
 .auto_scroll_button .material-icons {
-	font-size: 18px;
-	position: relative;
-	top: 4px;
-}
-.auto_scroll_button > .link {
-	&.switch_is_on {
-		color: $white;
-		background-image: linear-gradient(#5074be, #3b5c9f);
-		border: solid 1px #34518d;
-		&:hover {
-			color: $white;
-			background-image: linear-gradient(#5074be, #3b5c9f);
-			border: solid 1px #34518d;
-		}
-		&:active {
-			color: $white;
-			border-color: $color_la_palma_approx;
-			//Instead of the line below you could use @include box-shadow($shadow-1, $shadow-2, $shadow-3, $shadow-4, $shadow-5, $shadow-6, $shadow-7, $shadow-8, $shadow-9, $shadow-10)
-			box-shadow: inset 0 2px 4px $black_15;
-		}
-	}
-	&.switch_is_off:active {
-		background-color: $color_alto_approx;
-		//Instead of the line below you could use @include box-shadow($shadow-1, $shadow-2, $shadow-3, $shadow-4, $shadow-5, $shadow-6, $shadow-7, $shadow-8, $shadow-9, $shadow-10)
-		box-shadow: inset 0 1px 6px $black_20;
-	}
-}
-.auto_enter_community_button > .link {
-	&.switch_is_on {
-		color: $white;
-		background-image: linear-gradient(#78c35e, #5cad40);
-		border: solid 1px #529a3a;
-		&:hover {
-			color: $white;
-			background-image: linear-gradient(#78c35e, #5cad40);
-			border: solid 1px #529a3a;
-		}
-		&:active {
-			color: $white;
-			border-color: $color_la_palma_approx;
-			//Instead of the line below you could use @include box-shadow($shadow-1, $shadow-2, $shadow-3, $shadow-4, $shadow-5, $shadow-6, $shadow-7, $shadow-8, $shadow-9, $shadow-10)
-			box-shadow: inset 0 2px 4px $black_15;
-		}
-	}
-	&.switch_is_off:active {
-		background-color: $color_alto_approx;
-		//Instead of the line below you could use @include box-shadow($shadow-1, $shadow-2, $shadow-3, $shadow-4, $shadow-5, $shadow-6, $shadow-7, $shadow-8, $shadow-9, $shadow-10)
-		box-shadow: inset 0 1px 6px $black_20;
-	}
-}
-.auto_enter_program_button > .link {
-	&.switch_is_off {
-		background-image: linear-gradient($color_alabaster_approx, $color_gallery_approx);
-		color: $color_log_cabin_approx !important;
-		&:hover {
-			background-image: linear-gradient($color_gallery_approx, $color_alto_approx);
-		}
-		&:active {
-			background-color: $color_alto_approx;
-			//Instead of the line below you could use @include box-shadow($shadow-1, $shadow-2, $shadow-3, $shadow-4, $shadow-5, $shadow-6, $shadow-7, $shadow-8, $shadow-9, $shadow-10)
-			box-shadow: inset 0 1px 6px $black_20;
-		}
-	}
-	&.switch_is_on {
-		color: $white;
-		background-image: linear-gradient($color_carnation_approx, $color_monza_approx);
-		&:hover {
-			color: $white;
-			background-image: linear-gradient($color_carnation_approx, $color_monza_approx);
-		}
-		&:active {
-			color: $white;
-			background-color: $color_red_devil_approx;
-			background-image: none;
-			border-color: $color_dark_burgundy_approx;
-		}
-	}
+  font-size: 18px;
+  position: relative;
+  top: 4px;
 }
 .radio-badge-wrapper {
-	background-image: linear-gradient(rgb(51, 204, 86) 0%, rgb(40, 167, 69) 100%);
-	width: 50px;
-	height: 50px;
-	border-radius: 50px;
-
+  background-image: linear-gradient(rgb(51, 204, 86) 0%, rgb(40, 167, 69) 100%);
+  width: 50px;
+  height: 50px;
+  border-radius: 50px;
 }
 .radio-badge {
-	height: 40px;
-	width: 40px;
-	border-radius: 50px;
-	background-size: 35px;
-	position: relative;
-	top: 7px;
-	left: 7px;
-	background-repeat: no-repeat;
-	background-image: url(chrome-extension://__MSG_@@extension_id__/images/radio.png), linear-gradient(to bottom, #33CC56 0%, #28A745 100%);
+  height: 40px;
+  width: 40px;
+  border-radius: 50px;
+  background-size: 35px;
+  position: relative;
+  top: 7px;
+  left: 7px;
+  background-repeat: no-repeat;
+  background-image: url(chrome-extension://__MSG_@@extension_id__/images/radio.png),
+    linear-gradient(to bottom, #33cc56 0%, #28a745 100%);
+}
+#program-social-block {
+  bottom: 30px;
 }
