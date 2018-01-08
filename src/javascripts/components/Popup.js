@@ -24,14 +24,6 @@ export default class Popup extends React.Component {
       });
   }
 
-  // componentDidMount() {
-  //   if (store.get("options.showReserved.enable") == "enable") {
-  //     this.setState({ showReserve: false });
-  //   } else {
-  //     this.setState({ showReserve: true });
-  //   }
-  // }
-
   shouldComponentUpdate(nextProps, nextState) {
     const selectedTab = {
       prev: this.state.selectedTab,
@@ -46,13 +38,13 @@ export default class Popup extends React.Component {
     }
     switch (e.target.id) {
       case "user":
-        this.setState({ selectedTab: "user", videoInfoList: [] });
+        this.setState({ selectedTab: "user" });
         break;
       case "official":
-        this.setState({ selectedTab: "official", videoInfoList: [] });
+        this.setState({ selectedTab: "official" });
         break;
       case "future":
-        this.setState({ selectedTab: "future", videoInfoList: [] });
+        this.setState({ selectedTab: "future" });
         break;
       case "search":
         this.setState({
@@ -140,16 +132,7 @@ export default class Popup extends React.Component {
       <div id="wrapper">
         {menu}
         <div id="tab-container">{tabs}</div>
-        <div id="communities">
-          {/* <div
-            style={{ height: "200px", width: "200px" }}
-            className="nowloading"
-          /> */}
-          {/* <video autoPlay loop className="loading">
-            <source src="/images/loading.mp4" />
-          </video> */}
-          {content}
-        </div>
+        <div id="communities">{content}</div>
       </div>
     );
   }
