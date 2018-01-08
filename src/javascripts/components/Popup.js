@@ -24,14 +24,6 @@ export default class Popup extends React.Component {
       });
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    const selectedTab = {
-      prev: this.state.selectedTab,
-      next: nextState.selectedTab
-    };
-    return true;
-  }
-
   toggleTab(e) {
     if (e.target.id === this.state.selectedTab) {
       return;

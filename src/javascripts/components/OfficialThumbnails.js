@@ -21,7 +21,11 @@ export default class OfficialThumbnails extends GeneralThumbnails {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (genre === nextProps.genre) return;
+    if (genre === nextProps.genre) {
+      return;
+    } else {
+      genre = nextProps.genre;
+    }
     this.setState({ loading: true, thumbParams: [] }, () => {
       super.loadCasts(nextProps.genre, this.setParams);
     });
