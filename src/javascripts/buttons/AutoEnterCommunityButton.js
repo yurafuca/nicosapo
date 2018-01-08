@@ -103,7 +103,7 @@ export default class AutoEnterCommunityButton extends React.Component {
             .find("a")
             .text() || $(".company").text();
         break;
-      case "MODERN_CAST_PAGE":
+      case "CHIMERA_CAST_PAGE":
         title = $(".program-community-name").text();
         owner = $(
           $(".program-broadcaster-name")

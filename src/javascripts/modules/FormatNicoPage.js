@@ -33,10 +33,18 @@ export default class FormatNicoPage {
         $("ul[class^='___sns-share-menu-custom___']").css("bottom", "20px");
 
         break;
+      case "CHIMERA_CAST_PAGE":
+        $(".program-title")
+          .next()
+          .css("width", "950px");
+        $("div[class^='___player-head-area___']").css("margin", 0);
+        $("div[class^='___player-body-area___']").css("margin", 0);
+        $("#program-social-block").css("position", "relative");
+        $("#program-social-block").css("bottom", "10px");
         $("#program-social-block").css("top", "auto");
+        $("#program-social-block").css("z-index", "-9");
+        $("#nicosapo_buttons").css("top", 0);
         break;
-      case "NORMAL_CAST_PAGE": // Fall through.
-      case "OFFICIAL_CAST_PAGE": // Fall through.
       case "NORMAL_CAST_PAGE":
       case "TIME_SHIFT_PAGE":
         $("#extended-bar").css("width", "650px");

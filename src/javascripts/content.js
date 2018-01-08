@@ -4,6 +4,7 @@ import PageType from "./modules/PageType";
 import StandByPage from "./page/StandByPage";
 import GatePage from "./page/GatePage";
 import NormalCastPage from "./page/NormalCastPage";
+import ChimeraCastPage from "./page/ChimeraCastPage";
 import ModernCastPage from "./page/ModernCastPage";
 import OfficialCastPage from "./page/OfficialCastPage";
 import TimeShiftPage from "./page/TimeShiftPage";
@@ -19,6 +20,7 @@ $(() => {
     STAND_BY_PAGE: StandByPage,
     GATE_PAGE: GatePage,
     NORMAL_CAST_PAGE: NormalCastPage,
+    CHIMERA_CAST_PAGE: ChimeraCastPage,
     MODERN_CAST_PAGE: ModernCastPage,
     OFFICIAL_CAST_PAGE: OfficialCastPage,
     TIME_SHIFT_PAGE: TimeShiftPage,

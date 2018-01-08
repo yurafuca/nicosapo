@@ -28,10 +28,13 @@ export default class Widgets extends React.Component {
      * MESSAGE
      */
     if (this.props.buttonOrder === `MESSAGE`) {
-      const parent = document.getElementsByClassName("meta")[0];
       const child = document.createElement("span");
       child.textContent = this.props.message;
-      parent.appendChild(child);
+      child.style.whiteSpace = "nowrap";
+      child.style.fontSize = "12px";
+      child.style.color = "#777";
+      // this.props.element4Buttons.appendChild(child);
+      insertAfter(child, this.props.element4Buttons);
       return;
     }
     /**
