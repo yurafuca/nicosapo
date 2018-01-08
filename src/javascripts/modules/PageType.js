@@ -63,6 +63,10 @@ export default class PageType {
   }
 
   static _isOfficialCastPage() {
+    // お便り投稿ヘッダ
+    if ($(".mail_title").length > 0) {
+      return true;
+    }
     if ($("div[class^='___program-information___']").length == 0) {
       return false;
     }

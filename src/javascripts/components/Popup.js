@@ -17,10 +17,14 @@ export default class Popup extends React.Component {
 
     Api.loadCasts("user")
       .then(programs => {
-        this.setState({ programs: programs, loading: false });
+        this.setState({
+          programs: programs,
+          loading: false,
+          loadedTab: "user"
+        });
       })
       .catch(() => {
-        this.setState({ isLogined: false, loading: false });
+        this.setState({ isLogined: false, loading: false, loadedTab: "user" });
       });
   }
 
@@ -53,6 +57,7 @@ export default class Popup extends React.Component {
     }
     Api.loadCasts(e.target.id)
       .then(programs => {
+        console.log(loadedTab);
         this.setState({
           programs: programs,
           loading: false,
