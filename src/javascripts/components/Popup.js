@@ -28,15 +28,21 @@ export default class Popup extends React.Component {
     if (e.target.id === this.state.selectedTab) {
       return;
     }
+    const loadedTab = e.target.id;
+    this.setState({
+      programs: [],
+      loading: true,
+      loadedTab: loadedTab
+    });
     switch (e.target.id) {
       case "user":
-        this.setState({ selectedTab: "user", programs: [], loading: true });
+        this.setState({ selectedTab: "user" });
         break;
       case "official":
-        this.setState({ selectedTab: "official", programs: [], loading: true });
+        this.setState({ selectedTab: "official" });
         break;
       case "future":
-        this.setState({ selectedTab: "future", programs: [], loading: true });
+        this.setState({ selectedTab: "future" });
         break;
       case "search":
         this.setState({ selectedTab: "search" });
@@ -47,7 +53,11 @@ export default class Popup extends React.Component {
     }
     Api.loadCasts(e.target.id)
       .then(programs => {
-        this.setState({ programs: programs, loading: false });
+        this.setState({
+          programs: programs,
+          loading: false,
+          loadedTab: loadedTab
+        });
       })
       .catch(() => {
         // this.setState({ isLogined: false, loading: false });
@@ -120,7 +130,7 @@ export default class Popup extends React.Component {
         <OfficialThumbnails
           loading={this.state.loading}
           programs={this.state.programs}
-          genre={this.state.selectedTab}
+          loadedTab={this.state.loadedTab}
         />
       );
     } else if (this.state.selectedTab === "search") {

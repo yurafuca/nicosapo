@@ -3,8 +3,6 @@ import React from "react";
 import GeneralThumbnails from "./GeneralThumbnails";
 import Thumbnail from "../components/Thumbnail";
 
-let genre = "";
-
 export default class OfficialThumbnails extends GeneralThumbnails {
   constructor(props) {
     super(props);
@@ -12,21 +10,16 @@ export default class OfficialThumbnails extends GeneralThumbnails {
     this.setParams = this.setParams.bind(this);
   }
 
-  componentDidMount() {
-    genre = "";
-  }
-
   componentWillReceiveProps(nextProps) {
-    if (this.props.genre !== nextProps.genre) {
-      this.setState({ thumbParams: [] }, () =>
-        this.setParams(nextProps.programs)
-      );
-    } else {
+    if (nextProps.loadedTab !== "user") {
       this.setParams(nextProps.programs);
     }
   }
 
   setParams(programs) {
+    if (programs.length === 0) {
+      this.setState({ thumbParams: [] });
+    }
     const thumbParams = [];
     programs.forEach((program, index) => {
       const thumbParam = {};
