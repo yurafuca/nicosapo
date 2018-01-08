@@ -11,18 +11,16 @@ export default class OfficialThumbnails extends GeneralThumbnails {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.loading) {
-      this.setState({ thumbParams: [] });
+    if (this.props.genre !== nextProps.genre) {
+      this.setState({ thumbParams: [] }, () =>
+        this.setParams(nextProps.programs)
+      );
+    } else {
+      this.setParams(nextProps.programs);
     }
-    this.setParams(nextProps.programs);
-    // this.setState({ programs: nextProps.programs }, this.setParams);
   }
 
   setParams(programs) {
-    if (programs == null) {
-      this.setState({ thumbParams: [] });
-      return;
-    }
     const thumbParams = [];
     programs.forEach((program, index) => {
       const thumbParam = {};

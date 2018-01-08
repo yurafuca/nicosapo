@@ -136,6 +136,7 @@ export default class Popup extends React.Component {
         <OfficialThumbnails
           loading={this.state.loading}
           programs={this.state.programs}
+          genre={this.state.selectedTab}
         />
       );
     } else if (this.state.selectedTab === "search") {
