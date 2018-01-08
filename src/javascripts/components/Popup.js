@@ -152,7 +152,7 @@ export default class Popup extends React.Component {
             className="nowloading"
           /> */}
           {/* <video autoPlay loop className="loading">
-            <source src="/images/loading.mp4" />
+            <source src="/images/loading.compressed.mp4" />
           </video> */}
           {content}
         </div>

@@ -171,7 +171,7 @@ export default class SearchContent extends React.Component {
           <div id="search-result">
             {this.state.isLoading && (
               <video autoPlay loop className="loading">
-                <source src="/images/loading.mp4" />
+                <source src="/images/loading.compressed.mp4" />
               </video>
             )}
             {this.state.thumbParams.map(thumbParam => (

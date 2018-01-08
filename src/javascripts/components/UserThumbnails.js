@@ -97,7 +97,7 @@ export default class UserThumbnails extends GeneralThumbnails {
       <div id="container" className="nowloading">
         {this.props.loading && (
           <video autoPlay loop className="loading">
-            <source src="/images/loading.mp4" />
+            <source src="/images/loading.compressed.mp4" />
           </video>
         )}
         {content}

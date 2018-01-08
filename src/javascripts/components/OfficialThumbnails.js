@@ -59,7 +59,7 @@ export default class OfficialThumbnails extends GeneralThumbnails {
       <div id="container" className="nowloading">
         {this.props.loading && (
           <video autoPlay loop className="loading">
-            <source src="/images/loading.mp4" />
+            <source src="/images/loading.compressed.mp4" />
           </video>
         )}
         {/* <div className="nowloading" style={{ border: "solid 10px red" }} /> */}
