@@ -11,7 +11,7 @@ export default class CommunityPage extends NonCastPagee {
       position       : `AFTER`,
       requireInline  : true,
       element4Buttons: document.getElementById('comSetting_hide'),
-      idName4ExBar   : `siteHeader` // TODO: temp
+      idName4ExBar   : `id=siteHeader` // TODO: temp
     };
     super.putWidgets(props);
   }
