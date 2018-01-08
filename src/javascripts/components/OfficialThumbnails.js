@@ -6,19 +6,15 @@ import Thumbnail from "../components/Thumbnail";
 export default class OfficialThumbnails extends GeneralThumbnails {
   constructor(props) {
     super(props);
-    this.state = {
-      loading: true,
-      programs: [],
-      thumbParams: []
-    };
+    this.state = { thumbParams: [] };
     this.setParams = this.setParams.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setState({ loading: true, thumbParams: [] }, () => {
-      super.loadCasts(nextProps.genre, this.setParams);
-    });
-
+    if (nextProps.loading) {
+      this.setState({ thumbParams: [] });
+    }
+    this.setParams(nextProps.programs);
     // this.setState({ programs: nextProps.programs }, this.setParams);
   }
 
@@ -51,10 +47,7 @@ export default class OfficialThumbnails extends GeneralThumbnails {
         : undefined;
       thumbParams.push(thumbParam);
       if (index == programs.length - 1) {
-        this.setState({
-          thumbParams: thumbParams,
-          loading: false
-        });
+        this.setState({ thumbParams: thumbParams });
       }
     });
   }
@@ -64,7 +57,7 @@ export default class OfficialThumbnails extends GeneralThumbnails {
     }
     return (
       <div id="container" className="nowloading">
-        {this.state.loading && (
+        {this.props.loading && (
           <video autoPlay loop className="loading">
             <source src="/images/loading.mp4" />
           </video>
