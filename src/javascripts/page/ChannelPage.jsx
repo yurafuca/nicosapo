@@ -11,7 +11,7 @@ export default class ChannelPage extends NonCastPage {
       position       : `APPEND`,
       requireInline  : true,
       element4Buttons: document.getElementsByClassName('join_leave')[0],
-      idName4ExBar   : `siteHeader` // TODO: temp
+      idName4ExBar   : `id=siteHeader` // TODO: temp
     };
     super.putWidgets(props);
   }

@@ -9,7 +9,7 @@ export default class Popup extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isLogined: true,
+      loading: true,
       selectedTab: "user",
       programs: []
     };
@@ -17,7 +17,7 @@ export default class Popup extends React.Component {
 
     Api.loadCasts("user")
       .then(programs => {
-        this.setState({ programs: programs });
+        this.setState({ programs: programs, loading: false });
       })
       .catch(() => {
         this.setState({ isLogined: false, loading: false });
@@ -30,20 +30,16 @@ export default class Popup extends React.Component {
     }
     switch (e.target.id) {
       case "user":
-        this.setState({ selectedTab: "user" });
+        this.setState({ selectedTab: "user", programs: [], loading: true });
         break;
       case "official":
-        this.setState({ selectedTab: "official" });
+        this.setState({ selectedTab: "official", programs: [], loading: true });
         break;
       case "future":
-        this.setState({ selectedTab: "future" });
+        this.setState({ selectedTab: "future", programs: [], loading: true });
         break;
       case "search":
-        this.setState({
-          selectedTab: "search",
-          videoInfoList: [],
-          loading: false
-        });
+        this.setState({ selectedTab: "search" });
         break;
       default:
         this.setState({ selectedTab: "user" });
@@ -51,7 +47,7 @@ export default class Popup extends React.Component {
     }
     Api.loadCasts(e.target.id)
       .then(programs => {
-        this.setState({ programs: programs });
+        this.setState({ programs: programs, loading: false });
       })
       .catch(() => {
         // this.setState({ isLogined: false, loading: false });
@@ -109,13 +105,24 @@ export default class Popup extends React.Component {
           </div>
         );
       } else {
-        content = <UserThumbnails programs={this.state.programs} />;
+        content = (
+          <UserThumbnails
+            loading={this.state.loading}
+            programs={this.state.programs}
+          />
+        );
       }
     } else if (
       this.state.selectedTab === "official" ||
       this.state.selectedTab === "future"
     ) {
-      content = <OfficialThumbnails genre={this.state.selectedTab} />;
+      content = (
+        <OfficialThumbnails
+          loading={this.state.loading}
+          programs={this.state.programs}
+          genre={this.state.selectedTab}
+        />
+      );
     } else if (this.state.selectedTab === "search") {
       content = <SearchContent />;
     }
@@ -124,7 +131,16 @@ export default class Popup extends React.Component {
       <div id="wrapper">
         {menu}
         <div id="tab-container">{tabs}</div>
-        <div id="communities">{content}</div>
+        <div id="communities">
+          {/* <div
+            style={{ height: "200px", width: "200px" }}
+            className="nowloading"
+          /> */}
+          {/* <video autoPlay loop className="loading">
+            <source src="/images/loading.compressed.mp4" />
+          </video> */}
+          {content}
+        </div>
       </div>
     );
   }

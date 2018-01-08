@@ -8,11 +8,7 @@ let genre = "";
 export default class OfficialThumbnails extends GeneralThumbnails {
   constructor(props) {
     super(props);
-    this.state = {
-      loading: true,
-      programs: [],
-      thumbParams: []
-    };
+    this.state = { thumbParams: [] };
     this.setParams = this.setParams.bind(this);
   }
 
@@ -21,21 +17,16 @@ export default class OfficialThumbnails extends GeneralThumbnails {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (genre === nextProps.genre) {
-      return;
+    if (this.props.genre !== nextProps.genre) {
+      this.setState({ thumbParams: [] }, () =>
+        this.setParams(nextProps.programs)
+      );
     } else {
-      genre = nextProps.genre;
+      this.setParams(nextProps.programs);
     }
-    this.setState({ loading: true, thumbParams: [] }, () => {
-      super.loadCasts(nextProps.genre, this.setParams);
-    });
   }
 
   setParams(programs) {
-    if (programs == null) {
-      this.setState({ thumbParams: [] });
-      return;
-    }
     const thumbParams = [];
     programs.forEach((program, index) => {
       const thumbParam = {};
@@ -60,10 +51,7 @@ export default class OfficialThumbnails extends GeneralThumbnails {
         : undefined;
       thumbParams.push(thumbParam);
       if (index == programs.length - 1) {
-        this.setState({
-          thumbParams: thumbParams,
-          loading: false
-        });
+        this.setState({ thumbParams: thumbParams });
       }
     });
   }
@@ -73,9 +61,9 @@ export default class OfficialThumbnails extends GeneralThumbnails {
     }
     return (
       <div id="container" className="nowloading">
-        {this.state.loading && (
+        {this.props.loading && (
           <video autoPlay loop className="loading">
-            <source src="/images/loading.mp4" />
+            <source src="/images/loading.compressed.mp4" />
           </video>
         )}
         {/* <div className="nowloading" style={{ border: "solid 10px red" }} /> */}

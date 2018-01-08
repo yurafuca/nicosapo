@@ -7,10 +7,7 @@ import Thumbnail from "../components/Thumbnail";
 export default class UserThumbnails extends GeneralThumbnails {
   constructor(props) {
     super(props);
-    this.state = {
-      loading: true,
-      thumbParams: []
-    };
+    this.state = { thumbParams: [] };
     this.setParams = this.setParams.bind(this);
   }
 
@@ -55,10 +52,7 @@ export default class UserThumbnails extends GeneralThumbnails {
         thumbParams.push(thumbParam);
       }
       if (index == programs.length - 1) {
-        this.setState({
-          thumbParams: thumbParams,
-          loading: false
-        });
+        this.setState({ thumbParams: thumbParams });
       }
     });
   }
@@ -90,7 +84,7 @@ export default class UserThumbnails extends GeneralThumbnails {
           />
         );
       });
-    } else if (this.state.loading) {
+    } else if (this.props.loading) {
       content = "";
     } else {
       content = (
@@ -101,9 +95,9 @@ export default class UserThumbnails extends GeneralThumbnails {
     }
     return (
       <div id="container" className="nowloading">
-        {this.state.loading && (
+        {this.props.loading && (
           <video autoPlay loop className="loading">
-            <source src="/images/loading.mp4" />
+            <source src="/images/loading.compressed.mp4" />
           </video>
         )}
         {content}
