@@ -19,14 +19,27 @@ export default class FormatNicoPage {
         this.$program_title.css("display", "inline-block");
         this.$program_title.attr("title", this.$program_title.text());
         break;
+      case "OFFICIAL_CAST_PAGE": // 公式放送は必ず新配信でおこなわれる
       case "MODERN_CAST_PAGE":
         $(".program-detail").css("width", "930px");
-        $("#program-social-block").css("bottom", "35px");
+        // $("#program-social-block").css("bottom", "35px");
+        // $("#program-social-block").css("top", "auto");
+        $("div[class^='___player-head-area___']").css("margin", 0);
+        $("div[class^='___player-body-area___']").css("margin", 0);
+        $("ul[class^='___sns-share-menu-custom___']").css(
+          "position",
+          "relative"
+        );
+        $("ul[class^='___sns-share-menu-custom___']").css("bottom", "20px");
+
+        break;
         $("#program-social-block").css("top", "auto");
         break;
       case "NORMAL_CAST_PAGE": // Fall through.
       case "OFFICIAL_CAST_PAGE": // Fall through.
+      case "NORMAL_CAST_PAGE":
       case "TIME_SHIFT_PAGE":
+        $("#extended-bar").css("width", "650px");
         this.$watch_title_box_meta.css("width", "1000px");
         this.$slider_container.css("padding", "0"); // For ExBar
         break;

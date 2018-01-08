@@ -94,6 +94,9 @@ $url_0: url(chrome-extension://__MSG_@@extension_id__/images/icon.png);
 
 #nicosapo_buttons {
   display: inline;
+  white-space: nowrap;
+  position: relative;
+  top: -2px;
 }
 #nicosapo-toast {
   font-family: $font_0, $font_1, $font_2, $font_3, $font_4, $font_5, $font_6,
@@ -223,7 +226,7 @@ $url_0: url(chrome-extension://__MSG_@@extension_id__/images/icon.png);
 #extended-bar {
   font-family: $font_0, $font_1, $font_2, $font_3, $font_4, $font_5, $font_6,
     $font_7, $font_8, $font_9;
-  width: 960px;
+  width: 1024px;
   text-align: right;
   background-color: $color_log_cabin_approx;
   color: $color_gallery_approx;
@@ -266,8 +269,8 @@ $url_0: url(chrome-extension://__MSG_@@extension_id__/images/icon.png);
     }
   }
 }
-#program-main-block #extended-bar {
-  width: 1024px;
+#page_cover #extended-bar {
+  width: 960px;
 }
 .auto_scroll_button .material-icons {
   font-size: 18px;

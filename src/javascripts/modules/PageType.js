@@ -7,10 +7,12 @@ export default class PageType {
     /**
      * CastPages
      */
-    if (this._isModernCastPage()) {
-      pageType = "MODERN_CAST_PAGE";
-    } else if (this._isOfficialCastPage()) {
+    if (this._isOfficialCastPage()) {
       pageType = "OFFICIAL_CAST_PAGE";
+    } else if (this._isModernCastPage()) {
+      pageType = "MODERN_CAST_PAGE";
+    } else if (this._isChimeraCastPage()) {
+      pageType = "CHIMERA_CAST_PAGE";
     } else if (this._isNormalCastPage()) {
       pageType = "NORMAL_CAST_PAGE";
       /**
@@ -37,18 +39,37 @@ export default class PageType {
   }
 
   static _isModernCastPage() {
-    const re = /http:\/\/live2\.nicovideo\.jp\/watch\/lv([0-9]+)/;
-    const url = window.location.href;
-    return url.match(re);
-  }
-
-  static _isOfficialCastPage() {
-    const $targetDom = $("#page.official");
+    const $targetDom = $("#root");
     if ($targetDom.length > 0) {
       return true;
     } else {
       return false;
     }
+    // const re = /http:\/\/live2\.nicovideo\.jp\/watch\/lv([0-9]+)/;
+    // const url = window.location.href;
+    // return url.match(re);
+  }
+
+  static _isChimeraCastPage() {
+    const $targetDom = $("#player-block");
+    if ($targetDom.length > 0) {
+      return true;
+    } else {
+      return false;
+    }
+    // const re = /http:\/\/live2\.nicovideo\.jp\/watch\/lv([0-9]+)/;
+    // const url = window.location.href;
+    // return url.match(re);
+  }
+
+  static _isOfficialCastPage() {
+    if ($("div[class^='___program-information___']").length == 0) {
+      return false;
+    }
+    if ($("h2[class^='___section-title___']").length > 0) {
+      return false;
+    }
+    return true;
   }
 
   // TODO: 自身の生放送中に判定が正しくなくなる

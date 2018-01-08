@@ -8,7 +8,7 @@ function insertAfter(newNode, referenceNode) {
 
 export default class Page extends React.Component {
   putWidgets(props) {
-    const parent = document.getElementById(props.idName4ExBar);
+    const parent = document.querySelector(`[${props.idName4ExBar}]`);
     const child = document.createElement("div");
     child.id = "nicosapo_gadgets";
     insertAfter(child, parent);

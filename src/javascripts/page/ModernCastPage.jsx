@@ -10,8 +10,8 @@ export default class ModernCastPage extends CastPage {
       enableExBar    : true,
       position       : `APPEND`,
       requireInline  : true,
-      element4Buttons: document.querySelector('.program-detail div'),
-      idName4ExBar   : 'bourbon-block'
+      element4Buttons: document.querySelector('[class^="___provider-detail___"]'),
+      idName4ExBar   : 'class^="___operator-area___"'
     };
     super.putWidgets(props);
   }

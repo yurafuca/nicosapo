@@ -111,6 +111,12 @@ export default class AutoEnterCommunityButton extends React.Component {
             .get(0)
         ).text();
         break;
+      case "MODERN_CAST_PAGE":
+        title = $("span[class^='___broadcaster___'] a")
+          .first()
+          .text();
+        owner = $("a[class^='___social-group-anchor___']").text();
+        break;
       default:
     }
     Storage.saveToNestedLocalStorage("autoEnterCommunityList", id, {

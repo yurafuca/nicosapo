@@ -7,7 +7,8 @@ export default class TimeShiftPage extends CastPage {
         message     : `/* にこさぽ: タイムシフトでは各種ボタンと情報バーが無効になります */`,
         position    : `APPEND`,
         enableExBar : false,
-        idName4ExBar: 'watch_player_top_box'
+        element4Buttons: document.getElementsByClassName('smooth_scroll')[0],
+        idName4ExBar: 'id="watch_player_top_box"'
       };
       super.putWidgets(props);
   }
