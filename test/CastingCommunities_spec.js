@@ -1,11 +1,14 @@
 /*global describe, it, before */
 
 import { expect } from "chai";
-import { jsdom } from "jsdom";
-const document = jsdom("<div/");
-const window = document.defaultView;
-import jQuery from "jquery";
-const $ = jQuery(window);
+
+import jsdom from "jsdom";
+import jquery from "jquery";
+
+const { JSDOM } = jsdom;
+const { window } = new JSDOM("<html></html>");
+const $ = jquery(window);
+
 import VideoInfos from "../test/VideoInfos";
 import CastingCommunities from "../src/javascripts/modules/CastingCommunities";
 

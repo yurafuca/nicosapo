@@ -5,7 +5,7 @@ import store from "store";
 
 describe("Db", () => {
   beforeEach(done => {
-    store.clear();
+    store.clearAll();
     const obj = {};
     obj["co0"] = {};
     obj["co0"].state = `offair`;
