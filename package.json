@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/tsuyuknow/nicosapo#readme",
   "dependencies": {
+    "axios": "^0.17.1",
     "blacklist": "^1.1.4",
     "bootstrap-toggle": "^2.2.2",
     "css-loader": "^0.28.7",
@@ -35,7 +36,6 @@
     "react-toggle": "^4.0.1",
     "sass-loader": "^6.0.6",
     "scrollmonitor": "^1.2.3",
-    "sloc": "^0.2.0",
     "store": "^2.0.12",
     "style-loader": "^0.18.2",
     "to-integer": "^1.0.1"
@@ -60,6 +60,7 @@
     "prettier-eslint": "^8.7.0",
     "prettier-eslint-cli": "^4.7.0",
     "regexpu-core": "^4.1.2",
+    "sloc": "^0.2.0",
     "webpack": "^3.10.0",
     "webpack-dev-server": "^2.7.1"
   }
