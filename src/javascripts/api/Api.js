@@ -1,4 +1,6 @@
 import $ from "jquery";
+import axios from "axios";
+import { parseString } from "xml2js";
 import VIParser from "../modules/VIParser";
 
 const parameter_nicovideojs = [];
@@ -216,6 +218,38 @@ export default class Api {
         const parsedResponse = parser(response);
         resolve(parsedResponse);
       });
+    });
+  }
+
+  // 公式チャンネル・ユーザーチャンネルのフィードを取得
+  static fetchChannelFeed(type = "all") {
+    const base = "http://live.nicovideo.jp/rss";
+
+    const request = axios.get(base, {
+      responseType: "xml",
+      params: {
+        firstStreamNum: 1,
+        streamMany: 100,
+        streamType: type // "all", "onair", "comingsoon",
+      }
+    });
+
+    return request
+      .then(response => {
+        if (response.status !== 200) throw new Error("failed.");
+        else return Api._toChannelList(response.data);
+      })
+      .catch(error => {
+        console.error(error);
+        throw error;
+      });
+  }
+
+  // 公式チャンネル・ユーザーチャンネルのフィードを Array に変換
+  static _toChannelList(channelFeed) {
+    return parseString(channelFeed, (err, result) => {
+      console.log(result.rss.channel[0].item);
+      return result.rss.channel[0].item;
     });
   }
 }
