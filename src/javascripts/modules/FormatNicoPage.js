@@ -22,6 +22,7 @@ export default class FormatNicoPage {
       case "OFFICIAL_CAST_PAGE": // 公式放送は必ず新配信でおこなわれる
       case "MODERN_CAST_PAGE":
         $(".program-detail").css("width", "930px");
+        $("div[class^='___provider-detail___']").css("display", "-webkit-box");
         // $("#program-social-block").css("bottom", "35px");
         // $("#program-social-block").css("top", "auto");
         $("div[class^='___player-head-area___']").css("margin", 0);

@@ -1,4 +1,6 @@
 import $ from "jquery";
+import axios from "axios";
+import { parseString } from "xml2js";
 import VIParser from "../modules/VIParser";
 
 const parameter_nicovideojs = [];
@@ -159,6 +161,64 @@ export default class Api {
     });
   }
 
+  /*
+   * 放送中のチャンネルのリストを取得
+   *  0: { id: "co000000",
+   *       url: "http://live.nicovideo.jp/watch/lv310946190",
+   *       thumbnail: "http://icon.nimg.jp/community/s/281/co2811763.jpg?1504943573",
+   *       title "闘会議モルゲッソヨ" }
+   */
+  static fetchOnairChannelList() {
+    const base =
+      "http://live.nicovideo.jp/ranking?type=onair&main_provider_type=official";
+
+    const request = axios.get(base);
+
+    return request
+      .then(response => {
+        if (response.status !== 200) throw new Error("failed.");
+        else return Api._channelPageToChannelList(response.data);
+      })
+      .catch(error => {
+        console.error(error);
+        throw error;
+      });
+  }
+
+  // 放送中のチャンネルページからチャンネルを抽出
+  static _channelPageToChannelList(html) {
+    const officialCastElements = $(html)
+      .find(".ranking_video")
+      .toArray();
+    const channelList = officialCastElements.map(element => {
+      const $e = $(element);
+      const id = $e.find(".video_id").text();
+      const prefixedId = `lv${id}`;
+      const providerUrl = $e.find(".video_text a").attr("href");
+      const providerRegExp = /http\:\/\/ch.nicovideo.jp\/channel\/(.+)/;
+      const params = {
+        id: prefixedId,
+        provider: providerRegExp.exec(providerUrl)[1],
+        url: `http://live.nicovideo.jp/watch/${prefixedId}`,
+        thumbnail: $e.find(".info a img").attr("src"),
+        title: $e.find(".video_title").text()
+      };
+      return params;
+    });
+    return channelList;
+  }
+
+  // チャンネル id から放送中でない id を抽出
+  static selectOnairChannel(channels) {
+    Api.fetchOnairChannelList().then(channelList => {
+      const selectedChannels = channelList.filter(channel => {
+        const result = channels.includes(channel.provider);
+        return result;
+      });
+      return selectedChannels;
+    });
+  }
+
   static search(query, sortMode) {
     return new Promise(resolve => {
       const sortModes = {
@@ -218,4 +278,36 @@ export default class Api {
       });
     });
   }
+
+  // 公式チャンネル・ユーザーチャンネルのフィードを取得
+  static fetchChannelFeed(type = "all") {
+    const base = "http://live.nicovideo.jp/rss";
+
+    const request = axios.get(base, {
+      responseType: "xml",
+      params: {
+        firstStreamNum: 1,
+        streamMany: 100,
+        streamType: type // "all", "onair", "comingsoon",
+      }
+    });
+
+    return request
+      .then(response => {
+        if (response.status !== 200) throw new Error("failed.");
+        else return Api._toChannelList(response.data);
+      })
+      .catch(error => {
+        console.error(error);
+        throw error;
+      });
+  }
+
+  // // 公式チャンネル・ユーザーチャンネルのフィードを Array に変換
+  // static _toChannelList(channelFeed) {
+  //   return parseString(channelFeed, (err, result) => {
+  //     console.log(result.rss.channel[0].item);
+  //     return result.rss.channel[0].item;
+  //   });
+  // }
 }
