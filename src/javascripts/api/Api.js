@@ -231,7 +231,7 @@ export default class Api {
       };
       const q =
         `http://api.search.nicovideo.jp/api/v2/live/contents/search?q=${query}` +
-        "&targets=tags" +
+        "&targets=tags,title,description" +
         "&fields=contentId,title,communityIcon,description,start_time,live_end_time,comment_counter,score_timeshift_reserved,provider_type,tags,member_only,viewCounter,timeshift_enabled" +
         "&_context=nicosapo" +
         "&filters%5BliveStatus%5D%5B0%5D=onair" +
