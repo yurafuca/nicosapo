@@ -73,7 +73,7 @@ export default class AutoEnterCommunityButton extends React.Component {
   saveAsAutoEnter() {
     const idHolder = new IdHolder();
     const id = idHolder.communityId;
-    const thumbnail = $('meta[property="og:image"]').attr("content");
+    let thumbnail = $('meta[property="og:image"]').attr("content");
     const pageType = PageType.get();
     const openDate = null;
     let title, owner;
@@ -89,6 +89,10 @@ export default class AutoEnterCommunityButton extends React.Component {
       case "CHANNEL_PAGE":
         title = $("h3.cp_chname").text();
         owner = $("p.cp_viewname").text();
+        thumbnail =
+          "https://secure-dcdn.cdn.nimg.jp/comch/channel-icon/128x128/" +
+          id +
+          ".jpg";
         break;
       case "NORMAL_CAST_PAGE": // PAIR A
       case "OFFICIAL_CAST_PAGE": // PAIR A

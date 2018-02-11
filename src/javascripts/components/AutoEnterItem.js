@@ -2,6 +2,19 @@ import React from "react";
 import ReactDOM from "react-dom";
 
 export default class AutoEnterItem extends React.Component {
+  description() {
+    if (Date.parse(this.props.openDate) < Date.now()) {
+      return (
+        <span>
+          <span className="ended"> この番組は終了しました</span>
+          {this.props.description}
+        </span>
+      );
+    } else {
+      return this.props.description;
+    }
+  }
+
   render() {
     return (
       <div className="listgroup-item clearfix">
@@ -36,7 +49,7 @@ export default class AutoEnterItem extends React.Component {
             </a>
           </span>
           <span className="meta-description text-small text-gray">
-            {this.props.description}
+            {this.description()}
           </span>
         </div>
       </div>

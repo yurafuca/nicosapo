@@ -8,7 +8,7 @@ $color_log_cabin_approx: #222;
 $white: #fff;
 $color_apple_approx: #5ca941;
 $color_pastel_green_approx: #8add6d;
-$black_15: rgba(0,0,0,0.15);
+$black_15: rgba(0, 0, 0, 0.15);
 $color_mantis_approx: #79d858;
 $forest_green: #228b22;
 $color_thunderbird_approx: #bd2c00;
@@ -32,402 +32,420 @@ $url_0: url(/images/icon.png);
 //original selectors
 //.btn-danger:active, .btn-danger.selected
 %extend_1 {
-	color: $white;
-	background-color: $color_red_devil_approx;
-	background-image: none;
-	border-color: $color_dark_burgundy_approx;
+  color: $white;
+  background-color: $color_red_devil_approx;
+  background-image: none;
+  border-color: $color_dark_burgundy_approx;
 }
 
 * {
-	//Instead of the line below you could use @include box-sizing($bs)
-	box-sizing: border-box;
+  //Instead of the line below you could use @include box-sizing($bs)
+  box-sizing: border-box;
 }
 html {
-	height: 100%;
+  height: 100%;
 }
 body {
-	color: #24292e;
-	margin: 0;
-	font-family: "Lucida Grande","segoe UI","ヒラギノ丸ゴ ProN W4","Hiragino Maru Gothic ProN",Meiryo,Arial,sans-serif;
+  color: #24292e;
+  margin: 0;
+  font-family: "Lucida Grande", "segoe UI", "ヒラギノ丸ゴ ProN W4",
+    "Hiragino Maru Gothic ProN", Meiryo, Arial, sans-serif;
 }
 p {
-	font-size: 14px;
-	-webkit-margin-before: 0.5em;
-	-webkit-margin-after: 0.5em;
+  font-size: 14px;
+  -webkit-margin-before: 0.5em;
+  -webkit-margin-after: 0.5em;
 }
 .header {
-	padding-top: 10px;
-	padding-bottom: 10px;
-	background-color: $color_wild_sand_approx;
-	border-bottom: 1px solid $mercury;
-	padding-top: 4px;
-	padding-bottom: 4px;
-	font-weight: 500;
-	background: $color_wild_sand_approx;
-	border-bottom: 1px solid $color_iron_approx;
-	margin: 0;
-	padding-left: 45px;
-	color: $color_log_cabin_approx;
-	font-size: 14px;
-	line-height: 38px;
-	font-weight: bold;
-	margin-bottom: 30px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background-color: $color_wild_sand_approx;
+  border-bottom: 1px solid $mercury;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  font-weight: 500;
+  background: $color_wild_sand_approx;
+  border-bottom: 1px solid $color_iron_approx;
+  margin: 0;
+  padding-left: 45px;
+  color: $color_log_cabin_approx;
+  font-size: 14px;
+  line-height: 38px;
+  font-weight: bold;
+  margin-bottom: 30px;
 }
 .content {
-	margin: 20px auto 0;
-	width: 1000px;
+  margin: 20px auto 0;
+  width: 1000px;
 }
 .wrapper {
-	float: right;
-	width: 700px;
-	margin-right: auto;
-	margin-left: auto;
-	&.menu {
+  float: right;
+  width: 700px;
+  margin-right: auto;
+  margin-left: auto;
+  &.menu {
     margin-top: 30px;
-		width: 250px;
-		border-radius: 2px;
-		border: solid 1px #D8D8D8;
-		&:first-child {
-			margin-top: 3px;
-		}
-		.appicon {
-			background-color: #f6f8fa;
-			padding: 0 10px;
-			line-height: 38px;
-		}
-		.item {
-			position: relative;
-			color: #0366d6;
-			font-size: 13px;
-			line-height: 30px;
-			padding-left: 10px;
-			border-bottom: solid 1px #EEE;
-			&.selected:before {
-				position: absolute;
-		    top: 0;
-		    bottom: 0;
-		    left: 0;
-		    width: 2px;
-		    content: "";
-		    background-color: #e36209;
-			}
-			&:last-child {
-				border: none;
-			}
-			&:hover {
-				cursor: pointer;
-				background-color: $color_alabaster_approx;
-			}
-		}
-	}
+    width: 250px;
+    border-radius: 2px;
+    border: solid 1px #d8d8d8;
+    &:first-child {
+      margin-top: 3px;
+    }
+    .appicon {
+      background-color: #f6f8fa;
+      padding: 0 10px;
+      line-height: 38px;
+    }
+    .item {
+      position: relative;
+      color: #0366d6;
+      font-size: 13px;
+      line-height: 30px;
+      padding-left: 10px;
+      border-bottom: solid 1px #eee;
+      &.selected:before {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        width: 2px;
+        content: "";
+        background-color: #e36209;
+      }
+      &:last-child {
+        border: none;
+      }
+      &:hover {
+        cursor: pointer;
+        background-color: $color_alabaster_approx;
+      }
+    }
+  }
 }
 .wrapper.menu .item:hover {
-	cursor: pointer;
-	background-color: #F9F9F9;
+  cursor: pointer;
+  background-color: #f9f9f9;
 }
 .items {
-	margin-left: 10px;
-	.item {
-		margin-bottom: 25px;
-		&:first-child {
-			margin-top: 15px;
-		}
-		&:last-child {
-			margin-bottom: 5px;
-		}
-	}
+  margin-left: 10px;
+  .item {
+    margin-bottom: 25px;
+    &:first-child {
+      margin-top: 15px;
+    }
+    &:last-child {
+      margin-bottom: 5px;
+    }
+  }
 }
 #saveAll {
-	font: 14px / 1.4 Helvetica, Meiryo, arial, nimbussansl, liberationsans, freesans, clean, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-	font-weight: bold;
-	margin-left: 290px;
-	vertical-align: middle;
-	color: $white;
-	margin-right: 6px;
-	padding: 4px 13px;
-	border: solid 1px $color_apple_approx;
-	//Instead of the line below you could use @include border-radius($radius, $vertical-radius)
-	border-radius: 3px;
-	background-image: linear-gradient($color_pastel_green_approx, $color_apple_approx);
-	//Instead of the line below you could use @include text-shadow($shadow-1, $shadow-2, $shadow-3, $shadow-4, $shadow-5, $shadow-6, $shadow-7, $shadow-8, $shadow-9, $shadow-10)
-	text-shadow: 0 -1px 0 $black_15;
-	&:hover {
-		background-image: linear-gradient($color_mantis_approx, $color_apple_approx);
-		cursor: pointer;
-	}
+  font: 14px / 1.4 Helvetica, Meiryo, arial, nimbussansl, liberationsans,
+    freesans, clean, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol";
+  font-weight: bold;
+  margin-left: 290px;
+  vertical-align: middle;
+  color: $white;
+  margin-right: 6px;
+  padding: 4px 13px;
+  border: solid 1px $color_apple_approx;
+  //Instead of the line below you could use @include border-radius($radius, $vertical-radius)
+  border-radius: 3px;
+  background-image: linear-gradient(
+    $color_pastel_green_approx,
+    $color_apple_approx
+  );
+  //Instead of the line below you could use @include text-shadow($shadow-1, $shadow-2, $shadow-3, $shadow-4, $shadow-5, $shadow-6, $shadow-7, $shadow-8, $shadow-9, $shadow-10)
+  text-shadow: 0 -1px 0 $black_15;
+  &:hover {
+    background-image: linear-gradient(
+      $color_mantis_approx,
+      $color_apple_approx
+    );
+    cursor: pointer;
+  }
 }
 .note {
-	font-size: 12px;
-	color: rgb(118, 118, 118);
+  font-size: 12px;
+  color: rgb(118, 118, 118);
 }
 .note-green {
-	display: inline;
-	color: #24963e;
-	margin-left: 5px;
+  display: inline;
+  color: #24963e;
+  margin-left: 5px;
 }
 .green {
-	color: #24963e;
+  color: #24963e;
 }
 .red {
-	color: #cb2431;
+  color: #cb2431;
 }
 h1 {
-	font-family: 'Noto Sans Japanese';
-	color: #24292e;
-	font-size: 20px;
-	padding: 0 10px 4px 10px;
-	font-weight: 400;
-	border-bottom: 1px solid $color_iron_approx;
-	margin: 0;
-	line-height: 38px;
+  font-family: "Noto Sans Japanese";
+  color: #24292e;
+  font-size: 20px;
+  padding: 0 10px 4px 10px;
+  font-weight: 400;
+  border-bottom: 1px solid $color_iron_approx;
+  margin: 0;
+  line-height: 38px;
 }
 h3 {
-	font-family: 'Noto Sans Japanese';
-	color: #24292e;
-	font-weight: 500;
-	font-size: 13px;
-	margin: 0.3em 0;
+  font-family: "Noto Sans Japanese";
+  color: #24292e;
+  font-weight: 500;
+  font-size: 13px;
+  margin: 0.3em 0;
 }
 .ended {
-	color: $color_tamarillo_approx;
-	font-weight: bold;
+  color: #fafafa;
+  font-size: 10px;
+  vertical-align: bottom;
+  padding: 0px 8px 2px;
+  border-radius: 2px;
+  margin-right: 10px;
+  background: #404448;
 }
 .soundtest {
-	position: relative;
-	top: -6px;
-	left: 5px;
+  position: relative;
+  top: -6px;
+  left: 5px;
 }
 
 /**
  * GitHub
  */
 .listgroup {
-	list-style: none;
-	//Instead of the line below you could use @include border-radius($radius, $vertical-radius)
-	border-radius: 3px;
+  list-style: none;
+  //Instead of the line below you could use @include border-radius($radius, $vertical-radius)
+  border-radius: 3px;
 }
 .listgroup-item {
-	font-family: 'Noto Sans Japanese';
+  font-family: "Noto Sans Japanese";
   height: 60px;
-	min-height: inherit;
-	padding: 10px;
-	font-size: 13px;
-	line-height: 26px;
-	color: $color_tapa_approx;
-	border-bottom: 1px solid $mercury;
-	&.card-style {
-		position: relative;
-		height: 75px;
-		width: 50%;
-		display: inline-block;
-		.list-group-text-block {
-			padding-left: 65px;
-		}
-		.list-group-text-block .meta-title {
-			line-height: 16px;
-			margin-bottom: 3px;
-		}
-		.meta-description {
-			margin-left: 2px;
-			vertical-align: middle;
-		}
-		.octicon {
-			font-size: 14px;
-		}
-		.form-switcher {
-			position: absolute;
-			top: 20px;
-			right: 10px;
-		}
-	}
-	&:last-child {
-		border-bottom: 0;
-	}
+  min-height: inherit;
+  padding: 10px;
+  font-size: 13px;
+  line-height: 26px;
+  color: $color_tapa_approx;
+  border-bottom: 1px solid $mercury;
+  &.card-style {
+    position: relative;
+    height: 75px;
+    width: 50%;
+    display: inline-block;
+    .list-group-text-block {
+      padding-left: 65px;
+    }
+    .list-group-text-block .meta-title {
+      line-height: 16px;
+      margin-bottom: 3px;
+    }
+    .meta-description {
+      margin-left: 2px;
+      vertical-align: middle;
+    }
+    .octicon {
+      font-size: 14px;
+    }
+    .form-switcher {
+      position: absolute;
+      top: 20px;
+      right: 10px;
+    }
+  }
+  &:last-child {
+    border-bottom: 0;
+  }
 }
 .listgroup-item::before {
-	display: table;
-	content: "";
+  display: table;
+  content: "";
 }
 .float-right {
-	float: right !important;
+  float: right !important;
 }
 .BtnGroup {
-	display: inline-block;
-	vertical-align: middle;
+  display: inline-block;
+  vertical-align: middle;
 }
 .BtnGroup::before {
-	display: table;
-	content: "";
+  display: table;
+  content: "";
 }
 .BtnGroup-item {
-	position: relative;
-	float: left;
-	border-right-width: 0;
-	//Instead of the line below you could use @include border-radius($radius, $vertical-radius)
-	border-radius: 0;
-	&:last-child {
-		border-right-width: 1px;
-		//Instead of the line below you could use @include border-top-right-radius($radius)
-		border-top-right-radius: 3px;
-		//Instead of the line below you could use @include border-bottom-right-radius($radius)
-		border-bottom-right-radius: 3px;
-	}
-	&:first-child {
-		//Instead of the line below you could use @include border-top-left-radius($radius)
-		border-top-left-radius: 3px;
-		//Instead of the line below you could use @include border-bottom-left-radius($radius)
-		border-bottom-left-radius: 3px;
-	}
+  position: relative;
+  float: left;
+  border-right-width: 0;
+  //Instead of the line below you could use @include border-radius($radius, $vertical-radius)
+  border-radius: 0;
+  &:last-child {
+    border-right-width: 1px;
+    //Instead of the line below you could use @include border-top-right-radius($radius)
+    border-top-right-radius: 3px;
+    //Instead of the line below you could use @include border-bottom-right-radius($radius)
+    border-bottom-right-radius: 3px;
+  }
+  &:first-child {
+    //Instead of the line below you could use @include border-top-left-radius($radius)
+    border-top-left-radius: 3px;
+    //Instead of the line below you could use @include border-bottom-left-radius($radius)
+    border-bottom-left-radius: 3px;
+  }
 }
 .btn {
-	position: relative;
-	display: inline-block;
-	padding: 6px 12px;
-	font-size: 14px;
-	font-weight: 600;
-	line-height: 20px;
-	color: $color_mine_shaft_approx;
-	white-space: nowrap;
-	vertical-align: middle;
-	cursor: pointer;
-	//Instead of the line below you could use @include user-select($select)
-	user-select: none;
-	background-color: $color_gallery_approx;
-	background-image: linear-gradient($color_alabaster_approx, $color_gallery_approx);
-	border: 1px solid $color_quill_gray_approx;
-	//Instead of the line below you could use @include border-radius($radius, $vertical-radius)
-	border-radius: 3px;
-	appearance: none;
-	&:hover {
-		text-decoration: none;
-	}
-	&:active {
-		text-decoration: none;
-	}
+  position: relative;
+  display: inline-block;
+  padding: 6px 12px;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+  color: $color_mine_shaft_approx;
+  white-space: nowrap;
+  vertical-align: middle;
+  cursor: pointer;
+  //Instead of the line below you could use @include user-select($select)
+  user-select: none;
+  background-color: $color_gallery_approx;
+  background-image: linear-gradient(
+    $color_alabaster_approx,
+    $color_gallery_approx
+  );
+  border: 1px solid $color_quill_gray_approx;
+  //Instead of the line below you could use @include border-radius($radius, $vertical-radius)
+  border-radius: 3px;
+  appearance: none;
+  &:hover {
+    text-decoration: none;
+  }
+  &:active {
+    text-decoration: none;
+  }
 }
 .btn-sm {
-	padding: 3px 10px;
-	font-size: 12px;
-	line-height: 20px;
+  padding: 3px 10px;
+  font-size: 12px;
+  line-height: 20px;
 }
 .btn-danger {
-	color: $color_tamarillo_approx;
-	&:hover {
-		color: $white;
-		background-color: $color_tamarillo_approx;
-		background-image: linear-gradient($color_carnation_approx, $color_monza_approx);
-		border-color: $color_tamarillo_approx;
-	}
-	&:active {
-		@extend %extend_1;
-	}
-	&.selected {
-		@extend %extend_1;
-	}
+  color: $color_tamarillo_approx;
+  &:hover {
+    color: $white;
+    background-color: $color_tamarillo_approx;
+    background-image: linear-gradient(
+      $color_carnation_approx,
+      $color_monza_approx
+    );
+    border-color: $color_tamarillo_approx;
+  }
+  &:active {
+    @extend %extend_1;
+  }
+  &.selected {
+    @extend %extend_1;
+  }
 }
 a {
-	color: #0366d6;
-	text-decoration: none;
-	&:hover {
-		text-decoration: underline;
-	}
-	&:active {
-		text-decoration: underline;
-	}
+  color: #0366d6;
+  text-decoration: none;
+  &:hover {
+    text-decoration: underline;
+  }
+  &:active {
+    text-decoration: underline;
+  }
 }
 .BtnGroup::after {
-	display: table;
-	clear: both;
-	content: "";
+  display: table;
+  clear: both;
+  content: "";
 }
 .list-group-text-block {
-	position: relative;
-	padding-left: 50px;
-	line-height: 20px;
-	img {
-		position: absolute;
-		top: 0;
-		left: 0;
-	}
-	.meta-title {
-		display: block;
-		font-weight: bold;
-		color: $black;
-		.short {
-			white-space: nowrap;
-			text-overflow: ellipsis;
-			width: 100px;
-		}
-	}
-	.meta-description {
-		display: inline-block;
-	}
+  position: relative;
+  padding-left: 50px;
+  line-height: 20px;
+  img {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+  .meta-title {
+    display: block;
+    font-weight: bold;
+    color: $black;
+    .short {
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      width: 100px;
+    }
+  }
+  .meta-description {
+    display: inline-block;
+  }
 }
 .float-left {
-	float: left !important;
+  float: left !important;
 }
 .avatar {
-	display: inline-block;
-	overflow: hidden;
-	line-height: 1;
-	vertical-align: middle;
-	//Instead of the line below you could use @include border-radius($radius, $vertical-radius)
-	border-radius: 3px;
+  display: inline-block;
+  overflow: hidden;
+  line-height: 1;
+  vertical-align: middle;
+  //Instead of the line below you could use @include border-radius($radius, $vertical-radius)
+  border-radius: 3px;
 }
 /**
  * End GitHub
  */
 
 img {
-	border-style: none;
+  border-style: none;
 }
 .text-small {
-	font-size: 12px !important;
+  font-size: 12px !important;
 }
 .text-gray {
-	color: $color_tapa_approx !important;
+  color: $color_tapa_approx !important;
 }
 .campa {
-	display: inline-block;
-	margin-top: 10px;
-	font-size: 13px;
-	color: $color_tapa_approx;
+  display: inline-block;
+  margin-top: 10px;
+  font-size: 13px;
+  color: $color_tapa_approx;
 }
 .clearfix {
-	display: block;
-	&:after {
-		content: ".";
-		display: block;
-		clear: both;
-		height: 0;
-		visibility: hidden;
-	}
+  display: block;
+  &:after {
+    content: ".";
+    display: block;
+    clear: both;
+    height: 0;
+    visibility: hidden;
+  }
 }
 .nudge-down.BtnGroup {
-	position: relative;
-	top: 6px;
+  position: relative;
+  top: 6px;
 }
-
 
 .float-left {
-	float: left;
+  float: left;
 }
-
 
 /**
  * Switcher
  */
 .form-switcher .switcher {
-	z-index: 999;
-  // transition: box-shadow 0.07s linear, border-color 0.01s linear 0.07s !important;	
-	transition: none !important;
+  z-index: 999;
+  // transition: box-shadow 0.07s linear, border-color 0.01s linear 0.07s !important;
+  transition: none !important;
 }
 
 .form-switcher .switcher:after {
-	// transition: all 0.07s linear !important;
-	transition: none !important;
-	&:active {
-	}
+  // transition: all 0.07s linear !important;
+  transition: none !important;
+  &:active {
+  }
 }
 
 .form-switcher .switcher:hover:active:after {
@@ -447,15 +465,15 @@ img {
 }
 
 .text-vividgray {
-    color: #586069 !important;
+  color: #586069 !important;
 }
 
 .switcher-label {
-		position: absolute;
-    top: 4px;
-    right: 50px;
-		white-space: nowrap;
-		font-size: 12px;
-		font-size: 11px;
-    color: #888;
+  position: absolute;
+  top: 4px;
+  right: 50px;
+  white-space: nowrap;
+  font-size: 12px;
+  font-size: 11px;
+  color: #888;
 }

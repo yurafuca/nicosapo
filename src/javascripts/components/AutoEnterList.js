@@ -34,10 +34,6 @@ export default class AutoEnterList extends React.Component {
             description = `開場時刻: ${Time.toJpnString(
               Date.parse(response[id]["openDate"])
             )}`;
-            if (Date.parse(response[id]["openDate"]) < Date.now()) {
-              description +=
-                '<span class="ended"> ⛔ この番組は終了しました</span>';
-            }
           }
           itemParam.id = id;
           itemParam.type = this.props.type;
@@ -45,6 +41,7 @@ export default class AutoEnterList extends React.Component {
           itemParam.thumbnail = response[id]["thumbnail"];
           itemParam.title = response[id]["title"];
           itemParam.description = description;
+          itemParam.openDate = response[id]["openDate"];
           switch (this.props.type) {
             case `community`:
               itemParam.url = `http://com.nicovideo.jp/community/${id}`;
@@ -93,6 +90,7 @@ export default class AutoEnterList extends React.Component {
         url={itemParam.url}
         title={itemParam.title}
         description={itemParam.description}
+        openDate={itemParam.openDate}
       />
     ));
     if (this.state.itemParams.length === 0) {
