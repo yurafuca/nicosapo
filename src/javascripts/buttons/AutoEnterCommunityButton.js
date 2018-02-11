@@ -81,10 +81,10 @@ export default class AutoEnterCommunityButton extends React.Component {
       case "COMMUNITY_PAGE":
         title = $("div.communityData > h2.title > a")
           .text()
-          .replace(/[ ]/, "");
+          .replace(/[\n\t]/g, "");
         owner = $("div.communityData tr.row:first-child > td.content > a")
           .text()
-          .replace(/[ ]/, "");
+          .replace(/[\n\t]/g, "");
         break;
       case "CHANNEL_PAGE":
         title = $("h3.cp_chname").text();
