@@ -33,14 +33,15 @@ export default class VIParser {
 
   static _communityProps(element) {
     const $target = $($(element).find("img")[0]);
+    const id = $target.attr("src").match(/(ch|co)\d+/)[0];
+    const base = `https://secure-dcdn.cdn.nimg.jp/comch`;
+    const dir = id.startsWith("co") ? `community-icon` : `channel-icon`;
+    const size = `128x128`;
     const community = {
-      url: $target
-        .attr("src")
-        .match(/http\:\/\/icon.nimg.jp\/(channel|community)\//)[0],
-      id: $target.attr("src").match(/(ch|co)\d+/)[0],
-      thumbnail: ""
+      // url: `https://secure-dcdn.cdn.nimg.jp/comch/channel-icon/128x128/`,
+      id: id,
+      thumbnail: `${base}/${dir}/${size}/${id}.jpg`
     };
-    community.thumbnail = `${community.url}${community.id}.jpg`;
     return community;
   }
 }
