@@ -63,9 +63,8 @@ export default class BackgroundReloader {
       const videoId = community.find("video id").text();
       const number = Number(commuId);
       const thumbnail = community.find("community thumbnail").text();
-      const prefixedId = thumbnail
-        .replace(/http:\/\/icon\.nimg\.jp\/(channe|community)\//, "")
-        .replace(/\.(jpg|png)/, "");
+      const re = /.+((ch|co)[0-9]+)\.jpg.*/;
+      const prefixedId = re.exec(thumbnail)[1];
       console.info(prefixedId);
       const distributors = store.get(`excludedDistributors`);
       if (distributors && distributors.hasOwnProperty(prefixedId)) return; // `continue` for lodash.

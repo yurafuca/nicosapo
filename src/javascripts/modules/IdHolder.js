@@ -14,11 +14,11 @@ function getLiveId() {
 
 function getCommunityId() {
   const communityUrl1 = $('meta[property="og:image"]').attr("content");
-  const re1 = /http:\/\/icon\.nimg\.jp\/(community|channel).*((ch|co)[0-9]+)\.jpg.*/;
+  const re1 = /.+((ch|co)[0-9]+)\.jpg.*/;
 
   // ユーザ放送
   if (re1.exec(communityUrl1)) {
-    const communityId = re1.exec(communityUrl1)[2];
+    const communityId = re1.exec(communityUrl1)[1];
     return communityId;
   }
 
