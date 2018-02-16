@@ -45,28 +45,38 @@ export default class Api {
   // jQuery オブジェクトでなく JSON を返したい
   static getUserOnair() {
     return new Promise((resolve, reject) => {
-      const endpoint = "http://live.nicovideo.jp/my";
-      $.post(endpoint)
+      const endpoint =
+        "http://sp.live.nicovideo.jp/api/favorite?firstStreamNum=1&streamMany=100&streamType=all";
+      $.get(endpoint)
         .done(response => {
-          const $html = $(response);
-          const subscribes = $html.find(
-            "[id$=subscribeItemsWrap] > .liveItems > [class^='liveItem']"
-          );
-          const reserved = $html.find(
-            "[id$=subscribeReservedItemsWrap] > .liveItems > [class^='liveItem']"
-          );
-          $.each($(reserved), (index, item) => {
-            item.is_reserved = true;
+          let favoriteStreams = response.favoriteStreams;
+          favoriteStreams = favoriteStreams.map(stream => {
+            stream.is_reserved = stream.start_time * 1000 > Date.now();
+            return stream;
           });
-          $.merge(subscribes, reserved);
-          const videoInfoList = [];
-          $.each($(subscribes), (index, element) => {
-            if ($($(element).find("img")[0]) === `CLOSED`) {
-              return;
-            }
-            const $videoInfo = VIParser.parse(element);
-            videoInfoList.push($videoInfo);
-          });
+          const videoInfoList = favoriteStreams.map(stream =>
+            VIParser.parse(stream)
+          );
+          resolve(videoInfoList);
+          // const $html = $(response);
+          // const subscribes = $html.find(
+          //   "[data-] > .liveItems > [class^='liveItem']"
+          // );
+          // const reserved = $html.find(
+          //   "[id$=subscribeReservedItemsWrap] > .liveItems > [class^='liveItem']"
+          // );
+          // $.each($(reserved), (index, item) => {
+          //   item.is_reserved = true;
+          // });
+          // $.merge(subscribes, reserved);
+          // const videoInfoList = [];
+          // $.each($(subscribes), (index, element) => {
+          //   if ($($(element).find("img")[0]) === `CLOSED`) {
+          //     return;
+          //   }
+          //   const $videoInfo = VIParser.parse(element);
+          //   videoInfoList.push($videoInfo);
+          // });
           resolve(videoInfoList);
         })
         .fail((jqXHR, textStatus, errorThrown) => {
