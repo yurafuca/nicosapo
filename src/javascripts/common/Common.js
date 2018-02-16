@@ -11,4 +11,10 @@ export default class Common {
   static sleep(time) {
     return new Promise(resolve => setTimeout(resolve, time));
   }
+
+  static jpDay(dayNum) {
+    const days = ["日", "月", "火", "水", "木", "金", "土", "日"];
+
+    return days[dayNum];
+  }
 }

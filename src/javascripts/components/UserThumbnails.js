@@ -1,6 +1,8 @@
 import $ from "jquery";
 import React from "react";
 import store from "store";
+import Common from "../common/Common";
+import Time from "../common/Time";
 import GeneralThumbnails from "./GeneralThumbnails";
 import Thumbnail from "../components/Thumbnail";
 
@@ -26,22 +28,17 @@ export default class UserThumbnails extends GeneralThumbnails {
       const thumbParam = {};
       const $program = $(program);
       const thumbnailUrl = $program.find("community thumbnail").text();
-      const startDayJpn = $program
-        .find("video open_time_jpstr")
-        .text()
-        .match(/\d+\/(\d+)/)[1]; // Month/Day(Date) ...
-      const startDateJpn = $program
-        .find("video open_time_jpstr")
-        .text()
-        .match(/\d+\/\d+\((.)\)/)[1];
+      const startTime = ~$program.find("video open_time_jpstr").text();
+      const date = new Date(~startTime);
       thumbParam.background = `url('${thumbnailUrl}')`;
       thumbParam.title = $program.find("video title").text();
       thumbParam.id = $program.find("video id").text();
       thumbParam.url = `http://live.nicovideo.jp/watch/${thumbParam.id}`;
       thumbParam.isReserved = this.isReserved($program);
-      thumbParam.day = `${startDayJpn}(${startDateJpn})`;
+      thumbParam.day = `${date.getDate()}(${Common.jpDay(date.getDay())})`;
+      console.log(Time.jpDateFormat(startTime));
       thumbParam.openTime = thumbParam.isReserved
-        ? $program.find("video open_time_jpstr").text()
+        ? Time.jpDateFormat(startTime)
         : undefined;
       thumbParam.text = thumbParam.title;
       thumbParam.index = index;
