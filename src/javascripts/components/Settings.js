@@ -697,6 +697,14 @@ export default class Settings extends React.Component {
                         Amazon ほしいものリスト - ほしい雑貨
                       </a>
                     </p>
+                    <p>
+                      <a
+                        target="_blank"
+                        href="https://www.amazon.co.jp/dp/B004N3APGO/"
+                      >
+                        Amazon ギフト券（最低15円から金額を自由指定できます）
+                      </a>
+                    </p>
                   </div>
                 </div>
               );
