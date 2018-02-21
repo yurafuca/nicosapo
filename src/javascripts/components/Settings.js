@@ -702,7 +702,7 @@ export default class Settings extends React.Component {
                         target="_blank"
                         href="https://www.amazon.co.jp/dp/B004N3APGO/"
                       >
-                        Amazon ギフト券（最低15円から金額を自由指定できます）
+                        Amazon ギフト券（15円から金額を自由に指定できます）
                       </a>
                     </p>
                   </div>
