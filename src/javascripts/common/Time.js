@@ -16,14 +16,14 @@ export default class Time {
   // 2018/02/02(月) 00:00
   static jpDateFormat(unixTime) {
     const days = ["日", "月", "火", "水", "木", "金", "土", "日"];
-    const date = new Date(unixTime);
+    const date = new Date(unixTime * 1000);
     const y = date.getFullYear();
     const m = date.getMonth() + 1;
     const d = date.getDate();
     const h = ("0" + date.getHours()).slice(-2);
     const s = ("0" + date.getSeconds()).slice(-2);
     const w = days[date.getDay()];
-    return `${y}/${m}/${d}(${w}) ${h}:${s}`;
+    return `${y}年${m}月${d}日 ${h}:${s}`;
   }
 
   static toJpnDay(milisec) {

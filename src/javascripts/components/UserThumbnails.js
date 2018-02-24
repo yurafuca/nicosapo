@@ -28,17 +28,16 @@ export default class UserThumbnails extends GeneralThumbnails {
       const thumbParam = {};
       const $program = $(program);
       const thumbnailUrl = $program.find("community thumbnail").text();
-      const startTime = ~$program.find("video open_time_jpstr").text();
-      const date = new Date(~startTime);
+      const startTime = $program.find("video open_time_jpstr").text() - 0;
+      const date = new Date(startTime * 1000);
       thumbParam.background = `url('${thumbnailUrl}')`;
       thumbParam.title = $program.find("video title").text();
       thumbParam.id = $program.find("video id").text();
       thumbParam.url = `http://live.nicovideo.jp/watch/${thumbParam.id}`;
       thumbParam.isReserved = this.isReserved($program);
       thumbParam.day = `${date.getDate()}(${Common.jpDay(date.getDay())})`;
-      console.log(Time.jpDateFormat(startTime));
       thumbParam.openTime = thumbParam.isReserved
-        ? Time.jpDateFormat(startTime)
+        ? Time.jpDateFormat(startTime) + " 開場"
         : undefined;
       thumbParam.text = thumbParam.title;
       thumbParam.index = index;

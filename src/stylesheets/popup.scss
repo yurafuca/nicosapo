@@ -35,7 +35,6 @@ $font_0: Arial;
 $font_1: sans-serif;
 
 //urls
-$url_0: url(/images/loading.gif);
 $url_1: url(/images/icon.png);
 
 html {
@@ -149,7 +148,6 @@ a {
 }
 .nowloading {
   min-height: 65px;
-  background-image: $url_0;
   background-size: 65px;
   background-repeat: no-repeat;
   background-position: center;

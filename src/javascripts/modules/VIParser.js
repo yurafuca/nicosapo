@@ -8,7 +8,7 @@ export default class VIParser {
     const videoInfo = new VideoInfo();
     videoInfo.video().set("title", element.title);
     videoInfo.video().set("id", `lv${element.id}`);
-    videoInfo.video().set("openTimeJp", element.start_time * 1000);
+    videoInfo.video().set("openTimeJp", element.start_time);
     videoInfo.video().set("isReserved", element.is_reserved);
     videoInfo
       .community()

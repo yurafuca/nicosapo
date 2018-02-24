@@ -24,7 +24,11 @@ export default class Popup extends React.Component {
         });
       })
       .catch(() => {
-        this.setState({ isLogined: false, loading: false, loadedTab: "user" });
+        this.setState({
+          isLogined: false,
+          loading: false,
+          loadedTab: "user"
+        });
       });
   }
 
@@ -69,8 +73,8 @@ export default class Popup extends React.Component {
       });
   }
 
-  render() {
-    const menu = (
+  getMenu() {
+    return (
       <div id="menu">
         <div className="avator" />
         <span className="username">放送中の番組</span>
@@ -88,74 +92,95 @@ export default class Popup extends React.Component {
         </a>
       </div>
     );
+  }
 
-    const tabs = [
-      { name: "user", text: "フォロー中" },
-      { name: "official", text: "公式" },
-      { name: "future", text: "未来の公式" },
-      { name: "search", text: "検索" }
-    ].map(tab => {
-      return (
+  getTabs() {
+    const { selectedTab, isLogined } = this.state;
+
+    return (
+      <div>
         <div
-          key={tab.name}
-          id={tab.name}
+          key="user"
+          id="user"
           className={
-            this.state.selectedTab === tab.name
-              ? `tab selected`
-              : `tab non-selected`
+            selectedTab === "user" ? `tab selected` : `tab non-selected`
           }
           onClick={this.toggleTab}
         >
-          {tab.text}
+          フォロー中
+        </div>
+        <div
+          key="official"
+          id="official"
+          className={
+            selectedTab === "official" ? `tab selected` : `tab non-selected`
+          }
+          onClick={this.toggleTab}
+        >
+          公式
+        </div>
+        <div
+          key="future"
+          id="future"
+          className={
+            selectedTab === "future" ? `tab selected` : `tab non-selected`
+          }
+          onClick={this.toggleTab}
+        >
+          未来の公式
+        </div>
+        <div
+          key="search"
+          id="search"
+          className={
+            selectedTab === "search" ? `tab selected` : `tab non-selected`
+          }
+          onClick={this.toggleTab}
+        >
+          番組
+        </div>
+      </div>
+    );
+  }
+
+  getContent() {
+    const { selectedTab, isLogined, loading, programs, loadedTab } = this.state;
+
+    if (isLogined === false && selectedTab === "user") {
+      return (
+        <div className="message">
+          ニコニコ動画にログインしていません．ログインしてから再度お試しください．
         </div>
       );
-    });
-
-    let content;
-    if (this.state.selectedTab === "user") {
-      if (this.state.isLogined === false) {
-        content = (
-          <div className="message">
-            ニコニコ動画にログインしていません．ログインしてから再度お試しください．
-          </div>
-        );
-      } else {
-        content = (
-          <UserThumbnails
-            loading={this.state.loading}
-            programs={this.state.programs}
-          />
-        );
-      }
-    } else if (
-      this.state.selectedTab === "official" ||
-      this.state.selectedTab === "future"
-    ) {
-      content = (
-        <OfficialThumbnails
-          loading={this.state.loading}
-          programs={this.state.programs}
-          loadedTab={this.state.loadedTab}
-        />
-      );
-    } else if (this.state.selectedTab === "search") {
-      content = <SearchContent />;
     }
+
+    switch (selectedTab) {
+      case "user": {
+        return <UserThumbnails loading={loading} programs={programs} />;
+        break;
+      }
+      case "official":
+      case "future": {
+        return <OfficialThumbnails loading={loading} programs={programs} />;
+        break;
+      }
+      case "search": {
+        return <SearchContent />;
+        break;
+      }
+    }
+  }
+
+  render() {
+    const menu = this.getMenu();
+    const tabs = this.getTabs();
+    const content = this.getContent();
 
     return (
       <div id="wrapper">
         {menu}
         <div id="tab-container">{tabs}</div>
-        <div id="communities">
-          {/* <div
-            style={{ height: "200px", width: "200px" }}
-            className="nowloading"
-          /> */}
-          {/* <video autoPlay loop className="loading">
-            <source src="/images/loading.compressed.mp4" />
-          </video> */}
-          {content}
-        </div>
+        <div id="communities">{content}</div>
       </div>
     );
   }
