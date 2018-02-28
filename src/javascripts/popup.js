@@ -3,24 +3,37 @@ import UserThumbnails from "./modules/UserThumbnails";
 import OfficialThumbnails from "./modules/OfficialThumbnails";
 import Thumbnail from "./modules/Thumbnail";
 import Search from "./modules/search";
-
-let currentTab = "user";
+import { showSpinner, hideSpinner } from "./modules/spinner";
 
 // DOM を削除・非表示
 const removeElements = elms => [...elms].forEach(el => el.remove());
 const hideElements = elms => [...elms].forEach(el => (el.style.display = "none"));
 
-// ツールチップが表示されたら，ツールチップにマウスオーバーしたときツールチップを非表示にする
-const observer = new MutationObserver((mutationRecords, _observer) => {
-  Array.prototype.forEach.call(document.getElementsByClassName("tooltip"), el => {
-    el.addEventListener("mouseover", () => {
-      hideElements(document.getElementsByClassName("tooltip"));
-    });
+document.getElementById("user").addEventListener("click", e => {
+  changeTab("user");
+  Api.loadCasts("user").then(streams => {
+    showStream(streams, "user");
   });
 });
 
-observer.observe(document.getElementById("nicosapo"), {
-  childList: true
+document.getElementById("official").addEventListener("click", e => {
+  changeTab("official");
+  Api.loadCasts("official").then(streams => {
+    showStream(streams, "official");
+  });
+});
+
+document.getElementById("future").addEventListener("click", () => {
+  changeTab("future");
+  Api.loadCasts("future").then(streams => {
+    showStream(streams, "future");
+  });
+});
+
+document.getElementById("search").addEventListener("click", () => {
+  changeTab("search");
+  const search = new Search();
+  search.loadHTML();
 });
 
 // 番組表示
@@ -31,29 +44,24 @@ const showStream = (streams, genre) => {
       params = UserThumbnails.getParams(streams);
       break;
     case "official":
+      params = OfficialThumbnails.getParams(streams);
+      break;
     case "future":
       params = OfficialThumbnails.getParams(streams);
       break;
+    default: // Discard.
   }
   const container = document.getElementById("container");
   params.forEach(param => {
-    const thumbnail = Thumbnail.createElement(param);
-    container.appendChild(thumbnail);
-    new Tooltip(thumbnail.querySelector(".comu_thumbnail"), {
-      placement: "top", // or bottom, left, right, and variations
-      title: thumbnail.dataset.title,
-      container: document.getElementById("nicosapo"),
-      boundariesElement: document.getElementById("nicosapo")
-    });
+    const frame = Thumbnail.createElement(param);
+    container.appendChild(frame);
   });
-  const loading = document.getElementById("loading");
-  loading.style.display = "none";
+
+  hideSpinner();
 };
 
 // タブ切り替え
-const selectTab = genre => {
-  currentTab = genre;
-
+const changeTab = genre => {
   const searchroot = document.querySelector("#search-root");
   if (searchroot) {
     searchroot.remove();
@@ -63,15 +71,20 @@ const selectTab = genre => {
   ctnr.style.display = "block";
 
   removeElements(document.querySelectorAll(".community-hover-wrapper"));
-  const loading = document.getElementById("loading");
-  loading.currentTime = 0;
-  loading.style.display = "block";
+  showSpinner();
 
+  deselectTabs();
+  selectTab(genre);
+};
+
+const deselectTabs = () => {
   const allTabs = document.querySelectorAll(".tab");
   for (const tab of allTabs) {
-    console.log(tab.className);
     tab.className = "tab non-selected";
   }
+};
+
+const selectTab = genre => {
   const tab = document.querySelector(`#${genre}`);
   tab.className = "tab selected";
 };
@@ -80,29 +93,16 @@ Api.loadCasts("user").then(streams => {
   showStream(streams, "user");
 });
 
-document.getElementById("user").addEventListener("click", e => {
-  selectTab("user");
-  Api.loadCasts("user").then(streams => {
-    showStream(streams, "user");
+// ツールチップが表示されたら，ツールチップにマウスオーバーしたときツールチップを非表示にする
+const observer = new MutationObserver(() => {
+  const tooltips = document.querySelectorAll(".tooltip");
+  Array.prototype.forEach.call(tooltips, el => {
+    el.addEventListener("mouseover", () => {
+      hideElements(document.querySelectorAll(".tooltip"));
+    });
   });
 });
 
-document.getElementById("official").addEventListener("click", e => {
-  selectTab("official");
-  Api.loadCasts("official").then(streams => {
-    showStream(streams, "official");
-  });
-});
-
-document.getElementById("future").addEventListener("click", () => {
-  selectTab("future");
-  Api.loadCasts("future").then(streams => {
-    showStream(streams, "future");
-  });
-});
-
-document.getElementById("search").addEventListener("click", () => {
-  selectTab("search");
-  const search = new Search();
-  search.loadHTML();
+observer.observe(document.querySelector("#nicosapo"), {
+  childList: true
 });

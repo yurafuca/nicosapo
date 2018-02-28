@@ -1,18 +1,8 @@
+/* global Tooltip */
+
 export default class Thumbnail {
   static createElement(params) {
-    const {
-      key,
-      preload,
-      background,
-      title,
-      url,
-      id,
-      isReserved,
-      text,
-      day,
-      openTime,
-      index
-    } = params;
+    const { key, preload, background, title, url, id, isReserved, text, day, openTime, index } = params;
 
     const thumbnail = document.createElement("div");
     thumbnail.id = id;
@@ -33,10 +23,23 @@ export default class Thumbnail {
     span.style.backgroundImage = background;
     // span.tooltip();
 
+    const options = {
+      placement: "top",
+      title: title,
+      container: document.querySelector("#nicosapo"),
+      boundariesElement: document.querySelector("#nicosapo")
+    };
+
+    Thumbnail.setTooltip(span, options);
+
     thumbnail.appendChild(inner);
     inner.appendChild(a);
     a.appendChild(span);
 
     return thumbnail;
+  }
+
+  static setTooltip(reference, options) {
+    new Tooltip(reference, options);
   }
 }
