@@ -1,4 +1,3 @@
-import $ from "jquery";
 import axios from "axios";
 import VIParser from "../modules/VIParser";
 
@@ -44,52 +43,30 @@ export default class Api {
   // jQuery オブジェクトでなく JSON を返したい
   static getUserOnair() {
     return new Promise((resolve, reject) => {
-      const endpoint =
-        "http://sp.live.nicovideo.jp/api/favorite?firstStreamNum=1&streamMany=100&streamType=all";
-      $.get(endpoint)
-        .done(response => {
-          let favoriteStreams = response.favoriteStreams;
+      const url = "http://sp.live.nicovideo.jp/api/favorite?firstStreamNum=1&streamMany=100&streamType=all";
+
+      axios
+        .get(url)
+        .then(response => {
+          let favoriteStreams = response.data.favoriteStreams;
           favoriteStreams = favoriteStreams.map(stream => {
             stream.is_reserved = stream.start_time * 1000 > Date.now();
             return stream;
           });
-          const videoInfoList = favoriteStreams.map(stream =>
-            VIParser.parse(stream)
-          );
-          resolve(videoInfoList);
-          // const $html = $(response);
-          // const subscribes = $html.find(
-          //   "[data-] > .liveItems > [class^='liveItem']"
-          // );
-          // const reserved = $html.find(
-          //   "[id$=subscribeReservedItemsWrap] > .liveItems > [class^='liveItem']"
-          // );
-          // $.each($(reserved), (index, item) => {
-          //   item.is_reserved = true;
-          // });
-          // $.merge(subscribes, reserved);
-          // const videoInfoList = [];
-          // $.each($(subscribes), (index, element) => {
-          //   if ($($(element).find("img")[0]) === `CLOSED`) {
-          //     return;
-          //   }
-          //   const $videoInfo = VIParser.parse(element);
-          //   videoInfoList.push($videoInfo);
-          // });
+          const videoInfoList = favoriteStreams.map(stream => VIParser.parse(stream));
           resolve(videoInfoList);
         })
-        .fail((jqXHR, textStatus, errorThrown) => {
-          reject(errorThrown);
+        .catch(error => {
+          throw error;
         });
     });
   }
 
   static getCheckList() {
     return new Promise((resolve, reject) => {
-      const endpoint = "http://flapi.nicovideo.jp/api/getchecklist";
-      const posting = $.get(endpoint);
-      posting.done(data => {
-        const json = JSON.parse(data);
+      const url = "http://flapi.nicovideo.jp/api/getchecklist";
+      axios.get(url).then(response => {
+        const json = JSON.parse(response.data);
         const status = json.status;
         switch (status) {
           case "OK":
@@ -105,13 +82,13 @@ export default class Api {
 
   static getFutureOnair() {
     return new Promise(resolve => {
-      const endpoint =
-        "http://live.nicovideo.jp/ranking?type=comingsoon&main_provider_type=official";
-      const posting = $.get(endpoint);
-      posting.done(response => {
-        const future_lives = $(response).find(".ranking_video");
-        if (future_lives) {
-          resolve(future_lives.toArray());
+      const url = "http://live.nicovideo.jp/ranking?type=comingsoon&main_provider_type=official";
+      axios.get(url).then(response => {
+        const parser = new DOMParser();
+        const html = parser.parseFromString(response.data, "text/html");
+        const futureStreams = html.querySelectorAll(".ranking_video");
+        if (futureStreams) {
+          resolve(futureStreams);
         }
       });
     });
@@ -119,12 +96,12 @@ export default class Api {
 
   static getOfficialOnair() {
     return new Promise(resolve => {
-      const endpoint =
-        "http://live.nicovideo.jp/ranking?type=onair&main_provider_type=official";
-      const posting = $.get(endpoint);
-      posting.done(response => {
-        const official_lives = $(response).find(".ranking_video");
-        resolve(official_lives.toArray());
+      const url = "http://live.nicovideo.jp/ranking?type=onair&main_provider_type=official";
+      axios.get(url).then(response => {
+        const parser = new DOMParser();
+        const html = parser.parseFromString(response.data, "text/html");
+        const officialStreams = html.querySelectorAll(".ranking_video");
+        resolve(officialStreams);
       });
     });
   }
@@ -132,12 +109,22 @@ export default class Api {
   static getStatus(param) {
     parameter_nicovideojs.push(param);
     return new Promise(resolve => {
-      const endpoint = "http://watch.live.nicovideo.jp/api/getplayerstatus?v=";
+      const url = "http://watch.live.nicovideo.jp/api/getplayerstatus?v=";
       const parameter = parameter_nicovideojs.shift();
-      $.get(endpoint + param, response => {
-        response.param = parameter;
-        resolve(response);
-      });
+
+      axios
+        .get(url + param)
+        .then(response => {
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(response.data, "text/xml");
+          doc.param = parameter;
+          resolve(doc);
+          // });
+        })
+        .catch(response => {
+          response.data.param = parameter;
+          resolve(response.data);
+        });
     });
   }
 
@@ -149,82 +136,24 @@ export default class Api {
     const theRequestId = requestId;
     return new Promise(resolve => {
       Api.getStatus(requestId).then(response => {
-        const $response = $(response);
-        const errorCode = $response.find("error code").text();
+        const errorCode = response.querySelector("error code");
         if (errorCode) {
-          if (errorCode !== "require_community_member") {
-            console.log(`${theRequestId} is OFFAIR or ERROR`);
+          if (errorCode.textContent !== "require_community_member") {
+            console.log(`${theRequestId}: offair.`);
             response.isOpen = false;
           }
         }
-        const endTime = $response.find("end_time").text();
+
+        const endTime = response.querySelector("end_time").textContent;
         if (Date.now() < `${endTime}000`) {
-          console.log(`${theRequestId} is ONAIR`);
-          const liveId = $response.find("stream id").text();
+          console.log(`${theRequestId}: onair.`);
+          const liveId = response.querySelector("stream id").textContent;
           response.nextLiveId = liveId;
           response.isOpen = true;
         }
         response.requestId = theRequestId;
         resolve(response);
       });
-    });
-  }
-
-  /*
-   * 放送中のチャンネルのリストを取得
-   *  0: { id: "co000000",
-   *       url: "http://live.nicovideo.jp/watch/lv310946190",
-   *       thumbnail: "http://icon.nimg.jp/community/s/281/co2811763.jpg?1504943573",
-   *       title "闘会議モルゲッソヨ" }
-   */
-  static fetchOnairChannelList() {
-    const base =
-      "http://live.nicovideo.jp/ranking?type=onair&main_provider_type=official";
-
-    const request = axios.get(base);
-
-    return request
-      .then(response => {
-        if (response.status !== 200) throw new Error("failed.");
-        else return Api._channelPageToChannelList(response.data);
-      })
-      .catch(error => {
-        console.error(error);
-        throw error;
-      });
-  }
-
-  // 放送中のチャンネルページからチャンネルを抽出
-  static _channelPageToChannelList(html) {
-    const officialCastElements = $(html)
-      .find(".ranking_video")
-      .toArray();
-    const channelList = officialCastElements.map(element => {
-      const $e = $(element);
-      const id = $e.find(".video_id").text();
-      const prefixedId = `lv${id}`;
-      const providerUrl = $e.find(".video_text a").attr("href");
-      const providerRegExp = /http\:\/\/ch.nicovideo.jp\/channel\/(.+)/;
-      const params = {
-        id: prefixedId,
-        provider: providerRegExp.exec(providerUrl)[1],
-        url: `http://live.nicovideo.jp/watch/${prefixedId}`,
-        thumbnail: $e.find(".info a img").attr("src"),
-        title: $e.find(".video_title").text()
-      };
-      return params;
-    });
-    return channelList;
-  }
-
-  // チャンネル id から放送中でない id を抽出
-  static selectOnairChannel(channels) {
-    Api.fetchOnairChannelList().then(channelList => {
-      const selectedChannels = channelList.filter(channel => {
-        const result = channels.includes(channel.provider);
-        return result;
-      });
-      return selectedChannels;
     });
   }
 
@@ -238,17 +167,10 @@ export default class Api {
         "commentCounter-dsc": "commentCounter",
         "commentCounter-asc": "%2bcommentCounter"
       };
-      const q =
-        `http://api.search.nicovideo.jp/api/v2/live/contents/search?q=${query}` +
-        "&targets=tags,title,description" +
-        "&fields=contentId,title,communityIcon,description,start_time,live_end_time,comment_counter,score_timeshift_reserved,provider_type,tags,member_only,viewCounter,timeshift_enabled" +
-        "&_context=nicosapo" +
-        "&filters%5BliveStatus%5D%5B0%5D=onair" +
-        `&_sort=${sortModes[sortMode]}` +
-        "&_limit=100";
-      $.get(q, response => {
-        console.info(response);
-        resolve(response);
+      const q = `http://api.search.nicovideo.jp/api/v2/live/contents/search?q=${query}` + "&targets=tags,title,description" + "&fields=contentId,title,communityIcon,description,start_time,live_end_time,comment_counter,score_timeshift_reserved,provider_type,tags,member_only,viewCounter,timeshift_enabled" + "&_context=nicosapo" + "&filters%5BliveStatus%5D%5B0%5D=onair" + `&_sort=${sortModes[sortMode]}` + "&_limit=100";
+      axios.get(q).then(response => {
+        // console.info(response.data);
+        resolve(response.data);
       });
     });
   }
@@ -256,15 +178,23 @@ export default class Api {
   static getFollowingCommunities(pageNum) {
     const parser = httpResponse => {
       const result = [];
-      const $frame = $($(httpResponse).find(".com_frm"));
-      $.each($frame, (i, element) => {
-        const $e = $(element);
-        const title = $e.find(`.title`).text();
-        const thumbnail = $e.find(".thmb img").attr(`src`);
-        const id = $e
-          .find(`.thmb a`)
-          .attr(`href`)
-          .replace("/community/", ``);
+      const parser = new DOMParser();
+      const html = parser.parseFromString(httpResponse, "text/html");
+      const frames = html.querySelectorAll(".com_frm");
+      // const $frame = $($(httpResponse).find(".com_frm"));
+
+      // $.each($frame, (i, element) => {
+      Array.prototype.forEach.call(frames, el => {
+        // const $e = $(element);
+        const title = el.querySelector(".title").textContent;
+        // const title = $e.find(`.title`).text();
+        const thumbnail = el.querySelector(".thmb img").src;
+        // const thumbnail = $e.find(".thmb img").attr(`src`);
+        const id = el.querySelector(".thmb a").href.replace("http://com.nicovideo.jp/community/", ``);
+        // const id = $e
+        // .find(`.thmb a`)
+        // .attr(`href`)
+        // .replace("/community/", ``);
         const url = `http://com.nicovideo.jp/community/${id}`;
         const community = {
           title: title,
@@ -274,6 +204,22 @@ export default class Api {
         };
         result.push(community);
       });
+      // const $e = $(element);
+      // const title = $e.find(`.title`).text();
+      // const thumbnail = $e.find(".thmb img").attr(`src`);
+      // const id = $e
+      //   .find(`.thmb a`)
+      //   .attr(`href`)
+      //   .replace("/community/", ``);
+      // const url = `http://com.nicovideo.jp/community/${id}`;
+      // const community = {
+      //   title: title,
+      //   thumbnail: thumbnail,
+      //   id: id,
+      //   url: url
+      // };
+      // result.push(community);
+      // });
       return result;
     };
     return new Promise(resolve => {
@@ -309,12 +255,4 @@ export default class Api {
         throw error;
       });
   }
-
-  // // 公式チャンネル・ユーザーチャンネルのフィードを Array に変換
-  // static _toChannelList(channelFeed) {
-  //   return parseString(channelFeed, (err, result) => {
-  //     console.log(result.rss.channel[0].item);
-  //     return result.rss.channel[0].item;
-  //   });
-  // }
 }

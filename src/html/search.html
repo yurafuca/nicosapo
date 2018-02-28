@@ -1,0 +1,40 @@
+<div id="search-root">
+  <form id="search-container">
+    <select id="search-sort" name="sort" value={this.state.sortMode}>
+      <option value="startTime-dsc">放送日時が近い順</option>
+      <option value="startTime-asc">放送日時が遠い順</option>
+      <option value="viewCounter-dsc">来場者数が多い順</option>
+      <option value="viewCounter-asc">来場者数が少ない順</option>
+      <option value="commentCounter-dsc">コメント数が多い順</option>
+      <option value="commentCounter-asc">コメント数が少ない順</option>
+    </select>
+    <input type="text" id="search-input" value="" placeholder="キーワードを入力"></input>
+    <input type="button" id="search-button" value="検索" class="button primary"></input>
+    <span id="regist-favorite">
+      お気に入りに登録
+    </span>
+  </form>
+  <div id="container" class="search lowloading">
+    <div id="favorite-query-list">
+      <span class="favorite-query-head">お気に入り</span>
+      <!--
+        Favorite Queries
+      -->
+    </div>
+    <div id="search-result-message">
+      <span>
+        {this.
+      </span>
+    </div>
+    <div id="search-result">
+      {this.state.isLoading && (
+      <video autoPlay loop class="loading">
+        <source src="/images/loading.compressed.mp4" />
+      </video>
+      )} {this.state.thumbParams.map(thumbParam => (
+      <ListItem title={thumbParam.title} url={thumbParam.url} description={thumbParam.description} thumbnail={thumbParam.thumbnail}
+        viewCounter={thumbParam.viewCounter} commentCounter={thumbParam.commentCounter} lapsedTime={thumbParam.lapsedTime}
+      /> ))}
+    </div>
+  </div>
+</div>

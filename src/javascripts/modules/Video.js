@@ -1,8 +1,11 @@
-import $ from "jquery";
+// import $ from "jquery";
 
 export default class Video {
   constructor() {
-    this.content = $(this._xml());
+    const parser = new DOMParser();
+    const xml = parser.parseFromString(this._xml(), "text/xml");
+    // this.content = $(this._xml());
+    this.content = xml;
     this.table = {
       title: `title`,
       id: `id`,
@@ -12,15 +15,17 @@ export default class Video {
   }
 
   set(prop, value) {
-    this.content.find(this.table[prop]).text(value);
+    // this.content.find(this.table[prop]).text(value);
+    this.content.querySelector(this.table[prop]).textContent = value;
   }
 
   get(prop) {
-    return this.content.find(this.table[prop]).text();
+    // return this.content.find(this.table[prop]).text();
+    return this.content.querySelector(this.table[prop]).textContent;
   }
 
   xml() {
-    return this.content;
+    return this.content.documentElement;
   }
 
   _xml() {

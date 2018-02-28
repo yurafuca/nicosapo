@@ -51,6 +51,10 @@ module.exports = [
         {
           from: "src/stylesheets/animate.min.css",
           to: "../stylesheets/animate.min.css"
+        },
+        {
+          from: "src/stylesheets/popper.css",
+          to: "../stylesheets/popper.css"
         }
       ])
     ],

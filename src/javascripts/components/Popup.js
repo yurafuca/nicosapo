@@ -82,11 +82,7 @@ export default class Popup extends React.Component {
           <span className="octicon mega-octicon octicon-tools" />
           <span className="title">設定</span>
         </a>
-        <a
-          className="menu-button"
-          href="http://live.nicovideo.jp/my"
-          target="_blank"
-        >
+        <a className="menu-button" href="http://live.nicovideo.jp/my" target="_blank">
           <span className="octicon mega-octicon octicon-radio-tower" />
           <span className="title">マイページ</span>
         </a>
@@ -99,44 +95,16 @@ export default class Popup extends React.Component {
 
     return (
       <div>
-        <div
-          key="user"
-          id="user"
-          className={
-            selectedTab === "user" ? `tab selected` : `tab non-selected`
-          }
-          onClick={this.toggleTab}
-        >
+        <div key="user" id="user" className={selectedTab === "user" ? `tab selected` : `tab non-selected`} onClick={this.toggleTab}>
           フォロー中
         </div>
-        <div
-          key="official"
-          id="official"
-          className={
-            selectedTab === "official" ? `tab selected` : `tab non-selected`
-          }
-          onClick={this.toggleTab}
-        >
+        <div key="official" id="official" className={selectedTab === "official" ? `tab selected` : `tab non-selected`} onClick={this.toggleTab}>
           公式
         </div>
-        <div
-          key="future"
-          id="future"
-          className={
-            selectedTab === "future" ? `tab selected` : `tab non-selected`
-          }
-          onClick={this.toggleTab}
-        >
+        <div key="future" id="future" className={selectedTab === "future" ? `tab selected` : `tab non-selected`} onClick={this.toggleTab}>
           未来の公式
         </div>
-        <div
-          key="search"
-          id="search"
-          className={
-            selectedTab === "search" ? `tab selected` : `tab non-selected`
-          }
-          onClick={this.toggleTab}
-        >
+        <div key="search" id="search" className={selectedTab === "search" ? `tab selected` : `tab non-selected`} onClick={this.toggleTab}>
           番組
         </div>
       </div>
@@ -147,11 +115,7 @@ export default class Popup extends React.Component {
     const { selectedTab, isLogined, loading, programs, loadedTab } = this.state;
 
     if (isLogined === false && selectedTab === "user") {
-      return (
-        <div className="message">
-          ニコニコ動画にログインしていません．ログインしてから再度お試しください．
-        </div>
-      );
+      return <div className="message">ニコニコ動画にログインしていません．ログインしてから再度お試しください．</div>;
     }
 
     switch (selectedTab) {
