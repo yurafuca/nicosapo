@@ -151,7 +151,7 @@ class Tabs {
 // 予約番組の表示が有効になっている場合は予約タブを追加する
 {
   const isShowReservedStreams = store.get("options.showReserved.enable");
-  if (isShowReservedStreams === "enable") {
+  if (isShowReservedStreams === "enable" || isShowReservedStreams == null) {
     const reserveTab = document.createElement("div");
     reserveTab.className = "tab non-selected";
     reserveTab.id = "reserve";
