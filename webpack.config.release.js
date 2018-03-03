@@ -56,6 +56,10 @@ module.exports = [
         {
           from: "src/stylesheets/popper.css",
           to: "../stylesheets/popper.css"
+        },
+        {
+          from: "src/stylesheets/spinner.css",
+          to: "../stylesheets/spinner.css"
         }
       ]),
       new webpack.DefinePlugin({

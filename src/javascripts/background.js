@@ -56,18 +56,18 @@ chrome.contextMenus.removeAll(() => {
 
 Badge.setBackgroundColor("#ff6200");
 Db.setAll("autoEnterCommunityList", "state", "init");
-// BackgroundReloader.run();
-// setInterval(BackgroundReloader.run, 60 * 1000);
-// Common.sleep(7 * 1000).then(() => {
-//   setInterval(() => {
-//     const isForceCancel = store.get("options.autoEnter.forceCancel") || false;
-//     const isAutoCancel = store.get("state.autoEnter.cancel") || false;
-//     if (!isForceCancel && !isAutoCancel) {
-//       Promise.resolve()
-//         .then(new AutoEnterRunner().run("live"))
-//         .then(new AutoEnterRunner().run("community"));
-//     } else {
-//       console.log("Canceled auto enter.");
-//     }
-//   }, 60 * 1000);
-// });
+BackgroundReloader.run();
+setInterval(BackgroundReloader.run, 60 * 1000);
+Common.sleep(7 * 1000).then(() => {
+  setInterval(() => {
+    const isForceCancel = store.get("options.autoEnter.forceCancel") || false;
+    const isAutoCancel = store.get("state.autoEnter.cancel") || false;
+    if (!isForceCancel && !isAutoCancel) {
+      Promise.resolve()
+        .then(new AutoEnterRunner().run("live"))
+        .then(new AutoEnterRunner().run("community"));
+    } else {
+      console.log("Canceled auto enter.");
+    }
+  }, 60 * 1000);
+});

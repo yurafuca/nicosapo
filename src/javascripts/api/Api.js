@@ -45,6 +45,8 @@ export default class Api {
     return new Promise((resolve, reject) => {
       const url = "http://sp.live.nicovideo.jp/api/favorite?firstStreamNum=1&streamMany=100&streamType=all";
 
+      // axios.get("http://live.nicovideo.jp/my");
+
       axios
         .get(url)
         .then(response => {
@@ -66,11 +68,10 @@ export default class Api {
     return new Promise((resolve, reject) => {
       const url = "http://flapi.nicovideo.jp/api/getchecklist";
       axios.get(url).then(response => {
-        const json = JSON.parse(response.data);
-        const status = json.status;
+        const status = response.data.status;
         switch (status) {
           case "OK":
-            resolve(json.community_id);
+            resolve(response.data.community_id);
             break;
           default:
             reject(new Error('Request failed: status is "fail".'));
@@ -144,12 +145,14 @@ export default class Api {
           }
         }
 
-        const endTime = response.querySelector("end_time").textContent;
-        if (Date.now() < `${endTime}000`) {
-          console.log(`${theRequestId}: onair.`);
-          const liveId = response.querySelector("stream id").textContent;
-          response.nextLiveId = liveId;
-          response.isOpen = true;
+        const endTime = response.querySelector("end_time");
+        if (endTime) {
+          if (Date.now() < `${endTime.textContent}000`) {
+            console.log(`${theRequestId}: onair.`);
+            const liveId = response.querySelector("stream id").textContent;
+            response.nextLiveId = liveId;
+            response.isOpen = true;
+          }
         }
         response.requestId = theRequestId;
         resolve(response);
@@ -225,8 +228,8 @@ export default class Api {
     return new Promise(resolve => {
       const endpoint = `http://com.nicovideo.jp/community`;
       const query = `?page=${pageNum}`;
-      $.get(endpoint + query, response => {
-        const parsedResponse = parser(response);
+      axios.get(endpoint + query).then(response => {
+        const parsedResponse = parser(response.data);
         resolve(parsedResponse);
       });
     });

@@ -3,10 +3,10 @@
 <head>
 	<meta charset="UTF-8">
 	<link rel="stylesheet" href="/octicons/octicons.css">
-	<!-- <link rel="stylesheet" href="/stylesheets/bootstrap.3.3.6.min.css"> -->
 	<link rel="stylesheet" type="text/css" href="/stylesheets/popup.css">
 	<link rel="stylesheet" type="text/css" href="/stylesheets/button.css">
 	<link rel="stylesheet" type="text/css" href="/stylesheets/popper.css">
+	<link rel="stylesheet" type="text/css" href="/stylesheets/spinner.css">
 </head>
 
 <body style="width: 730px">
@@ -41,15 +41,25 @@
 				</div>
 			</div>
 			<div id="communities">
-				<div id="container" class="nowloading">
-					<!-- {this.props.loading && ( -->
-					<video autoPlay loop class="loading" id="loading">
-						<source src="/images/loading.compressed.mp4" />
-					</video>
-					<!-- )} {content} -->
+				<div id="container">
+					<div class="spinner">
+						<div class="dot-wrapper wrapper1">
+							<div class="dot"></div>
+						</div>
+						<div class="dot-wrapper wrapper2">
+							<div class="dot"></div>
+						</div>
+						<div class="dot-wrapper wrapper3">
+							<div class="dot"></div>
+						</div>
+						<div class="dot-wrapper wrapper4">
+							<div class="dot"></div>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
+	</div>
 	</div>
 	<!-- dummyツールチップ．予め表示してツールチップの初回表示時のチラつきを防止する -->
 	<div class="tooltip" role="tooltip" id="tooltip_dummy" aria-hidden="false" x-placement="top" style="position: absolute; transform: translate3d(7px, 40px, 0px); top: 0px; left: -999px; will-change: transform;">

@@ -28,16 +28,16 @@ export default class CastingCommunities {
       throw new Error(`current is null.`);
     }
     const openTimesOfPrevious = Object.keys(this.previous || {}).map(id => {
-      return this.previous[id].find("video open_time_jpstr").text(); // => [ 'time1', 'time2', 'time0']
+      return this.previous[id].querySelector("video open_time_jpstr").textContent; // => [ 'time1', 'time2', 'time0']
     });
     const openTimesOfCurrent = Object.keys(this.current).map(id => {
-      return this.current[id].find("video open_time_jpstr").text(); // => [ 'time1', 'time2', 'time3', 'time4', 'time0' ]
+      return this.current[id].querySelector("video open_time_jpstr").textContent; // => [ 'time1', 'time2', 'time3', 'time4', 'time0' ]
     });
     const timesOfDiff = openTimesOfCurrent.filter(time => {
       return !openTimesOfPrevious.includes(time); // => [ 'time3', 'time4' ]
     });
     const communityIdsOfDiff = Object.keys(this.current).filter((id, index) => {
-      const time = this.current[id].find("video open_time_jpstr").text();
+      const time = this.current[id].querySelector("video open_time_jpstr").textContent;
       return timesOfDiff.includes(time); // => [ '333333', '444444' ]
     });
     const communities = {};

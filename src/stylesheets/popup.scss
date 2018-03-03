@@ -9,7 +9,8 @@ $gray: gray;
 $color_wild_sand_approx: #f5f5f5;
 $white: #fff; //
 $color_alto_approx: #dcdcdc;
-$color_hot_cinnamon_approx: #d26911;
+// $color_hot_cinnamon_approx: #d26911;
+$color_hot_cinnamon_approx: #e36209;
 $black_20: rgba(0, 0, 0, 0.2);
 $black: black;
 $black_15: rgba(0, 0, 0, 0.15);
@@ -22,6 +23,48 @@ $color_gallery_approx: #eee;
 $color_pastel_green_approx: #8add6d;
 $color_apple_approx: #5ca941;
 $color_mantis_approx: #79d858;
+
+.loader,
+.loader:after {
+  border-radius: 50%;
+  width: 10em;
+  height: 10em;
+}
+.loader {
+  margin: 60px auto;
+  font-size: 10px;
+  position: relative;
+  text-indent: -9999em;
+  border-top: 1.1em solid rgba(0, 179, 159, 0.2);
+  border-right: 1.1em solid rgba(0, 179, 159, 0.2);
+  border-bottom: 1.1em solid rgba(0, 179, 159, 0.2);
+  border-left: 1.1em solid #00b39f;
+  -webkit-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-animation: load8 1.1s infinite linear;
+  animation: load8 1.1s infinite linear;
+}
+@-webkit-keyframes load8 {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+@keyframes load8 {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
 
 %extend_1 {
   color: $white;
@@ -44,6 +87,14 @@ $url_1: url(/images/icon.png);
 }
 html {
   display: table;
+}
+
+select {
+  font-family: Noto Sans Japanese;
+}
+
+input {
+  font-family: Noto Sans Japanese;
 }
 
 body {
@@ -103,7 +154,7 @@ a {
   line-height: 23px;
   font-weight: 500;
   //Instead of the line below you could use @include text-shadow($shadow-1, $shadow-2, $shadow-3, $shadow-4, $shadow-5, $shadow-6, $shadow-7, $shadow-8, $shadow-9, $shadow-10)
-  text-shadow: 0 1px 0 $white;
+  // text-shadow: 0 1px 0 $white;
   background: #fcfcfc;
   border-left: solid 1px $color_iron_approx;
   display: inline-block;
@@ -151,23 +202,24 @@ a {
     max-height: 492px;
   }
 }
-.nowloading {
-  min-height: 65px;
-  background-size: 65px;
-  background-repeat: no-repeat;
-  background-position: center;
 
-  background: none;
-  background-size: 0;
-}
-.loading {
-  position: absolute;
-  top: 16%;
-  left: 45%;
-  width: 65px;
-  z-index: 1;
-}
+// .nowloading {
+//   min-height: 65px;
+//   background-size: 50px;
+//   background-repeat: no-repeat;
+//   background-position: center;
+//   background-image: url(/images/loading.small.gif);
+// }
+// .loading {
+//   position: absolute;
+//   top: 16%;
+//   left: 45%;
+//   width: 65px;
+//   z-index: 1;
+// }
 .message {
+  font-family: Noto Sans Japanese;
+  font-weight: 300;
   width: auto;
   font-size: 18px;
   margin: 10px;
@@ -177,11 +229,10 @@ a {
   top: 5px;
   float: right;
   vertical-align: middle;
-  color: $color_mine_shaft_approx;
+  color: #333;
   margin-right: 6px;
   padding: 3px 10px;
   border: solid 1px #d5d5d5;
-  //Instead of the line below you could use @include border-radius($radius, $vertical-radius)
   border-radius: 3px;
   background-image: linear-gradient(#fcfcfc, #eee);
   &:hover {
@@ -204,11 +255,10 @@ a {
   > span {
     color: inherit;
     //Instead of the line below you could use @include text-shadow($shadow-1, $shadow-2, $shadow-3, $shadow-4, $shadow-5, $shadow-6, $shadow-7, $shadow-8, $shadow-9, $shadow-10)
-    text-shadow: 0 1px 0 $white;
+    // text-shadow: 0 1px 0 $white;
     &.octicon {
       position: relative;
-      top: 1px;
-      font-size: 17px !important;
+      font-size: 15px !important;
     }
     &.title {
       font-size: 12px;
@@ -220,14 +270,13 @@ a {
   position: relative;
   top: -1px;
   float: left;
-  background-image: $url_1;
-  background-size: 27px;
+  background-image: url(/images/icon.png);
+  background-size: 25px;
   background-repeat: no-repeat;
   background-position: center;
-  height: 37px;
-  width: 40px;
-  margin-left: 2px;
-  //Instead of the line below you could use @include border-radius($radius, $vertical-radius)
+  height: 36px;
+  width: 36px;
+  margin-left: 5px;
   border-radius: 3px 0 0 0;
 }
 
@@ -241,10 +290,10 @@ a {
 }
 .listgroup-item {
   font-family: "Noto Sans Japanese";
-  padding: 10px;
+  padding: 8px;
   font-size: 13px;
   line-height: 26px;
-  height: 79px; // ない方がいい
+  height: 72px;
   color: #767676;
   border-bottom: 1px solid #e5e5e5;
   &:last-child {
@@ -350,7 +399,7 @@ a {
 .list-group-text-block {
   position: relative;
   // padding-left: 50px;
-  padding-left: 70px;
+  padding-left: 65px;
   line-height: 20px;
   overflow: hidden;
   width: 436px;
@@ -361,7 +410,6 @@ a {
   }
   .meta-title {
     display: block;
-    // font-weight: bold;
     height: 20px;
     overflow: hidden;
     font-weight: 600;
@@ -382,10 +430,11 @@ a {
   }
   .meta-status {
     font-size: 0.7em;
-    height: 18px;
+    height: 15px;
     color: #bbb;
     overflow: hidden;
     display: inline-block;
+    line-height: 15px;
   }
 }
 .float-left {
@@ -414,18 +463,22 @@ a {
 }
 #search-result {
   position: relative;
-  min-height: 65px;
+  max-height: 455px;
+  overflow-y: scroll;
 }
 
 .username {
-  margin-left: 2px;
-  color: $color_mine_shaft_approx;
+  margin-left: 3px;
+  color: #333;
   font-size: 14px;
-  line-height: 38px;
+  line-height: 36px;
   font-weight: 500;
-  //Instead of the line below you could use @include text-shadow($shadow-1, $shadow-2, $shadow-3, $shadow-4, $shadow-5, $shadow-6, $shadow-7, $shadow-8, $shadow-9, $shadow-10)
-  text-shadow: 0 1px 0 $white;
+  // text-shadow: 0 1px 0 #fff;
+  cursor: default;
+  position: relative;
+  top: 1px;
 }
+
 #search-container {
   font-family: "Noto Sans Japanese";
   background: #f5f5f5;
@@ -436,21 +489,27 @@ a {
 #search-sort {
   display: inline-block;
   position: absolute;
-  height: 28px;
-  width: 140px;
-  font-size: 0.8em;
+  // height: 28px;
+  height: 25px;
+
+  width: 125px;
   color: #333;
+  font-size: 11px;
 }
 #search-input {
   display: inline-block;
   background: white;
   color: #333;
-  vertical-align: middle;
+  vertical-align: top;
   // width: 400px;
-  width: 260px;
-  margin-left: 140px;
-  height: 28px;
-  padding: 0 5px;
+  // width: 260px;
+  // width: 282px;
+  width: 301px;
+  margin-left: 125px;
+  // height: 28px;
+  height: 25px;
+  padding: 0 3px;
+  font-size: 12px;
 }
 #search-button {
   display: inline-block;
@@ -459,8 +518,12 @@ a {
 
   // vertical-align: middle;
   // color: white;
-  padding: 3px 13px;
+  // padding: 3px 13px;
   border-radius: 0;
+  height: 25px;
+  line-height: 18px;
+  font-size: 11px;
+
   // border: solid 1px $color_apple_approx;
   // border-radius: 0 3px 3px 0;
   // background-image: linear-gradient(
@@ -513,15 +576,15 @@ a {
 .query-remove {
   background: #0366d6;
   color: #f1f8ff;
-  font-size: 11px !important;
+  font-size: 10px !important;
   padding: 0 5px;
   border-radius: 999px;
   position: relative;
   display: inline-block;
-  height: 16px;
+  height: 15px;
   top: -1px;
   margin-left: 8px;
-  margin-right: 4px;
+  margin-right: 2px;
   &:hover {
     color: white;
     background: #d02d3a;
@@ -529,13 +592,17 @@ a {
 }
 #regist-favorite {
   position: absolute;
-  top: 77px;
-  right: 80px;
+  top: 5px;
+  right: 51px;
+  font-size: 11px;
   color: #777;
   cursor: pointer;
+  height: 16px;
+  line-height: 14px;
   background: #eee;
   padding: 0 3px;
   border-radius: 2px;
+  border: solid 1px #ddd;
   &:hover {
     // color: #999;
     background: #ddd;

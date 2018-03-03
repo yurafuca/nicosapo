@@ -57,7 +57,7 @@ p.bold {
 .popper,
 .tooltip {
   font-family: "Noto Sans Japanese";
-  background: rgba(0, 0, 0, 0.85);
+  background: rgba(0, 0, 0, 0.8);
   color: white;
   max-width: 270px;
   width: auto;

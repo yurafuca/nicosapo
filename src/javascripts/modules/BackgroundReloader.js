@@ -51,24 +51,20 @@ export default class BackgroundReloader {
 
   static _alertEach() {
     // TODO: require argument.
-    const justStartedCommunities = _castingCommunities.query(
-      "ONLY_JUST_STARTED"
-    ); // Array of jQuery Objects.
-    const justFollowedCommunities = _followingCommunities.query(
-      "ONLY_JUST_FOLLOWED"
-    ); // Array of Integer.
+    const justStartedCommunities = _castingCommunities.query("ONLY_JUST_STARTED"); // Array of jQuery Objects.
+    const justFollowedCommunities = _followingCommunities.query("ONLY_JUST_FOLLOWED"); // Array of Integer.
     _.each(justStartedCommunities, community => {
       console.info("justStarted");
-      const commuId = community.find("community id").text();
-      const videoId = community.find("video id").text();
-      const number = Number(commuId);
-      const thumbnail = community.find("community thumbnail").text();
-      const re = /.+((ch|co)[0-9]+)\.jpg.*/;
-      const prefixedId = re.exec(thumbnail)[1];
-      console.info(prefixedId);
+      const commuId = community.querySelector("community id").textContent;
+      const videoId = community.querySelector("video id").textContent;
+      // const number = Number(commuId);
+      const thumbnail = community.querySelector("community thumbnail").textContent;
+      const re = /.+((ch|co)([0-9]+))\.jpg.*/;
+      const dePrefixedId = Number(re.exec(thumbnail)[3]);
+      console.info(dePrefixedId);
       const distributors = store.get(`excludedDistributors`);
-      if (distributors && distributors.hasOwnProperty(prefixedId)) return; // `continue` for lodash.
-      if (justFollowedCommunities.includes(number)) return; // `continue` for lodash.
+      if (distributors && distributors.hasOwnProperty(commuId)) return; // `continue` for lodash.
+      if (justFollowedCommunities.includes(dePrefixedId)) return; // `continue` for lodash.
       if (Db.contains("autoEnterCommunityList", commuId)) return; // `continue` for lodash.
       if (Db.contains("autoEnterProgramList", videoId)) return; // `continue` for lodash.
       Alert.fire(community);

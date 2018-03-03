@@ -1,48 +1,34 @@
 import store from "store";
 import Api from "../api/Api";
+import { showSpinner, hideSpinner } from "./spinner";
 
 const removeElements = elms => [...elms].forEach(el => el.remove());
 
 export default class Search {
-  constructor() {
-    const state = {
-      programs: [],
-      thumbParams: [],
-      isLoading: true,
-      resultCount: 0,
-      query_current: store.get("search.query.last") || "雑談",
-      query_last: store.get("search.query.last") || "",
-      query_favorite: store.get("search.query.favorite") || [],
-      sortMode: store.get("search.sortMode") || "startTime-dsc"
-    };
-    this.state = state;
-  }
-
-  initFavorites() {
+  initFavorites(queries = this.getCurrentFavorites()) {
     // 削除
     const favorites = document.querySelectorAll(".favorite-query");
     removeElements(favorites);
 
     // 追加
-    this.state.query_favorite.forEach(query => {
+    queries.forEach(query => {
       const q = document.createElement("span");
       q.className = "favorite-query";
       q.dataset.query = query;
       q.textContent = query;
-      q.addEventListener("click", e => {
-        let query = "";
-        for (const elem of e.currentTarget.childNodes) {
-          if (elem.nodeName == "#text") {
-            query += elem.nodeValue;
-          }
-        }
-        this.setQuery(query);
-        document.getElementById("search-input").value = query;
+
+      q.addEventListener("click", el => {
+        this.onClickFavorite(el);
       });
 
       const del = document.createElement("span");
-      del.className = this.state.query_last == query ? "query-remove" : "query-remove none";
+      del.className = this.getCurrentQuery() == query ? "query-remove" : "query-remove none";
       del.textContent = "削除";
+
+      del.addEventListener("click", el => {
+        this.removeQuery(el.textContent);
+        el.stopPropagation();
+      });
 
       q.appendChild(del);
 
@@ -51,7 +37,22 @@ export default class Search {
   }
 
   initInput() {
-    document.getElementById("search-input").value = this.state.query_last;
+    document.getElementById("search-input").value = this.getCurrentQuery();
+  }
+
+  initSortMode() {
+    document.getElementById("search-sort").value = this.getCurrentSortMode();
+  }
+
+  onClickFavorite(el) {
+    let query = "";
+    for (const elem of el.currentTarget.childNodes) {
+      if (elem.nodeName == "#text") {
+        query += elem.nodeValue;
+      }
+    }
+    document.getElementById("search-input").value = query;
+    this.setQuery(query);
   }
 
   setState(state) {
@@ -67,35 +68,34 @@ export default class Search {
         const parser = new DOMParser();
         const html = parser.parseFromString(data, "text/html");
         const child = html.documentElement.querySelector("#search-root");
-        document.querySelector("#communities").appendChild(child);
-        const container = document.getElementById("container");
-        container.style.display = "none";
-        const loading = document.getElementById("loading");
-        loading.style.display = "none";
-        this.setEventListener();
-        this.initFavorites();
+        document.querySelector("#container").prepend(child);
+        hideSpinner();
         this.initInput();
+        this.setEventListener();
+        this.initSortMode();
         this.search();
       });
   }
 
   setEventListener() {
-    document.getElementById("search-sort").addEventListener("change", () => {
+    document.querySelector("#search-sort").addEventListener("change", () => {
       this.handleChange();
     });
-    document.getElementById("search-input").addEventListener("keydown", e => {
+    document.querySelector("#search-input").addEventListener("keydown", e => {
       this.handleKeyPress(e);
     });
-    document.getElementById("search-button").onclick = this.search;
-    document.getElementById("regist-favorite").onclick = this.registFavorite;
-    document.getElementsByClassName("favorite-query").onclick = this.setQuery;
+    document.querySelector("#search-button").addEventListener("click", () => {
+      this.search();
+    });
+    document.querySelector("#regist-favorite").addEventListener("click", () => {
+      this.registFavorite();
+    });
   }
 
   setParams(query, sortMode) {
     Api.search(query, sortMode).then(response => {
       const datas = response.data;
       const thumbParams = [];
-      this.setState({ resultCount: datas.length });
       for (const data of datas) {
         const thumbParam = {};
         thumbParam.url = `http://live.nicovideo.jp/watch/${data.contentId}`;
@@ -111,11 +111,23 @@ export default class Search {
         thumbParam.lapsedTime = parseInt(hoge);
         thumbParams.push(thumbParam);
       }
-      // this.setState({ thumbParams: thumbParams, isLoading: false });
+
+      const result = document.getElementById("search-result");
+
       thumbParams.forEach(params => {
         const element = this.getResultElement(params);
-        document.getElementById("search-result").appendChild(element);
+        result.appendChild(element);
       });
+
+      if (thumbParams.length === 0) {
+        const query = this.getCurrentQuery();
+        const message = document.createElement("div");
+        message.className = "message";
+        message.textContent = `「${query}」を含む放送中の番組はありません 😴`;
+        result.appendChild(message);
+      }
+
+      hideSpinner();
     });
   }
 
@@ -134,8 +146,8 @@ export default class Search {
     img.alt = "";
     img.className = "avatar";
     img.src = thumbnail;
-    img.style.height = 60;
-    img.style.width = 60;
+    img.style.height = 55;
+    img.style.width = 55;
 
     const titleParent = document.createElement("span");
     titleParent.className = "meta-title";
@@ -167,50 +179,99 @@ export default class Search {
     return resultParent;
   }
 
-  handleChange(event) {
-    this.setState({ query_current: event.target.value });
+  handleChange() {
+    this.search();
   }
 
   handleKeyPress(event) {
+    const input = document.querySelector("#search-input");
+    input.title = input.value;
+
     if (event.key == "Enter") {
       event.preventDefault();
       this.search();
     }
   }
 
-  registFavorite(e) {
-    const q = this.state.query_current;
-    const queries = this.state.query_favorite.filter(query => q !== query);
+  registFavorite() {
+    const q = this.getCurrentQuery();
+    const queries = this.getCurrentFavorites().filter(query => q !== query);
     queries.push(q);
-    this.setState({ query_favorite: queries });
     store.set("search.query.favorite", queries);
+    this.initFavorites(queries);
   }
 
   changeSortMode(e) {
-    this.setState({ sortMode: e.target.value }, this.search);
-    store.set("search.sortMode", e.target.value);
+    this.search();
+    store.set("search.sortMode", this.getCurrentSortMode());
   }
 
   setQuery(query) {
     this.search(query);
-    this.initInput();
   }
 
   removeQuery() {
-    const q = this.state.query_last;
-    const queries = this.state.query_favorite.filter(query => q !== query);
-    this.setState({ query_favorite: queries });
+    const q = this.getCurrentQuery();
+    const queries = this.getCurrentFavorites().filter(query => q !== query);
+    this.initFavorites(queries);
     store.set("search.query.favorite", queries);
   }
 
+  getCurrentSortMode() {
+    const el = document.querySelector("#search-sort");
+    if (el.value) {
+      return el.value;
+    }
+
+    const lastSortMode = store.get("search.sortMode");
+    if (lastSortMode) {
+      return lastSortMode;
+    }
+
+    return "startTime-dsc";
+  }
+
   getCurrentQuery() {
-    return document.getElementById("search-input").value;
+    const el = document.getElementById("search-input");
+    if (el.value) {
+      return el.value;
+    }
+
+    const lastQuery = store.get("search.query.last");
+    if (lastQuery) {
+      return lastQuery;
+    }
+
+    return "雑談";
+  }
+
+  getCurrentFavorites() {
+    const els = document.querySelectorAll(".favorite-query");
+    if (els.length > 0) {
+      const favorites = [];
+      Array.prototype.forEach.call(els, el => {
+        favorites.push(el.dataset.query);
+      });
+      return favorites;
+    }
+
+    const lastFavorites = store.get("search.query.favorite");
+    if (lastFavorites) {
+      return lastFavorites;
+    }
+
+    return [];
   }
 
   search(query = this.getCurrentQuery()) {
     document.getElementById("search-result").innerHTML = "";
-    this.setParams(query, this.state.sortMode);
+    showSpinner();
+
+    this.setParams(query, this.getCurrentSortMode());
+
+    this.initInput();
     this.initFavorites();
+
     store.set("search.query.last", query);
   }
 }
