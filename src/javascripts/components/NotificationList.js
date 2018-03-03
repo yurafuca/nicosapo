@@ -40,7 +40,7 @@ export default class NotificationList extends React.Component {
 
   resetWatcher() {
     if (this.watcher) this.watcher.destroy();
-    this.watcher = scrollMonitor.create(document.getElementById(`modal`));
+    this.watcher = scrollMonitor.create(document.getElementById(`spinner`));
     this.watcher.enterViewport(() => {
       if (this.state.loadComplete) return;
       this.setState({ loading: true }, () => {
@@ -174,13 +174,27 @@ export default class NotificationList extends React.Component {
       const message = this.state.loadComplete
         ? "すべてのコミュニティを読み込みました．"
         : "";
-      const classes = `modal ` + (this.state.loading ? `loading` : `standby`);
-      const modal = (
-        <div id="modal" className={classes}>
-          {message}
+      const classes = `spinner ` + (this.state.loading ? `loading` : `standby`);
+      const spinner = (
+        <div>
+          <div id="spinner" className={this.state.loadComplete ? "" : "spinner"}>
+          <div className="dot-wrapper wrapper1">
+            <div className="dot"></div>
+          </div>
+          <div className="dot-wrapper wrapper2">
+            <div className="dot"></div>
+          </div>
+          <div className="dot-wrapper wrapper3">
+            <div className="dot"></div>
+          </div>
+          <div className="dot-wrapper wrapper4">
+            <div className="dot"></div>
+          </div>
         </div>
+        {message}
+      </div>
       );
-      items.push(modal);
+      items.push(spinner);
     }
     const status = this.state.loading ? (
       <div>
