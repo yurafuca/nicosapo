@@ -54,6 +54,11 @@ class Streams {
 
 class Tabs {
   static change(genre) {
+    // 選択中のタブを選択した場合は無視する
+    if (genre === Tabs._selected()) {
+      return;
+    }
+
     const searchroot = document.querySelector("#search-root");
     if (searchroot) {
       searchroot.remove();
@@ -71,8 +76,39 @@ class Tabs {
 
     Elements.remove(document.querySelectorAll(".community-hover-wrapper"));
     Elements.remove(document.querySelectorAll(".message"));
+
     this._deselectAll();
     this._select(genre);
+
+    showSpinner();
+
+    // 検索タブ以外は API を叩いて番組をロードする
+    switch (genre) {
+      case "user":
+      case "official":
+      case "future": {
+        Api.loadCasts(genre).then(streams => {
+          hideSpinner();
+          Streams.show(streams, genre);
+        });
+        break;
+      }
+      case "reserve": {
+        Api.loadCasts("user").then(streams => {
+          hideSpinner();
+          Streams.show(streams, genre);
+        });
+        break;
+      }
+      case "search": {
+        const search = new Search();
+        search.loadHTML();
+      }
+    }
+  }
+
+  static _selected() {
+    return document.querySelector(".tab.selected").id;
   }
 
   static _select(genre) {
@@ -138,38 +174,20 @@ class Tabs {
   const userTab = document.getElementById("user");
   userTab.addEventListener("click", () => {
     Tabs.change("user");
-    showSpinner();
-    Api.loadCasts("user").then(streams => {
-      hideSpinner();
-      Streams.show(streams, "user");
-    });
   });
 
   const officialTab = document.getElementById("official");
   officialTab.addEventListener("click", () => {
     Tabs.change("official");
-    showSpinner();
-    Api.loadCasts("official").then(streams => {
-      hideSpinner();
-      Streams.show(streams, "official");
-    });
   });
 
   const futureTab = document.getElementById("future");
   futureTab.addEventListener("click", () => {
     Tabs.change("future");
-    showSpinner();
-    Api.loadCasts("future").then(streams => {
-      hideSpinner();
-      Streams.show(streams, "future");
-    });
   });
 
   document.getElementById("search").addEventListener("click", () => {
     Tabs.change("search");
-    showSpinner();
-    const search = new Search();
-    search.loadHTML();
   });
 
   // 予約タブの存在は設定に依存する
@@ -177,11 +195,6 @@ class Tabs {
   if (reserveTab) {
     reserveTab.addEventListener("click", () => {
       Tabs.change("reserve");
-      showSpinner();
-      Api.loadCasts("user").then(streams => {
-        hideSpinner();
-        Streams.show(streams, "reserve");
-      });
     });
   }
 }
