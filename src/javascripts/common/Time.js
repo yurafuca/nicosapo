@@ -3,13 +3,27 @@ export default class Time {
     const date = new Date(milisec);
     const days = Time.days();
 
-    return [
-        date.getFullYear(),
-        date.getMonth() + 1,
-        date.getDate()
-      ].join('/') + ' ' +
-      '(' + days[date.getDay()] + ') ' +
-      date.toLocaleTimeString();
+    return (
+      [date.getFullYear(), date.getMonth() + 1, date.getDate()].join("/") +
+      " " +
+      "(" +
+      days[date.getDay()] +
+      ") " +
+      date.toLocaleTimeString()
+    );
+  }
+
+  // 2018/02/02(月) 00:00
+  static jpDateFormat(unixTime) {
+    const days = ["日", "月", "火", "水", "木", "金", "土", "日"];
+    const date = new Date(unixTime * 1000);
+    const y = date.getFullYear();
+    const m = date.getMonth() + 1;
+    const d = date.getDate();
+    const h = ("0" + date.getHours()).slice(-2);
+    const s = ("0" + date.getSeconds()).slice(-2);
+    const w = days[date.getDay()];
+    return `${y}年${m}月${d}日 ${h}:${s}`;
   }
 
   static toJpnDay(milisec) {
@@ -26,13 +40,13 @@ export default class Time {
 
   static days() {
     const days = {
-      0: '日',
-      1: '月',
-      2: '火',
-      3: '水',
-      4: '木',
-      5: '金',
-      6: '土'
+      0: "日",
+      1: "月",
+      2: "火",
+      3: "水",
+      4: "木",
+      5: "金",
+      6: "土"
     };
 
     return days;
@@ -55,12 +69,11 @@ export default class Time {
 
   static minuteSurplusDistance(src, dst) {
     const secDist = Time.minuteDistance(src, dst);
-    return parseInt(secDist % 60 % 60);
+    return parseInt((secDist % 60) % 60);
   }
 
   static hourDistance(src, dst) {
     const deltaMillsecond = dst.getTime() - src.getTime();
     return parseInt(deltaMillsecond / 1000 / 60 / 60);
   }
-
 }

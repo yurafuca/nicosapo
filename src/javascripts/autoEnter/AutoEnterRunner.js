@@ -1,24 +1,24 @@
-import store from 'store';
-import AutoEnterProgram from '../autoEnter/AutoEnterProgram';
-import AutoEnterCommunity from '../autoEnter/AutoEnterCommunity';
+import store from "store";
+import AutoEnterProgram from "../autoEnter/AutoEnterProgram";
+import AutoEnterCommunity from "../autoEnter/AutoEnterCommunity";
 
 const _funcs = {
   live: AutoEnterProgram,
   community: AutoEnterCommunity,
   channel: AutoEnterCommunity
-}
+};
 
 const _keys = {
-  live: 'autoEnterProgramList',
-  community: 'autoEnterCommunityList',
-  channel: 'autoEnterCommunityList'
+  live: "autoEnterProgramList",
+  community: "autoEnterCommunityList",
+  channel: "autoEnterCommunityList"
 };
 
 const INTERVAL = 6 * 1000;
 
 export default class AutoEnterRunner {
   run(requestType) {
-    new Promise((resolve) => {
+    new Promise(resolve => {
       let storagedData = {};
       if (store.get(_keys[requestType])) {
         storagedData = store.get(_keys[requestType]);
@@ -35,8 +35,8 @@ export default class AutoEnterRunner {
       for (let i = 0; i < funcs.length; i++) {
         (() => {
           setTimeout(() => {
+            console.info("Checking... %d/%d", i + 1, length);
             funcs[i].call(null);
-            console.info('Checking... %d/%d', i+1, length);
             if (i === length - 1) {
               setTimeout(resolve, INTERVAL);
             }

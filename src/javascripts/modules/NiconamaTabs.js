@@ -1,5 +1,5 @@
-import store from 'store'
-import _ from 'lodash';
+import store from "store";
+import _ from "lodash";
 
 const KEY = `NiconamaTabs`;
 
@@ -16,7 +16,7 @@ export default class NiconamaTabs {
   static getTabId(castId) {
     const list = store.get(KEY) || {};
     let result = null;
-    Object.keys(list).forEach((tabId) => {
+    Object.keys(list).forEach(tabId => {
       if (list[tabId].castId === castId) {
         result = tabId;
       }

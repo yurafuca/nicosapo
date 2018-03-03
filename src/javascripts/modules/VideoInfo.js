@@ -1,6 +1,6 @@
-import $ from 'jquery'
-import Video from '../modules/Video'
-import Community from '../modules/Community'
+// import $ from "jquery";
+import Video from "../modules/Video";
+import Community from "../modules/Community";
 
 export default class VideoInfo {
   constructor() {
@@ -17,10 +17,14 @@ export default class VideoInfo {
   }
 
   xml() {
-    const xml = $(this._xml());
-    xml.append(this._video.xml());
-    xml.append(this._community.xml());
-    return xml;
+    // const xml = $(this._xml());
+    const parser = new DOMParser();
+    const xml = parser.parseFromString(this._xml(), "text/xml");
+    const root = xml.documentElement;
+    const foo = this._video.xml();
+    root.appendChild(this._video.xml());
+    root.appendChild(this._community.xml());
+    return root;
   }
 
   _xml() {

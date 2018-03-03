@@ -11,7 +11,7 @@ export default class StandByPage extends NonCastPage {
       position       : `APPEND`,
       requireInline  : true,
       element4Buttons: document.getElementById('watch_like_buttons'),
-      idName4ExBar   : `siteHeader` // TODO: temp
+      idName4ExBar   : `id=siteHeader` // TODO: temp
     };
     super.putWidgets(props);
   }

@@ -10,12 +10,12 @@ chrome.extension.onMessage.addListener((request, sender, sendResponse) => {
 });
 
 const idHolder = new IdHolder();
-const goToCast  = (liveId) => {
-  const baseUrl = 'http://live.nicovideo.jp/watch/';
+const goToCast = liveId => {
+  const baseUrl = "http://live.nicovideo.jp/watch/";
   const liveUrl = baseUrl + liveId;
   window.location.href = liveUrl;
   // window.location.replace(liveUrl);
-}
+};
 let _prolongReceiver = null;
 let _isEnableChecking = true;
 
@@ -33,24 +33,27 @@ export default class NewCastChecker {
   }
 
   repeat(repeatFunc) {
-    chrome.runtime.sendMessage({
-        purpose: 'getFromLocalStorage',
-        key: 'options.redirect.time'
-      }, (response) => {
+    chrome.runtime.sendMessage(
+      {
+        purpose: "getFromLocalStorage",
+        key: "options.redirect.time"
+      },
+      response => {
         const intervalTime = response || 30;
         setTimeout(repeatFunc, intervalTime * 1000);
-    });
+      }
+    );
   }
 
   checkNewCast() {
-    Api.isOpen(idHolder.liveId).then((response) => {
+    Api.isOpen(idHolder.liveId).then(response => {
       if (response.isOpen) {
         if (_prolongReceiver) {
           _prolongReceiver(response);
         }
       } else {
         if (_isEnableChecking) {
-          Api.isOpen(idHolder.communityId).then((response) => {
+          Api.isOpen(idHolder.communityId).then(response => {
             if (response.isOpen) {
               goToCast(response.nextLiveId);
             }

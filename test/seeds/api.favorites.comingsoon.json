@@ -1,0 +1,33 @@
+{
+  "status": "ok",
+  "totalStreamMany": 14,
+  "favoriteStreams": [
+    {
+      "id": 309748138,
+      "title":
+        "\u3010\u304a\u307e\u3051\u751f\u653e\u9001\u3011THE IDOLM@STER\u200b MillionRADIO",
+      "thumbnail_url": "http://icon.nimg.jp/channel/ch2571478.jpg?1514527468",
+      "provider_type": "channel",
+      "is_product": true,
+      "start_time": 1515673800
+    },
+    {
+      "id": 310111621,
+      "title":
+        "\u3010\u304a\u307e\u3051\u751f\u653e\u9001\u3011THE IDOLM@STER\u200b MillionRADIO",
+      "thumbnail_url": "http://icon.nimg.jp/channel/ch2571478.jpg?1514527468",
+      "provider_type": "channel",
+      "is_product": true,
+      "start_time": 1516883400
+    },
+    {
+      "id": 310111674,
+      "title":
+        "\u3010\u304a\u307e\u3051\u751f\u653e\u9001\u3011THE IDOLM@STER\u200b MillionRADIO",
+      "thumbnail_url": "http://icon.nimg.jp/channel/ch2571478.jpg?1514527468",
+      "provider_type": "channel",
+      "is_product": true,
+      "start_time": 1517488200
+    }
+  ]
+}

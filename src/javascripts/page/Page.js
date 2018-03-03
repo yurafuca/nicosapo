@@ -1,6 +1,6 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import Widgets from '../components/Widgets';
+import React from "react";
+import ReactDOM from "react-dom";
+import Widgets from "../components/Widgets";
 
 function insertAfter(newNode, referenceNode) {
   referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
@@ -8,9 +8,9 @@ function insertAfter(newNode, referenceNode) {
 
 export default class Page extends React.Component {
   putWidgets(props) {
-    const parent = document.getElementById(props.idName4ExBar);
-    const child = document.createElement('div');
-    child.id = 'nicosapo_gadgets';
+    const parent = document.querySelector(`[${props.idName4ExBar}]`);
+    const child = document.createElement("div");
+    child.id = "nicosapo_gadgets";
     insertAfter(child, parent);
     ReactDOM.render(
       <Widgets
@@ -22,7 +22,9 @@ export default class Page extends React.Component {
         message={props.message}
         position={props.position}
         requireInline={props.requireInline}
-        element4Buttons={props.element4Buttons}/>, child
+        element4Buttons={props.element4Buttons}
+      />,
+      child
     );
   }
 }
