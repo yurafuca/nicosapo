@@ -27,8 +27,27 @@ export default class UserThumbnails {
       thumbParam.index = index;
 
       thumbParam.isReserved = UserThumbnails.isReserved(program);
-      thumbParam.day = `${date.getDate()}`;
       thumbParam.openTime = thumbParam.isReserved ? Time.jpDateFormat(startTime) + ` (${Common.jpDay(date.getDay())}) ` + " 開場" : undefined;
+
+      const today = new Date();
+      switch (date.getDate() - today.getDate()) {
+        case 0:
+          thumbParam.day = `今日`;
+          break;
+        case 1:
+          thumbParam.day = `明日`;
+          break;
+        case 2:
+        case 3:
+        case 4:
+        case 5:
+        case 6:
+          thumbParam.day = Common.jpDay(date.getDay());
+          break;
+        default:
+          thumbParam.day = `${date.getDate()}日`;
+          break;
+      }
 
       if (isShowReservedStream && isReserved) {
         thumbParams.push(thumbParam);

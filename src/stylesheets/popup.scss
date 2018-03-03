@@ -636,14 +636,15 @@ a {
   text-transform: uppercase;
   top: 2px;
   right: 2px;
+  font-size: 11px;
   background: #4d394b;
-  background: rgba(0, 0, 0, 0.6);
-  width: 20px;
-  height: 20px;
-  line-height: 20px;
+  background: rgba(0, 0, 0, 0.5);
+  width: 34px;
+  height: 18px;
+  line-height: 18px;
   padding: 0;
   /* font-size: 12px; */
-  border-radius: 50%;
+  border-radius: 10px;
 }
 .community {
   display: inline-block;
