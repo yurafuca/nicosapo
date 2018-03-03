@@ -10,13 +10,13 @@
     "release": "webpack --config webpack.config.release.js --display-error-details --optimize-minimize --watch",
     "watch-test": "mocha  -r mock-local-storage --compilers js:babel-core/register --watch"
   },
-  "repository": "git+https://github.com/tsuyuknow/nicosapo.git",
-  "author": "tsuyuknow <tsuyuknow@gmail.com>",
+  "repository": "git+https://github.com/yurafuca/nicosapo.git",
+  "author": "yurafuca <root@yurafuca.com>",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/tsuyuknow/nicosapo/issues"
+    "url": "https://github.com/yurafuca/nicosapo/issues"
   },
-  "homepage": "https://github.com/tsuyuknow/nicosapo#readme",
+  "homepage": "https://github.com/yurafuca/nicosapo#readme",
   "dependencies": {
     "axios": "^0.18.0",
     "blacklist": "^1.1.4",
