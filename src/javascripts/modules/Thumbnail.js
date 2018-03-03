@@ -11,6 +11,9 @@ export default class Thumbnail {
     thumbnail.dataset.placement = "top";
     thumbnail.dataset.title = title;
 
+    const outer = document.createElement("div");
+    outer.className = "side-corner-tag disabled";
+
     const inner = document.createElement("div");
     inner.className = "community";
 
@@ -21,20 +24,46 @@ export default class Thumbnail {
     const span = document.createElement("span");
     span.className = "comu_thumbnail";
     span.style.backgroundImage = background;
-    // span.tooltip();
+
+    let tooltipHTML = `<span>${title}</span>`;
+    if (openTime) {
+      tooltipHTML = `<span class="tooltip-opentime">${openTime}</span><br>${tooltipHTML}`;
+    }
 
     const options = {
       placement: "top",
-      title: title,
+      html: true,
+      title: tooltipHTML,
       container: document.querySelector("#nicosapo"),
-      boundariesElement: document.querySelector("#nicosapo")
+      boundariesElement: document.querySelector("#nicosapo"),
+      popperOptions: {
+        // 強制的に top に表示する
+        // https://github.com/FezVrasta/popper.js/issues/354
+        modifiers: {
+          flip: {
+            enabled: false
+          },
+          preventOverflow: {
+            escapeWithReference: true
+          }
+        }
+      }
     };
 
     Thumbnail.setTooltip(span, options);
 
-    thumbnail.appendChild(inner);
+    thumbnail.appendChild(outer);
+    outer.appendChild(inner);
     inner.appendChild(a);
     a.appendChild(span);
+
+    if (isReserved) {
+      const openDay = document.createElement("p");
+      openDay.innerHTML = `<span class="reserved-message">${day}</span>`;
+
+      outer.className = "side-corner-tag enabled";
+      outer.appendChild(openDay);
+    }
 
     return thumbnail;
   }
