@@ -39,6 +39,7 @@ module.exports = [
         { from: "src/images", to: "../images" },
         { from: "src/octicons", to: "../octicons" },
         { from: "src/sounds", to: "../sounds" },
+        { from: "src/fonts", to: "../fonts" },
         { from: "manifest.json", to: "../manifest.json" },
       ])
     ],
