@@ -157,9 +157,9 @@ class Tabs {
     reserveTab.id = "reserve";
     reserveTab.textContent = "予約";
 
-    const futureTab = document.querySelector("#future");
+    const officialTab = document.querySelector("#official");
     const tabContainer = document.querySelector("#tab-container");
-    tabContainer.insertBefore(reserveTab, futureTab);
+    tabContainer.insertBefore(reserveTab, officialTab);
 
     const tabs = document.querySelectorAll(".tab");
     Array.prototype.forEach.call(tabs, tab => {
