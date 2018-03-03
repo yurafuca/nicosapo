@@ -1,3 +1,5 @@
+/* eslint-disable *//* prettier-disable */
+
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const path = require("path");
@@ -36,31 +38,11 @@ module.exports = [
       new ExtractTextPlugin("[name].css"),
       new CopyWebpackPlugin([
         { from: "src/html", to: "../html" },
+        { from: "src/stylesheets", to: "../stylesheets", ignore: [ '*.scss' ] },
         { from: "src/images", to: "../images" },
         { from: "src/octicons", to: "../octicons" },
         { from: "src/sounds", to: "../sounds" },
         { from: "manifest.json", to: "../manifest.json" },
-        { from: "src/stylesheets/modal.css", to: "../stylesheets/modal.css" },
-        {
-          from: "src/stylesheets/switcher.css",
-          to: "../stylesheets/switcher.css"
-        },
-        {
-          from: "src/stylesheets/balloon.min.css",
-          to: "../stylesheets/balloon.min.css"
-        },
-        {
-          from: "src/stylesheets/animate.min.css",
-          to: "../stylesheets/animate.min.css"
-        },
-        {
-          from: "src/stylesheets/popper.css",
-          to: "../stylesheets/popper.css"
-        },
-        {
-          from: "src/stylesheets/spinner.css",
-          to: "../stylesheets/spinner.css"
-        }
       ]),
       new webpack.DefinePlugin({
         "process.env.NODE_ENV": JSON.stringify("production")
