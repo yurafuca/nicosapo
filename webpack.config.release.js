@@ -38,6 +38,14 @@ module.exports = [
       new ExtractTextPlugin("[name].css"),
       new CopyWebpackPlugin([
         { from: "src/html", to: "../html" },
+        {
+          from: "src/javascripts/popper.min.js",
+          to: "../javascripts/popper.min.js"
+        },
+        {
+          from: "src/javascripts/tooltip.min.js",
+          to: "../javascripts/tooltip.min.js"
+        },
         { from: "src/stylesheets", to: "../stylesheets", ignore: [ '*.scss' ] },
         { from: "src/images", to: "../images" },
         { from: "src/octicons", to: "../octicons" },
