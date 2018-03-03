@@ -1,3 +1,4 @@
+import store from "store";
 import Api from "./api/Api";
 import UserThumbnails from "./modules/UserThumbnails";
 import OfficialThumbnails from "./modules/OfficialThumbnails";
@@ -9,46 +10,15 @@ import { showSpinner, hideSpinner } from "./modules/spinner";
 const removeElements = elms => [...elms].forEach(el => el.remove());
 const hideElements = elms => [...elms].forEach(el => (el.style.display = "none"));
 
-document.getElementById("user").addEventListener("click", e => {
-  changeTab("user");
-  showSpinner();
-  Api.loadCasts("user").then(streams => {
-    hideSpinner();
-    showStream(streams, "user");
-  });
-});
-
-document.getElementById("official").addEventListener("click", e => {
-  changeTab("official");
-  showSpinner();
-  Api.loadCasts("official").then(streams => {
-    hideSpinner();
-    showStream(streams, "official");
-  });
-});
-
-document.getElementById("future").addEventListener("click", () => {
-  changeTab("future");
-  showSpinner();
-  Api.loadCasts("future").then(streams => {
-    hideSpinner();
-    showStream(streams, "future");
-  });
-});
-
-document.getElementById("search").addEventListener("click", () => {
-  changeTab("search");
-  showSpinner();
-  const search = new Search();
-  search.loadHTML();
-});
-
 // 番組表示
 const showStream = (streams, genre) => {
   let params;
   switch (genre) {
     case "user":
-      params = UserThumbnails.getParams(streams);
+      params = UserThumbnails.getParams(streams, false);
+      break;
+    case "reserve":
+      params = UserThumbnails.getParams(streams, true);
       break;
     case "official":
       params = OfficialThumbnails.getParams(streams);
@@ -109,21 +79,100 @@ const selectTab = genre => {
   tab.className = "tab selected";
 };
 
-Api.loadCasts("user").then(streams => {
-  hideSpinner();
-  showStream(streams, "user");
-});
+// 初回表示
+{
+  Api.loadCasts("user").then(streams => {
+    hideSpinner();
+    showStream(streams, "user");
+  });
+}
 
 // ツールチップが表示されたら，ツールチップにマウスオーバーしたときツールチップを非表示にする
-const observer = new MutationObserver(() => {
-  const tooltips = document.querySelectorAll(".tooltip");
-  Array.prototype.forEach.call(tooltips, el => {
-    el.addEventListener("mouseover", () => {
-      hideElements(document.querySelectorAll(".tooltip"));
+{
+  const observer = new MutationObserver(() => {
+    const tooltips = document.querySelectorAll(".tooltip");
+    Array.prototype.forEach.call(tooltips, el => {
+      el.addEventListener("mouseover", () => {
+        hideElements(document.querySelectorAll(".tooltip"));
+      });
     });
   });
-});
 
-observer.observe(document.querySelector("#nicosapo"), {
-  childList: true
-});
+  observer.observe(document.querySelector("#nicosapo"), {
+    childList: true
+  });
+}
+
+// 予約番組の表示が有効になっている場合は予約タブを追加する
+{
+  const isShowReservedStreams = store.get("options.showReserved.enable");
+  if (isShowReservedStreams === "enable") {
+    const reserveTab = document.createElement("div");
+    reserveTab.className = "tab non-selected";
+    reserveTab.id = "reserve";
+    reserveTab.textContent = "予約";
+
+    const officialTab = document.querySelector("#official");
+
+    const tabContainer = document.querySelector("#tab-container");
+    tabContainer.insertBefore(reserveTab, officialTab);
+
+    const tabs = document.querySelectorAll(".tab");
+    Array.prototype.forEach.call(tabs, tab => {
+      tab.style.width = "20%";
+    });
+  }
+}
+
+// イベントリスナ
+{
+  const userTab = document.getElementById("user");
+  userTab.addEventListener("click", () => {
+    changeTab("user");
+    showSpinner();
+    Api.loadCasts("user").then(streams => {
+      hideSpinner();
+      showStream(streams, "user");
+    });
+  });
+
+  const officialTab = document.getElementById("official");
+  officialTab.addEventListener("click", () => {
+    changeTab("official");
+    showSpinner();
+    Api.loadCasts("official").then(streams => {
+      hideSpinner();
+      showStream(streams, "official");
+    });
+  });
+
+  const futureTab = document.getElementById("future");
+  futureTab.addEventListener("click", () => {
+    changeTab("future");
+    showSpinner();
+    Api.loadCasts("future").then(streams => {
+      hideSpinner();
+      showStream(streams, "future");
+    });
+  });
+
+  document.getElementById("search").addEventListener("click", () => {
+    changeTab("search");
+    showSpinner();
+    const search = new Search();
+    search.loadHTML();
+  });
+
+  // 予約タブの存在は設定に依存する
+  const reserveTab = document.getElementById("reserve");
+  if (reserveTab) {
+    reserveTab.addEventListener("click", () => {
+      changeTab("reserve");
+      showSpinner();
+      Api.loadCasts("user").then(streams => {
+        hideSpinner();
+        showStream(streams, "reserve");
+      });
+    });
+  }
+}
