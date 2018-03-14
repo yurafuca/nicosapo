@@ -16,8 +16,6 @@ export default class UserThumbnails {
 
       const thumbParam = {};
       const thumbnailUrl = program.querySelector("community thumbnail").textContent;
-      const startTime = program.querySelector("video open_time_jpstr").textContent - 0;
-      const date = new Date(startTime * 1000);
 
       thumbParam.background = `url('${thumbnailUrl}')`;
       thumbParam.title = program.querySelector("video title").textContent;
@@ -26,8 +24,26 @@ export default class UserThumbnails {
       thumbParam.text = thumbParam.title;
       thumbParam.index = index;
 
+      const dateJpnOrig = program.querySelector("video open_time_jpstr").textContent;
+      // => "03/15(木) 開場 18:00 開演 18:00"
+      // これを "2018/03/13(火) 18:00" の書式にすれば Date で parse できる
+
+      const dateJpnMin = dateJpnOrig.split(" ")[0];
+      // => "03/15(木)"
+
+      const dateJpnYear = `${new Date().getFullYear()}/${dateJpnMin}`;
+      // => "2018/03/15(木)"
+
+      const timeJpn = dateJpnOrig.match(/\d{2}:\d{2}/)[0];
+      // => "18:00"
+
+      const dateJpn = `${dateJpnYear}${timeJpn}`;
+      // => "2018/03/13(火) 18:00"
+
+      const date = new Date(Date.parse(dateJpn));
+
       thumbParam.isReserved = UserThumbnails.isReserved(program);
-      thumbParam.openTime = thumbParam.isReserved ? Time.jpDateFormat(startTime) + ` (${Common.jpDay(date.getDay())}) ` + " 開場" : undefined;
+      thumbParam.openTime = thumbParam.isReserved ? dateJpnOrig : undefined;
 
       const today = new Date();
       switch (date.getDate() - today.getDate()) {

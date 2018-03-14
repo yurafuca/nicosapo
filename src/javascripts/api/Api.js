@@ -43,19 +43,29 @@ export default class Api {
   // jQuery オブジェクトでなく JSON を返したい
   static getUserOnair() {
     return new Promise((resolve, reject) => {
-      const url = "http://sp.live.nicovideo.jp/api/favorite?firstStreamNum=1&streamMany=100&streamType=all";
-
-      // axios.get("http://live.nicovideo.jp/my");
+      const url = "http://live.nicovideo.jp/my";
 
       axios
         .get(url)
         .then(response => {
-          let favoriteStreams = response.data.favoriteStreams;
-          favoriteStreams = favoriteStreams.map(stream => {
-            stream.is_reserved = stream.start_time * 1000 > Date.now();
+          const parser = new DOMParser();
+          const html = parser.parseFromString(response.data, "text/html");
+
+          const onairSelector = "[id$=subscribeItemsWrap] > .liveItems > [class^='liveItem']";
+          const onairStreams = html.querySelectorAll(onairSelector);
+
+          const reservedSelector = "[id$=subscribeReservedItemsWrap] > .liveItems > [class^='liveItem']";
+          const reservedStreams = html.querySelectorAll(reservedSelector);
+
+          const onairStreamList = onairStreams;
+          const reservedStreamList = [...reservedStreams].map(stream => {
+            stream.is_reserved = true;
             return stream;
           });
-          const videoInfoList = favoriteStreams.map(stream => VIParser.parse(stream));
+
+          const allStreamList = [...onairStreamList].concat([...reservedStreamList]);
+          const videoInfoList = allStreamList.map(stream => VIParser.parse(stream));
+
           resolve(videoInfoList);
         })
         .catch(error => {
