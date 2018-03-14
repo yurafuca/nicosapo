@@ -81,7 +81,7 @@ export default class Thumbnail {
       }
     };
 
-    const tooltip = Thumbnail.setTooltip(thumbnail, options);
+    Thumbnail.setTooltip(thumbnail, options);
 
     thumbnail.appendChild(outer);
     outer.appendChild(inner);
