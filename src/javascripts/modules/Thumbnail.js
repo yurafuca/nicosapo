@@ -40,23 +40,14 @@ export default class Thumbnail {
 
     // ツールチップがサムネイルと重なった場合はツールチップを上方に移動する
     const modefier = data => {
-      // サムネイルの絶対座標
-      const thumbnail = data.instance.reference;
-      const thumbnailRect = thumbnail.getBoundingClientRect();
-      const thumbnailTop = window.pageYOffset + thumbnailRect.top;
-
-      // ツールチップの絶対座標
       const tooltip = data.instance.popper;
-      const arrow = tooltip.querySelector(".tooltip-arrow");
-      const arrowRect = arrow.getBoundingClientRect();
-      const arrowBottom = window.pageYOffset + arrowRect.bottom;
-
-      // 重なり判定
-      if (thumbnailTop < arrowBottom) {
-        // サムネイルの上端とツールチップの上端を合わせる
-        // => ツールチップの高さだけ上方に移動する
-        // => 微調整
-        tooltip.style.top = `${thumbnailTop - tooltip.clientHeight - TOOLTIP_OFFSET_TOP_PX}px`;
+      const clientHeight = tooltip.clientHeight;
+      if (index < 6) {
+        if (clientHeight > 90) {
+          tooltip.style.top = "-32px";
+        } else if (clientHeight > 70) {
+          tooltip.style.top = "-12px";
+        }
       }
     };
 

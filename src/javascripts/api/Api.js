@@ -203,7 +203,7 @@ export default class Api {
         // const title = $e.find(`.title`).text();
         const thumbnail = el.querySelector(".thmb img").src;
         // const thumbnail = $e.find(".thmb img").attr(`src`);
-        const id = el.querySelector(".thmb a").href.replace("http://com.nicovideo.jp/community/", ``);
+        const id = el.querySelector(".thmb a").href.replace("https://com.nicovideo.jp/community/", ``);
         // const id = $e
         // .find(`.thmb a`)
         // .attr(`href`)
