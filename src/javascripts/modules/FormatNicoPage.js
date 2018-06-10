@@ -26,11 +26,8 @@ export default class FormatNicoPage {
         // $("#program-social-block").css("bottom", "35px");
         // $("#program-social-block").css("top", "auto");
         $("div[class^='___player-head-area___']").css("margin", 0);
-        $("div[class^='___player-body-area___']").css("margin", 0);
-        $("ul[class^='___sns-share-menu-custom___']").css(
-          "position",
-          "relative"
-        );
+        $("div[class^='___player-body-area___']").css("margin-top", "8px");
+        $("ul[class^='___sns-share-menu-custom___']").css("position", "relative");
         $("ul[class^='___sns-share-menu-custom___']").css("bottom", "20px");
 
         break;
