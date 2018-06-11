@@ -25,8 +25,8 @@ export default class FormatNicoPage {
         $("div[class^='___provider-detail___']").css("display", "-webkit-box");
         // $("#program-social-block").css("bottom", "35px");
         // $("#program-social-block").css("top", "auto");
-        $("div[class^='___player-head-area___']").css("margin", 0);
-        $("div[class^='___player-body-area___']").css("margin-top", "8px");
+        $("div[class^='___player-head-area___']").css("margin-top", '0');
+        $("div[class^='___player-head-area___']").css("margin-bottom", '8px');
         $("ul[class^='___sns-share-menu-custom___']").css("position", "relative");
         $("ul[class^='___sns-share-menu-custom___']").css("bottom", "20px");
 
@@ -50,7 +50,7 @@ export default class FormatNicoPage {
         this.$slider_container.css("padding", "0"); // For ExBar
         break;
       default:
-      // Do nothing.
+        // Do nothing.
     }
   }
 }
