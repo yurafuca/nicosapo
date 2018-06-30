@@ -2,15 +2,32 @@ import VideoInfo from "../modules/VideoInfo";
 
 export default class VIParser {
   static parse(element) {
-    // const videoProps = VIParser._videoProps(element);
-    // const communityProps = VIParser._communityProps(element);
     const videoInfo = new VideoInfo();
-    videoInfo.video().set("title", element.title);
-    videoInfo.video().set("id", `lv${element.id}`);
-    videoInfo.video().set("openTimeJp", element.start_time);
-    videoInfo.video().set("isReserved", element.is_reserved);
-    videoInfo.community().set("id", element.thumbnail_url.match(/(ch|co)\d+/)[0]);
-    videoInfo.community().set("thumbnail", element.thumbnail_url);
+
+    const videoElement = element.querySelector("a");
+
+    const video = {
+      title: videoElement.title,
+      id: videoElement.href.match(/(lv\d+)/g)[0],
+      start_time: element.querySelector("strong").textContent,
+      is_reserved: element.is_reserved
+    };
+
+    const providerElement = element.querySelector("img");
+
+    const provider = {
+      id: providerElement.src.match(/(co|ch)\d+\.jpg/)[0].replace(".jpg", ""),
+      thumbnail: providerElement.src.replace("64x64", "128x128")
+    };
+
+    videoInfo.video().set("title", video.title);
+    videoInfo.video().set("id", video.id);
+    videoInfo.video().set("openTimeJp", video.start_time);
+    videoInfo.video().set("isReserved", video.is_reserved);
+
+    videoInfo.community().set("id", provider.id);
+    videoInfo.community().set("thumbnail", provider.thumbnail);
+
     return videoInfo.xml();
   }
 }

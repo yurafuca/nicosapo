@@ -42,9 +42,7 @@ $url_0: url(chrome-extension://__MSG_@@extension_id__/images/icon.png);
   font-family: "Material Icons";
   font-style: normal;
   font-weight: 400;
-  src: local("Material Icons"), local("MaterialIcons-Regular"),
-    url(https://fonts.gstatic.com/s/materialicons/v22/2fcrYFNaTjcS6g4U3t-Y5ZjZjT5FdEJ140U2DJYC3mY.woff2)
-      format("woff2");
+  src: local("Material Icons"), local("MaterialIcons-Regular"), url(https://fonts.gstatic.com/s/materialicons/v22/2fcrYFNaTjcS6g4U3t-Y5ZjZjT5FdEJ140U2DJYC3mY.woff2) format("woff2");
 }
 
 .material-icons {
@@ -103,8 +101,7 @@ $url_0: url(chrome-extension://__MSG_@@extension_id__/images/icon.png);
   top: -2px;
 }
 #nicosapo-toast {
-  font-family: $font_0, $font_1, $font_2, $font_3, $font_4, $font_5, $font_6,
-    $font_7, $font_8, $font_9;
+  font-family: $font_0, $font_1, $font_2, $font_3, $font_4, $font_5, $font_6, $font_7, $font_8, $font_9;
   position: absolute;
   z-index: 999;
   top: 79px;
@@ -189,16 +186,10 @@ $url_0: url(chrome-extension://__MSG_@@extension_id__/images/icon.png);
 }
 .auto_enter_program_button > .link {
   &.switch_is_off {
-    background-image: linear-gradient(
-      $color_alabaster_approx,
-      $color_gallery_approx
-    );
+    background-image: linear-gradient($color_alabaster_approx, $color_gallery_approx);
     color: $color_log_cabin_approx !important;
     &:hover {
-      background-image: linear-gradient(
-        $color_gallery_approx,
-        $color_alto_approx
-      );
+      background-image: linear-gradient($color_gallery_approx, $color_alto_approx);
     }
     &:active {
       background-color: $color_alto_approx;
@@ -208,16 +199,10 @@ $url_0: url(chrome-extension://__MSG_@@extension_id__/images/icon.png);
   }
   &.switch_is_on {
     color: $white;
-    background-image: linear-gradient(
-      $color_carnation_approx,
-      $color_monza_approx
-    );
+    background-image: linear-gradient($color_carnation_approx, $color_monza_approx);
     &:hover {
       color: $white;
-      background-image: linear-gradient(
-        $color_carnation_approx,
-        $color_monza_approx
-      );
+      background-image: linear-gradient($color_carnation_approx, $color_monza_approx);
     }
     &:active {
       color: $white;
@@ -228,9 +213,11 @@ $url_0: url(chrome-extension://__MSG_@@extension_id__/images/icon.png);
   }
 }
 #extended-bar {
-  font-family: $font_0, $font_1, $font_2, $font_3, $font_4, $font_5, $font_6,
-    $font_7, $font_8, $font_9;
-  width: 1024px;
+  font-family: $font_0, $font_1, $font_2, $font_3, $font_4, $font_5, $font_6, $font_7, $font_8, $font_9;
+  width: calc(100% - 24px * 2);
+  min-width: 1024px;
+  max-width: 1664px;
+  margin: auto;
   text-align: right;
   background-color: $color_log_cabin_approx;
   color: $color_gallery_approx;
@@ -238,7 +225,7 @@ $url_0: url(chrome-extension://__MSG_@@extension_id__/images/icon.png);
   // Instead of the line below you could use @include box-sizing($bs)
   box-sizing: border-box;
   margin-top: 10px;
-  padding: 10px 20px 4px;
+  padding: 10px 20px 7px;
   font-size: 12px;
   > * {
     cursor: default;
@@ -273,6 +260,7 @@ $url_0: url(chrome-extension://__MSG_@@extension_id__/images/icon.png);
     }
   }
 }
+// タイムシフト
 #page_cover #extended-bar {
   width: 960px;
 }
@@ -296,8 +284,7 @@ $url_0: url(chrome-extension://__MSG_@@extension_id__/images/icon.png);
   top: 7px;
   left: 7px;
   background-repeat: no-repeat;
-  background-image: url(chrome-extension://__MSG_@@extension_id__/images/radio.png),
-    linear-gradient(to bottom, #33cc56 0%, #28a745 100%);
+  background-image: url(chrome-extension://__MSG_@@extension_id__/images/radio.png), linear-gradient(to bottom, #33cc56 0%, #28a745 100%);
 }
 #program-social-block {
   bottom: 100px;

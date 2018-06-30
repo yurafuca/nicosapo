@@ -41,7 +41,7 @@ export default class Search {
   }
 
   initSortMode() {
-    document.getElementById("search-sort").value = this.getCurrentSortMode();
+    document.getElementById("search-sort").value = store.get("search.sortMode") || this.getCurrentSortMode();
   }
 
   onClickFavorite(el) {
@@ -79,7 +79,7 @@ export default class Search {
 
   setEventListener() {
     document.querySelector("#search-sort").addEventListener("change", () => {
-      this.handleChange();
+      this.changeSortMode();
     });
     document.querySelector("#search-input").addEventListener("keydown", e => {
       this.handleKeyPress(e);
@@ -177,10 +177,6 @@ export default class Search {
     resutChild.appendChild(meta);
 
     return resultParent;
-  }
-
-  handleChange() {
-    this.search();
   }
 
   handleKeyPress(event) {

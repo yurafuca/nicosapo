@@ -63,10 +63,18 @@ export default class BackgroundReloader {
       const dePrefixedId = Number(re.exec(thumbnail)[3]);
       console.info(dePrefixedId);
       const distributors = store.get(`excludedDistributors`);
-      if (distributors && distributors.hasOwnProperty(commuId)) return; // `continue` for lodash.
-      if (justFollowedCommunities.includes(dePrefixedId)) return; // `continue` for lodash.
-      if (Db.contains("autoEnterCommunityList", commuId)) return; // `continue` for lodash.
-      if (Db.contains("autoEnterProgramList", videoId)) return; // `continue` for lodash.
+      if (distributors && distributors.hasOwnProperty(commuId)) {
+        return; // `continue` for lodash.
+      }
+      if (justFollowedCommunities.includes(dePrefixedId)) {
+        return; // `continue` for lodash.
+      }
+      if (Db.contains("autoEnterCommunityList", commuId)) {
+        return; // `continue` for lodash.
+      }
+      if (Db.contains("autoEnterProgramList", videoId)) {
+        return; // `continue` for lodash.
+      }
       Alert.fire(community);
     });
   }

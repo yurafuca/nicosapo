@@ -23,16 +23,10 @@ export default class FormatNicoPage {
       case "MODERN_CAST_PAGE":
         $(".program-detail").css("width", "930px");
         $("div[class^='___provider-detail___']").css("display", "-webkit-box");
-        // $("#program-social-block").css("bottom", "35px");
-        // $("#program-social-block").css("top", "auto");
-        $("div[class^='___player-head-area___']").css("margin", 0);
-        $("div[class^='___player-body-area___']").css("margin", 0);
-        $("ul[class^='___sns-share-menu-custom___']").css(
-          "position",
-          "relative"
-        );
+        $("div[class^='___player-head-area___']").css("margin-top", "0");
+        $("div[class^='___player-head-area___']").css("margin-bottom", "8px");
+        $("ul[class^='___sns-share-menu-custom___']").css("position", "relative");
         $("ul[class^='___sns-share-menu-custom___']").css("bottom", "20px");
-
         break;
       case "CHIMERA_CAST_PAGE":
         $(".program-title")
@@ -49,11 +43,17 @@ export default class FormatNicoPage {
       case "NORMAL_CAST_PAGE":
       case "TIME_SHIFT_PAGE":
         $("#extended-bar").css("width", "650px");
+        $("div[class^='___player-head-area___']").css("margin-top", "0");
         this.$watch_title_box_meta.css("width", "1000px");
-        this.$slider_container.css("padding", "0"); // For ExBar
+        this.$slider_container.css("padding", "0");
         break;
       default:
       // Do nothing.
+    }
+
+    if (pageType === "OFFICIAL_CAST_PAGE") {
+      $("div[class^='___player-head-area___']").css("margin-bottom", "0");
+      $("div[class^='___player-body-area___']").css("margin-top", "0");
     }
   }
 }
