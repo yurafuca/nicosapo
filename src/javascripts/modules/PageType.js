@@ -66,7 +66,7 @@ export default class PageType {
 
   static _isModernTimeShiftPage() {
     // コメントが無効
-    if ($("div[class^='___disabled-message___']").length > 0) {
+    if (document.querySelector("span[class^='___disabled-message___']")) {
       return true;
     } else {
       return false;
