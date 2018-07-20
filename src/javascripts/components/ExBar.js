@@ -1,4 +1,4 @@
-import $ from "jquery";
+﻿import $ from "jquery";
 import React from "react";
 // import Blink from 'react-blink';
 import Blink from "../components/Blink";
@@ -129,9 +129,13 @@ export default class ExBar extends React.Component {
   }
 
   render() {
+    const player = document.querySelector('div[class^="___player-section___"]');
+    const playerWidth = player.offsetWidth;
+    const width = `${playerWidth}px`;
+
     return (
       <div>
-        <div id="extended-bar">
+        <div id="extended-bar" style={{ width: width }}>
           <div className="time end-time">
             {this.state.isOpen ? this.state.endText : "放送が終了しました"}
           </div>
