@@ -20,6 +20,21 @@ let _prolongReceiver = null;
 let _isEnableChecking = true;
 
 export default class NewCastChecker {
+  constructor() {
+    chrome.runtime.sendMessage({
+        purpose: "getFromLocalStorage",
+        key: "options.autoJump.enable"
+      },
+      response => {
+        if (response == "enable" || response == null) {
+          _isEnableChecking = true;
+        } else {
+          _isEnableChecking = false;
+        }
+      }
+    );
+  }
+
   run() {
     this.repeat(this.checkNewCast.bind(this));
   }
@@ -33,8 +48,7 @@ export default class NewCastChecker {
   }
 
   repeat(repeatFunc) {
-    chrome.runtime.sendMessage(
-      {
+    chrome.runtime.sendMessage({
         purpose: "getFromLocalStorage",
         key: "options.redirect.time"
       },
