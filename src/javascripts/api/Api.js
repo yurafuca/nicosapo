@@ -182,7 +182,6 @@ export default class Api {
       };
       const q = `http://api.search.nicovideo.jp/api/v2/live/contents/search?q=${query}` + "&targets=tags,title,description" + "&fields=contentId,title,communityIcon,description,start_time,live_end_time,comment_counter,score_timeshift_reserved,provider_type,tags,member_only,viewCounter,timeshift_enabled" + "&_context=nicosapo" + "&filters%5BliveStatus%5D%5B0%5D=onair" + `&_sort=${sortModes[sortMode]}` + "&_limit=100";
       axios.get(q).then(response => {
-        // console.info(response.data);
         resolve(response.data);
       });
     });
@@ -194,20 +193,11 @@ export default class Api {
       const parser = new DOMParser();
       const html = parser.parseFromString(httpResponse, "text/html");
       const frames = html.querySelectorAll(".com_frm");
-      // const $frame = $($(httpResponse).find(".com_frm"));
 
-      // $.each($frame, (i, element) => {
       Array.prototype.forEach.call(frames, el => {
-        // const $e = $(element);
         const title = el.querySelector(".title").textContent;
-        // const title = $e.find(`.title`).text();
         const thumbnail = el.querySelector(".thmb img").src;
-        // const thumbnail = $e.find(".thmb img").attr(`src`);
         const id = el.querySelector(".thmb a").href.replace("https://com.nicovideo.jp/community/", ``);
-        // const id = $e
-        // .find(`.thmb a`)
-        // .attr(`href`)
-        // .replace("/community/", ``);
         const url = `http://com.nicovideo.jp/community/${id}`;
         const community = {
           title: title,
@@ -217,22 +207,6 @@ export default class Api {
         };
         result.push(community);
       });
-      // const $e = $(element);
-      // const title = $e.find(`.title`).text();
-      // const thumbnail = $e.find(".thmb img").attr(`src`);
-      // const id = $e
-      //   .find(`.thmb a`)
-      //   .attr(`href`)
-      //   .replace("/community/", ``);
-      // const url = `http://com.nicovideo.jp/community/${id}`;
-      // const community = {
-      //   title: title,
-      //   thumbnail: thumbnail,
-      //   id: id,
-      //   url: url
-      // };
-      // result.push(community);
-      // });
       return result;
     };
     return new Promise(resolve => {
@@ -267,5 +241,27 @@ export default class Api {
         console.error(error);
         throw error;
       });
+  }
+
+  static fetchVideoInfo(id, source = "statistics", title = "") {
+    let url = '';
+
+    if (source === "statistics")
+      url = `http://live2.nicovideo.jp/watch/${id}/statistics`;
+    else if (source === "apiv2")
+      url = `http://api.search.nicovideo.jp/api/v2/live/contents/search?q=${title}&targets=title&fields=contentId,title,viewCounter,commentCounter&filters[liveStatus][0]=onair&_sort=-viewCounter`;
+
+    const request = axios.get(url);
+    return request
+      .then(response => {
+        if (response.status !== 200)
+          throw new Error("failed.");
+        else
+          return response;
+      })
+      .catch(error => {
+        console.error(error);
+        throw error;
+      })
   }
 }

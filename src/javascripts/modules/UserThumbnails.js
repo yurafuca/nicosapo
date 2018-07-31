@@ -40,9 +40,13 @@ export default class UserThumbnails {
       const dateJpn = `${dateJpnYear}${timeJpn}`;
       // => "2018/03/13(火) 18:00"
 
+      // 24 時超えるとバグる
       const date = new Date(Date.parse(dateJpn));
 
+      thumbParam.openDate = date;
+
       thumbParam.isReserved = UserThumbnails.isReserved(program);
+      thumbParam.isOfficial = false;
       thumbParam.openTime = thumbParam.isReserved ? dateJpnOrig : undefined;
 
       const today = new Date();
