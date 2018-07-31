@@ -98,7 +98,6 @@ export default class Thumbnail {
 
     const openTimeHTML = this._isReserved === true ? `<span class="tooltip-opentime">${this._openTime}</span><br>` : '';
 
-
     const counterHTML = this._isReserved === false ? `
       <br>
       <span class="statistics">
@@ -135,6 +134,8 @@ export default class Thumbnail {
       const statistics = tooltipInnnerElement.querySelector(".statistics");
 
       const updateStatistics = () => {
+        if (statistics == null)
+          return;
         statistics.querySelector(".watch-count-value").textContent = this._watchCount;
         statistics.querySelector(".view-count-value").textContent = this._commentCount;
         statistics.querySelector(".elapsed-time-value").textContent = this._elapsedTime;
@@ -184,38 +185,43 @@ export default class Thumbnail {
   }
 
   setParams(params) {
-    const {
-      key,
-      preload,
-      background,
-      title,
-      watchCount,
-      commentCount,
-      url,
-      id,
-      isReserved,
-      isOfficial,
-      text,
-      day,
-      openTime,
-      openDate,
-      index
-    } = params;
+    // const {
+    //   key,
+    //   preload,
+    //   background,
+    //   title,
+    //   watchCount,
+    //   commentCount,
+    //   url,
+    //   id,
+    //   isReserved,
+    //   isOfficial,
+    //   text,
+    //   day,
+    //   openTime,
+    //   openDate,
+    //   index
+    // } = params;
 
-    this._key = key || this._key;
-    this._preload = preload || this._preload;
-    this._background = background || this._background;
-    this._title = title || this._title;
-    this._watchCount = watchCount || this._watchCount;
-    this._commentCount = commentCount || this._commentCount;
-    this._url = url || this._url;
-    this._id = id || this._id;
-    this._isReserved = isReserved || this._isReserved;
-    this._isOfficial = isOfficial || this._isOfficial;
-    this._text = text || this._text;
-    this._day = day || this._day;
-    this._openTime = openTime || this._openTime;
-    this._openDate = openDate || this._openDate;
-    this._index = index || this._index;
+    for (const param in params) {
+      if (param != null)
+        this[`_${param}`] = params[param];
+    }
+
+    // this._key = key || this._key;
+    // this._preload = preload || this._preload;
+    // this._background = background || this._background;
+    // this._title = title || this._title;
+    // this._watchCount = watchCount || this._watchCount;
+    // this._commentCount = commentCount || this._commentCount;
+    // this._url = url || this._url;
+    // this._id = id || this._id;
+    // this._isReserved = isReserved || this._isReserved;
+    // this._isOfficial = isOfficial || this._isOfficial;
+    // this._text = text || this._text;
+    // this._day = day || this._day;
+    // this._openTime = openTime || this._openTime;
+    // this._openDate = openDate || this._openDate;
+    // this._index = index || this._index;
   }
 }
