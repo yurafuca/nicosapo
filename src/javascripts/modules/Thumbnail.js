@@ -21,43 +21,49 @@ export default class Thumbnail {
     this._openTime = ""; // 開始・開場
     this._openDate = ""; // 残り時間用
     this._index = "";
+    this._isUpdatedAtFirst = false;
+  }
+
+  setParams(params) {
+    for (const param in params) {
+      if (param != null)
+        this[`_${param}`] = params[param];
+    }
   }
 
   createElement() {
-    const thumbnail = document.createElement("div");
-    thumbnail.id = this._id;
-    thumbnail.className = "community-hover-wrapper";
-    thumbnail.dataset.toggle = "tooltip";
-    thumbnail.dataset.placement = "top";
-    thumbnail.dataset.title = this._title;
-
-    const outer = document.createElement("div");
-    outer.className = "side-corner-tag disabled";
-
-    const inner = document.createElement("div");
-    inner.className = "community";
-
-    const a = document.createElement("a");
-    a.href = this._url;
-    a.target = "_blank";
-
-    const span = document.createElement("span");
-    span.className = "comu_thumbnail";
-    span.style.backgroundImage = this._background;
-
-    this._element = thumbnail;
-
-    thumbnail.appendChild(outer);
-    outer.appendChild(inner);
-    inner.appendChild(a);
-    a.appendChild(span);
+    const parser = new DOMParser();
+    this._element = parser.parseFromString(`
+      <div
+        id="${this._id}"
+        class="community-hover-wrapper"
+        data-toggle="tooltip"
+        data-placement="top"
+        data-title="${this._title}"
+      >
+        <div class="side-corner-tag disabled">
+          <div class="community">
+            <a
+              href="${this._url}"
+              target="_blank">
+              <span
+                class="comu_thumbnail"
+                style="background-image:${this._background}"
+            </a>
+          </div>
+        </div>
+      </div>
+    `,
+        'text/html'
+      )
+      .childNodes[0].querySelector('body').childNodes[0];
 
     if (this._isReserved && this._isOfficial === false) {
       const openDay = document.createElement("p");
       openDay.innerHTML = `<span class="reserved-message">${this._day}</span>`;
-
-      outer.className = "side-corner-tag enabled";
-      outer.appendChild(openDay);
+      const div = this._element.querySelector(".side-corner-tag");
+      div.className = "side-corner-tag enabled";
+      div.appendChild(openDay);
     }
 
     this._elapsedTime = this.getElapsedTime();
@@ -95,9 +101,7 @@ export default class Thumbnail {
 
   createTooltipOptions() {
     const titleHTML = `<span>${this._title}</span>`;
-
     const openTimeHTML = this._isReserved === true ? `<span class="tooltip-opentime">${this._openTime}</span><br>` : '';
-
     const counterHTML = this._isReserved === false ? `
       <br>
       <span class="statistics">
@@ -144,12 +148,17 @@ export default class Thumbnail {
 
       updatePosition();
 
-      const timer = setInterval(() => {
-        if (this._watchCount != LOADING_TEXT) {
-          updateStatistics();
-          clearInterval(timer);
-        }
-      }, 1);
+      if (this._isUpdatedAtFirst === false) {
+        this._timer = setInterval(() => {
+          if (this._watchCount != LOADING_TEXT) {
+            updateStatistics();
+            this._isUpdatedAtFirst = true;
+            data.instance.update();
+          }
+        }, 1);
+      } else {
+        clearInterval(this._timer);
+      }
 
       setInterval(() => {
         updateStatistics();
@@ -182,46 +191,5 @@ export default class Thumbnail {
 
   setTooltip(reference, options) {
     return new Tooltip(reference, options);
-  }
-
-  setParams(params) {
-    // const {
-    //   key,
-    //   preload,
-    //   background,
-    //   title,
-    //   watchCount,
-    //   commentCount,
-    //   url,
-    //   id,
-    //   isReserved,
-    //   isOfficial,
-    //   text,
-    //   day,
-    //   openTime,
-    //   openDate,
-    //   index
-    // } = params;
-
-    for (const param in params) {
-      if (param != null)
-        this[`_${param}`] = params[param];
-    }
-
-    // this._key = key || this._key;
-    // this._preload = preload || this._preload;
-    // this._background = background || this._background;
-    // this._title = title || this._title;
-    // this._watchCount = watchCount || this._watchCount;
-    // this._commentCount = commentCount || this._commentCount;
-    // this._url = url || this._url;
-    // this._id = id || this._id;
-    // this._isReserved = isReserved || this._isReserved;
-    // this._isOfficial = isOfficial || this._isOfficial;
-    // this._text = text || this._text;
-    // this._day = day || this._day;
-    // this._openTime = openTime || this._openTime;
-    // this._openDate = openDate || this._openDate;
-    // this._index = index || this._index;
   }
 }
