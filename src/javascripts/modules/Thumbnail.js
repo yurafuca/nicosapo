@@ -22,6 +22,7 @@ export default class Thumbnail {
     this._openDate = ""; // 残り時間用
     this._index = "";
     this._isUpdatedAtFirst = false;
+    this._updateTimers = [];
   }
 
   setParams(params) {
@@ -160,9 +161,23 @@ export default class Thumbnail {
         clearInterval(this._timer);
       }
 
-      setInterval(() => {
-        updateStatistics();
-      }, UPDATE_INTERVAL_MILLISEC);
+      //aria-hidden
+      const isHidden = tooltip.getAttribute('aria-hidden');
+
+      if (this._isUpdatedAtFirst === false || isHidden == 'false') {
+        const timer = setInterval(() => {
+          const isHidden2 = tooltip.getAttribute('aria-hidden');
+          if (isHidden2 === 'true') {
+            console.log(isHidden2);
+            for (const t in this._updateTimers)
+              clearInterval(this._updateTimers[t]);
+          } else {
+            console.log(isHidden2);
+            updateStatistics();
+          }
+        }, UPDATE_INTERVAL_MILLISEC);
+        this._updateTimers.push(timer);
+      }
     };
 
     const options = {
