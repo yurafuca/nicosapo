@@ -158,26 +158,20 @@ export default class Thumbnail {
           }
         }, 1);
       } else {
+        updateStatistics();
         clearInterval(this._timer);
       }
 
-      //aria-hidden
-      const isHidden = tooltip.getAttribute('aria-hidden');
-
-      if (this._isUpdatedAtFirst === false || isHidden == 'false') {
-        const timer = setInterval(() => {
-          const isHidden2 = tooltip.getAttribute('aria-hidden');
-          if (isHidden2 === 'true') {
-            console.log(isHidden2);
-            for (const t in this._updateTimers)
-              clearInterval(this._updateTimers[t]);
-          } else {
-            console.log(isHidden2);
-            updateStatistics();
-          }
-        }, UPDATE_INTERVAL_MILLISEC);
-        this._updateTimers.push(timer);
-      }
+      const timer = setInterval(() => {
+        const isHidden = tooltip.getAttribute('aria-hidden');
+        if (isHidden === 'true' || this._isUpdatedAtFirst == false) {
+          for (const id in this._updateTimers)
+            clearInterval(this._updateTimers[id]);
+        } else {
+          updateStatistics();
+        }
+      }, UPDATE_INTERVAL_MILLISEC);
+      this._updateTimers.push(timer);
     };
 
     const options = {

@@ -60,7 +60,6 @@ class Streams {
           watchCount,
           commentCount
         } = res.data.data;
-        console.log(watchCount);
         thumbnail.setParams({
           watchCount: watchCount.toString(),
           commentCount: commentCount.toString()
