@@ -21,13 +21,8 @@ export default class Thumbnail {
     this._openTime = ""; // 開始・開場
     this._openDate = ""; // 残り時間用
     this._index = "";
-    this._isUpdatedAtFirst = false;
-    this._updateElapsedTimeTimer = null;
-    this._updateTimers = [];
 
     this._isCreated = false;
-    this._isAreadHidden = false;
-
     this._isBeforeRerender = true;
   }
 
