@@ -27,6 +27,8 @@ export default class Thumbnail {
 
     this._isCreated = false;
     this._isAreadHidden = false;
+
+    this._isBeforeRerender = true;
   }
 
   setParams(params) {
@@ -131,7 +133,8 @@ export default class Thumbnail {
           this.setStatistics(tooltip, this._watchCount, this._commentCount, this.getElapsedTime());
           if (this.isFetched()) {
             clearInterval(timer);
-            updater2();
+            this._isBeforeRerender = false;
+            data.instance.update();
           }
         }, 1);
       }
@@ -145,7 +148,10 @@ export default class Thumbnail {
         }, 1000);
       }
 
-      updater1();
+      if (this._isBeforeRerender)
+        updater1();
+      else
+        updater2();
     }
 
     const options = {
