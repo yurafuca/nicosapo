@@ -260,8 +260,7 @@ export default class Api {
           return response;
       })
       .catch(error => {
-        console.error(error);
         throw error;
-      })
+      });
   }
 }
