@@ -254,17 +254,13 @@ export default class Api {
     const request = axios.get(url);
     return request
       .then(response => {
-        console.log(title, response.status);
-
         if (response.status !== 200)
           throw new Error("failed.");
         else
           return response;
       })
       .catch(error => {
-        console.log(title, error);
-        console.error(error);
         throw error;
-      })
+      });
   }
 }

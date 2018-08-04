@@ -128,8 +128,6 @@ export default class Thumbnail {
 
       const updater1 = () => {
         const timer = setInterval(() => {
-          console.log(this._isBeforeRerender);
-
           this.setStatistics(tooltip, this._watchCount, this._commentCount, this.getElapsedTime());
           this._isBeforeRerender = false;
           if (this.isFetched()) {
@@ -161,30 +159,13 @@ export default class Thumbnail {
         }, 1000);
       }
 
-      console.log(this._isBeforeRerender);
       if (this._isBeforeRerender) {
-        if (this._isRequireRSS) {
-          console.log(1);
-          Api.fetchVideoInfo(this._id, "apiv2", this._title).then((res) => {
-            if (res.data.data.length === 0)
-              return;
-            const {
-              viewCounter,
-              commentCounter
-            } = res.data.data[0];
-            console.log(res.data.data[0]);
-            this.setParams({
-              watchCount: viewCounter.toString(),
-              commentCount: commentCounter.toString()
-            });
-          });
-        }
-
         updater1();
+        if (this._isRequireRSS)
+          this.fetchFromRSS();
         if (!this.isCreated())
           updater2();
       } else {
-
         updater3();
       }
 
@@ -243,9 +224,23 @@ export default class Thumbnail {
     tooltip.childNodes[1].childNodes[5].outerHTML = statistics.outerHTML;
   }
 
-  changeIntervalTime(timer, func, time) {
-    clearInterval(timer);
-    setInterval(func, time);
+  fetchFromRSS() {
+    Api.fetchVideoInfo(this._id, "apiv2", this._title).then((res) => {
+      if (res.data.data.length === 0)
+        return;
+      if (this.isFetched()) {
+        console.log(1);
+        return;
+      }
+      const {
+        viewCounter,
+        commentCounter
+      } = res.data.data[0];
+      this.setParams({
+        watchCount: viewCounter.toString(),
+        commentCount: commentCounter.toString()
+      });
+    });
   }
 
   recalcTop(tooltip) {
