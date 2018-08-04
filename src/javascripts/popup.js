@@ -49,11 +49,16 @@ class Streams {
       container.appendChild(message);
     }
 
+    let catchCount = 0;
+
     params.forEach(param => {
       const thumbnail = new Thumbnail();
       thumbnail.setParams(param);
       const thumbnailElement = thumbnail.createElement();
       container.appendChild(thumbnailElement);
+
+      if (genre === 'reserve' || genre === "future" || genre === 'search')
+        return;
 
       // コメント数・来場者数読み込み
       Api.fetchVideoInfo(thumbnail._id).then(res => {
@@ -66,21 +71,7 @@ class Streams {
           commentCount: commentCount.toString()
         });
       }).catch(() => {
-        Common.sleep(100).then(() => {
-          Api.fetchVideoInfo(thumbnail._id, "apiv2", thumbnail._title).then((res) => {
-            if (res.data.data.length === 0)
-              return;
-            const {
-              viewCounter,
-              commentCounter
-            } = res.data.data[0];
-            thumbnail.setParams({
-              watchCount: viewCounter.toString(),
-              commentCount: commentCounter.toString()
-            });
-          });
-
-        });
+        thumbnail._isRequireRSS = true;
       });
     });
   }

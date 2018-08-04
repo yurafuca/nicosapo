@@ -1,7 +1,8 @@
 /* global Tooltip */
+import Api from "../api/Api";
 
 const UPDATE_INTERVAL_MILLISEC = 1000;
-const LOADING_TEXT = "loading..."
+const LOADING_TEXT = "loading"
 
 export default class Thumbnail {
   constructor() {
@@ -22,8 +23,12 @@ export default class Thumbnail {
     this._openDate = ""; // 残り時間用
     this._index = "";
 
+    this._isRequireRSS = true;
+
     this._isCreated = false;
     this._isBeforeRerender = true;
+
+    this._loadingDots = "&nbsp;&nbsp;&nbsp;";
   }
 
   setParams(params) {
@@ -118,23 +123,36 @@ export default class Thumbnail {
 
     // ツールチップがサムネイルと重なった場合はツールチップを上方に移動する
     const modefier = data => {
-      this._isCreated = true;
-
       const tooltip = data.instance.popper;
       this.recalcTop(tooltip);
 
       const updater1 = () => {
         const timer = setInterval(() => {
+          console.log(this._isBeforeRerender);
+
           this.setStatistics(tooltip, this._watchCount, this._commentCount, this.getElapsedTime());
+          this._isBeforeRerender = false;
           if (this.isFetched()) {
             clearInterval(timer);
-            this._isBeforeRerender = false;
             data.instance.update();
           }
         }, 1);
       }
 
       const updater2 = () => {
+        const timer = setInterval(() => {
+          if (this._loadingDots.includes("&nbsp;"))
+            this._loadingDots = this._loadingDots.replace("&nbsp;", ".");
+          else
+            this._loadingDots = "&nbsp;&nbsp;&nbsp;";
+          if (this.isFetched()) {
+            clearInterval(timer);
+          }
+        }, 100);
+      }
+
+      const updater3 = () => {
+        this.setStatistics(tooltip, this._watchCount, this._commentCount, this.getElapsedTime());
         const timer = setInterval(() => {
           this.setStatistics(tooltip, this._watchCount, this._commentCount, this.getElapsedTime());
           if (this.isHidden(tooltip)) {
@@ -143,10 +161,35 @@ export default class Thumbnail {
         }, 1000);
       }
 
-      if (this._isBeforeRerender)
+      console.log(this._isBeforeRerender);
+      if (this._isBeforeRerender) {
+        if (this._isRequireRSS) {
+          console.log(1);
+          Api.fetchVideoInfo(this._id, "apiv2", this._title).then((res) => {
+            if (res.data.data.length === 0)
+              return;
+            const {
+              viewCounter,
+              commentCounter
+            } = res.data.data[0];
+            console.log(res.data.data[0]);
+            this.setParams({
+              watchCount: viewCounter.toString(),
+              commentCount: commentCounter.toString()
+            });
+          });
+        }
+
         updater1();
-      else
-        updater2();
+        if (!this.isCreated())
+          updater2();
+      } else {
+
+        updater3();
+      }
+
+      this._isCreated = true;
+
     }
 
     const options = {
@@ -170,6 +213,7 @@ export default class Thumbnail {
       }
     };
 
+
     return options;
   }
 
@@ -180,9 +224,21 @@ export default class Thumbnail {
     if (statistics == null)
       return;
 
-    statistics.querySelector(".watch-count-value").textContent = watchCount;
-    statistics.querySelector(".view-count-value").textContent = commentCount;
-    statistics.querySelector(".elapsed-time-value").textContent = elapsedTime;
+    let watchCountText = "";
+    if (this.isFetched())
+      watchCountText = watchCount;
+    else
+      watchCountText = LOADING_TEXT + this._loadingDots;
+
+    let commentCountText = "";
+    if (this.isFetched())
+      commentCountText = commentCount;
+    else
+      commentCountText = LOADING_TEXT + this._loadingDots;
+
+    statistics.querySelector(".watch-count-value").innerHTML = watchCountText;
+    statistics.querySelector(".view-count-value").innerHTML = commentCountText;
+    statistics.querySelector(".elapsed-time-value").innerHTML = elapsedTime;
 
     tooltip.childNodes[1].childNodes[5].outerHTML = statistics.outerHTML;
   }
