@@ -22,7 +22,11 @@ export default class Thumbnail {
     this._openDate = ""; // 残り時間用
     this._index = "";
     this._isUpdatedAtFirst = false;
+    this._updateElapsedTimeTimer = null;
     this._updateTimers = [];
+
+    this._isCreated = false;
+    this._isAreadHidden = false;
   }
 
   setParams(params) {
@@ -67,12 +71,6 @@ export default class Thumbnail {
       div.appendChild(openDay);
     }
 
-    this._elapsedTime = this.getElapsedTime();
-
-    setInterval(() => {
-      this._elapsedTime = this.getElapsedTime();
-    }, UPDATE_INTERVAL_MILLISEC);
-
     this.setTooltip(this._element, this.createTooltipOptions());
 
     return this._element;
@@ -83,7 +81,7 @@ export default class Thumbnail {
     const elapsedTime = parseInt((currentDate.getTime() - this._openDate.getTime()) / 1000);
 
     let h = parseInt(elapsedTime / 3600);
-    let m = parseInt((elapsedTime / 60) % 60) - 1;
+    let m = parseInt((elapsedTime / 60) % 60);
     let s = parseInt(elapsedTime % 60);
 
     if (m < 10)
@@ -123,56 +121,32 @@ export default class Thumbnail {
 
     // ツールチップがサムネイルと重なった場合はツールチップを上方に移動する
     const modefier = data => {
+      this._isCreated = true;
+
       const tooltip = data.instance.popper;
-      const clientHeight = tooltip.clientHeight;
+      this.recalcTop(tooltip);
 
-      const updatePosition = () => {
-        if (this._index < 6) {
-          if (clientHeight > 90)
-            tooltip.style.top = "-32px";
-          else if (clientHeight > 70)
-            tooltip.style.top = "-12px";
-        }
-      }
-
-      const tooltipInnnerElement = new DOMParser().parseFromString(tooltip.innerHTML, 'text/html');
-      const statistics = tooltipInnnerElement.querySelector(".statistics");
-
-      const updateStatistics = () => {
-        if (statistics == null)
-          return;
-        statistics.querySelector(".watch-count-value").textContent = this._watchCount;
-        statistics.querySelector(".view-count-value").textContent = this._commentCount;
-        statistics.querySelector(".elapsed-time-value").textContent = this._elapsedTime;
-        tooltip.childNodes[1].childNodes[5].outerHTML = statistics.outerHTML;
-      }
-
-      updatePosition();
-
-      if (this._isUpdatedAtFirst === false) {
-        this._timer = setInterval(() => {
-          if (this._watchCount != LOADING_TEXT) {
-            updateStatistics();
-            this._isUpdatedAtFirst = true;
-            data.instance.update();
+      const updater1 = () => {
+        const timer = setInterval(() => {
+          this.setStatistics(tooltip, this._watchCount, this._commentCount, this.getElapsedTime());
+          if (this.isFetched()) {
+            clearInterval(timer);
+            updater2();
           }
         }, 1);
-      } else {
-        updateStatistics();
-        clearInterval(this._timer);
       }
 
-      const timer = setInterval(() => {
-        const isHidden = tooltip.getAttribute('aria-hidden');
-        if (isHidden === 'true' || this._isUpdatedAtFirst == false) {
-          for (const id in this._updateTimers)
-            clearInterval(this._updateTimers[id]);
-        } else {
-          updateStatistics();
-        }
-      }, UPDATE_INTERVAL_MILLISEC);
-      this._updateTimers.push(timer);
-    };
+      const updater2 = () => {
+        const timer = setInterval(() => {
+          this.setStatistics(tooltip, this._watchCount, this._commentCount, this.getElapsedTime());
+          if (this.isHidden(tooltip)) {
+            clearInterval(timer); // for in
+          }
+        }, 1000);
+      }
+
+      updater1();
+    }
 
     const options = {
       placement: "top",
@@ -196,6 +170,56 @@ export default class Thumbnail {
     };
 
     return options;
+  }
+
+  setStatistics(tooltip, watchCount, commentCount, elapsedTime) {
+    const tooltipInnnerElement = new DOMParser().parseFromString(tooltip.innerHTML, 'text/html');
+    const statistics = tooltipInnnerElement.querySelector(".statistics");
+
+    if (statistics == null)
+      return;
+
+    statistics.querySelector(".watch-count-value").textContent = watchCount;
+    statistics.querySelector(".view-count-value").textContent = commentCount;
+    statistics.querySelector(".elapsed-time-value").textContent = elapsedTime;
+
+    tooltip.childNodes[1].childNodes[5].outerHTML = statistics.outerHTML;
+  }
+
+  changeIntervalTime(timer, func, time) {
+    clearInterval(timer);
+    setInterval(func, time);
+  }
+
+  recalcTop(tooltip) {
+    const clientHeight = tooltip.clientHeight;
+
+    let top = 0;
+
+    if (this._index < 6) {
+      if (clientHeight > 90)
+        top = "-32px";
+      else if (clientHeight > 70)
+        top = "-12px";
+    }
+
+    tooltip.style.top = top;
+  }
+
+  isCreated() {
+    return this._isCreated;
+  }
+
+  isFetched() {
+    return this._watchCount !== LOADING_TEXT;
+  }
+
+  isHidden(tooltip) {
+    if (!this._isCreated)
+      return true;
+    if (tooltip.getAttribute('aria-hidden') === 'true')
+      return true;
+    return false;
   }
 
   setTooltip(reference, options) {

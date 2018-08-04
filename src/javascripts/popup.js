@@ -1,5 +1,6 @@
 import store from "store";
 import Api from "./api/Api";
+import Common from "./common/Common";
 import UserThumbnails from "./modules/UserThumbnails";
 import OfficialThumbnails from "./modules/OfficialThumbnails";
 import Thumbnail from "./modules/Thumbnail";
@@ -65,17 +66,20 @@ class Streams {
           commentCount: commentCount.toString()
         });
       }).catch(() => {
-        Api.fetchVideoInfo(thumbnail._id, "apiv2", thumbnail._title).then((res) => {
-          if (res.data.data.length === 0)
-            return;
-          const {
-            viewCounter,
-            commentCounter
-          } = res.data.data[0];
-          thumbnail.setParams({
-            watchCount: viewCounter.toString(),
-            commentCount: commentCounter.toString()
+        Common.sleep(100).then(() => {
+          Api.fetchVideoInfo(thumbnail._id, "apiv2", thumbnail._title).then((res) => {
+            if (res.data.data.length === 0)
+              return;
+            const {
+              viewCounter,
+              commentCounter
+            } = res.data.data[0];
+            thumbnail.setParams({
+              watchCount: viewCounter.toString(),
+              commentCount: commentCounter.toString()
+            });
           });
+
         });
       });
     });
