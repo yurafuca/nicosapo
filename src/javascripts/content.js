@@ -8,6 +8,7 @@ import ChimeraCastPage from "./page/ChimeraCastPage";
 import ModernCastPage from "./page/ModernCastPage";
 import OfficialCastPage from "./page/OfficialCastPage";
 import TimeShiftPage from "./page/TimeShiftPage";
+import ModernTimeShiftPage from "./page/ModernTimeShiftPage";
 import CommunityPage from "./page/CommunityPage";
 import ChannelPage from "./page/ChannelPage";
 
@@ -24,6 +25,7 @@ $(() => {
     MODERN_CAST_PAGE: ModernCastPage,
     OFFICIAL_CAST_PAGE: OfficialCastPage,
     TIME_SHIFT_PAGE: TimeShiftPage,
+    MODERN_TIME_SHIFT_PAGE: ModernTimeShiftPage,
     COMMUNITY_PAGE: CommunityPage,
     CHANNEL_PAGE: ChannelPage
   };

@@ -1,10 +1,14 @@
 import store from "store";
 import Api from "./api/Api";
+import Common from "./common/Common";
 import UserThumbnails from "./modules/UserThumbnails";
 import OfficialThumbnails from "./modules/OfficialThumbnails";
 import Thumbnail from "./modules/Thumbnail";
 import Search from "./modules/search";
-import { showSpinner, hideSpinner } from "./modules/spinner";
+import {
+  showSpinner,
+  hideSpinner
+} from "./modules/spinner";
 
 // DOM を削除・非表示
 class Elements {
@@ -38,17 +42,38 @@ class Streams {
 
     const container = document.getElementById("container");
 
-    params.forEach(param => {
-      const frame = Thumbnail.createElement(param);
-      container.appendChild(frame);
-    });
-
     if (params.length === 0) {
       const message = document.createElement("div");
       message.className = "message";
       message.textContent = "フォロー中のコミュニティ・チャンネルが放送している番組はありません 😴";
       container.appendChild(message);
     }
+
+    let catchCount = 0;
+
+    params.forEach(param => {
+      const thumbnail = new Thumbnail();
+      thumbnail.setParams(param);
+      const thumbnailElement = thumbnail.createElement();
+      container.appendChild(thumbnailElement);
+
+      if (genre === 'reserve' || genre === "future" || genre === 'search')
+        return;
+
+      // コメント数・来場者数読み込み
+      Api.fetchVideoInfo(thumbnail._id).then(res => {
+        const {
+          watchCount,
+          commentCount
+        } = res.data.data;
+        thumbnail.setParams({
+          watchCount: watchCount.toString(),
+          commentCount: commentCount.toString()
+        });
+      }).catch(() => {
+        thumbnail._isRequireRSS = true;
+      });
+    });
   }
 }
 
@@ -86,24 +111,27 @@ class Tabs {
     switch (genre) {
       case "user":
       case "official":
-      case "future": {
-        Api.loadCasts(genre).then(streams => {
-          hideSpinner();
-          Streams.show(streams, genre);
-        });
-        break;
-      }
-      case "reserve": {
-        Api.loadCasts("user").then(streams => {
-          hideSpinner();
-          Streams.show(streams, genre);
-        });
-        break;
-      }
-      case "search": {
-        const search = new Search();
-        search.loadHTML();
-      }
+      case "future":
+        {
+          Api.loadCasts(genre).then(streams => {
+            hideSpinner();
+            Streams.show(streams, genre);
+          });
+          break;
+        }
+      case "reserve":
+        {
+          Api.loadCasts("user").then(streams => {
+            hideSpinner();
+            Streams.show(streams, genre);
+          });
+          break;
+        }
+      case "search":
+        {
+          const search = new Search();
+          search.loadHTML();
+        }
     }
   }
 

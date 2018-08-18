@@ -10,8 +10,9 @@ export default class UserThumbnails {
     }
 
     const thumbParams = [];
+    let index = 0;
 
-    programs.forEach((program, index) => {
+    programs.forEach((program) => {
       const isReserved = UserThumbnails.isReserved(program);
 
       const thumbParam = {};
@@ -22,7 +23,6 @@ export default class UserThumbnails {
       thumbParam.id = program.querySelector("video id").textContent;
       thumbParam.url = `http://live.nicovideo.jp/watch/${thumbParam.id}`;
       thumbParam.text = thumbParam.title;
-      thumbParam.index = index;
 
       const dateJpnOrig = program.querySelector("video open_time_jpstr").textContent;
       // => "03/15(木) 開場 18:00 開演 18:00"
@@ -40,9 +40,13 @@ export default class UserThumbnails {
       const dateJpn = `${dateJpnYear}${timeJpn}`;
       // => "2018/03/13(火) 18:00"
 
+      // 24 時超えるとバグる
       const date = new Date(Date.parse(dateJpn));
 
+      thumbParam.openDate = date;
+
       thumbParam.isReserved = UserThumbnails.isReserved(program);
+      thumbParam.isOfficial = false;
       thumbParam.openTime = thumbParam.isReserved ? dateJpnOrig : undefined;
 
       const today = new Date();
@@ -66,8 +70,10 @@ export default class UserThumbnails {
       }
 
       if (isShowReservedStream && isReserved) {
+        thumbParam.index = index++;
         thumbParams.push(thumbParam);
       } else if (!isShowReservedStream && !isReserved) {
+        thumbParam.index = index++;
         thumbParams.push(thumbParam);
       }
     });

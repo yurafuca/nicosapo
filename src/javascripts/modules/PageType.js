@@ -4,10 +4,12 @@ export default class PageType {
   static get() {
     let pageType = null;
 
-    /**
-     * CastPages
-     */
-    if (this._isOfficialCastPage()) {
+    if (this._isModernTimeShiftPage()) {
+      pageType = "MODERN_TIME_SHIFT_PAGE";
+      /**
+       * CastPages
+       */
+    } else if (this._isOfficialCastPage()) {
       pageType = "OFFICIAL_CAST_PAGE";
     } else if (this._isModernCastPage()) {
       pageType = "MODERN_CAST_PAGE";
@@ -60,6 +62,15 @@ export default class PageType {
     // const re = /http:\/\/live2\.nicovideo\.jp\/watch\/lv([0-9]+)/;
     // const url = window.location.href;
     // return url.match(re);
+  }
+
+  static _isModernTimeShiftPage() {
+    // コメントが無効
+    if (document.querySelector("span[class^='___disabled-message___']")) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   static _isOfficialCastPage() {

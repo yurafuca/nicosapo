@@ -21,6 +21,7 @@ export default class FormatNicoPage {
         break;
       case "OFFICIAL_CAST_PAGE": // 公式放送は必ず新配信でおこなわれる
       case "MODERN_CAST_PAGE":
+      case "MODERN_TIME_SHIFT_PAGE":
         $(".program-detail").css("width", "930px");
         $("div[class^='___provider-detail___']").css("display", "-webkit-box");
         $("div[class^='___player-head-area___']").css("margin-top", "0");
@@ -48,7 +49,7 @@ export default class FormatNicoPage {
         this.$slider_container.css("padding", "0");
         break;
       default:
-      // Do nothing.
+        // Do nothing.
     }
 
     if (pageType === "OFFICIAL_CAST_PAGE") {
