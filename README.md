@@ -1,168 +1,55 @@
-<p align="center">
-  <img alt="nicosapo" src="https://yurafuca.github.io/resources/nstitle.png">
-</p>
+# nicosapo
 
-<p align="center">
-  Raise the experience one step.
-</p>
+Google Chrome Extension build with React for extending NicoNico Live.
 
----
+<img alt="nicosapo" src="./src/images/popup.png" width='543px'>
 
-# What is this
+## Install
 
-にこさぽはニコニコ生放送の視聴を支援する Google Chrome Extension です．
+[Chrome WebStore](https://chrome.google.com/webstore/detail/%E3%83%8B%E3%82%B3%E7%94%9F%E3%83%81%E3%82%A7%E3%83%83%E3%82%AB%E3%83%BC/kfnogdokhemdbbclknmmjpcnmjmpjknc)
 
-# Install
+## Feature
 
-[にこさぽ - Chrome WebStore](https://chrome.google.com/webstore/detail/%E3%83%8B%E3%82%B3%E7%94%9F%E3%83%81%E3%82%A7%E3%83%83%E3%82%AB%E3%83%BC/kfnogdokhemdbbclknmmjpcnmjmpjknc)
+1. Popup list of programs
+1. Automatic redirect
+1. Automatic entry
+1. Automatic scroll
+1. Search programs
+1. Notification bar
+    * Show remaining time
+    * Show end time
+    * Notify extension
 
-# How to Build
+## Build
+
+Build:
 
 ```
-yarn run build
+npm run build
 ```
 
-# Donate
+Watch:
 
-にこさぽはユーザの投げ銭によって開発されています．この拡張機能に課金してもいいよという方はぜひご協力ください．欲しいものリストのほかに Amazon ギフト券も歓迎しています．
+```
+npm run watch
+```
 
-<a href="http://amzn.asia/7MmmuAz" target="_blank">欲しいものリスト: 本</a>
+## Demo
 
-<a href="http://amzn.asia/38NVAwa" target="_blank">欲しいものリスト: 雑貨</a>
+<img alt="nicosapo" src="./src/video/demo.gif" width='684px'>
 
+## Donate
 
-# Features
+This application is developed by the user's offer. Please cooperate if you can charge for this extended function. Amazon gift certificates are also welcome.
 
-1. 放送中 / 放送予定 の番組を一覧表示
-1. デスクトップ通知
-1. 放送中の番組を検索
-1. 自動枠移動
-1. 自動入場
-1. 自動スクロール
-1. 通知バー（残り時間・終了時刻の表示，延長通知）
+<a href="http://amzn.asia/7MmmuAz" target="_blank">Amazon Wishlist: Book</a>
 
-## 放送中の番組一覧を表示
+<a href="http://amzn.asia/38NVAwa" target="_blank">Amazon Wishlist: Sundries</a>
 
-![Alt Text](./src/images/popup.png)
+## Licence
 
-ツールバーに追加されるにこさぽのアイコンをクリックすると，フォローしているコミュニティ・チャンネルの放送番組を一覧表示します．サムネイルにマウスオーバーすると番組の説明が表示されます．
+MIT
 
-ポップアップ上部のタブをクリックすると，ポップアップに表示されるコンテンツを切り替えられます．
+## Author
 
-| タブ | 説明 |
-| --- | --- |
-| フォロー中 | フォロー中のコミュニティ・チャンネルが放送中の番組を一覧表示します |
-| 予約 | フォロー中のコミュニティ・チャンネルが予約中の番組を一覧表示します |
-| 公式 | ユーザチャンネル・公式チャンネルが放送中の番組を一覧表示します |
-| 未来 | ユーザチャンネル・公式チャンネルが予約中の番組を一覧表示します |
-| 検索 | 放送中の番組を検索します |
-
-アイコンには放送中のフォロー中タブのアイテムの数がオレンジ色のバッジとして表示されます．
-
-> **NOTE:** 放送中の番組数が 0 のときのバッジの表示の有無をオプションから設定できます．
-
-## デスクトップ通知
-
-フォロー中のコミュニティ・チャンネルが放送を開始すると，にこさぽは通知音を再生しデスクトップ通知を表示します．通知の有無や音量をオプションから設定できます．
-
-<p align="center">
-<img src="./src/images/notification1.png">
-</p>
-
-## 放送中の番組を検索
-
-<p align="center">
-<img src="./src/images/search.png" height="700">
-</p>
-
-ポップアップの上部のタブから **検索** タブをクリックすると放送中の番組を検索できます．
-
-**お気に入りに登録** ボタンをクリックすると検索ボックスに入力したキーワードをお気に入りに登録できます．お気に入りに登録されたキーワードは検索ボックスの下の水色の領域に常に表示されるようになります．登録されたキーワードをクリックするとキーボードを叩かずに番組を検索できます．
-
-## 自動次枠移動
-
-![Alt Text](./src/images/autoredirect.png)
-
-**自動次枠移動** は放送終了後に新しい番組が開始された場合，その番組へ自動でジャンプする機能です．
-
-にこさぽをインストールすると放送ページに自動次枠移動の有効・無効を切り替えるボタンが表示されます．「自動次枠移動オン」と表示されているときが自動次枠移動が有効な状態です．
-
-放送用ページを開き続けておくと，その間にこさぽは当該コミュニティの新しい番組を一定時間ごとにチェックします．新しい番組が始まったことを検知すると，にこさぽはその番組を自動的に開きます．
-
-> **NOTE:** 自動枠移動の更新間隔はオプションから設定できます．
-
-> **NOTE:** 新しく放送ページを開いたとき，ボタンの状態は必ずオプションで設定した状態になります．
-
-> **NOTE:** にこさぽは自動次枠移動の有効・無効の状態をタブごとに保有しています．あるタブで自動次枠移動を有効・無効を切り替えても他のタブは影響を受けません．
-
-> **NOTE:** にこさぽは放送ページが閉じられるか次の番組へジャンプするまで新しい番組の開始を断続的にチェックします．
-
-> **NOTE:** 自動枠移動は最大数十秒のラグが発生します．
-
-## 自動入場
-
-**自動入場** はあらかじめ登録した配信者や番組の放送が開始された場合，その番組を自動で開く機能です．
-
-自動入場は次の二種類に大別できます．
-
-1. **番組** への自動入場
-2. **コミュニティ・チャンネル** への自動入場
-
-### 番組への自動入場
-
-![Alt Text](./src/images/autoenter_program.png)
-
-にこさぽをインストールするとゲートページに自動入場の有効・無効を切り替えるボタンが表示されます．「自動入場オン」と表示されているときが自動入場が有効な状態です．
-
-自動入場が有効になっている番組の放送が始まると，にこさぽはその番組を自動的に新しいタブで開きます．新しいタブを開くときにこさぽは通知を表示します．
-
-<p align="center">
-<img src="./src/images/notification2.png">
-</p>
-
-> **NOTE:** 新しいタブが開かれると同時に当該番組は自動入場リストから自動的に削除されます
-
-> **NOTE:** 自動入場を有効にした番組の管理はオプションからおこなえます
-
-> **NOTE:** Google Chrome を終了すると自動入場しません
-
-### コミュニティ・チャンネルへの自動入場
-
-![Alt Text](./src/images/autoenter_community1.png)
-![Alt Text](./src/images/autoenter_community2.png)
-
-にこさぽをインストールすると下記のページに自動入場の有効・無効を切り替えるボタンが表示されます．
-
-+ 放送ページ
-+ コミュニティのトップページ
-
-「自動入場オン」と表示されているときが自動入場が有効な状態です．
-
-自動入場が有効になっているコミュニティ・チャンネルが放送を開始したとき．にこさぽはその番組を自動的に新しいタブで開きます．新しいタブを開くときにこさぽは通知を表示します．
-
-> **NOTE:** 自動入場を有効にしたコミュニティ・チャンネルの管理はオプションからおこなえます
-
-## 自動スクロール
-
-**自動スクロール** は自動次枠移動したとき，前回の位置までページを自動でスクロールする機能です．
-
-にこさぽをインストールすると放送ページに自動スクロールの有効・無効を切り替えるボタンが表示されます．「自動次枠移動オン」と表示されているときが自動スクロールが有効な状態です．「自動次枠移動オフ」と表示されているときが自動スクロールが無効な状態です．
-
-# 通知バー
-
-![Alt Text](./src/images/bar.png)
-
-プレイヤー上部に通知バーが表示されます．通知バーには次が表示されます．
-
-| 表示される情報 | 説明 |
-| --- | --- |
-| 通知検知 | 番組が延長されたとき「放送が～に延長されました」とメッセージが表示されます |
-| 終了時刻 | 番組が終了する時刻です |
-| 残り時間 | 番組の残り時間です |
-
-## 設定画面
-
-インストール後にツールバーに追加されるアイコンを右クリック->設定 から，にこさぽの設定をおこなえます．
-
-![Alt Text](./src/images/settings.png)
-
+<a href="https://twitter.com/yurafuca" target="_blank">@yurafuca</a>
