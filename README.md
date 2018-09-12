@@ -4,6 +4,9 @@ Google Chrome Extension build with React for extending NicoNico Live.
 
 <img alt="nicosapo" src="./src/images/popup.png" width='549x'>
 
+<img alt="nicosapo" src="./src/images/autoredirect.png" width='549x'>
+
+
 ## Install
 
 [Chrome WebStore](https://chrome.google.com/webstore/detail/%E3%83%8B%E3%82%B3%E7%94%9F%E3%83%81%E3%82%A7%E3%83%83%E3%82%AB%E3%83%BC/kfnogdokhemdbbclknmmjpcnmjmpjknc)
@@ -20,7 +23,17 @@ Google Chrome Extension build with React for extending NicoNico Live.
     * Show end time
     * Notify extension
 
+## Demo
+
+<img alt="nicosapo" src="./src/video/demo.gif" width='542px'>
+
 ## Build
+
+Release:
+
+```
+npm run release
+```
 
 Build:
 
@@ -33,10 +46,6 @@ Watch:
 ```
 npm run watch
 ```
-
-## Demo
-
-<img alt="nicosapo" src="./src/video/demo.gif" width='542px'>
 
 ## Donate
 
