@@ -26,13 +26,17 @@ export default class ExcludeList extends React.Component {
           .then(communities => {
             const itemParams = [];
             communities.forEach(community => {
-              const communityInResponse = response.find(item => item.id === community.global_id[0]);
+              const id = community.global_id[0];
+              const thumbnail = community.thumbnail[0];
+              const name = community.name[0];
+              const communityInResponse = response.find(item => item.id === id);
               const itemParam = [];
-              itemParam.id = community.global_id[0];
+              itemParam.id = id;
+              itemParam.url = `http://com.nicovideo.jp/community/${id}`;
               itemParam.onClick = this.onClick;
-              itemParam.thumbnail = community.thumbnail[0];
-              itemParam.title = community.name[0];
-              itemParam.description = community.global_id[0];
+              itemParam.thumbnail = thumbnail;
+              itemParam.title = name;
+              itemParam.description = id;
               itemParam.keyword = communityInResponse.keyword;
               itemParam.type = "exclude";
               itemParams.push(itemParam);
