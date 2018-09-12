@@ -95,12 +95,14 @@ p {
       background-color: #f6f8fa;
       padding: 0 10px;
       line-height: 38px;
+      font-size: 13px;
+      font-weight: 500;
     }
     .item {
       position: relative;
       color: #0366d6;
       font-size: 13px;
-      line-height: 30px;
+      line-height: 34px;
       padding-left: 10px;
       border-bottom: solid 1px #eee;
       &.selected:before {
@@ -328,21 +330,21 @@ h3 {
   line-height: 20px;
 }
 .btn-danger {
-  color: $color_tamarillo_approx;
+  color: #cb2431;
+  background-color: #fafbfc;
+  background-image: linear-gradient(-180deg, #fafbfc 0%, #eff3f6 90%);
   &:hover {
-    color: $white;
-    background-color: $color_tamarillo_approx;
-    background-image: linear-gradient(
-      $color_carnation_approx,
-      $color_monza_approx
-    );
-    border-color: $color_tamarillo_approx;
+    color: #fff;
+    background-color: #cb2431;
+    background-image: linear-gradient(-180deg, #de4450 0%, #cb2431 90%);
+    border-color: rgba(27,31,35,0.5);
   }
   &:active {
-    @extend %extend_1;
-  }
-  &.selected {
-    @extend %extend_1;
+    color: #fff;
+    background-color: #b5202c;
+    background-image: none;
+    border-color: rgba(27,31,35,0.5);
+    box-shadow: inset 0 0.15em 0.3em rgba(27,31,35,0.15);
   }
 }
 a {

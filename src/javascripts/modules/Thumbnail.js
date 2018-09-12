@@ -225,7 +225,7 @@ export default class Thumbnail {
   }
 
   fetchFromRSS() {
-    Api.fetchVideoInfo(this._id, "apiv2", this._title).then((res) => {
+    Api.fetchVideoStatistics(this._id, "apiv2", this._title).then((res) => {
       if (res.data.data.length === 0)
         return;
       if (this.isFetched()) {

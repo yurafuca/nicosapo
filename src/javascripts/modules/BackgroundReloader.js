@@ -75,6 +75,7 @@ export default class BackgroundReloader {
       if (Db.contains("autoEnterProgramList", videoId)) {
         return; // `continue` for lodash.
       }
+      console.log("before alert");
       Alert.fire(community);
     });
   }

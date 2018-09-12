@@ -1,25 +1,30 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
-export default class AutoEnterItem extends React.Component {
+export default class BroadcastItem extends React.Component {
   description() {
-    if (Date.parse(this.props.openDate) < Date.now()) {
-      return (
-        <span>
-          <span className="ended"> この番組は終了しました</span>
-          {this.props.description}
+    if (this.props.type === "community" || this.props.type === "program") {
+      if (Date.parse(this.props.openDate) < Date.now()) {
+        return (
+          <span>
+          <span className="ended"> {this.props.messageForEmpty}</span>
+            {this.props.description}
         </span>
-      );
-    } else {
-      return this.props.description;
+        );
+      } else {
+        return this.props.description;
+      }
+    } else if (this.props.type === "exclude") {
+      return `登録したときのキーワード：${this.props.keyword}`;
     }
   }
 
   render() {
+    console.log(this.props);
     return (
-      <div className="listgroup-item clearfix">
+      <div className="listgroup-item clearfix" key={this.props.id}>
         <div className="nudge-down BtnGroup float-right">
-          <a
+          <span
             href=""
             className="btn btn-sm btn-danger BtnGroup-item"
             rel="facebox"
@@ -28,7 +33,7 @@ export default class AutoEnterItem extends React.Component {
             onClick={this.props.onClick.bind(this, this.props.id)}
           >
             削除
-          </a>
+          </span>
         </div>
         <div className="list-group-text-block float-left">
           <img

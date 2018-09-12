@@ -64,6 +64,14 @@ p.bold {
   font-size: 14px;
   padding: 7px 8px;
 }
+.popper-small,
+.tooltip-small {
+  padding: 2px 5px;
+  font-size: 11px;
+  color: #eee;
+  line-height: normal;
+  background: rgba(0, 0, 0, 0.7);
+}
 .style5 .tooltip {
   background: #1e252b;
   color: #ffffff;
@@ -80,11 +88,15 @@ p.bold {
   position: absolute;
   margin: 5px;
 }
-
 .tooltip .tooltip-arrow,
 .popper .popper__arrow {
   /* border-color: #ffc107; */
   border-color: rgba(0, 0, 0, 0.8);
+}
+.tooltip-small .tooltip-arrow,
+.popper-small .popper__arrow {
+  /* border-color: #ffc107; */
+  border-color: rgba(0, 0, 0, 0.7);
 }
 .style5 .tooltip .tooltip-arrow {
   border-color: #1e252b;

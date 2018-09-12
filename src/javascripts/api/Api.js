@@ -1,4 +1,5 @@
 import axios from "axios";
+import { parseString } from "xml2js";
 import VIParser from "../modules/VIParser";
 
 const parameter_nicovideojs = [];
@@ -219,31 +220,7 @@ export default class Api {
     });
   }
 
-  // 公式チャンネル・ユーザーチャンネルのフィードを取得
-  static fetchChannelFeed(type = "all") {
-    const base = "http://live.nicovideo.jp/rss";
-
-    const request = axios.get(base, {
-      responseType: "xml",
-      params: {
-        firstStreamNum: 1,
-        streamMany: 100,
-        streamType: type // "all", "onair", "comingsoon",
-      }
-    });
-
-    return request
-      .then(response => {
-        if (response.status !== 200) throw new Error("failed.");
-        else return Api._toChannelList(response.data);
-      })
-      .catch(error => {
-        console.error(error);
-        throw error;
-      });
-  }
-
-  static fetchVideoInfo(id, source = "statistics", title = "") {
+  static fetchVideoStatistics(id, source = "statistics", title = "") {
     let url = '';
 
     if (source === "statistics")
@@ -258,6 +235,32 @@ export default class Api {
           throw new Error("failed.");
         else
           return response;
+      })
+      .catch(error => {
+        throw error;
+      });
+  }
+
+  static fetchCommunityStatistics(distributorIdList) {
+    const separator = ",";
+    const joinedWith = distributorIdList.join(separator);
+    const url = `http://api.ce.nicovideo.jp/api/v1/community.array?id=${joinedWith}`;
+    return axios
+      .get(url)
+      .then(response => {
+        if (response.status != 200) {
+          throw new Error("request failed.");
+        } else {
+          let ret;
+          parseString(response.data, (err, result) => {
+            if (result.nicovideo_community_response.error != null) {
+              ret = []
+            } else {
+              ret = result.nicovideo_community_response.community;
+            }
+          });
+          return ret;
+        }
       })
       .catch(error => {
         throw error;

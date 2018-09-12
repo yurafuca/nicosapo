@@ -61,7 +61,7 @@ class Streams {
         return;
 
       // コメント数・来場者数読み込み
-      Api.fetchVideoInfo(thumbnail._id).then(res => {
+      Api.fetchVideoStatistics(thumbnail._id).then(res => {
         const {
           watchCount,
           commentCount

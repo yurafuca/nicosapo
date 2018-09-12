@@ -5,6 +5,7 @@ import NotificationList from "../components/NotificationList";
 import AutoEnterList from "../components/AutoEnterList";
 import Button from "../components/Button";
 import Badge from "../modules/Badge";
+import ExcludeList from "./ExcludeList";
 
 function compare(a, b) {
   if (a < b) return -1;
@@ -142,6 +143,7 @@ export default class Settings extends React.Component {
   }
 
   render() {
+    console.log(this.state);
     return (
       <div>
         <div className="content">
@@ -168,6 +170,9 @@ export default class Settings extends React.Component {
               </div>
               <div className={this.state.selectedMenu === "auto-community" ? "item selected" : "item"} data-menu="auto-community" onClick={this.clickMenu}>
                 自動入場リスト（CH・コミュ）
+              </div>
+              <div className={this.state.selectedMenu === "exclude-from-search" ? "item selected" : "item"} data-menu="exclude-from-search" onClick={this.clickMenu}>
+                検索タブの除外リスト
               </div>
             </div>
             <div className="wrapper menu float-left">
@@ -349,6 +354,18 @@ export default class Settings extends React.Component {
                   <h1 className="appicon">自動入場が有効になっているCH・コミュ</h1>
                   <div id="listgroup-community">
                     <AutoEnterList type="community" />
+                  </div>
+                </div>
+              );
+            }
+          })()}
+          {(() => {
+            if (this.state.selectedMenu == "exclude-from-search") {
+              return (
+                <div className="wrapper">
+                  <h1 className="appicon">検索タブの除外リスト</h1>
+                  <div id="listgroup-community">
+                    <ExcludeList />
                   </div>
                 </div>
               );
