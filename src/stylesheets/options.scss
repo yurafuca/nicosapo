@@ -48,7 +48,7 @@ html {
 body {
   color: #24292e;
   margin: 0;
-  font-family: "Lucida Grande", "segoe UI", "ヒラギノ丸ゴ ProN W4",
+  font-family: "Noto Sans Japanese", "Lucida Grande", "segoe UI", "ヒラギノ丸ゴ ProN W4",
     "Hiragino Maru Gothic ProN", Meiryo, Arial, sans-serif;
 }
 p {
@@ -92,7 +92,8 @@ p {
       margin-top: 3px;
     }
     .appicon {
-      background-color: #f6f8fa;
+      color: #586069;
+      background-color: #f3f5f8;
       padding: 0 10px;
       line-height: 38px;
       font-size: 13px;
@@ -468,6 +469,10 @@ img {
 
 .text-vividgray {
   color: #586069 !important;
+}
+
+label:last-child {
+  margin-left: 10px;
 }
 
 .switcher-label {

@@ -50,7 +50,8 @@ export default class Settings extends React.Component {
       // 'options.autoEnter.cancelList':       [],
       "options.autoEnter.cancel.onIdle": false,
       "options.idle.minute": 20,
-      "options.hideBadge.enable": "disable"
+      "options.hideBadge.enable": "disable",
+      "options.excludeMemberOnly.enable": false
     };
     return state;
   }
@@ -158,6 +159,9 @@ export default class Settings extends React.Component {
               </div>
               <div className={this.state.selectedMenu === "popup" ? "item selected" : "item"} data-menu="popup" onClick={this.clickMenu}>
                 ポップアップ・バッジ
+              </div>
+              <div className={this.state.selectedMenu === "search" ? "item selected" : "item"} data-menu="search" onClick={this.clickMenu}>
+                検索
               </div>
             </div>
             <div className="wrapper menu float-left">
@@ -316,6 +320,26 @@ export default class Settings extends React.Component {
                       </label>
                       <label>
                         <input type="radio" name="options.hideBadge.enable" value={"disable"} checked={this.state["options.hideBadge.enable"] == "disable"} onChange={this.onChange} /> 「0」と表示する
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              );
+            }
+          })()}
+          {(() => {
+            if (this.state.selectedMenu == "search") {
+              return (
+                <div className="wrapper">
+                  <h1 className="appicon">検索</h1>
+                  <div className="items">
+                    <div className="item">
+                      <h3>コミュニティ限定番組を検索結果から除外する</h3>
+                      <label>
+                        <input type="radio" name="options.excludeMemberOnly.enable" value={"enable"} checked={this.state["options.excludeMemberOnly.enable"] == "enable"} onChange={this.onChange} /> 有効
+                      </label>
+                      <label>
+                        <input type="radio" name="options.excludeMemberOnly.enable" value={"disable"} checked={this.state["options.excludeMemberOnly.enable"] == "disable"} onChange={this.onChange} /> 無効
                       </label>
                     </div>
                   </div>

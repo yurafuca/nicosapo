@@ -124,6 +124,7 @@ export default class Search {
         thumbParam.title = data.title;
         thumbParam.viewCounter = data.viewCounter;
         thumbParam.commentCounter = data.commentCounter;
+        thumbParam.memberOnly = data.memberOnly;
         const foo = new Date(data.startTime);
         const bar = foo.getTime();
         const baz = new Date().getTime();
@@ -146,7 +147,7 @@ export default class Search {
   }
 
   getResultElement(props) {
-    const { thumbnail, url, title, description, viewCounter, commentCounter, lapsedTime } = props;
+    const { thumbnail, url, title, description, viewCounter, commentCounter, lapsedTime, memberOnly } = props;
 
     const isCannotBeExcluded = thumbnail === null;
 
@@ -181,12 +182,26 @@ export default class Search {
       resultParent.appendChild(excludeButton);
     }
 
+    const imgParent = document.createElement("a");
+    imgParent.href = url;
+    imgParent.target = "_blank";
+
+    const badge = document.createElement("span");
+    badge.className = "community-badge community-badge-small";
+    badge.textContent = "コミュ限";
+
     const img = document.createElement("img");
     img.alt = "";
     img.className = "avatar";
     img.src = thumbnail;
     img.style.height = 55;
     img.style.width = 55;
+
+    imgParent.appendChild(img);
+
+    if (memberOnly) {
+      imgParent.appendChild(badge);
+    }
 
     const titleParent = document.createElement("span");
     titleParent.className = "meta-title";
@@ -209,7 +224,7 @@ export default class Search {
     meta.className = "meta-status text-small text-gray";
     meta.textContent = `${viewCounter} 来場者 · ${commentCounter} コメント · ${lapsedTime} 分経過`;
 
-    resultChild.appendChild(img);
+    resultChild.appendChild(imgParent);
     resultChild.appendChild(titleParent);
     resultChild.appendChild(desc);
     resultChild.appendChild(br);
