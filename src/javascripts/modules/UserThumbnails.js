@@ -1,5 +1,5 @@
+import moment from 'moment';
 import Common from "../common/Common";
-import Time from "../common/Time";
 
 export default class UserThumbnails {
   static getParams(programs, isShowReservedStream = false) {
@@ -12,7 +12,7 @@ export default class UserThumbnails {
     const thumbParams = [];
     let index = 0;
 
-    programs.forEach((program) => {
+    programs.forEach(program => {
       const isReserved = UserThumbnails.isReserved(program);
 
       const thumbParam = {};
@@ -32,16 +32,30 @@ export default class UserThumbnails {
       // => "03/15(木)"
 
       const dateJpnYear = `${new Date().getFullYear()}/${dateJpnMin}`;
-      // => "2018/03/15(木)"
+      // => "2018/03/15(木)"`
 
       const timeJpn = dateJpnOrig.match(/\d{2}:\d{2}/)[0];
       // => "18:00"
 
-      const dateJpn = `${dateJpnYear}${timeJpn}`;
+      const hour = Number(timeJpn.split(':')[0]);
+      // => 18
+
+      const minute = Number(timeJpn.split(':')[1]);
+      //
+
+      const cutoffHour = Math.min(hour, 23);
+      // => 18
+
+      const restHour = hour - cutoffHour;
+      // hour === 27, cutoffHour === 23 なら 4
+
+      const dateJpn = `${dateJpnYear} ${cutoffHour}:${minute}`;
       // => "2018/03/13(火) 18:00"
 
-      // 24 時超えるとバグる
-      const date = new Date(Date.parse(dateJpn));
+      const start = moment(dateJpn);
+      start.add(restHour, 'hours');
+
+      const date = new Date(start);
 
       thumbParam.openDate = date;
 

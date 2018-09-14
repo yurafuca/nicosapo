@@ -22,6 +22,7 @@
     "blacklist": "^1.1.4",
     "bootstrap-toggle": "^2.2.2",
     "jquery": "^3.1.1",
+    "moment": "^2.22.2",
     "react": "^16.2.0",
     "react-bootstrap": "^0.32.1",
     "react-dom": "^16.2.0",
