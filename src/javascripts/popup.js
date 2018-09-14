@@ -1,6 +1,5 @@
 import store from "store";
 import Api from "./api/Api";
-import Common from "./common/Common";
 import UserThumbnails from "./modules/UserThumbnails";
 import OfficialThumbnails from "./modules/OfficialThumbnails";
 import Thumbnail from "./modules/Thumbnail";
@@ -48,8 +47,6 @@ class Streams {
       message.textContent = "フォロー中のコミュニティ・チャンネルが放送している番組はありません 😴";
       container.appendChild(message);
     }
-
-    let catchCount = 0;
 
     params.forEach(param => {
       const thumbnail = new Thumbnail();
@@ -99,7 +96,7 @@ class Tabs {
       ctnr.style.overflowY = "scroll";
     }
 
-    Elements.remove(document.querySelectorAll(".community-hover-wrapper"));
+    Elements.remove(document.querySelectorAll(".community-hover"));
     Elements.remove(document.querySelectorAll(".message"));
 
     this._deselectAll();
