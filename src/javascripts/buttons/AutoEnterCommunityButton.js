@@ -17,12 +17,12 @@ export default class AutoEnterCommunityButton extends React.Component {
     this._popoverMessage = (
       <span>
         このコミュニティ・チャンネルが放送を始めたとき自動で枠を新しいタブで開きます．<br />
-        <strong>📢注意: </strong>
+        <strong>📍NOTE： </strong>
         <font color="#24963e">
           負荷軽減のため最大登録数は 5 を目安にしてください
         </font>
         <br />
-        <strong>📢注意: </strong>
+        <strong>📍NOTE： </strong>
         <font color="#24963e">
           自動次枠移動を オン にすると自動入場しません
         </font>
@@ -116,10 +116,10 @@ export default class AutoEnterCommunityButton extends React.Component {
         ).text();
         break;
       case "MODERN_CAST_PAGE":
-        title = $("span[class^='___broadcaster___'] a")
+        title = $("a[class^='___social-group-anchor___']").text();
+        owner = $("span[class^='___broadcaster___'] a")
           .first()
           .text();
-        owner = $("a[class^='___social-group-anchor___']").text();
         break;
       default:
     }
