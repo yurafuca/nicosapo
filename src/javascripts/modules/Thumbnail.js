@@ -229,7 +229,6 @@ export default class Thumbnail {
       if (res.data.data.length === 0)
         return;
       if (this.isFetched()) {
-        console.log(1);
         return;
       }
       const {
