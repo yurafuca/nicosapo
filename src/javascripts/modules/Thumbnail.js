@@ -97,14 +97,6 @@ export default class Thumbnail {
     else
       h = '';
 
-    if (Number.isNaN(s) || s === "NaN"){
-      console.error("currentDate", currentDate);
-      console.error("elapsedTime", elapsedTime);
-      console.error("h", h);
-      console.error("m", m);
-      console.error("s", s);
-    }
-
     return `${h}${m}:${s}`;
   }
 

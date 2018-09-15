@@ -14,7 +14,7 @@ $forest_green: #228b22;
 $color_thunderbird_approx: #bd2c00;
 $color_mine_shaft_approx: #333;
 $color_tamarillo_approx: #911;
-$color_tapa_approx: #767676;
+$color_tapa_approx: #888;
 $color_gallery_approx: #eee;
 $color_alabaster_approx: #fcfcfc;
 $color_quill_gray_approx: #d5d5d5;
@@ -176,6 +176,15 @@ p {
   display: inline;
   color: #24963e;
   margin-left: 5px;
+}
+.margin-top-10 {
+  margin-top: 10px;
+}
+.margin-top-15 {
+  margin-top: 15px;
+}
+.gray {
+  color: rgb(118, 118, 118);
 }
 .green {
   color: #24963e;
@@ -415,6 +424,7 @@ img {
   margin-top: 10px;
   font-size: 13px;
   color: $color_tapa_approx;
+  line-height: 20px;
 }
 .clearfix {
   display: block;
@@ -480,6 +490,8 @@ label {
     margin-right: 4px;
   }
 }
+
+
 
 .switcher-label {
   position: absolute;

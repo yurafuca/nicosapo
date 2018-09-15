@@ -445,16 +445,26 @@ export default class Settings extends React.Component {
                     </div>
                     <p>ニコニコ生放送の視聴をサポートする Google Chrome Extension</p>
                     <p>バージョン: {chrome.runtime.getManifest().version}</p>
-                    <p>
-                      Twitter: <a href="https://twitter.com/nicosapo_dev">@nicosapo_dev</a>
-                    </p>
-                    <p>
-                      Author: <a href="https://twitter.com/yurafuca">@yurafuca</a>
-                    </p>
-                    <p>
-                      GitHub: <a href="https://github.com/yurafuca/nicosapo">nicosapo</a>
-                    </p>
+
                   </div>
+                  <h1 className="appicon">サポート</h1>
+                  <p className="note gray margin-top-10">Twitter でにこさぽのサポートをしています</p>
+                  <p>
+                    <a href="https://twitter.com/nicosapo_dev" target="_blank">@nicosapo_dev</a>
+                  </p>
+                  <p className="note gray margin-top-15" target="_blank">にこさぽの使いかたを確認できます</p>
+                  <p>
+                    <a href="https://github.com/yurafuca/nicosapo/wiki" target="_blank">nicosapo wiki</a>
+                  </p>
+                  <h1 className="appicon">作者</h1>
+                  <p className="note gray margin-top-10">Twitter</p>
+                  <p>
+                    <a href="https://twitter.com/yurafuca" target="_blank">@yurafuca</a>
+                  </p>
+                  <p className="note gray margin-top-15" target="_blank">リポジトリ</p>
+                  <p>
+                    <a href="https://github.com/yurafuca/nicosapo/" target="_blank">yurafuca/nicosapo</a>
+                  </p>
                 </div>
               );
             }
@@ -465,7 +475,7 @@ export default class Settings extends React.Component {
                 <div className="wrapper" style={{ marginTop: "20px" }}>
                   <h1 className="appicon">作者にカンパする</h1>
                   <div className="items">
-                    <span className="campa">にこさぽの開発を応援してくださる方はよろしくお願いします．今後の開発の励みになります．😘</span>
+                    <span className="campa">にこさぽはユーザーのみなさまの投げ銭によって開発されています．このアプリに課金してもいいよという方はぜひご協力ください 😉</span>
                     <p>
                       <a target="_blank" href="http://amzn.asia/3CJmj5o">
                         Amazon ほしいものリスト - ほしい本

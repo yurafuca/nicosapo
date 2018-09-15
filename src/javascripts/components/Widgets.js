@@ -78,7 +78,7 @@ export default class Widgets extends React.Component {
     }
     let wrapper = null;
     if (this.props.requireInline) {
-      wrapper = <div style={{ display: "inline-block" }}>{buttonDoms}</div>;
+      wrapper = <div style={{ display: "flex", position: "relative", top: "2px" }}>{buttonDoms}</div>;
     } else {
       wrapper = <div>{buttonDoms}</div>;
     }
