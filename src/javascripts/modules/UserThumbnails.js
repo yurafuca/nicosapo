@@ -31,28 +31,33 @@ export default class UserThumbnails {
       const dateJpnMin = dateJpnOrig.split(" ")[0];
       // => "03/15(木)"
 
-      const dateJpnYear = `${new Date().getFullYear()}/${dateJpnMin}`;
-      // => "2018/03/15(木)"`
+      const dateJpnWithoutDay = dateJpnMin.split("(")[0];
+      // => "03/15"
+
+      const dateJpnYear = `${new Date().getFullYear()}/${dateJpnWithoutDay}`;
+      // => "2018/03/15"`
 
       const timeJpn = dateJpnOrig.match(/\d{2}:\d{2}/)[0];
       // => "18:00"
 
-      const hour = Number(timeJpn.split(':')[0]);
+      const hour = timeJpn.split(':')[0];
       // => 18
 
-      const minute = Number(timeJpn.split(':')[1]);
-      //
+      const minute = timeJpn.split(':')[1];
+      // => 00
 
-      const cutoffHour = Math.min(hour, 23);
+      const cutoffHour = `0${Math.min(hour, 23)}`.slice(-2);
       // => 18
 
       const restHour = hour - cutoffHour;
       // hour === 27, cutoffHour === 23 なら 4
 
       const dateJpn = `${dateJpnYear} ${cutoffHour}:${minute}`;
-      // => "2018/03/13(火) 18:00"
+      // => "2018/03/13 18:00"
 
-      const start = moment(dateJpn);
+      console.log(dateJpn.replace(/[\t\r\n]/g, ""));
+
+      const start = moment(dateJpn.replace(/[\t\r\n]/g, "").replace(/\//g, "-"));
       start.add(restHour, 'hours');
 
       const date = new Date(start);
