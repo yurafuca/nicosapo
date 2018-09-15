@@ -219,16 +219,13 @@ export default class Settings extends React.Component {
                     </div>
                     <div className="item">
                       <h3>自動入場を離席状態のときに自動で無効にする</h3>
-                      <p className="note green" style={{ marginBottom: "0.3em" }}>
-                        離席時や就寝時に放送の音声が再生されることを防ぎます．
-                      </p>
+
                       <label>
-                        <input type="radio" name="options.autoEnter.cancel.onIdle" onChange={this.onChange} value={false} checked={!this.state["options.autoEnter.cancel.onIdle"]} />無効にしない（通常どおり入場）
+                        <input type="radio" name="options.autoEnter.cancel.onIdle" onChange={this.onChange} value={false} checked={!this.state["options.autoEnter.cancel.onIdle"]} /> 無効にしない（通常どおり入場）
                       </label>
                       <label>
-                        <input type="radio" name="options.autoEnter.cancel.onIdle" onChange={this.onChange} value={true} checked={this.state["options.autoEnter.cancel.onIdle"]} />無効にする
+                        <input type="radio" name="options.autoEnter.cancel.onIdle" onChange={this.onChange} value={true} checked={this.state["options.autoEnter.cancel.onIdle"]} /> 無効にする
                       </label>
-                      <br />
                     </div>
                     <div className="item">
                       <h3>離席状態になるまでの時間</h3>
@@ -443,7 +440,7 @@ export default class Settings extends React.Component {
                   <div id="appinfo" style={{ textAlign: "center", margin: "20px auto" }}>
                     <div id="logo">
                       <a target="_blank" href="https://goo.gl/UWX5H2">
-                        <img src="../images/logo.png" style={{ width: "500px" }} />
+                        <img src="../images/nicosapo_2x.png" style={{ width: "360px", height: "128px" }}/>
                       </a>
                     </div>
                     <p>ニコニコ生放送の視聴をサポートする Google Chrome Extension</p>

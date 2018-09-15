@@ -471,8 +471,14 @@ img {
   color: #586069 !important;
 }
 
-label:last-child {
-  margin-left: 10px;
+
+label {
+  &:last-child {
+    margin-left: 15px;
+  }
+  input[type="radio"] {
+    margin-right: 4px;
+  }
 }
 
 .switcher-label {
