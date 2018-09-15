@@ -163,6 +163,7 @@ export default class Search {
     const excludeButton = document.createElement("div");
     excludeButton.className = "exclude-button";
     excludeButton.textContent = "除外";
+    excludeButton.dataset.memberOnly = memberOnly;
     excludeButton.dataset.distributorId = distributorId;
     excludeButton.dataset.thumbnail = thumbnail;
     excludeButton.dataset.keyword = this.getCurrentQuery();
@@ -199,6 +200,7 @@ export default class Search {
 
     imgParent.appendChild(img);
 
+    // 公式番組は null の場合がある
     if (memberOnly) {
       imgParent.appendChild(badge);
     }
@@ -314,16 +316,29 @@ export default class Search {
   }
 
   removeExcludedDistributors() {
-    // 削除
+    const resultArea = document.getElementById("search-result");
+    const isEnableExcludeMemberOnly = store.get("options.excludeMemberOnly.enable") == "enable";
+
+    // 除外リスト
     const excludedDistributors = store.get("search.item.exclude") || [];
     const distributorIds = excludedDistributors.map(distributor => distributor.id);
-    const resultArea = document.getElementById("search-result");
+
+    // 削除
     const communities = resultArea.childNodes;
     [...communities].forEach(community => {
       const excludeButton = community.querySelector(".exclude-button");
       if (excludeButton == null) {
         return false;
       }
+
+      // コミュ限除外が有効になっていればコミュ限を削除
+      const isMemberOnly = excludeButton.dataset.memberOnly == "true";
+      if (isMemberOnly && isEnableExcludeMemberOnly) {
+        community.remove();
+        return;
+      }
+
+      // 除外リストに登録されていれば削除
       const distributorId = excludeButton.dataset.distributorId;
       if (distributorIds.includes(distributorId)) {
         community.remove();
