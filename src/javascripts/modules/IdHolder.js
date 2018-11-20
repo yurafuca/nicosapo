@@ -2,7 +2,7 @@ import $ from "jquery";
 
 function getLiveId() {
   const url = $('meta[property="og:url"]').attr("content");
-  const re = /http:\/\/live\.nicovideo\.jp\/watch\/lv([0-9]+)/;
+  const re = /https:\/\/live\.nicovideo\.jp\/watch\/lv([0-9]+)/;
 
   if (re.exec(url)) {
     let liveId = `lv${re.exec(url)[1]}`;
