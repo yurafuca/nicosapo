@@ -60,6 +60,11 @@ export default class NewCastChecker {
   }
 
   checkNewCast() {
+    // Ignore when id is not properly parsed.
+    // TODO: Show notification to users.
+    if (idHolder.liveId == null || idHolder.communityId == null) {
+      return
+    }
     Api.isOpen(idHolder.liveId).then(response => {
       if (response.isOpen) {
         if (_prolongReceiver) {
