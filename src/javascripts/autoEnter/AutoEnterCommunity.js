@@ -25,9 +25,9 @@ export default class AutoEnterCommunity {
       const storagedData = store.get(_listKey) || {};
       if (response.isOpen) {
         const lastState = storagedData[response.requestId].state;
+        storagedData[response.requestId].state = "onair";
+        store.set(_listKey, storagedData);
         if (lastState === "offair") {
-          storagedData[response.requestId].state = "onair";
-          store.set(_listKey, storagedData);
           // 自動次枠移動が有効になっている場合は無視する．
           const tabId = NiconamaTabs.getTabId(id);
           if (tabId) {

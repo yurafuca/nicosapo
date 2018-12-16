@@ -23,7 +23,7 @@ function getCommunityId() {
   }
 
   const communityUrl2 = document.querySelector('[class^=___provider___]')
-  const re2 = /https:\/\/(com|ch)\.nicovideo\.jp\/(community|channel)\/([\x21-\x7e]+)/;
+  const re2 = /https?:\/\/(com|ch)\.nicovideo\.jp\/(community|channel)\/([\x21-\x7e]+)/;
 
   // チャンネル放送/公式放送
   if (communityUrl2 != null && re2.exec(communityUrl2)) {
@@ -32,7 +32,7 @@ function getCommunityId() {
   }
 
   const communityUrl3 = window.location.href;
-  const re3 = /https:\/\/com\.nicovideo\.jp\/community\/(co[0-9]+)/;
+  const re3 = /https?:\/\/com\.nicovideo\.jp\/community\/(co[0-9]+)/;
 
   // コミュニティページ
   if (re3.exec(communityUrl3)) {
