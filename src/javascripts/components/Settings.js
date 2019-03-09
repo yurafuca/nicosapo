@@ -5,6 +5,7 @@ import NotificationList from "../components/NotificationList";
 import AutoEnterList from "../components/AutoEnterList";
 import Button from "../components/Button";
 import Badge from "../modules/Badge";
+import ExcludeList from "./ExcludeList";
 
 function compare(a, b) {
   if (a < b) return -1;
@@ -49,7 +50,8 @@ export default class Settings extends React.Component {
       // 'options.autoEnter.cancelList':       [],
       "options.autoEnter.cancel.onIdle": false,
       "options.idle.minute": 20,
-      "options.hideBadge.enable": "disable"
+      "options.hideBadge.enable": "disable",
+      "options.excludeMemberOnly.enable": false
     };
     return state;
   }
@@ -142,6 +144,7 @@ export default class Settings extends React.Component {
   }
 
   render() {
+    console.log(this.state);
     return (
       <div>
         <div className="content">
@@ -157,6 +160,9 @@ export default class Settings extends React.Component {
               <div className={this.state.selectedMenu === "popup" ? "item selected" : "item"} data-menu="popup" onClick={this.clickMenu}>
                 ポップアップ・バッジ
               </div>
+              <div className={this.state.selectedMenu === "search" ? "item selected" : "item"} data-menu="search" onClick={this.clickMenu}>
+                検索
+              </div>
             </div>
             <div className="wrapper menu float-left">
               <h1 className="appicon">リストの管理</h1>
@@ -168,6 +174,9 @@ export default class Settings extends React.Component {
               </div>
               <div className={this.state.selectedMenu === "auto-community" ? "item selected" : "item"} data-menu="auto-community" onClick={this.clickMenu}>
                 自動入場リスト（CH・コミュ）
+              </div>
+              <div className={this.state.selectedMenu === "exclude-from-search" ? "item selected" : "item"} data-menu="exclude-from-search" onClick={this.clickMenu}>
+                検索結果の除外リスト
               </div>
             </div>
             <div className="wrapper menu float-left">
@@ -210,16 +219,13 @@ export default class Settings extends React.Component {
                     </div>
                     <div className="item">
                       <h3>自動入場を離席状態のときに自動で無効にする</h3>
-                      <p className="note green" style={{ marginBottom: "0.3em" }}>
-                        離席時や就寝時に放送の音声が再生されることを防ぎます．
-                      </p>
+
                       <label>
-                        <input type="radio" name="options.autoEnter.cancel.onIdle" onChange={this.onChange} value={false} checked={!this.state["options.autoEnter.cancel.onIdle"]} />無効にしない（通常どおり入場）
+                        <input type="radio" name="options.autoEnter.cancel.onIdle" onChange={this.onChange} value={false} checked={!this.state["options.autoEnter.cancel.onIdle"]} /> 無効にしない（通常どおり入場）
                       </label>
                       <label>
-                        <input type="radio" name="options.autoEnter.cancel.onIdle" onChange={this.onChange} value={true} checked={this.state["options.autoEnter.cancel.onIdle"]} />無効にする
+                        <input type="radio" name="options.autoEnter.cancel.onIdle" onChange={this.onChange} value={true} checked={this.state["options.autoEnter.cancel.onIdle"]} /> 無効にする
                       </label>
-                      <br />
                     </div>
                     <div className="item">
                       <h3>離席状態になるまでの時間</h3>
@@ -319,6 +325,26 @@ export default class Settings extends React.Component {
             }
           })()}
           {(() => {
+            if (this.state.selectedMenu == "search") {
+              return (
+                <div className="wrapper">
+                  <h1 className="appicon">検索</h1>
+                  <div className="items">
+                    <div className="item">
+                      <h3>コミュニティ限定番組を検索結果から除外する</h3>
+                      <label>
+                        <input type="radio" name="options.excludeMemberOnly.enable" value={"enable"} checked={this.state["options.excludeMemberOnly.enable"] == "enable"} onChange={this.onChange} /> 有効
+                      </label>
+                      <label>
+                        <input type="radio" name="options.excludeMemberOnly.enable" value={"disable"} checked={this.state["options.excludeMemberOnly.enable"] == "disable"} onChange={this.onChange} /> 無効
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              );
+            }
+          })()}
+          {(() => {
             if (this.state.selectedMenu == "specify-notification") {
               return (
                 <div className="wrapper">
@@ -349,6 +375,18 @@ export default class Settings extends React.Component {
                   <h1 className="appicon">自動入場が有効になっているCH・コミュ</h1>
                   <div id="listgroup-community">
                     <AutoEnterList type="community" />
+                  </div>
+                </div>
+              );
+            }
+          })()}
+          {(() => {
+            if (this.state.selectedMenu == "exclude-from-search") {
+              return (
+                <div className="wrapper">
+                  <h1 className="appicon">検索結果の除外リスト</h1>
+                  <div id="listgroup-community">
+                    <ExcludeList />
                   </div>
                 </div>
               );
@@ -402,21 +440,31 @@ export default class Settings extends React.Component {
                   <div id="appinfo" style={{ textAlign: "center", margin: "20px auto" }}>
                     <div id="logo">
                       <a target="_blank" href="https://goo.gl/UWX5H2">
-                        <img src="../images/logo.png" style={{ width: "500px" }} />
+                        <img src="../images/nicosapo_2x.png" style={{ width: "360px", height: "128px" }}/>
                       </a>
                     </div>
                     <p>ニコニコ生放送の視聴をサポートする Google Chrome Extension</p>
                     <p>バージョン: {chrome.runtime.getManifest().version}</p>
-                    <p>
-                      Twitter: <a href="https://twitter.com/nicosapo_dev">@nicosapo_dev</a>
-                    </p>
-                    <p>
-                      Author: <a href="https://twitter.com/yurafuca">@yurafuca</a>
-                    </p>
-                    <p>
-                      GitHub: <a href="https://github.com/yurafuca/nicosapo">nicosapo</a>
-                    </p>
+
                   </div>
+                  <h1 className="appicon">サポート</h1>
+                  <p className="note gray margin-top-10">Twitter でにこさぽのサポートをしています</p>
+                  <p>
+                    <a href="https://twitter.com/nicosapo_dev" target="_blank">@nicosapo_dev</a>
+                  </p>
+                  <p className="note gray margin-top-15" target="_blank">にこさぽの使いかたを確認できます</p>
+                  <p>
+                    <a href="https://github.com/yurafuca/nicosapo/wiki" target="_blank">nicosapo wiki</a>
+                  </p>
+                  <h1 className="appicon">作者</h1>
+                  <p className="note gray margin-top-10">Twitter</p>
+                  <p>
+                    <a href="https://twitter.com/yurafuca" target="_blank">@yurafuca</a>
+                  </p>
+                  <p className="note gray margin-top-15" target="_blank">リポジトリ</p>
+                  <p>
+                    <a href="https://github.com/yurafuca/nicosapo/" target="_blank">yurafuca/nicosapo</a>
+                  </p>
                 </div>
               );
             }
@@ -427,14 +475,14 @@ export default class Settings extends React.Component {
                 <div className="wrapper" style={{ marginTop: "20px" }}>
                   <h1 className="appicon">作者にカンパする</h1>
                   <div className="items">
-                    <span className="campa">にこさぽの開発を応援してくださる方はよろしくお願いします．今後の開発の励みになります．😘</span>
+                    <span className="campa">にこさぽはユーザーのみなさまの投げ銭によって開発されています．このアプリに課金してもいいよという方はぜひご協力ください 😉</span>
                     <p>
-                      <a target="_blank" href="http://amzn.asia/3CJmj5o">
+                      <a target="_blank" href="https://amzn.asia/3CJmj5o">
                         Amazon ほしいものリスト - ほしい本
                       </a>
                     </p>
                     <p>
-                      <a target="_blank" href="http://amzn.asia/hqChgj3">
+                      <a target="_blank" href="https://amzn.asia/hqChgj3">
                         Amazon ほしいものリスト - ほしい雑貨
                       </a>
                     </p>

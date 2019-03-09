@@ -22,6 +22,8 @@ export default class Alert {
 
   static _popup($videoInfos) {
     const notification = new WebNotification();
+    console.log("alert!");
+    console.log($videoInfos);
     notification.show($videoInfos);
   }
 }

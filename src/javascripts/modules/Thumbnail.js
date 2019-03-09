@@ -43,7 +43,7 @@ export default class Thumbnail {
     this._element = parser.parseFromString(`
       <div
         id="${this._id}"
-        class="community-hover-wrapper"
+        class="community-tile community-hover"
         data-toggle="tooltip"
         data-placement="top"
         data-title="${this._title}"
@@ -67,7 +67,7 @@ export default class Thumbnail {
 
     if (this._isReserved && this._isOfficial === false) {
       const openDay = document.createElement("p");
-      openDay.innerHTML = `<span class="reserved-message">${this._day}</span>`;
+      openDay.innerHTML = `<span class="community-badge">${this._day}</span>`;
       const div = this._element.querySelector(".side-corner-tag");
       div.className = "side-corner-tag enabled";
       div.appendChild(openDay);
@@ -225,11 +225,10 @@ export default class Thumbnail {
   }
 
   fetchFromRSS() {
-    Api.fetchVideoInfo(this._id, "apiv2", this._title).then((res) => {
+    Api.fetchVideoStatistics(this._id, "apiv2", this._title).then((res) => {
       if (res.data.data.length === 0)
         return;
       if (this.isFetched()) {
-        console.log(1);
         return;
       }
       const {

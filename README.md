@@ -1,164 +1,64 @@
-<p align="center">
-  <img alt="nicosapo" src="https://yurafuca.github.io/resources/nstitle.png">
-</p>
+# nicosapo
 
-<p align="center">
-  Google Chrome Extension for enjoying nicolive.jp FURTHERMORE.
-</p>
+Google Chrome Extension build with React for extending NicoNico Live.
 
----
+<img alt="nicosapo" src="./src/images/popup.png" width='549x'>
 
-# Install
+<img alt="nicosapo" src="./src/images/autoredirect.png" width='549x'>
 
-[にこさぽ - Chrome ウェブストア](https://chrome.google.com/webstore/detail/%E3%83%8B%E3%82%B3%E7%94%9F%E3%83%81%E3%82%A7%E3%83%83%E3%82%AB%E3%83%BC/kfnogdokhemdbbclknmmjpcnmjmpjknc)
 
-# Screenshot
+## Install
 
-![Alt Text](https://yurafuca.github.io/resources/nicosapo_popup.png)
+[Chrome WebStore](https://chrome.google.com/webstore/detail/%E3%83%8B%E3%82%B3%E7%94%9F%E3%83%81%E3%82%A7%E3%83%83%E3%82%AB%E3%83%BC/kfnogdokhemdbbclknmmjpcnmjmpjknc)
 
-# 機能一覧
+## Feature
 
-1. 番組の一覧表示
-1. 検索
-1. 自動次枠移動
-1. 放送通知
-1. 自動入場
-1. 残り時間・終了時刻表示
-1. 延長検知
+1. Popup list of programs
+1. Automatic redirect
+1. Automatic entry
+1. Automatic scroll
+1. Search programs
+1. Notification bar
+    * Show remaining time
+    * Show end time
+    * Notify extension
 
-# 番組の一覧表示
+## Demo
 
-![Alt Text](https://yurafuca.github.io/resources/nicosapo_popup.png)
+<img alt="nicosapo" src="./src/video/demo.gif" width='542px'>
 
-にこさぽのアイコンをクリックすると番組が放送中の番組や予約番組が一覧表示されます．表示される番組はタブで選択できます．
+## Build
 
-| タブ       | 説明                                                                 |
-| ---------- | -------------------------------------------------------------------- |
-| フォロー中 | フォロー中のコミュニティ・チャンネルが放送している番組が表示されます |
-| 予約       | フォロー中のコミュニティ・チャンネルが放送予定の番組が表示されます   |
-| 未来       | 公式チャンネル・非公式チャンネルが放送予定の番組が表示されます       |
-| 検索       | 放送中の番組を検索できます．詳細は「**検索**」を参照してください     |
+Release:
 
-にこさぽのアイコンには「フォロー中」タブのアイテムの数がオレンジのバッジとして表示されます．
+```
+npm run release
+```
 
-| 表示される値 | 説明                                                                 |
-| ------------ | -------------------------------------------------------------------- |
-| 数字         | 「フォロー中」タブのアイテムの数です                                 |
-| x            | ニコニコ動画にログインしていないか，それ以外のエラーが発生しています |
+Build:
 
-# 検索
+```
+npm run build
+```
 
-放送中の番組を検索できます．にこさぽのアイコンをクリックし，「検索」タブをクリックしてください．キーワードには下記のクエリを使用できます．
+Watch:
 
-| クエリ | 例                      | 説明                                                                           |
-| ------ | ----------------------- | ------------------------------------------------------------------------------ |
-| -      | -初音ミク               | 「初音ミク」を概要文・タイトル・タグに含む番組を除外します                     |
-| AND    | 初音ミク AND 歌ってみた | 「初音ミク」と「歌ってみた」を概要文・タイトル・タグに含む番組を検索します     |
-| OR     | 初音ミク OR 歌ってみた  | 「初音ミク」または「歌ってみた」を概要文・タイトル・タグに含む番組を検索します |
+```
+npm run watch
+```
 
-![Alt Text](https://yurafuca.github.io/resources/nicosapo_popup.png)
+## Donate
 
-「お気に入りに登録」ボタンをクリックすると，キーワードをお気に入りに登録できます．おすすめは頻繁に検索するキーワードや長いキーワードを登録することです．
+This application is developed by the user's offer. Please cooperate if you can charge for this extended function. Amazon gift certificates are also welcome.
 
-# 自動次枠移動
+<a href="http://amzn.asia/7MmmuAz" target="_blank">Amazon Wishlist: Book</a>
 
-![Alt Text](https://yurafuca.github.io/resources/nicosapo_auto_redirect.png)
+<a href="http://amzn.asia/38NVAwa" target="_blank">Amazon Wishlist: Sundries</a>
 
-視聴している番組の次枠に自動で移動します．放送用ページに表示される「自動次枠移動」ボタンをクリックすると機能の有効・無効を切り替えられます．
-
-| 表示されるテキスト | 説明                   |
-| ------------------ | ---------------------- |
-| 自動次枠移動: オン | 自動次枠移動が有効です |
-| 自動次枠移動: オフ | 自動次枠移動が無効です |
-
-**Note**
-
-> 番組を開いたときの自動次枠移動の状態は「設定 -> 自動枠移動・自動入場 -> 自動次枠移動をデフォルトで「ON」にする」で設定した値です．配信者ごとに設定は保存されません．
-
-> 放送が修了しても番組を開いているかぎり次枠を検知します．
-
-> 次枠の移動には 1 秒から 60 秒程度のラグが発生します．
-
-# 放送通知
-
-フォロー中の配信者が放送を開始したとき通知を表示します．「設定 -> 通知」から通知音や通知の表示時間などを設定できます．
-
-**Note**
-
-> 通知が表示されるまでに 1 秒から 60 秒程度のラグが発生します．
-
-![Alt Text](https://yurafuca.github.io/resources/nicosapo_notification.png)
-
-# 自動入場
-
-フォロー中の配信者が放送を開始したとき番組を新しいタブで自動で開きます．
-
-自動入場は次の二種類に大別できます．
-
-1. 番組への自動入場
-2. コミュニティ・チャンネルへの自動入場
-
-## 自動入場（番組への自動入場）
-
-![Alt Text](https://yurafuca.github.io/resources/nicosapo_auto_enter.png)
-
-予約画面に自動入場の有効・無効を切り替えるボタンが表示されます．ボタンをクリックすると機能の有効・無効を切り替えられます．「
-
-| 表示されるテキスト | 説明               |
-| ------------------ | ------------------ |
-| 自動入場: オン     | 自動入場が有効です |
-| 自動入場: オフ     | 自動入場が無効です |
-
-**Note**
-
-> 自動入場が完了すると当該番組は自動入場リストから自動的に削除されます．
-
-インストールするとゲートページに自動入場の有効/無効を切り替えるボタンが表示されます．ボタンをクリックするごとにボタンの状態が切り替わります．「自動入場 ON」の状態では自動入場が有効になり，にこさぽ内部の自動入場リストに当該番組が登録されます．一方「自動入場 OFF」の状態では自動入場が無効になり，自動入場リストから当該番組が削除されます．
-
-Google Chrome が起動している間，にこさぽは自動入場リストの中から放送が始まった番組を一定時間ごとにチェックします．放送が始まった番組を検知すると，にこさぽはその番組を自動的に新しいタブで開きます．
-
-## 自動入場（コミュニティ・チャンネルへの自動入場）
-
-![Alt Text](https://yurafuca.github.io/resources/nicosapo_autoenter_community_1.png)
-![Alt Text](https://yurafuca.github.io/resources/nicosapo_autoenter_community_2.png)
-![Alt Text](https://yurafuca.github.io/resources/nicosapo_autoenter_community_3.png)
-
-次のページに新たにボタンが追加されます．
-
-* コミュニティのトップページ
-* 放送ページ
-
-ボタンをクリックすると，システム内部のコミュニティ/チャンネルへの自動入場リストに，当該のコミュニティ/チャンネルが登録されます．自動入場リストは設定画面から管理できます．
-
-にこさぽは一定時間ごとに，自動入場リストに登録されたコミュニティ/チャンネルが放送を開始したか確認します．放送が開始された場合はその放送を新しいタブで開きます．
-
-# 残り時間・終了時間の表示
-
-![Alt Text](https://yurafuca.github.io/resources/nicosapo_extendedbar.png)
-
-プレイヤー上部に通知バーが表示されます．通知バーには次が表示されます．
-
-| 表示される情報 | 説明                                                                       |
-| -------------- | -------------------------------------------------------------------------- |
-| 通知検知       | 放送が延長されたとき「放送が～に延長されました」とメッセージが表示されます |
-| 終了時刻       | 放送が終了する時刻です                                                     |
-| 残り時間       | 放送の残り時間です                                                         |
-
-# 設定画面
-
-インストール後にツールバーに追加されるアイコンを右クリック->設定 から，にこさぽの設定をおこなえます．
-
-![Alt Text](https://yurafuca.github.io/resources/nicosapo_setting.png)
-
-# Develop
-
-watch: `npm run watch`
-release: `npm run release`
-
-# License
+## Licence
 
 MIT
 
-# Author
+## Author
 
-@yurafuca
+<a href="https://twitter.com/yurafuca" target="_blank">@yurafuca</a>

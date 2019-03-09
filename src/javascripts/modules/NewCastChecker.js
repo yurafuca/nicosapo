@@ -11,7 +11,7 @@ chrome.extension.onMessage.addListener((request, sender, sendResponse) => {
 
 const idHolder = new IdHolder();
 const goToCast = liveId => {
-  const baseUrl = "http://live.nicovideo.jp/watch/";
+  const baseUrl = "https://live.nicovideo.jp/watch/";
   const liveUrl = baseUrl + liveId;
   window.location.href = liveUrl;
   // window.location.replace(liveUrl);
@@ -60,6 +60,11 @@ export default class NewCastChecker {
   }
 
   checkNewCast() {
+    // Ignore when id is not properly parsed.
+    // TODO: Show notification to users.
+    if (idHolder.liveId == null || idHolder.communityId == null) {
+      return
+    }
     Api.isOpen(idHolder.liveId).then(response => {
       if (response.isOpen) {
         if (_prolongReceiver) {

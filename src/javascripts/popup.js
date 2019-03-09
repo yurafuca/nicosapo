@@ -1,6 +1,5 @@
 import store from "store";
 import Api from "./api/Api";
-import Common from "./common/Common";
 import UserThumbnails from "./modules/UserThumbnails";
 import OfficialThumbnails from "./modules/OfficialThumbnails";
 import Thumbnail from "./modules/Thumbnail";
@@ -49,8 +48,6 @@ class Streams {
       container.appendChild(message);
     }
 
-    let catchCount = 0;
-
     params.forEach(param => {
       const thumbnail = new Thumbnail();
       thumbnail.setParams(param);
@@ -61,7 +58,7 @@ class Streams {
         return;
 
       // コメント数・来場者数読み込み
-      Api.fetchVideoInfo(thumbnail._id).then(res => {
+      Api.fetchVideoStatistics(thumbnail._id).then(res => {
         const {
           watchCount,
           commentCount
@@ -99,7 +96,7 @@ class Tabs {
       ctnr.style.overflowY = "scroll";
     }
 
-    Elements.remove(document.querySelectorAll(".community-hover-wrapper"));
+    Elements.remove(document.querySelectorAll(".community-hover"));
     Elements.remove(document.querySelectorAll(".message"));
 
     this._deselectAll();

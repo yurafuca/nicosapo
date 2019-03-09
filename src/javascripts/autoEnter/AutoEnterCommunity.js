@@ -7,7 +7,7 @@ const _notificationTitle = "自動入場（コミュニティ/チャンネル）
 
 const _move = (storagedData, id) => {
   console.log("move");
-  chrome.tabs.create({ url: `http://live.nicovideo.jp/watch/${id}` }, () => {
+  chrome.tabs.create({ url: `https://live.nicovideo.jp/watch/${id}` }, () => {
     const options = {
       type: "basic",
       title: _notificationTitle,
@@ -25,9 +25,9 @@ export default class AutoEnterCommunity {
       const storagedData = store.get(_listKey) || {};
       if (response.isOpen) {
         const lastState = storagedData[response.requestId].state;
+        storagedData[response.requestId].state = "onair";
+        store.set(_listKey, storagedData);
         if (lastState === "offair") {
-          storagedData[response.requestId].state = "onair";
-          store.set(_listKey, storagedData);
           // 自動次枠移動が有効になっている場合は無視する．
           const tabId = NiconamaTabs.getTabId(id);
           if (tabId) {

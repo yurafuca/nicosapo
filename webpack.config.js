@@ -3,6 +3,7 @@ const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const path = require("path");
 
 module.exports = [{
+    mode: "development",
     entry: {
       background: "./src/javascripts/background.js",
       content: "./src/javascripts/content.js",
@@ -11,18 +12,19 @@ module.exports = [{
     },
     output: {
       path: path.resolve(__dirname, "./dist/assets/javascripts"),
-      filename: "[name].js"
+      filename: "[name].js",
+      devtoolModuleFilenameTemplate: 'dist/fuck'
     },
     module: {
-      loaders: [{
-          test: /\.jsx?$/,
-          loader: "babel-loader",
-          exclude: /node_modules/,
-          query: {
-            cacheDirectory: true,
-            presets: ["react", "es2015"]
-          }
-        },
+      rules: [{
+        test: /\.jsx?$/,
+        loader: "babel-loader",
+        exclude: /node_modules/,
+        query: {
+          cacheDirectory: true,
+          retainLines: true
+        }
+      },
         {
           test: /\.css$/,
           loaders: ["style-loader", "css-loader?modules"]
@@ -70,12 +72,18 @@ module.exports = [{
         },
       ])
     ],
-    devtool: "source-map",
+    devtool: 'source-map',
+    devServer: {
+      inline: true,
+      port: 8080,
+      historyApiFallback: true
+    },
     resolve: {
       extensions: [".js", ".jsx", ".scss"]
     }
   },
   {
+    mode: "development",
     entry: {
       popup: "./src/stylesheets/popup.scss",
       content: "./src/stylesheets/content.scss",

@@ -1,5 +1,5 @@
+import moment from 'moment';
 import Common from "../common/Common";
-import Time from "../common/Time";
 
 export default class UserThumbnails {
   static getParams(programs, isShowReservedStream = false) {
@@ -12,7 +12,7 @@ export default class UserThumbnails {
     const thumbParams = [];
     let index = 0;
 
-    programs.forEach((program) => {
+    programs.forEach(program => {
       const isReserved = UserThumbnails.isReserved(program);
 
       const thumbParam = {};
@@ -21,7 +21,7 @@ export default class UserThumbnails {
       thumbParam.background = `url('${thumbnailUrl}')`;
       thumbParam.title = program.querySelector("video title").textContent;
       thumbParam.id = program.querySelector("video id").textContent;
-      thumbParam.url = `http://live.nicovideo.jp/watch/${thumbParam.id}`;
+      thumbParam.url = `https://live.nicovideo.jp/watch/${thumbParam.id}`;
       thumbParam.text = thumbParam.title;
 
       const dateJpnOrig = program.querySelector("video open_time_jpstr").textContent;
@@ -31,17 +31,36 @@ export default class UserThumbnails {
       const dateJpnMin = dateJpnOrig.split(" ")[0];
       // => "03/15(木)"
 
-      const dateJpnYear = `${new Date().getFullYear()}/${dateJpnMin}`;
-      // => "2018/03/15(木)"
+      const dateJpnWithoutDay = dateJpnMin.split("(")[0];
+      // => "03/15"
+
+      const dateJpnYear = `${new Date().getFullYear()}/${dateJpnWithoutDay}`;
+      // => "2018/03/15"`
 
       const timeJpn = dateJpnOrig.match(/\d{2}:\d{2}/)[0];
       // => "18:00"
 
-      const dateJpn = `${dateJpnYear}${timeJpn}`;
-      // => "2018/03/13(火) 18:00"
+      const hour = timeJpn.split(':')[0];
+      // => 18
 
-      // 24 時超えるとバグる
-      const date = new Date(Date.parse(dateJpn));
+      const minute = timeJpn.split(':')[1];
+      // => 00
+
+      const cutoffHour = `0${Math.min(hour, 23)}`.slice(-2);
+      // => 18
+
+      const restHour = hour - cutoffHour;
+      // hour === 27, cutoffHour === 23 なら 4
+
+      const dateJpn = `${dateJpnYear} ${cutoffHour}:${minute}`;
+      // => "2018/03/13 18:00"
+
+      console.log(dateJpn.replace(/[\t\r\n]/g, ""));
+
+      const start = moment(dateJpn.replace(/[\t\r\n]/g, "").replace(/\//g, "-"));
+      start.add(restHour, 'hours');
+
+      const date = new Date(start);
 
       thumbParam.openDate = date;
 

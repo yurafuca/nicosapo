@@ -16,12 +16,12 @@ export default class AutoEnterProgramButton extends React.Component {
     this._popoverMessage = (
       <span>
         この番組が始まったとき自動で番組を新しいタブで開きます<br />
-        <strong>📢注意: </strong>
+        <strong>📍 NOTE： </strong>
         <font color="#24963e">
           負荷軽減のため最大登録数は5を目安にしてください
         </font>
         <br />
-        <strong>📢注意: </strong>
+        <strong>📍 NOTE： </strong>
         <font color="#24963e">登録した番組は設定画面より設定できます</font>
       </span>
     );

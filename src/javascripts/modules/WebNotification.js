@@ -29,7 +29,7 @@ export default class WebNotification {
     const tag = e.currentTarget.tag;
     const streamId = tag.replace("nicosapo-", "");
     chrome.tabs.create({
-      url: `http://live.nicovideo.jp/watch/${streamId}`,
+      url: `https://live.nicovideo.jp/watch/${streamId}`,
       active: true
     });
   }

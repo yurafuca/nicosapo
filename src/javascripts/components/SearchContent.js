@@ -43,7 +43,7 @@ export default class SearchContent extends React.Component {
       this.setState({ resultCount: datas.length });
       for (const data of datas) {
         const thumbParam = {};
-        thumbParam.url = `http://live.nicovideo.jp/watch/${data.contentId}`;
+        thumbParam.url = `https://live.nicovideo.jp/watch/${data.contentId}`;
         thumbParam.thumbnail = data.communityIcon;
         thumbParam.description = data.description.replace(/\<.+\>/g, " ");
         thumbParam.title = data.title;

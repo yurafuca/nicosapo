@@ -17,15 +17,15 @@ module.exports = [{
       filename: "[name].js"
     },
     module: {
-      loaders: [{
-          test: /\.jsx?$/,
-          loader: "babel-loader",
-          exclude: /node_modules/,
-          query: {
-            cacheDirectory: true,
-            presets: ["react", "es2015"]
-          }
-        },
+      rules: [{
+        test: /\.jsx?$/,
+        loader: "babel-loader",
+        exclude: /node_modules/,
+        query: {
+          cacheDirectory: true,
+          retainLines: true
+        }
+      },
         {
           test: /\.css$/,
           loaders: ["style-loader", "css-loader?modules"]
@@ -74,8 +74,7 @@ module.exports = [{
       ]),
       new webpack.DefinePlugin({
         "process.env.NODE_ENV": JSON.stringify("production")
-      }),
-      new webpack.optimize.UglifyJsPlugin()
+      })
     ],
     resolve: {
       extensions: [".js", ".jsx", ".scss"]

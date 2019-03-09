@@ -47,7 +47,7 @@ export default class PageType {
     } else {
       return false;
     }
-    // const re = /http:\/\/live2\.nicovideo\.jp\/watch\/lv([0-9]+)/;
+    // const re = /https\/\/live2\.nicovideo\.jp\/watch\/lv([0-9]+)/;
     // const url = window.location.href;
     // return url.match(re);
   }
@@ -59,7 +59,7 @@ export default class PageType {
     } else {
       return false;
     }
-    // const re = /http:\/\/live2\.nicovideo\.jp\/watch\/lv([0-9]+)/;
+    // const re = /https\/\/live2\.nicovideo\.jp\/watch\/lv([0-9]+)/;
     // const url = window.location.href;
     // return url.match(re);
   }

@@ -1,3 +1,5 @@
+/* global Tooltip */
+
 import store from "store";
 import Api from "../api/Api";
 import { showSpinner, hideSpinner } from "./spinner";
@@ -55,6 +57,24 @@ export default class Search {
     this.setQuery(query);
   }
 
+  onClickExclude(el) {
+    const key = "search.item.exclude";
+    const distributorId = el.currentTarget.dataset.distributorId;
+    const excludeList = store.get(key) || [];
+    const newItem = {
+      id: distributorId,
+      thumbnail: el.currentTarget.dataset.thumbnail,
+      title: el.currentTarget.dataset.title,
+      description: el.currentTarget.dataset.description,
+      keyword: el.currentTarget.dataset.keyword
+    };
+    const removed = excludeList.filter(item => item.id !== newItem.id);
+    const added = [...removed, newItem];
+    store.set(key, added);
+
+    this.removeExcludedDistributors();
+  }
+
   setState(state) {
     for (const key in state) {
       this.state[key] = state[key];
@@ -98,12 +118,13 @@ export default class Search {
       const thumbParams = [];
       for (const data of datas) {
         const thumbParam = {};
-        thumbParam.url = `http://live.nicovideo.jp/watch/${data.contentId}`;
+        thumbParam.url = `https://live.nicovideo.jp/watch/${data.contentId}`;
         thumbParam.thumbnail = data.communityIcon;
         thumbParam.description = data.description.replace(/\<.+\>/g, " ");
         thumbParam.title = data.title;
         thumbParam.viewCounter = data.viewCounter;
         thumbParam.commentCounter = data.commentCounter;
+        thumbParam.memberOnly = data.memberOnly;
         const foo = new Date(data.startTime);
         const bar = foo.getTime();
         const baz = new Date().getTime();
@@ -119,28 +140,56 @@ export default class Search {
         result.appendChild(element);
       });
 
-      if (thumbParams.length === 0) {
-        const query = this.getCurrentQuery();
-        const message = document.createElement("div");
-        message.className = "message";
-        message.textContent = `「${query}」を含む放送中の番組はありません 😴`;
-        result.appendChild(message);
-      }
+      this.removeExcludedDistributors();
 
       hideSpinner();
     });
   }
 
   getResultElement(props) {
-    const { thumbnail, url, title, description, viewCounter, commentCounter, lapsedTime } = props;
+    const { thumbnail, url, title, description, viewCounter, commentCounter, lapsedTime, memberOnly } = props;
+
+    const isCannotBeExcluded = thumbnail === null;
+
+    const re = /((co|ch)\d+)\.(jpg|png)/;
+    const distributorId = isCannotBeExcluded ? "" : thumbnail.match(re)[1];
 
     const resultParent = document.createElement("div");
     resultParent.className = "listgroup-item clearfix";
 
-    const resutChild = document.createElement("div");
-    resutChild.className = "list-group-text-block float-left";
+    const resultChild = document.createElement("div");
+    resultChild.className = "list-group-text-block float-left";
 
-    resultParent.appendChild(resutChild);
+    const excludeButton = document.createElement("div");
+    excludeButton.className = "exclude-button";
+    excludeButton.textContent = "除外";
+    excludeButton.dataset.memberOnly = memberOnly;
+    excludeButton.dataset.distributorId = distributorId;
+    excludeButton.dataset.thumbnail = thumbnail;
+    excludeButton.dataset.keyword = this.getCurrentQuery();
+    excludeButton.addEventListener("click", el => {
+      this.onClickExclude(el);
+    });
+
+    new Tooltip(excludeButton, {
+      placement: 'left', // or bottom, left, right, and variations
+      title: "この配信者を検索結果から除外する",
+      template: '<div class="tooltip tooltip-small" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>'
+    });
+
+    resultParent.appendChild(resultChild);
+
+    if (!isCannotBeExcluded) {
+      resultParent.appendChild(excludeButton);
+    }
+
+    const imgParent = document.createElement("a");
+    imgParent.href = url;
+    imgParent.target = "_blank";
+
+    const badge = document.createElement("span");
+    badge.className = "community-badge community-badge-small";
+    badge.textContent = "コミュ限";
 
     const img = document.createElement("img");
     img.alt = "";
@@ -148,6 +197,13 @@ export default class Search {
     img.src = thumbnail;
     img.style.height = 55;
     img.style.width = 55;
+
+    imgParent.appendChild(img);
+
+    // 公式番組は null の場合がある
+    if (memberOnly) {
+      imgParent.appendChild(badge);
+    }
 
     const titleParent = document.createElement("span");
     titleParent.className = "meta-title";
@@ -170,11 +226,11 @@ export default class Search {
     meta.className = "meta-status text-small text-gray";
     meta.textContent = `${viewCounter} 来場者 · ${commentCounter} コメント · ${lapsedTime} 分経過`;
 
-    resutChild.appendChild(img);
-    resutChild.appendChild(titleParent);
-    resutChild.appendChild(desc);
-    resutChild.appendChild(br);
-    resutChild.appendChild(meta);
+    resultChild.appendChild(imgParent);
+    resultChild.appendChild(titleParent);
+    resultChild.appendChild(desc);
+    resultChild.appendChild(br);
+    resultChild.appendChild(meta);
 
     return resultParent;
   }
@@ -183,7 +239,7 @@ export default class Search {
     const input = document.querySelector("#search-input");
     input.title = input.value;
 
-    if (event.key == "Enter") {
+    if (event.key === "Enter") {
       event.preventDefault();
       this.search();
     }
@@ -257,6 +313,46 @@ export default class Search {
     }
 
     return [];
+  }
+
+  removeExcludedDistributors() {
+    const resultArea = document.getElementById("search-result");
+    const isEnableExcludeMemberOnly = store.get("options.excludeMemberOnly.enable") == "enable";
+
+    // 除外リスト
+    const excludedDistributors = store.get("search.item.exclude") || [];
+    const distributorIds = excludedDistributors.map(distributor => distributor.id);
+
+    // 削除
+    const communities = resultArea.childNodes;
+    [...communities].forEach(community => {
+      const excludeButton = community.querySelector(".exclude-button");
+      if (excludeButton == null) {
+        return false;
+      }
+
+      // コミュ限除外が有効になっていればコミュ限を削除
+      const isMemberOnly = excludeButton.dataset.memberOnly == "true";
+      if (isMemberOnly && isEnableExcludeMemberOnly) {
+        community.remove();
+        return;
+      }
+
+      // 除外リストに登録されていれば削除
+      const distributorId = excludeButton.dataset.distributorId;
+      if (distributorIds.includes(distributorId)) {
+        community.remove();
+      }
+    });
+
+    // 0 件の旨を表示
+    if (resultArea.childNodes.length === 0) {
+      const query = this.getCurrentQuery();
+      const message = document.createElement("div");
+      message.className = "message";
+      message.textContent = `「${query}」を含む放送中の番組はありません 😴`;
+      resultArea.appendChild(message);
+    }
   }
 
   search(query = this.getCurrentQuery()) {

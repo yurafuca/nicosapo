@@ -14,7 +14,7 @@ $forest_green: #228b22;
 $color_thunderbird_approx: #bd2c00;
 $color_mine_shaft_approx: #333;
 $color_tamarillo_approx: #911;
-$color_tapa_approx: #767676;
+$color_tapa_approx: #888;
 $color_gallery_approx: #eee;
 $color_alabaster_approx: #fcfcfc;
 $color_quill_gray_approx: #d5d5d5;
@@ -48,7 +48,7 @@ html {
 body {
   color: #24292e;
   margin: 0;
-  font-family: "Lucida Grande", "segoe UI", "ヒラギノ丸ゴ ProN W4",
+  font-family: "Noto Sans Japanese", "Lucida Grande", "segoe UI", "ヒラギノ丸ゴ ProN W4",
     "Hiragino Maru Gothic ProN", Meiryo, Arial, sans-serif;
 }
 p {
@@ -92,15 +92,18 @@ p {
       margin-top: 3px;
     }
     .appicon {
-      background-color: #f6f8fa;
+      color: #586069;
+      background-color: #f3f5f8;
       padding: 0 10px;
       line-height: 38px;
+      font-size: 13px;
+      font-weight: 500;
     }
     .item {
       position: relative;
       color: #0366d6;
       font-size: 13px;
-      line-height: 30px;
+      line-height: 34px;
       padding-left: 10px;
       border-bottom: solid 1px #eee;
       &.selected:before {
@@ -173,6 +176,15 @@ p {
   display: inline;
   color: #24963e;
   margin-left: 5px;
+}
+.margin-top-10 {
+  margin-top: 10px;
+}
+.margin-top-15 {
+  margin-top: 15px;
+}
+.gray {
+  color: rgb(118, 118, 118);
 }
 .green {
   color: #24963e;
@@ -328,21 +340,21 @@ h3 {
   line-height: 20px;
 }
 .btn-danger {
-  color: $color_tamarillo_approx;
+  color: #cb2431;
+  background-color: #fafbfc;
+  background-image: linear-gradient(-180deg, #fafbfc 0%, #eff3f6 90%);
   &:hover {
-    color: $white;
-    background-color: $color_tamarillo_approx;
-    background-image: linear-gradient(
-      $color_carnation_approx,
-      $color_monza_approx
-    );
-    border-color: $color_tamarillo_approx;
+    color: #fff;
+    background-color: #cb2431;
+    background-image: linear-gradient(-180deg, #de4450 0%, #cb2431 90%);
+    border-color: rgba(27,31,35,0.5);
   }
   &:active {
-    @extend %extend_1;
-  }
-  &.selected {
-    @extend %extend_1;
+    color: #fff;
+    background-color: #b5202c;
+    background-image: none;
+    border-color: rgba(27,31,35,0.5);
+    box-shadow: inset 0 0.15em 0.3em rgba(27,31,35,0.15);
   }
 }
 a {
@@ -412,6 +424,7 @@ img {
   margin-top: 10px;
   font-size: 13px;
   color: $color_tapa_approx;
+  line-height: 20px;
 }
 .clearfix {
   display: block;
@@ -467,6 +480,18 @@ img {
 .text-vividgray {
   color: #586069 !important;
 }
+
+
+label {
+  &:last-child {
+    margin-left: 15px;
+  }
+  input[type="radio"] {
+    margin-right: 4px;
+  }
+}
+
+
 
 .switcher-label {
   position: absolute;

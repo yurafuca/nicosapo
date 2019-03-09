@@ -1,6 +1,6 @@
 import React from "react";
 import Time from "../common/Time";
-import AutoEnterItem from "../components/AutoEnterItem";
+import BroadcastItem from "./BroadcastItem";
 import AutoEnterEmpty from "../components/AutoEnterEmpty";
 
 export default class AutoEnterList extends React.Component {
@@ -24,8 +24,8 @@ export default class AutoEnterList extends React.Component {
       },
       response => {
         const itemParams = [];
-        const keysArray = Object.keys(response);
-        keysArray.forEach((id, index) => {
+        const keys = Object.keys(response);
+        keys.forEach((id, index) => {
           const itemParam = {};
           let description;
           if (this.props.type === "community") {
@@ -44,17 +44,17 @@ export default class AutoEnterList extends React.Component {
           itemParam.openDate = response[id]["openDate"];
           switch (this.props.type) {
             case `community`:
-              itemParam.url = `http://com.nicovideo.jp/community/${id}`;
+              itemParam.url = `https://com.nicovideo.jp/community/${id}`;
               break;
             case `program`:
-              itemParam.url = `http://live.nicovideo.jp/gate/${id}`;
+              itemParam.url = `https://live.nicovideo.jp/gate/${id}`;
               break;
             default:
               itemParam.url = `InvalidItemParam`;
               break;
           }
           itemParams.push(itemParam);
-          if (index === keysArray.length - 1) {
+          if (index === keys.length - 1) {
             this.setState({ itemParams: itemParams });
           }
         });
@@ -76,13 +76,13 @@ export default class AutoEnterList extends React.Component {
       key: keys[this.props.type],
       innerKey: id
     });
-    const itemParams = itemParams.filter(param => param.id != id);
+    const itemParams = this.state.itemParams.filter(param => param.id != id);
     this.setState({ itemParams: itemParams });
   }
 
   render() {
     let items = this.state.itemParams.map(itemParam => (
-      <AutoEnterItem
+      <BroadcastItem
         id={itemParam.id}
         type={itemParam.type}
         onClick={itemParam.onClick}
@@ -91,6 +91,7 @@ export default class AutoEnterList extends React.Component {
         title={itemParam.title}
         description={itemParam.description}
         openDate={itemParam.openDate}
+        messageForEmpty={"この番組は終了しました"}
       />
     ));
     if (this.state.itemParams.length === 0) {
