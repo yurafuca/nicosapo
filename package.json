@@ -47,7 +47,6 @@
     "eslint-plugin-prettier": "^3.0.1",
     "eslint-plugin-react": "^7.12.4",
     "extract-text-webpack-plugin": "^4.0.0-beta.0",
-    "jquery": "^3.3.1",
     "jsdom": "^13.2.0",
     "jshint": "^2.10.1",
     "mocha": "^6.0.2",
@@ -61,6 +60,8 @@
     "sloc": "^0.2.1",
     "style-loader": "^0.23.1",
     "to-integer": "^1.0.1",
+    "ts-loader": "^5.3.3",
+    "typescript": "^3.3.3333",
     "webpack": "^4.29.6",
     "webpack-cli": "^3.2.3",
     "webpack-dev-server": "^3.2.1"
