@@ -9,7 +9,7 @@ export default class AutoEnterProgram {
     Api.isOpen(id).then(response => {
       if (response.isOpen) {
         chrome.tabs.create(
-          { url: `http://live.nicovideo.jp/watch/${response.nextLiveId}` },
+          { url: `https://live.nicovideo.jp/watch/${response.nextLiveId}` },
           () => {
             let storagedData = {};
             if (store.get(_listKey)) {

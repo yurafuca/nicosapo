@@ -32,7 +32,7 @@ export default class ExcludeList extends React.Component {
               const communityInResponse = response.find(item => item.id === id);
               const itemParam = [];
               itemParam.id = id;
-              itemParam.url = `http://com.nicovideo.jp/community/${id}`;
+              itemParam.url = `https://com.nicovideo.jp/community/${id}`;
               itemParam.onClick = this.onClick;
               itemParam.thumbnail = thumbnail;
               itemParam.title = name;

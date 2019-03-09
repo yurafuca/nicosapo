@@ -11,7 +11,7 @@ chrome.extension.onMessage.addListener((request, sender, sendResponse) => {
 
 const idHolder = new IdHolder();
 const goToCast = liveId => {
-  const baseUrl = "http://live.nicovideo.jp/watch/";
+  const baseUrl = "https://live.nicovideo.jp/watch/";
   const liveUrl = baseUrl + liveId;
   window.location.href = liveUrl;
   // window.location.replace(liveUrl);

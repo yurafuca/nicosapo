@@ -21,7 +21,7 @@ export default class UserThumbnails {
       thumbParam.background = `url('${thumbnailUrl}')`;
       thumbParam.title = program.querySelector("video title").textContent;
       thumbParam.id = program.querySelector("video id").textContent;
-      thumbParam.url = `http://live.nicovideo.jp/watch/${thumbParam.id}`;
+      thumbParam.url = `https://live.nicovideo.jp/watch/${thumbParam.id}`;
       thumbParam.text = thumbParam.title;
 
       const dateJpnOrig = program.querySelector("video open_time_jpstr").textContent;

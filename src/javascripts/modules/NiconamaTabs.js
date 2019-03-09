@@ -48,7 +48,7 @@ export default class NiconamaTabs {
   }
 
   static isCastPage(url) {
-    const re = /http:\/\/live2?\.nicovideo\.jp\/watch\/lv([0-9]+)/;
+    const re = /https\/\/live2?\.nicovideo\.jp\/watch\/lv([0-9]+)/;
     if (re.exec(url)) {
       const liveId = `lv${re.exec(url)[1]}`;
       return liveId;

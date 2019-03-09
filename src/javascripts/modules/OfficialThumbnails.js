@@ -15,14 +15,14 @@ export default class OfficialThumbnails {
         const communityId = a.href;
         const regexp = /http\:\/\/ch.nicovideo.jp\/channel\/(.+)/;
         const resultarr = regexp.exec(communityId);
-        thumbnailUrl = `http://icon.nimg.jp/channel/${resultarr[1]}.jpg`;
+        thumbnailUrl = `https://icon.nimg.jp/channel/${resultarr[1]}.jpg`;
       } else {
         thumbnailUrl = program.querySelector(".info a img").src;
       }
       thumbParam.background = `url('${thumbnailUrl}')`;
       thumbParam.title = program.querySelector(".video_title").textContent;
       thumbParam.id = `lv${program.querySelector(".video_id").textContent}`;
-      thumbParam.url = `http://live.nicovideo.jp/watch/${thumbParam.id}`;
+      thumbParam.url = `https://live.nicovideo.jp/watch/${thumbParam.id}`;
       thumbParam.text = thumbParam.title;
       thumbParam.index = index;
       thumbParam.openTime = program.querySelector(".reserve") ? `20${program.querySelector(".time").textContent} 開場` : undefined;

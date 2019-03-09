@@ -477,12 +477,12 @@ export default class Settings extends React.Component {
                   <div className="items">
                     <span className="campa">にこさぽはユーザーのみなさまの投げ銭によって開発されています．このアプリに課金してもいいよという方はぜひご協力ください 😉</span>
                     <p>
-                      <a target="_blank" href="http://amzn.asia/3CJmj5o">
+                      <a target="_blank" href="https://amzn.asia/3CJmj5o">
                         Amazon ほしいものリスト - ほしい本
                       </a>
                     </p>
                     <p>
-                      <a target="_blank" href="http://amzn.asia/hqChgj3">
+                      <a target="_blank" href="https://amzn.asia/hqChgj3">
                         Amazon ほしいものリスト - ほしい雑貨
                       </a>
                     </p>

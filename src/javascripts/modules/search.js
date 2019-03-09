@@ -118,7 +118,7 @@ export default class Search {
       const thumbParams = [];
       for (const data of datas) {
         const thumbParam = {};
-        thumbParam.url = `http://live.nicovideo.jp/watch/${data.contentId}`;
+        thumbParam.url = `https://live.nicovideo.jp/watch/${data.contentId}`;
         thumbParam.thumbnail = data.communityIcon;
         thumbParam.description = data.description.replace(/\<.+\>/g, " ");
         thumbParam.title = data.title;

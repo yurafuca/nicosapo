@@ -44,7 +44,7 @@ export default class Api {
   // jQuery オブジェクトでなく JSON を返したい
   static getUserOnair() {
     return new Promise((resolve, reject) => {
-      const url = "http://live.nicovideo.jp/my";
+      const url = " https://live.nicovideo.jp/my";
 
       axios
         .get(url)
@@ -77,7 +77,7 @@ export default class Api {
 
   static getCheckList() {
     return new Promise((resolve, reject) => {
-      const url = "http://flapi.nicovideo.jp/api/getchecklist";
+      const url = "https://flapi.nicovideo.jp/api/getchecklist";
       axios.get(url).then(response => {
         const status = response.data.status;
         switch (status) {
@@ -94,7 +94,7 @@ export default class Api {
 
   static getFutureOnair() {
     return new Promise(resolve => {
-      const url = "http://live.nicovideo.jp/ranking?type=comingsoon&main_provider_type=official";
+      const url = "https://live.nicovideo.jp/ranking?type=comingsoon&main_provider_type=official";
       axios.get(url).then(response => {
         const parser = new DOMParser();
         const html = parser.parseFromString(response.data, "text/html");
@@ -108,7 +108,7 @@ export default class Api {
 
   static getOfficialOnair() {
     return new Promise(resolve => {
-      const url = "http://live.nicovideo.jp/ranking?type=onair&main_provider_type=official";
+      const url = "https://live.nicovideo.jp/ranking?type=onair&main_provider_type=official";
       axios.get(url).then(response => {
         const parser = new DOMParser();
         const html = parser.parseFromString(response.data, "text/html");
@@ -121,7 +121,7 @@ export default class Api {
   static getStatus(param) {
     parameter_nicovideojs.push(param);
     return new Promise(resolve => {
-      const url = "http://watch.live.nicovideo.jp/api/getplayerstatus?v=";
+      const url = "https://watch.live.nicovideo.jp/api/getplayerstatus?v=";
       const parameter = parameter_nicovideojs.shift();
 
       axios
@@ -181,7 +181,7 @@ export default class Api {
         "commentCounter-dsc": "commentCounter",
         "commentCounter-asc": "%2bcommentCounter"
       };
-      const q = `http://api.search.nicovideo.jp/api/v2/live/contents/search?q=${query}` + "&targets=tags,title,description" + "&fields=contentId,title,communityIcon,description,start_time,live_end_time,comment_counter,score_timeshift_reserved,provider_type,tags,member_only,viewCounter,timeshift_enabled" + "&_context=nicosapo" + "&filters%5BliveStatus%5D%5B0%5D=onair" + `&_sort=${sortModes[sortMode]}` + "&_limit=100";
+      const q = `https://api.search.nicovideo.jp/api/v2/live/contents/search?q=${query}` + "&targets=tags,title,description" + "&fields=contentId,title,communityIcon,description,start_time,live_end_time,comment_counter,score_timeshift_reserved,provider_type,tags,member_only,viewCounter,timeshift_enabled" + "&_context=nicosapo" + "&filters%5BliveStatus%5D%5B0%5D=onair" + `&_sort=${sortModes[sortMode]}` + "&_limit=100";
       axios.get(q).then(response => {
         resolve(response.data);
       });
@@ -199,7 +199,7 @@ export default class Api {
         const title = el.querySelector(".title").textContent;
         const thumbnail = el.querySelector(".thmb img").src;
         const id = el.querySelector(".thmb a").href.replace("https://com.nicovideo.jp/community/", ``);
-        const url = `http://com.nicovideo.jp/community/${id}`;
+        const url = `https://com.nicovideo.jp/community/${id}`;
         const community = {
           title: title,
           thumbnail: thumbnail,
@@ -211,7 +211,7 @@ export default class Api {
       return result;
     };
     return new Promise(resolve => {
-      const endpoint = `http://com.nicovideo.jp/community`;
+      const endpoint = `https://com.nicovideo.jp/community`;
       const query = `?page=${pageNum}`;
       axios.get(endpoint + query).then(response => {
         const parsedResponse = parser(response.data);
@@ -224,9 +224,9 @@ export default class Api {
     let url = '';
 
     if (source === "statistics")
-      url = `http://live2.nicovideo.jp/watch/${id}/statistics`;
+      url = `https://live2.nicovideo.jp/watch/${id}/statistics`;
     else if (source === "apiv2")
-      url = `http://api.search.nicovideo.jp/api/v2/live/contents/search?q=${title}&targets=title&fields=contentId,title,viewCounter,commentCounter&filters[liveStatus][0]=onair&_sort=-viewCounter`;
+      url = `https://api.search.nicovideo.jp/api/v2/live/contents/search?q=${title}&targets=title&fields=contentId,title,viewCounter,commentCounter&filters[liveStatus][0]=onair&_sort=-viewCounter`;
 
     const request = axios.get(url);
     return request
@@ -244,7 +244,7 @@ export default class Api {
   static fetchCommunityStatistics(distributorIdList) {
     const separator = ",";
     const joinedWith = distributorIdList.join(separator);
-    const url = `http://api.ce.nicovideo.jp/api/v1/community.array?id=${joinedWith}`;
+    const url = `https://api.ce.nicovideo.jp/api/v1/community.array?id=${joinedWith}`;
     return axios
       .get(url)
       .then(response => {

@@ -7,7 +7,7 @@ const _notificationTitle = "自動入場（コミュニティ/チャンネル）
 
 const _move = (storagedData, id) => {
   console.log("move");
-  chrome.tabs.create({ url: `http://live.nicovideo.jp/watch/${id}` }, () => {
+  chrome.tabs.create({ url: `https://live.nicovideo.jp/watch/${id}` }, () => {
     const options = {
       type: "basic",
       title: _notificationTitle,
