@@ -1,13 +1,18 @@
 export class ProgramBuilder {
+    private _id: string;
+    private _thumbnailUrl: string;
     private _shouldOpenAutomatically: boolean;
     private _shouldMoveAutomatically: boolean;
     private _isVisiting: boolean;
     constructor() {
-        this._shouldOpenAutomatically = false
+        this._shouldOpenAutomatically = false;
         this._shouldMoveAutomatically = false;
         this._isVisiting = false;
     }
-    build(): Program {
+    buildCommunity(): Community {
+        return new Community(this);
+    }
+    buildProgram(): Program {
         return new Program(this);
     }
     shouldOpenAutomatically(): ProgramBuilder {
@@ -22,6 +27,12 @@ export class ProgramBuilder {
         this._isVisiting = true;
         return this;
     }
+    getId(): string {
+        return this._id;
+    }
+    getThumbnailUrl(): string {
+        return this._thumbnailUrl;
+    }
     getShouldOpenAutomatically(): boolean {
         return this._shouldOpenAutomatically;
     }
@@ -33,24 +44,22 @@ export class ProgramBuilder {
     }
 }
 
-class Program {
-    shouldOpenAutomatically: boolean;
-    shouldMoveAutomatically: boolean;
+class Bundled {
+    id: string;
+    shouldOpenAutomatically: boolean = true;
+    thumbnailUrl: string;
     isVisiting: boolean;
-    isJustFollowed: boolean;
     isJustStarted: boolean;
+    isJustFollowed: boolean;
     constructor(builder: ProgramBuilder) {
+        this.id = builder.getId();
+        this.thumbnailUrl = builder.getThumbnailUrl();
         this.shouldOpenAutomatically = builder.getShouldOpenAutomatically();
-        this.shouldMoveAutomatically = builder.getShouldMoveAutomatically();
         this.isVisiting = builder.getIsVisiting();
         this.isJustFollowed = false;
         this.isJustStarted = false;
     }
-    onFollow() {
-        this.isJustFollowed = true;
-    }
     onCheck() {
-        this.isJustFollowed = false;
         this.isJustStarted = false;
     }
     onStart() {
@@ -67,12 +76,31 @@ class Program {
     }
 }
 
-export class Bucket {
-    private programs: Program[];
-    constructor() {
-        this.programs = new Array<Program>();
+class Program extends Bundled { }
+
+class Community extends Bundled {
+    shouldMoveAutomatically: boolean;
+    isJustFollowed: boolean;
+    constructor(builder: ProgramBuilder) {
+        super(builder);
+        this.shouldMoveAutomatically = builder.getShouldMoveAutomatically();
+        this.isJustFollowed = false;
     }
-    public register(program: Program) {
+    onFollow() {
+        this.isJustFollowed = true;
+    }
+    onCheck() {
+        super.onCheck();
+        this.isJustFollowed = false;
+    }
+}
+
+export class Bucket {
+    private programs: Community[];
+    constructor() {
+        this.programs = new Array<Community>();
+    }
+    public register(program: Community) {
         this.programs.push(program);
     }
     public all() {
