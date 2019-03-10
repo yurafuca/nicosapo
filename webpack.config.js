@@ -10,21 +10,33 @@ module.exports = [{
       popup: "./src/javascripts/popup.js",
       options: "./src/javascripts/options.js"
     },
+    devtool: 'inline-source-map',
+    devServer: {
+      inline: true,
+      port: 8080,
+      historyApiFallback: true
+    },
     output: {
       path: path.resolve(__dirname, "./dist/assets/javascripts"),
       filename: "[name].js",
       devtoolModuleFilenameTemplate: 'dist/fuck'
     },
     module: {
-      rules: [{
-        test: /\.jsx?$/,
-        loader: "babel-loader",
-        exclude: /node_modules/,
-        query: {
-          cacheDirectory: true,
-          retainLines: true
-        }
-      },
+      rules: [
+        {
+          test: /\.jsx?$/,
+          loader: "babel-loader",
+          exclude: /node_modules/,
+          query: {
+            cacheDirectory: true,
+            retainLines: true
+          }
+        },
+        {
+          test: /\.tsx?$/,
+          use: 'ts-loader',
+          exclude: /node_modules/
+        },
         {
           test: /\.css$/,
           loaders: ["style-loader", "css-loader?modules"]
@@ -72,14 +84,8 @@ module.exports = [{
         },
       ])
     ],
-    devtool: 'source-map',
-    devServer: {
-      inline: true,
-      port: 8080,
-      historyApiFallback: true
-    },
     resolve: {
-      extensions: [".js", ".jsx", ".scss"]
+      extensions: [".ts", ".tsx", ".js", ".jsx", ".scss"]
     }
   },
   {
