@@ -1,12 +1,25 @@
 {
   "compilerOptions": {
+    "baseUrl": ".",
+    "paths": { "*": ["types/*"] },
     "outDir": "./dist/assets/",
+    "moduleResolution": "node",
+    "strictNullChecks": true,
     "sourceMap": true,
     "noImplicitAny": true,
     "module": "es6",
     "target": "es5",
     "jsx": "react",
-    "allowJs": true
+    "allowJs": true,
+    "types": [
+      "chrome",
+      "dom",
+      "jest",
+      "rx"
+    ],
+    "lib": [
+      "esnext"
+    ]
   }
 }
 
