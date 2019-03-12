@@ -72,7 +72,7 @@ module.exports = [{
         },
       ])
     ],
-    devtool: 'source-map',
+    devtool: 'inline-source-map',
     devServer: {
       inline: true,
       port: 8080,

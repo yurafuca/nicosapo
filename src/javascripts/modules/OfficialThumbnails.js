@@ -13,7 +13,7 @@ export default class OfficialThumbnails {
       let thumbnailUrl;
       if (a != null) {
         const communityId = a.href;
-        const regexp = /http\:\/\/ch.nicovideo.jp\/channel\/(.+)/;
+        const regexp = /https\:\/\/ch.nicovideo.jp\/channel\/(.+)/;
         const resultarr = regexp.exec(communityId);
         thumbnailUrl = `https://icon.nimg.jp/channel/${resultarr[1]}.jpg`;
       } else {
