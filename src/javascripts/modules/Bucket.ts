@@ -1,7 +1,5 @@
-import {filter} from "rxjs/operators";
-import { Community, Program } from "./Checkable";
-import { CheckableBuilder } from "./CheckableBuilder";
-
+import { Community, Program } from "./Manageable";
+import { ProgramBuilder, CommunityBuilder } from "./CheckableBuilder";
 
 class BucketClient {
     private rev: number;
@@ -34,24 +32,19 @@ export class Bucket {
         this.token = "@@NICOSAPO";
     }
 
-    touch(communityBuilder: CheckableBuilder, programBuilder: CheckableBuilder | null) {
-        const community = this.touchCommunity(communityBuilder);
-        if (programBuilder != null) {
-            const program = this.createProgram(programBuilder);
-            // Is just started?
-            const foundProgram = this.findProgram(program);
-            if (foundProgram == null) {
-                program.isJustStarted = true;
-            } else {
-                program.isJustStarted = !!(!foundProgram.isJustStarted && program.isJustStarted);
-            }
-            // Attach.
-            community.attachProgram(program);
-            program.community = community;
-        }
+    touch(communityBuilder: CommunityBuilder) {
+        this.touchCommunity(communityBuilder);
     }
 
-    mask(communityBuilders: CheckableBuilder[]) {
+    assign(communityBuilder: CommunityBuilder, programBuilder: ProgramBuilder) {
+        const community = this.touchCommunity(communityBuilder);
+        const program = this.createProgram(programBuilder, community);
+        // Attach.
+        community.attachProgram(program);
+        program.community = community;
+    }
+
+    mask(communityBuilders: CommunityBuilder[]) {
         const communities = communityBuilders.map(builder => this.touchCommunity(builder));
         const survivors = communities.map(c => c.id);
         this.communities = this.communities.filter(c => {
@@ -66,7 +59,7 @@ export class Bucket {
         return new BucketClient(0, this.token);
     }
 
-    private touchCommunity(communityBuilder: CheckableBuilder): Community {
+    private touchCommunity(communityBuilder: CommunityBuilder): Community {
         const community = this.createCommunity(communityBuilder);
         // Replace.
         this.communities = this.communities.filter(c => c.id != community.id);
@@ -106,12 +99,12 @@ export class Bucket {
             .reduce((array, v) => array.concat(v), [])
     }
 
-    private createCommunity(builder: CheckableBuilder): Community {
-        const draft = builder.buildCommunity();
+    private createCommunity(builder: CommunityBuilder): Community {
+        const draft = builder.build();
         const reference = this.findCommunity(draft, this.communities) || draft;
         // Update.
         builder.thumbnailUrl(builder.getThumbnailUrl() || reference.thumbnailUrl);
-        builder.isFollowing(builder.getIsVisiting() || reference.isFollowing);
+        builder.isFollowing(builder.getIsFollowing() || reference.isFollowing);
         const flag = builder.getShouldOpenAutomatically();
         if (flag != null) {
             builder.shouldOpenAutomatically(flag);
@@ -119,20 +112,20 @@ export class Bucket {
             builder.shouldOpenAutomatically(reference.shouldOpenAutomatically)
         }
         // Build.
-        const community = builder.buildCommunity();
+        const community = builder.build();
         // Attach previous programs.
         reference.programs.forEach(p => community.attachProgram(p));
         return community;
     }
 
-    private createProgram(builder: CheckableBuilder): Program {
-        const draft = builder.buildProgram(this.revision);
-        const reference = this.findProgram(draft) || draft;
+    private createProgram(builder: ProgramBuilder, parent: Community): Program {
+        const draft = builder.build(this.revision);
+        const reference = this.findProgram(draft, parent) || draft;
         // Update.
         builder.isVisiting(builder.getIsVisiting() || reference.isVisiting);
         builder.shouldMoveAutomatically(builder.getShouldMoveAutomatically() || reference.shouldMoveAutomatically);
         // Build.
-        return builder.buildProgram(this.revision);
+        return builder.build(this.revision);
     }
 
     private findCommunity(community: Community, communities: Community[]): Community | null {
@@ -144,8 +137,7 @@ export class Bucket {
         return communities.filter(c => c.id == id)[0];
     }
 
-    private findProgram(program: Program): Program | null {
-        const programs = this.communities.map(c => c.programs).reduce(v => v);
-        return programs.filter(p => p.id == program.id)[0];
+    private findProgram(program: Program, parent: Community): Program | null {
+        return parent.programs.filter(p => p.id == program.id)[0];
     }
 }

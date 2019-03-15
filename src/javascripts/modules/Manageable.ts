@@ -1,29 +1,27 @@
-import { CheckableBuilder } from "./CheckableBuilder";
+import { CommunityBuilder, ManageableBuilder, ProgramBuilder } from "./CheckableBuilder";
 
-export class Checkable {
+export class Manageable {
   id: string;
   title: string;
   shouldOpenAutomatically: boolean;
 
-  constructor(builder: CheckableBuilder) {
+  constructor(builder: ManageableBuilder) {
     this.id = builder.getId();
     this.shouldOpenAutomatically = builder.getShouldOpenAutomatically() || false;
   }
 }
 
-export class Program extends Checkable {
+export class Program extends Manageable {
   community: Community;
   isVisiting: boolean;
   shouldMoveAutomatically: boolean;
-  isJustStarted: boolean;
   private isActive: boolean;
   private readonly rev: number;
 
-  constructor(builder: CheckableBuilder, revision: number) {
+  constructor(builder: ProgramBuilder, revision: number) {
     super(builder);
     this.isVisiting = builder.getIsVisiting() ||false;
     this.shouldMoveAutomatically = builder.getShouldMoveAutomatically() || false;
-    this.isJustStarted = false;
     this.isActive = false;
     this.rev = revision;
   }
@@ -41,12 +39,12 @@ export class Program extends Checkable {
   }
 }
 
-export class Community extends Checkable {
+export class Community extends Manageable {
   programs: Program[];
   isFollowing: boolean;
   thumbnailUrl: string;
 
-  constructor(builder: CheckableBuilder) {
+  constructor(builder: CommunityBuilder) {
     super(builder);
     this.programs = [];
     this.thumbnailUrl = builder.getThumbnailUrl() || "";

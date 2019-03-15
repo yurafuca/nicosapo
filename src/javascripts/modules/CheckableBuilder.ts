@@ -1,24 +1,12 @@
-import { Community, Program } from "./Checkable";
+import { Community, Program } from "./Manageable";
 
-export class CheckableBuilder {
+export class ManageableBuilder {
   private _id: string;
-  private _thumbnailUrl: string | null;
+  private _title: string;
   private _shouldOpenAutomatically: boolean | null;
-  private _shouldMoveAutomatically: boolean | null;
-  private _isVisiting: boolean | null;
-  private _isFollowing: boolean | null;
 
   constructor() {
     this._shouldOpenAutomatically = false;
-    this._isVisiting = false;
-  }
-
-  buildCommunity(): Community {
-    return new Community(this);
-  }
-
-  buildProgram(revision: number): Program {
-    return new Program(this, revision);
   }
 
   id(id: string) {
@@ -26,28 +14,13 @@ export class CheckableBuilder {
     return this;
   }
 
-  thumbnailUrl(url: string) {
-    this._thumbnailUrl = url;
+  title(title: string) {
+    this._title = title;
     return this;
   }
 
-  shouldOpenAutomatically(predict: boolean): CheckableBuilder {
+  shouldOpenAutomatically(predict: boolean): this {
     this._shouldOpenAutomatically = predict;
-    return this;
-  }
-
-  shouldMoveAutomatically(predict: boolean): CheckableBuilder {
-    this._shouldMoveAutomatically = predict;
-    return this;
-  }
-
-  isVisiting(predict: boolean): CheckableBuilder {
-    this._isVisiting = predict;
-    return this;
-  }
-
-  isFollowing(predict: boolean): CheckableBuilder {
-    this._isFollowing = predict;
     return this;
   }
 
@@ -55,12 +28,70 @@ export class CheckableBuilder {
     return this._id;
   }
 
-  getThumbnailUrl(): string | null {
-    return this._thumbnailUrl;
+  getTitle(): string | null {
+    return this._title;
   }
 
   getShouldOpenAutomatically(): boolean | null {
     return this._shouldOpenAutomatically;
+  }
+}
+
+
+export class CommunityBuilder extends ManageableBuilder {
+  private _thumbnailUrl: string | null;
+  private _isFollowing: boolean | null;
+
+  constructor() {
+    super();
+  }
+
+  build(): Community {
+    return new Community(this);
+  }
+
+  thumbnailUrl(url: string) {
+    this._thumbnailUrl = url;
+    return this;
+  }
+
+  isFollowing(predict: boolean): this {
+    this._isFollowing = predict;
+    return this;
+  }
+
+  getThumbnailUrl(): string | null {
+    return this._thumbnailUrl;
+  }
+
+  getIsFollowing(): boolean | null {
+    return this._isFollowing;
+  }
+}
+
+
+export class ProgramBuilder extends ManageableBuilder {
+  private _shouldMoveAutomatically: boolean | null;
+  private _isVisiting: boolean | null;
+
+  constructor() {
+    super();
+    this._shouldMoveAutomatically = false;
+    this._isVisiting = false;
+  }
+
+  build(revision: number): Program {
+    return new Program(this, revision);
+  }
+
+  shouldMoveAutomatically(predict: boolean): this {
+    this._shouldMoveAutomatically = predict;
+    return this;
+  }
+
+  isVisiting(predict: boolean): this {
+    this._isVisiting = predict;
+    return this;
   }
 
   getShouldMoveAutomatically(): boolean | null {
@@ -69,9 +100,5 @@ export class CheckableBuilder {
 
   getIsVisiting(): boolean | null {
     return this._isVisiting;
-  }
-
-  getIsFollowing(): boolean | null {
-    return this._isFollowing;
   }
 }
