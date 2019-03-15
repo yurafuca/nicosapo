@@ -53,10 +53,6 @@ export class Community extends Checkable {
     this.isFollowing = builder.getIsFollowing() || false;
   }
 
-  justStartedPrograms(): Program[] {
-    return this.programs.filter(p => p.isJustStarted);
-  }
-
   attachProgram(program: Program | null) {
     if (program == null) {
       return;
