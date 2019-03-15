@@ -37,11 +37,11 @@ export class Bucket {
     }
 
     assign(communityBuilder: CommunityBuilder, programBuilder: ProgramBuilder) {
-        const community = this.touchCommunity(communityBuilder);
-        const program = this.createProgram(programBuilder, community);
-        // Attach.
-        community.attachProgram(program);
-        program.community = community;
+        this.touchBoth(communityBuilder, programBuilder, this.revision);
+    }
+
+    appoint(communityBuilder: CommunityBuilder, programBuilder: ProgramBuilder) {
+        this.touchBoth(communityBuilder, programBuilder, -1);
     }
 
     mask(communityBuilders: CommunityBuilder[]) {
@@ -67,6 +67,14 @@ export class Bucket {
         return community;
     }
 
+    private touchBoth(communityBuilder: CommunityBuilder, programBuilder: ProgramBuilder, revision: number) {
+        const community = this.touchCommunity(communityBuilder);
+        const program = this.createProgram(programBuilder, community, revision);
+        // Attach.
+        community.attachProgram(program);
+        program.community = community;
+    }
+
     takeProgramsShouldCancelOpen(client: BucketClient): Program[] {
         const result =  this.communities
           .map(c => c.programs)
@@ -75,7 +83,7 @@ export class Bucket {
           .filter(p =>
             p.shouldOpenAutomatically || p.community.shouldOpenAutomatically
           )
-          .filter(p => p.revision() >= client.revision());
+          .filter(p => p.revision() != -1 && p.revision() >= client.revision());
         client.setRevision(this.revision, this.token);
         return result;
     }
@@ -88,7 +96,7 @@ export class Bucket {
             .filter(p =>
                 p.shouldOpenAutomatically || p.community.shouldOpenAutomatically
             )
-            .filter(p => p.revision() >= client.revision());
+            .filter(p => p.revision() != -1 && p.revision() >= client.revision());
         client.setRevision(this.revision, this.token);
         return result;
     }
@@ -114,18 +122,32 @@ export class Bucket {
         // Build.
         const community = builder.build();
         // Attach previous programs.
-        reference.programs.forEach(p => community.attachProgram(p));
+        reference.programs.forEach(p => {
+            community.attachProgram(p);
+            p.community = community;
+        });
         return community;
     }
 
-    private createProgram(builder: ProgramBuilder, parent: Community): Program {
-        const draft = builder.build(this.revision);
+    private createProgram(builder: ProgramBuilder, parent: Community, revision: number): Program {
+        const draft = builder.build(revision);
         const reference = this.findProgram(draft, parent) || draft;
         // Update.
         builder.isVisiting(builder.getIsVisiting() || reference.isVisiting);
-        builder.shouldMoveAutomatically(builder.getShouldMoveAutomatically() || reference.shouldMoveAutomatically);
+        const shouldOpen = builder.getShouldOpenAutomatically();
+        if (shouldOpen != null) {
+            builder.shouldOpenAutomatically(shouldOpen);
+        } else {
+            builder.shouldOpenAutomatically(reference.shouldOpenAutomatically)
+        }
+        const shouldMove = builder.getShouldMoveAutomatically();
+        if (shouldMove != null) {
+            builder.shouldMoveAutomatically(shouldMove);
+        } else {
+            builder.shouldMoveAutomatically(reference.shouldMoveAutomatically)
+        }
         // Build.
-        return builder.build(this.revision);
+        return builder.build(Math.max(revision, reference.revision()));
     }
 
     private findCommunity(community: Community, communities: Community[]): Community | null {
