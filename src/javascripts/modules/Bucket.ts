@@ -166,6 +166,7 @@ export class Bucket {
         const reference = this.findProgram(draft, parent) || draft;
         // Update.
         builder.isVisiting(builder.getIsVisiting() || reference.isVisiting);
+        builder.title(builder.getTitle() || reference.title);
         const shouldOpen = builder.getShouldOpenAutomatically();
         if (shouldOpen != null) {
             builder.shouldOpenAutomatically(shouldOpen);
