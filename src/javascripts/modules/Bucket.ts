@@ -1,3 +1,4 @@
+import { diff } from 'deep-object-diff';
 import { Community, Program } from "./Manageable";
 import { ProgramBuilder, CommunityBuilder } from "./CheckableBuilder";
 
@@ -91,7 +92,6 @@ export class Bucket {
         const program = this.createProgram(programBuilder, community, revision);
         // Attach.
         community.attachProgram(program);
-        program.community = community;
     }
 
     takeProgramsShouldCancelOpen(client: BucketClient): Program[] {
@@ -141,8 +141,10 @@ export class Bucket {
 
     private createCommunity(builder: CommunityBuilder): Community {
         const draft = builder.build();
-        const reference = this.findCommunity(draft, this.communities) || draft;
+        const previous = this.findCommunity(draft, this.communities);
+        const reference = previous || draft;
         // Update.
+        builder.title(builder.getTitle() || reference.title);
         builder.thumbnailUrl(builder.getThumbnailUrl() || reference.thumbnailUrl);
         builder.isFollowing(builder.getIsFollowing() || reference.isFollowing);
         const flag = builder.getShouldOpenAutomatically();
@@ -158,12 +160,15 @@ export class Bucket {
             community.attachProgram(p);
             p.community = community;
         });
+        // Print diff.
+        Bucket.difference(previous, community);
         return community;
     }
 
     private createProgram(builder: ProgramBuilder, parent: Community, revision: number): Program {
         const draft = builder.build(revision);
-        const reference = this.findProgram(draft, parent) || draft;
+        const previous = this.findProgram(draft, parent);
+        const reference = previous || draft;
         // Update.
         builder.isVisiting(builder.getIsVisiting() || reference.isVisiting);
         builder.title(builder.getTitle() || reference.title);
@@ -187,7 +192,11 @@ export class Bucket {
             rev = reference.revision();
         }
         // Build.
-        return builder.build(rev);
+        const program = builder.build(rev);
+        program.community = parent;
+        // Print diff.
+        Bucket.difference(previous, program);
+        return program;
     }
 
     private findCommunity(community: Community, communities: Community[]): Community | null {
@@ -201,6 +210,21 @@ export class Bucket {
 
     private findProgram(program: Program, parent: Community): Program | null {
         return parent.programs.filter(p => p.id == program.id)[0];
+    }
+
+    private static difference(prev: object | null, next: object) {
+        if (prev != null) {
+            const difference = diff(prev, next);
+            if (!Bucket.isEmpty(difference)) {
+                console.log(difference)
+            }
+        } else {
+            console.info(next);
+        }
+    }
+
+    private static isEmpty(obj: {}): boolean {
+        return Object.keys(obj).length === 0 && obj.constructor === Object
     }
 }
 

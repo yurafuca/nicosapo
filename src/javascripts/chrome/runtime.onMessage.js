@@ -1,5 +1,10 @@
 import store from "store";
 import NiconamaTabs from "../modules/NiconamaTabs";
+import { CommunityBuilder, ProgramBuilder } from '../modules/CheckableBuilder';
+import bucket from "../modules/Bucket"
+
+export const ON_VISIT = "ON_VISIT";
+export const ON_LEAVE = "ON_LEAVE";
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.purpose == "NiconamaTabs.add") {
@@ -54,6 +59,14 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       storagedData[request.innerKey].owner = request.innerValue.owner;
     }
     store.set(request.key, storagedData);
+
+    if (request.key == "autoEnterCommunityList") {
+      const builder = new CommunityBuilder()
+        .id(request.innerKey)
+        .shouldOpenAutomatically(true);
+      bucket.touch(builder);
+    }
+
     return;
   }
 
@@ -82,6 +95,22 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     );
     delete storagedData[request.innerKey];
     store.set(request.key, storagedData);
-    return;
+
+    if (request.key == "autoEnterCommunityList") {
+      const builder = new CommunityBuilder()
+        .id(request.innerKey)
+        .shouldOpenAutomatically(false);
+      bucket.touch(builder);
+    }
+
+    if (request.key === ON_VISIT) {
+      request.programBuilder.isVisiting(true);
+      bucket.assign(request.communityBuilder, request.programBuilder);
+    }
+
+    if (request.key === ON_LEAVE) {
+      request.programBuilder.isVisiting(false);
+      bucket.assign(request.communityBuilder, request.programBuilder);
+    }
   }
 });

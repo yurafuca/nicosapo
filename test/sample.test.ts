@@ -1,6 +1,7 @@
 import { Bucket } from "../src/javascripts/modules/Bucket";
 import { CommunityBuilder, ManageableBuilder, ProgramBuilder } from "../src/javascripts/modules/CheckableBuilder";
 
+
 let bucket: Bucket;
 let revision: number;
 

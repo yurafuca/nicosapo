@@ -21,7 +21,8 @@ chrome.runtime.onStartup.addListener(() => {
   NiconamaTabs.clear();
 });
 
-chrome.tabs.onRemoved.addListener(tabId => {
+chrome.tabs.onRemoved.addListener((tabId, info) => {
+  // const url = info.i
   NiconamaTabs.remove(tabId);
 });
 

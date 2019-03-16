@@ -69,7 +69,6 @@ export  class AutoEnterCommunity {
                   `castId = ${id}, tabId = ${tabId}, autoRedirect = ${response}`
                 );
                 if (response) {
-                  console.log("ignore");
                   const communityData = store.get("autoEnterCommunityList")[id];
                   const options = {
                     body: `自動入場をキャンセルしました．この放送を開いている自動次枠移動が ON のタブがあります．`,
