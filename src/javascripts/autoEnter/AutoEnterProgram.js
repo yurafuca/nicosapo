@@ -4,6 +4,9 @@ import store from "store";
 const _listKey = "autoEnterProgramList";
 const _notificationTitle = "自動入場（番組）";
 
+// タブで開く
+// localStorage から消す
+
 export default class AutoEnterProgram {
   exec(id) {
     Api.isOpen(id).then(response => {

@@ -1,4 +1,7 @@
+import { Subject, pipe } from 'rxjs';
+import { map, filter } from 'rxjs/operators';
 import store from "store";
+import deamon from "./modules/Deamon";
 import Db from "./modules/db";
 import Badge from "./modules/Badge";
 import NiconamaTabs from "./modules/NiconamaTabs";
@@ -6,6 +9,9 @@ import BackgroundReloader from "./modules/BackgroundReloader";
 import Common from "./common/Common";
 import AutoEnterRunner from "./autoEnter/AutoEnterRunner";
 import "./chrome/runtime.onMessage";
+
+// import {CheckableBuilder} from "./modules/CheckableBuilder";
+// import { Community } from "./modules/Bucket";
 
 chrome.runtime.onInstalled.addListener(() => {
   NiconamaTabs.clear();
@@ -54,10 +60,25 @@ chrome.contextMenus.removeAll(() => {
   });
 });
 
+
+
+
+
+// range(1, 200).pipe(
+//     filter(x => x % 2 === 1),
+//     map(x => x + x)
+// ).subscribe(x => console.log(x));
+//
+// const list = bucket.all()
+//     .filter(p => p.isFollowing)
+//     .filter(p => p.isJustStarted)
+//     .filter(p => !p.shouldOpenAutomatically);
+
 Badge.setBackgroundColor("#ff6200");
 Db.setAll("autoEnterCommunityList", "state", "init");
 BackgroundReloader.run();
-setInterval(BackgroundReloader.run, 60 * 1000);
+
+setInterval(BackgroundReloader.run, 10 * 1000);
 Common.sleep(7 * 1000).then(() => {
   setInterval(() => {
     const isForceCancel = store.get("options.autoEnter.forceCancel") || false;
