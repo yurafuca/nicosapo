@@ -237,6 +237,48 @@ it('assign と appoint を monkey debug してもただしく動く3', () => {
     expect(bucket.takeProgramsShouldCancelOpen(bucket.createClient()).length).toBe(0);
 });
 
+it('assign と appoint を monkey debug してもただしく動く4', () => {
+    bucket.assign(c1, p1);
+    bucket.appoint(c2, p2);
+    bucket.appoint(c2, p2);
+    expect(bucket.takeProgramsShouldOpen(bucket.createClient()).length).toBe(0);
+    expect(bucket.takeProgramsShouldCancelOpen(bucket.createClient()).length).toBe(0);
+});
+
+
+it('すでに存在する番組の revision は更新されない', () => {
+    const client = bucket.createClient();
+    c1.isFollowing(true);
+    c2.isFollowing(true);
+    c3.isFollowing(true);
+    bucket.assign(c1, p1);
+    bucket.assign(c2, p2);
+    bucket.assign(c3, p3);
+    bucket.mask([c1, c2, c3]);
+    expect(bucket.takeProgramsShouldNotify(client).length).toBe(3);
+    bucket.assign(c1, p1);
+    bucket.assign(c2, p2);
+    bucket.assign(c3, p3);
+    bucket.mask([c1, c2, c3]);
+    expect(bucket.takeProgramsShouldNotify(client).length).toBe(0);
+});
+
+it('番組が始まったら通知される', () => {
+    const client = bucket.createClient();
+    c1.isFollowing(true);
+    c2.isFollowing(true);
+    c3.isFollowing(true);
+    bucket.assign(c1, p1);
+    bucket.assign(c2, p2);
+    bucket.mask([c1, c2]);
+    expect(bucket.takeProgramsShouldNotify(client).length).toBe(2);
+    bucket.assign(c1, p1);
+    bucket.assign(c2, p2);
+    bucket.assign(c3, p3);
+    bucket.mask([c1, c2, c3]);
+    expect(bucket.takeProgramsShouldNotify(client).length).toBe(1);
+});
+
 // appoint -> assign -1
 // assign -> appoint 0
 

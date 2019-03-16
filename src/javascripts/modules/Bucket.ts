@@ -20,6 +20,17 @@ class BucketClient {
         }
     }
 }
+// 番組を開いた           assign
+
+// 自動入場コミュニティ番組あり   assign / touch
+// 自動入場コミュニティ番組なし   touch
+// 自動入場番組           appoint
+// 自動枠移動            assign
+
+// 更新時              revision 更新
+
+// touch は community の番組に絶対に変化がないことが保証されている場合にのみ許される
+// program の touch はない．このモデルは program が必ず community をもつことを前提にするため．
 
 export class Bucket {
     private communities: Community[];
@@ -32,18 +43,26 @@ export class Bucket {
         this.token = "@@NICOSAPO";
     }
 
+    // insert
+    // 自動入場（コミュニティ）番組がない
     touch(communityBuilder: CommunityBuilder) {
         this.touchCommunity(communityBuilder);
     }
 
+    // insert
+    // 自動入場（コミュニティ），番組がある
+    // 更新時
     assign(communityBuilder: CommunityBuilder, programBuilder: ProgramBuilder) {
         this.touchBoth(communityBuilder, programBuilder, this.revision);
     }
 
+    // insert
+    // 自動入場（番組）
     appoint(communityBuilder: CommunityBuilder, programBuilder: ProgramBuilder) {
         this.touchBoth(communityBuilder, programBuilder, -1);
     }
 
+    // drop
     mask(communityBuilders: CommunityBuilder[]) {
         const communities = communityBuilders.map(builder => this.touchCommunity(builder));
         const survivors = communities.map(c => c.id);
@@ -90,13 +109,26 @@ export class Bucket {
 
     takeProgramsShouldOpen(client: BucketClient): Program[] {
         const result =  this.communities
-            .map(c => c.programs)
-            .reduce((array, v) => array.concat(v), [])
-            .filter(p => !p.isVisiting)
-            .filter(p =>
-                p.shouldOpenAutomatically || p.community.shouldOpenAutomatically
-            )
-            .filter(p => p.revision() != -1 && p.revision() >= client.revision());
+          .map(c => c.programs)
+          .reduce((array, v) => array.concat(v), [])
+          .filter(p => !p.isVisiting)
+          .filter(p =>
+            p.shouldOpenAutomatically || p.community.shouldOpenAutomatically
+          )
+          .filter(p => p.revision() != -1 && p.revision() >= client.revision());
+        client.setRevision(this.revision, this.token);
+        return result;
+    }
+
+    takeProgramsShouldNotify(client: BucketClient): Program[] {
+        const result =  this.communities
+          .map(c => c.programs)
+          .reduce((array, v) => array.concat(v), [])
+          .filter(p => p.community.isFollowing)
+          .filter(p =>
+            !p.shouldOpenAutomatically && !p.community.shouldOpenAutomatically
+          )
+          .filter(p => p.revision() != -1 && p.revision() >= client.revision());
         client.setRevision(this.revision, this.token);
         return result;
     }
@@ -146,8 +178,15 @@ export class Bucket {
         } else {
             builder.shouldMoveAutomatically(reference.shouldMoveAutomatically)
         }
+        // Choose revision.
+        let rev: number;
+        if (reference.revision() == -1) {
+            rev = revision;
+        } else {
+            rev = reference.revision();
+        }
         // Build.
-        return builder.build(Math.max(revision, reference.revision()));
+        return builder.build(rev);
     }
 
     private findCommunity(community: Community, communities: Community[]): Community | null {
@@ -163,3 +202,6 @@ export class Bucket {
         return parent.programs.filter(p => p.id == program.id)[0];
     }
 }
+
+const bucket = new Bucket();
+export default bucket;
