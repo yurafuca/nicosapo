@@ -20,22 +20,14 @@ export class Program extends Manageable {
 
   constructor(builder: ProgramBuilder, revision: number) {
     super(builder);
-    this.isVisiting = builder.getIsVisiting() ||false;
-    this.shouldMoveAutomatically = builder.getShouldMoveAutomatically() || false;
+    this.isVisiting = builder.getIsVisiting() || false;
+    this.shouldMoveAutomatically = builder.getShouldMoveAutomatically() || true;
     this.isActive = false;
     this.rev = revision;
   }
 
   revision(): number {
     return this.rev;
-  }
-
-  onVisit() {
-    this.isVisiting = true;
-  }
-
-  onLeave() {
-    this.isVisiting = false;
   }
 }
 

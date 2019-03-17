@@ -6,7 +6,7 @@ export class ManageableBuilder {
   private _shouldOpenAutomatically: boolean | null;
 
   constructor() {
-    this._shouldOpenAutomatically = false;
+    this._shouldOpenAutomatically = null;
   }
 
   id(id: string) {
@@ -44,6 +44,8 @@ export class CommunityBuilder extends ManageableBuilder {
 
   constructor() {
     super();
+    this._thumbnailUrl = null;
+    this._isFollowing = null;
   }
 
   build(): Community {
@@ -76,8 +78,8 @@ export class ProgramBuilder extends ManageableBuilder {
 
   constructor() {
     super();
-    this._shouldMoveAutomatically = false;
-    this._isVisiting = false;
+    this._shouldMoveAutomatically = null;
+    this._isVisiting = null;
   }
 
   build(revision: number): Program {

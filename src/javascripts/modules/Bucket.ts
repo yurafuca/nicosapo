@@ -70,7 +70,8 @@ export class Bucket {
         this.communities = this.communities.filter(c => {
             return survivors.includes(c.id) ||
             c.shouldOpenAutomatically ||
-            c.programs.some(p => p.shouldOpenAutomatically)
+            c.programs.some(p => p.shouldOpenAutomatically) ||
+            c.programs.some(p => p.isVisiting)
         });
         this.revision += 1;
     }
@@ -146,10 +147,15 @@ export class Bucket {
         // Update.
         builder.title(builder.getTitle() || reference.title);
         builder.thumbnailUrl(builder.getThumbnailUrl() || reference.thumbnailUrl);
-        builder.isFollowing(builder.getIsFollowing() || reference.isFollowing);
-        const flag = builder.getShouldOpenAutomatically();
-        if (flag != null) {
-            builder.shouldOpenAutomatically(flag);
+        const isFollowing = builder.getIsFollowing();
+        if (isFollowing != null) {
+            builder.isFollowing(isFollowing);
+        } else {
+            builder.isFollowing(reference.isFollowing);
+        }
+        const shouldOpen = builder.getShouldOpenAutomatically();
+        if (shouldOpen != null) {
+            builder.shouldOpenAutomatically(shouldOpen);
         } else {
             builder.shouldOpenAutomatically(reference.shouldOpenAutomatically)
         }
@@ -170,8 +176,13 @@ export class Bucket {
         const previous = this.findProgram(draft, parent);
         const reference = previous || draft;
         // Update.
-        builder.isVisiting(builder.getIsVisiting() || reference.isVisiting);
         builder.title(builder.getTitle() || reference.title);
+        const isVisiting = builder.getIsVisiting();
+        if (isVisiting != null) {
+            builder.isVisiting(isVisiting);
+        } else {
+            builder.isVisiting(reference.isVisiting);
+        }
         const shouldOpen = builder.getShouldOpenAutomatically();
         if (shouldOpen != null) {
             builder.shouldOpenAutomatically(shouldOpen);
