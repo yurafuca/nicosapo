@@ -161,7 +161,9 @@ export default class Api {
           if (Date.now() < `${endTime.textContent}000`) {
             console.log(`${theRequestId}: onair.`);
             const liveId = response.querySelector("stream id").textContent;
+            const title = response.querySelector("stream title").textContent;
             response.nextLiveId = liveId;
+            response.title = title;
             response.isOpen = true;
           }
         }

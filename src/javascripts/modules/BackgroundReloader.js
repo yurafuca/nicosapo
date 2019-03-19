@@ -3,7 +3,7 @@ import Common from "../common/Common";
 import Badge from "../modules/Badge";
 import bucket from "./Bucket";
 import { CommunityBuilder, ProgramBuilder } from './ManageableBuilder';
-import {Poster} from "./NoticeLetter";
+import {Poster} from "./Poster";
 import VideoInfoUtil from './VideoInfoUtil';
 
 export default class BackgroundReloader {
