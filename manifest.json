@@ -41,7 +41,11 @@
     "http://api.search.nicovideo.jp/",
     "https://api.search.nicovideo.jp/",
     "http://sp.live.nicovideo.jp/",
-    "https://sp.live.nicovideo.jp/"
+    "https://sp.live.nicovideo.jp/",
+    "http://secure-dcdn.cdn.nimg.jp/",
+    "https://secure-dcdn.cdn.nimg.jp/",
+    "http://ssth.dmc.nico/",
+    "https://ssth.dmc.nico/"
   ],
   "background": {
     "scripts": ["javascripts/background.js"]
