@@ -19,7 +19,36 @@ const _move = (storagedData, id) => {
 };
 
 // export default class AutoEnterProgram {
-export default class AutoEnterCommunity {
+export default class Alert {
+  static fire($info) {
+    const play = store.get("options.playsound.enable");
+    if (play == "enable" || play == null) {
+      Alert._ding();
+    }
+    const popup = store.get("options.popup.enable");
+    if (popup == "enable" || popup == null) {
+      Alert._popup($info);
+    }
+  }
+
+  static _ding() {
+    const sound = new Sound();
+    sound.play();
+  }
+
+  static _popup($videoInfos) {
+    const notification = new WebNotification();
+    console.log("alert!");
+    console.log($videoInfos);
+    notification.show($videoInfos);
+  }
+}
+
+// タブで開く//
+// キャンセルした場合は通知だけ
+// 状態を更新
+
+export  class AutoEnterCommunity {
   exec(id) {
     Api.isOpen(id).then(response => {
       const storagedData = store.get(_listKey) || {};
@@ -40,7 +69,6 @@ export default class AutoEnterCommunity {
                   `castId = ${id}, tabId = ${tabId}, autoRedirect = ${response}`
                 );
                 if (response) {
-                  console.log("ignore");
                   const communityData = store.get("autoEnterCommunityList")[id];
                   const options = {
                     body: `自動入場をキャンセルしました．この放送を開いている自動次枠移動が ON のタブがあります．`,

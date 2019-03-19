@@ -1,4 +1,5 @@
 import $ from "jquery";
+import MetaData from './MetaData';
 
 function getLiveId() {
   const url = $('meta[property="og:url"]').attr("content");
@@ -46,6 +47,13 @@ function getCommunityId() {
   if (communityHref) {
     const communityId = communityHref.replace("/", "");
     return communityId;
+  }
+
+  const img = document.querySelector("img.bd") || {};
+  const url = img.src || "";
+  const result = /\/((ch|co)\d+)\.jpg/.exec(url);
+  if (result) {
+    return result[1];
   }
 
   return null;

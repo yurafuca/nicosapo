@@ -1,10 +1,31 @@
 import $ from "jquery";
 import IdHolder from "../modules/IdHolder";
 import Page from "../page/Page";
+import MetaData from '../modules/MetaData';
+import { ON_LEAVE, ON_VISIT } from '../chrome/runtime.onMessage';
+import { CommunityBuilder, ProgramBuilder } from '../modules/ManageableBuilder';
 
 export default class CastPage extends Page {
   constructor() {
     super();
+
+    //
+    const metaData = MetaData.get();
+    const option = {
+      purpose: ON_VISIT,
+      metaData: metaData
+    };
+    chrome.runtime.sendMessage(option);
+
+    //
+    window.addEventListener('beforeunload', (event) => {
+      const option = {
+        purpose: ON_LEAVE,
+        metaData: metaData
+      };
+      chrome.runtime.sendMessage(option);
+    });
+
     this.communityId = new IdHolder().communityId;
 
     this._getScrollOption(response => {

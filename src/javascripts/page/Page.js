@@ -1,12 +1,18 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import Widgets from "../components/Widgets";
+import MetaData from '../modules/MetaData';
 
 function insertAfter(newNode, referenceNode) {
   referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
 }
 
 export default class Page extends React.Component {
+  constructor(props) {
+    super(props);
+    console.info(MetaData.get());
+  }
+
   putWidgets(props) {
     const parent = document.querySelector(`[${props.idName4ExBar}]`);
     const child = document.createElement("div");

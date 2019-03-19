@@ -15,7 +15,8 @@
     "types": [
       "chrome",
       "jest",
-      "rx"
+      "rx",
+      "store"
 //      "dom"
     ],
     "lib": [
