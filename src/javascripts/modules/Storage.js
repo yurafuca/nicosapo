@@ -13,12 +13,13 @@ export default class Storage {
     );
   }
 
-  static removeFromNestedLocalStorage(key, innerKey) {
+  static removeFromNestedLocalStorage(key, innerKey, innerValue) {
     chrome.runtime.sendMessage(
       {
         purpose: "removeFromNestedLocalStorage",
         key: key,
-        innerKey: innerKey
+        innerKey: innerKey,
+        innerValue: innerValue,
       },
       response => {
         console.info("response = ", response);

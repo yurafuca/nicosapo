@@ -1,11 +1,16 @@
 import $ from "jquery";
 import React from "react";
-import ReactDOM from "react-dom";
-import Buttons from "../buttons/Buttons";
 import IdHolder from "../modules/IdHolder";
 import PageType from "../modules/PageType";
 import Storage from "../modules/Storage";
 import { OverlayTrigger, Popover } from "react-bootstrap";
+import MetaData from '../modules/MetaData';
+import {
+  ON_VISIT,
+  SHOULD_MOVE_AUTOMATICALLY,
+  SHOULD_NOT_MOVE_AUTOMATICALLY,
+  SHOULD_NOT_OPEN_COMMUNITY_AUTOMATICALLY, SHOULD_OPEN_COMMUNITY_AUTOMATICALLY
+} from '../chrome/runtime.onMessage';
 
 export default class AutoEnterCommunityButton extends React.Component {
   constructor() {
@@ -54,10 +59,21 @@ export default class AutoEnterCommunityButton extends React.Component {
   }
 
   toggle() {
+    const metaData = MetaData.get();
     if (this.state.isToggledOn) {
       this.setState({ isToggledOn: false });
+      const option = {
+        purpose: SHOULD_NOT_OPEN_COMMUNITY_AUTOMATICALLY,
+        metaData: metaData
+      };
+      chrome.runtime.sendMessage(option);
     } else {
       this.setState({ isToggledOn: true });
+      const option = {
+        purpose: SHOULD_OPEN_COMMUNITY_AUTOMATICALLY,
+        metaData: metaData
+      };
+      chrome.runtime.sendMessage(option);
     }
   }
 
@@ -71,64 +87,13 @@ export default class AutoEnterCommunityButton extends React.Component {
   }
 
   saveAsAutoEnter() {
-    const idHolder = new IdHolder();
-    const id = idHolder.communityId;
-    let thumbnail = $('meta[property="og:image"]').attr("content");
-    const pageType = PageType.get();
-    const openDate = null;
-    let title, owner;
-    switch (pageType) {
-      case "COMMUNITY_PAGE":
-        title = $("div.communityData > h2.title > a")
-          .text()
-          .replace(/[\n\t]/g, "");
-        owner = $("div.communityData tr.row:first-child > td.content > a")
-          .text()
-          .replace(/[\n\t]/g, "");
-        break;
-      case "CHANNEL_PAGE":
-        title = $("h3.cp_chname").text();
-        owner = $("p.cp_viewname").text();
-        thumbnail =
-          "https://secure-dcdn.cdn.nimg.jp/comch/channel-icon/128x128/" +
-          id +
-          ".jpg";
-        break;
-      case "NORMAL_CAST_PAGE": // PAIR A
-      case "OFFICIAL_CAST_PAGE": // PAIR A
-        title =
-          $(
-            $(".commu_info")
-              .find("a")
-              .get(0)
-          ).html() || $(".ch_name").html();
-        owner =
-          $(".nicopedia_nushi")
-            .find("a")
-            .text() || $(".company").text();
-        break;
-      case "CHIMERA_CAST_PAGE":
-        title = $(".program-community-name").text();
-        owner = $(
-          $(".program-broadcaster-name")
-            .find("a")
-            .get(0)
-        ).text();
-        break;
-      case "MODERN_CAST_PAGE":
-        title = $("a[class^='___social-group-anchor___']").text();
-        owner = $("span[class^='___broadcaster___'] a")
-          .first()
-          .text();
-        break;
-      default:
-    }
-    Storage.saveToNestedLocalStorage("autoEnterCommunityList", id, {
+    const metaData = MetaData.get();
+    Storage.saveToNestedLocalStorage("autoEnterCommunityList", metaData.communityId, {
       state: "init",
-      thumbnail: thumbnail,
-      title: title,
-      openDate: openDate,
-      owner: owner
+      thumbnail: metaData.thumbnail,
+      title: metaData.title,
+      openDate: metaData.openDate,
+      owner: metaData.owner
     });
   }
 
