@@ -75,11 +75,13 @@ export class CommunityBuilder extends ManageableBuilder {
 export class ProgramBuilder extends ManageableBuilder {
   private _shouldMoveAutomatically: boolean | null;
   private _isVisiting: boolean | null;
+  private _isVisited: boolean | null;
 
   constructor() {
     super();
     this._shouldMoveAutomatically = null;
     this._isVisiting = null;
+    this._isVisited = null;
   }
 
   build(revision: number): Program {
@@ -96,11 +98,20 @@ export class ProgramBuilder extends ManageableBuilder {
     return this;
   }
 
+  isVisited(predict: boolean): this {
+    this._isVisited = predict;
+    return this;
+  }
+
   getShouldMoveAutomatically(): boolean | null {
     return this._shouldMoveAutomatically;
   }
 
   getIsVisiting(): boolean | null {
     return this._isVisiting;
+  }
+
+  getIsVisited(): boolean | null {
+    return this._isVisited;
   }
 }

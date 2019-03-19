@@ -1,6 +1,6 @@
 import { diff } from 'deep-object-diff';
-import { Community, Program } from "./Manageable";
-import { ProgramBuilder, CommunityBuilder } from "./CheckableBuilder";
+import { Community, nonNull, Program } from "./Manageable";
+import { ProgramBuilder, CommunityBuilder } from "./ManageableBuilder";
 
 class BucketClient {
     private rev: number;
@@ -21,63 +21,86 @@ class BucketClient {
         }
     }
 }
-// 番組を開いた           assign
-
-// 自動入場コミュニティ番組あり   assign / touch
-// 自動入場コミュニティ番組なし   touch
-// 自動入場番組           appoint
-// 自動枠移動            assign
-
-// 更新時              revision 更新
-
-// touch は community の番組に絶対に変化がないことが保証されている場合にのみ許される
-// program の touch はない．このモデルは program が必ず community をもつことを前提にするため．
 
 export class Bucket {
     private communities: Community[];
-    private revision: number;
+    private nextRevision: number;
     private readonly token: string;
+    static ANONYMOUS_PREFIX = "@@ANONYMOUS";
+    private anonymousCount: number;
 
     constructor() {
         this.communities = new Array<Community>();
-        this.revision = 0;
+        this.nextRevision = 1;
         this.token = "@@NICOSAPO";
+        this.anonymousCount = 0;
     }
 
-    // insert
-    // 自動入場（コミュニティ）番組がない
     touch(communityBuilder: CommunityBuilder) {
         this.touchCommunity(communityBuilder);
     }
 
-    // insert
-    // 自動入場（コミュニティ），番組がある
-    // 更新時
     assign(communityBuilder: CommunityBuilder, programBuilder: ProgramBuilder) {
-        this.touchBoth(communityBuilder, programBuilder, this.revision);
+        this.touchBoth(communityBuilder, programBuilder, false);
     }
 
-    // insert
-    // 自動入場（番組）
     appoint(communityBuilder: CommunityBuilder, programBuilder: ProgramBuilder) {
-        this.touchBoth(communityBuilder, programBuilder, -1);
+        this.touchBoth(communityBuilder, programBuilder, true);
     }
 
-    // drop
+    assignOrphan(programBuilder: ProgramBuilder, thumbnail: string | null = null) {
+        const program = this.findProgram(programBuilder, this.basicCommunities());
+        let community: CommunityBuilder;
+        if (program) {
+            community = this.communityToBuilder(program.community);
+        } else {
+            const prefix = this.takeAnonymousPrefix(programBuilder);
+            community = new CommunityBuilder().id(prefix);
+        }
+        if (thumbnail) {
+            community.thumbnailUrl(thumbnail);
+        }
+        this.assign(community, programBuilder);
+    }
+
+    appointOrphan(programBuilder: ProgramBuilder, thumbnail: string | null = null) {
+        const program = this.findProgram(programBuilder, this.basicCommunities());
+        let community: CommunityBuilder;
+        if (program) {
+            community = this.communityToBuilder(program.community);
+        } else {
+            const prefix = this.takeAnonymousPrefix(programBuilder);
+            community = new CommunityBuilder().id(prefix);
+        }
+        if (thumbnail) {
+            community.thumbnailUrl(thumbnail);
+        }
+        this.appoint(community, programBuilder);
+    }
+
     mask(communityBuilders: CommunityBuilder[]) {
         const communities = communityBuilders.map(builder => this.touchCommunity(builder));
         const survivors = communities.map(c => c.id);
         this.communities = this.communities.filter(c => {
             return survivors.includes(c.id) ||
-            c.shouldOpenAutomatically ||
-            c.programs.some(p => p.shouldOpenAutomatically) ||
-            c.programs.some(p => p.isVisiting)
+                (c.id.startsWith(Bucket.ANONYMOUS_PREFIX) && c.programs.length > 0) ||
+                c.shouldOpenAutomatically ||
+                c.programs.some(p => p.shouldOpenAutomatically) ||
+                c.programs.some(p => p.isVisiting) ||
+              c.programs.some(p => p.isVisited)
         });
-        this.revision += 1;
     }
 
     createClient():  BucketClient {
         return new BucketClient(0, this.token);
+    }
+
+    private takeAnonymousPrefix(programBuilder: ProgramBuilder) {
+        const program = this.findProgram(programBuilder, this.anonymousCommunities());
+        if (program != null) {
+            return program.community.id;
+        }
+        return Bucket.ANONYMOUS_PREFIX + "@" + this.anonymousCount++;
     }
 
     private touchCommunity(communityBuilder: CommunityBuilder): Community {
@@ -88,9 +111,15 @@ export class Bucket {
         return community;
     }
 
-    private touchBoth(communityBuilder: CommunityBuilder, programBuilder: ProgramBuilder, revision: number) {
+    private touchBoth(communityBuilder: CommunityBuilder, programBuilder: ProgramBuilder, isAppoint: boolean) {
+        const gracefulProgram = this.findProgram(programBuilder, this.anonymousCommunities());
+        if (gracefulProgram != null) {
+            gracefulProgram.community.detachProgram(gracefulProgram);
+            const builder = this.programToBuilder(gracefulProgram);
+            this.touchBoth(communityBuilder, builder, isAppoint);
+        }
         const community = this.touchCommunity(communityBuilder);
-        const program = this.createProgram(programBuilder, community, revision);
+        const program = this.createProgram(programBuilder, community, isAppoint);
         // Attach.
         community.attachProgram(program);
     }
@@ -100,11 +129,12 @@ export class Bucket {
           .map(c => c.programs)
           .reduce((array, v) => array.concat(v), [])
           .filter(p => p.isVisiting)
+          .filter(p => !p.isVisited)
           .filter(p =>
             p.shouldOpenAutomatically || p.community.shouldOpenAutomatically
           )
-          .filter(p => p.revision() != -1 && p.revision() >= client.revision());
-        client.setRevision(this.revision, this.token);
+          .filter(p => p.revision() != -1 && p.revision() > client.revision());
+        client.setRevision(this.nextRevision - 1, this.token);
         return result;
     }
 
@@ -113,11 +143,12 @@ export class Bucket {
           .map(c => c.programs)
           .reduce((array, v) => array.concat(v), [])
           .filter(p => !p.isVisiting)
+          .filter(p => !p.isVisited)
           .filter(p =>
             p.shouldOpenAutomatically || p.community.shouldOpenAutomatically
           )
-          .filter(p => p.revision() != -1 && p.revision() >= client.revision());
-        client.setRevision(this.revision, this.token);
+          .filter(p => p.revision() != -1 && p.revision() > client.revision());
+        client.setRevision(this.nextRevision - 1, this.token);
         return result;
     }
 
@@ -125,19 +156,35 @@ export class Bucket {
         const result =  this.communities
           .map(c => c.programs)
           .reduce((array, v) => array.concat(v), [])
+          .filter(p => !p.isVisiting)
           .filter(p => p.community.isFollowing)
           .filter(p =>
             !p.shouldOpenAutomatically && !p.community.shouldOpenAutomatically
           )
-          .filter(p => p.revision() != -1 && p.revision() >= client.revision());
-        client.setRevision(this.revision, this.token);
+          .filter(p => p.revision() != -1 && p.revision() > client.revision());
+        client.setRevision(this.nextRevision - 1, this.token);
         return result;
+    }
+
+    communitiesShouldPoll(): Community[] {
+        return this.communities.filter(c => c.shouldOpenAutomatically);
+    }
+
+    programsShouldPoll(): Program[] {
+        return this.communities
+          .map(c => c.programs)
+          .reduce((array, v) => array.concat(v), [])
+          .filter(p => p.shouldOpenAutomatically);
     }
 
     programs(): Program[] {
         return this.communities
             .map(c => c.programs)
             .reduce((array, v) => array.concat(v), [])
+    }
+
+    communityList(): Community[] {
+        return this.communities;
     }
 
     private createCommunity(builder: CommunityBuilder): Community {
@@ -171,9 +218,9 @@ export class Bucket {
         return community;
     }
 
-    private createProgram(builder: ProgramBuilder, parent: Community, revision: number): Program {
-        const draft = builder.build(revision);
-        const previous = this.findProgram(draft, parent);
+    private createProgram(builder: ProgramBuilder, parent: Community, isAppoint: boolean): Program {
+        const draft = builder.build(-100); // => dummy revision.
+        const previous = this.findProgram(builder, [parent]);
         const reference = previous || draft;
         // Update.
         builder.title(builder.getTitle() || reference.title);
@@ -183,6 +230,8 @@ export class Bucket {
         } else {
             builder.isVisiting(reference.isVisiting);
         }
+        const isVisited = nonNull(builder.getIsVisited(), reference.isVisited);
+        builder.isVisited(isVisited);
         const shouldOpen = builder.getShouldOpenAutomatically();
         if (shouldOpen != null) {
             builder.shouldOpenAutomatically(shouldOpen);
@@ -197,10 +246,26 @@ export class Bucket {
         }
         // Choose revision.
         let rev: number;
-        if (reference.revision() == -1) {
-            rev = revision;
+        if (previous != null) {
+            if (isAppoint) {
+                if (previous.revision() == -1) {
+                    rev = -1;
+                } else {
+                    rev = previous.revision();
+                }
+            } else {
+                if (previous.revision() == -1) {
+                    rev = this.nextRevision++;
+                } else {
+                    rev = previous.revision();
+                }
+            }
         } else {
-            rev = reference.revision();
+            if (isAppoint) {
+                rev = -1;
+            } else {
+                rev = this.nextRevision++;
+            }
         }
         // Build.
         const program = builder.build(rev);
@@ -219,8 +284,38 @@ export class Bucket {
         return communities.filter(c => c.id == id)[0];
     }
 
-    private findProgram(program: Program, parent: Community): Program | null {
-        return parent.programs.filter(p => p.id == program.id)[0];
+    private findProgram(programBuilder: ProgramBuilder, parents: Community[]): Program | null {
+        const program = programBuilder.build(-100); // => dummy revision.
+        return parents
+          .map(c => c.programs)
+          .reduce((array, v) => array.concat(v), [])
+          .filter(p => p.id == program.id)[0];
+    }
+
+    private communityToBuilder(community: Community) {
+        return new CommunityBuilder()
+          .id(community.id)
+          .title(community.title)
+          .shouldOpenAutomatically(community.shouldOpenAutomatically)
+          .thumbnailUrl(community.thumbnailUrl)
+          .isFollowing(community.isFollowing)
+    }
+
+    private programToBuilder(program: Program) {
+        return new ProgramBuilder()
+          .id(program.id)
+          .title(program.title)
+          .isVisiting(program.isVisiting)
+          .shouldMoveAutomatically(program.shouldMoveAutomatically)
+          .shouldOpenAutomatically(program.shouldOpenAutomatically);
+    }
+
+    private anonymousCommunities() {
+        return this.communities.filter(c => c.id.startsWith(Bucket.ANONYMOUS_PREFIX));
+    }
+
+    private basicCommunities() {
+        return this.communities.filter(c => !c.id.startsWith(Bucket.ANONYMOUS_PREFIX));
     }
 
     private static difference(prev: object | null, next: object) {

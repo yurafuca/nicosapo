@@ -1,4 +1,12 @@
-import { CommunityBuilder, ManageableBuilder, ProgramBuilder } from "./CheckableBuilder";
+import { CommunityBuilder, ManageableBuilder, ProgramBuilder } from "./ManageableBuilder";
+
+export const nonNull = (nullableValue: boolean | null, defaultValue: boolean): boolean => {
+  if (nullableValue != null) {
+    return nullableValue;
+  } else {
+    return defaultValue;
+  }
+};
 
 export class Manageable {
   id: string;
@@ -7,7 +15,8 @@ export class Manageable {
 
   constructor(builder: ManageableBuilder) {
     this.id = builder.getId();
-    this.shouldOpenAutomatically = builder.getShouldOpenAutomatically() || false;
+    this.title = builder.getTitle() || "";
+    this.shouldOpenAutomatically = nonNull(builder.getShouldOpenAutomatically(), false)
   }
 }
 
@@ -15,19 +24,25 @@ export class Program extends Manageable {
   community: Community;
   isVisiting: boolean;
   shouldMoveAutomatically: boolean;
-  private isActive: boolean;
+  isVisited: boolean;
   private readonly rev: number;
 
   constructor(builder: ProgramBuilder, revision: number) {
     super(builder);
     this.isVisiting = builder.getIsVisiting() || false;
-    this.shouldMoveAutomatically = builder.getShouldMoveAutomatically() || true;
-    this.isActive = false;
+    this.shouldMoveAutomatically = nonNull(builder.getShouldMoveAutomatically(), true);
+    this.isVisited = nonNull(builder.getIsVisited(), false);
     this.rev = revision;
   }
 
   revision(): number {
     return this.rev;
+  }
+
+  onAutomaticVisit() {
+    this.isVisiting = true;
+    this.isVisited = true;
+    this.shouldOpenAutomatically = false;
   }
 }
 
@@ -39,22 +54,16 @@ export class Community extends Manageable {
   constructor(builder: CommunityBuilder) {
     super(builder);
     this.programs = [];
-    this.thumbnailUrl = builder.getThumbnailUrl() || "";
+    this.thumbnailUrl = builder.getThumbnailUrl() || "../../images/icon.png";
     this.isFollowing = builder.getIsFollowing() || false;
   }
 
-  attachProgram(program: Program | null) {
-    if (program == null) {
-      return;
-    }
+  attachProgram(program: Program) {
     this.detachProgram(program);
     this.programs.push(program);
   }
 
-  detachProgram(program: Program | null) {
-    if (program == null) {
-      return;
-    }
+  detachProgram(program: Program) {
     this.programs = this.programs.filter(p => p.id !== program.id);
   }
 }
