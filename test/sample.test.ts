@@ -2,6 +2,7 @@ import { Bucket } from "../src/javascripts/modules/Bucket";
 import { CommunityBuilder, ProgramBuilder } from "ManageableBuilder.ts";
 
 
+
 let bucket: Bucket;
 let revision: number;
 
