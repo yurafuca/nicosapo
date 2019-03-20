@@ -1,4 +1,4 @@
-import { Subject, pipe, interval } from 'rxjs';
+import { interval } from 'rxjs';
 import store from "store";
 import "./modules/Pipe";
 import "./modules/Deamon";
@@ -81,4 +81,5 @@ interval(1000 * 60).subscribe(
   _ => { BackgroundReloader.run() }
 );
 
-
+// Make Observable Interval start immediately without a delay.
+BackgroundReloader.run();
