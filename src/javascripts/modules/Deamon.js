@@ -25,7 +25,7 @@ interval(1000 * 30).subscribe(
               .isVisiting(false)
               .shouldOpenAutomatically(true);
             // Assign.
-            bucket.assign(communityBuilder, programBuilder);
+            bucket.touchBoth(communityBuilder, programBuilder);
           }
         })
       }, delay);
@@ -42,7 +42,7 @@ interval(1000).subscribe(
       const isStarted = new Date(openDate) < new Date();
       if (isStarted) {
         const builder = new ProgramBuilder().id(program.id);
-        bucket.assignOrphan(builder);
+        bucket.touchProgram(builder);
       }
     });
   }

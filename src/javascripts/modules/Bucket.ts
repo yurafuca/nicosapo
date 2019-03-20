@@ -36,50 +36,36 @@ export class Bucket {
         this.anonymousCount = 0;
     }
 
-    touch(communityBuilder: CommunityBuilder) {
-        this.touchCommunity(communityBuilder);
+    touchCommunity(communityBuilder: CommunityBuilder) {
+        this.performTouchCommunity(communityBuilder);
     }
 
-    assign(communityBuilder: CommunityBuilder, programBuilder: ProgramBuilder) {
-        this.touchBoth(communityBuilder, programBuilder, false);
-    }
-
-    appoint(communityBuilder: CommunityBuilder, programBuilder: ProgramBuilder) {
-        this.touchBoth(communityBuilder, programBuilder, true);
-    }
-
-    assignOrphan(programBuilder: ProgramBuilder, thumbnail: string | null = null) {
-        const program = this.findProgram(programBuilder, this.basicCommunities());
-        let community: CommunityBuilder;
-        if (program) {
-            community = this.communityToBuilder(program.community);
-        } else {
-            const prefix = this.takeAnonymousPrefix(programBuilder);
-            community = new CommunityBuilder().id(prefix);
-        }
+    touchProgram(programBuilder: ProgramBuilder, thumbnail: string | null = null) {
+        const parent = this.findParent(programBuilder);
         if (thumbnail) {
-            community.thumbnailUrl(thumbnail);
+            parent.thumbnailUrl(thumbnail);
         }
-        this.assign(community, programBuilder);
+        this.touchBoth(parent, programBuilder);
     }
 
-    appointOrphan(programBuilder: ProgramBuilder, thumbnail: string | null = null) {
-        const program = this.findProgram(programBuilder, this.basicCommunities());
-        let community: CommunityBuilder;
-        if (program) {
-            community = this.communityToBuilder(program.community);
-        } else {
-            const prefix = this.takeAnonymousPrefix(programBuilder);
-            community = new CommunityBuilder().id(prefix);
-        }
+    appointProgram(programBuilder: ProgramBuilder, thumbnail: string | null = null) {
+        const parent = this.findParent(programBuilder);
         if (thumbnail) {
-            community.thumbnailUrl(thumbnail);
+            parent.thumbnailUrl(thumbnail);
         }
-        this.appoint(community, programBuilder);
+        this.appointBoth(parent, programBuilder);
+    }
+
+    touchBoth(communityBuilder: CommunityBuilder, programBuilder: ProgramBuilder) {
+        this.performTouchBoth(communityBuilder, programBuilder, false);
+    }
+
+    appointBoth(communityBuilder: CommunityBuilder, programBuilder: ProgramBuilder) {
+        this.performTouchBoth(communityBuilder, programBuilder, true);
     }
 
     mask(communityBuilders: CommunityBuilder[]) {
-        const communities = communityBuilders.map(builder => this.touchCommunity(builder));
+        const communities = communityBuilders.map(builder => this.performTouchCommunity(builder));
         const survivors = communities.map(c => c.id);
         this.communities = this.communities.filter(c => {
             return survivors.includes(c.id) ||
@@ -95,6 +81,18 @@ export class Bucket {
         return new BucketClient(0, this.token);
     }
 
+    private findParent(programBuilder: ProgramBuilder): CommunityBuilder {
+        const program = this.findProgram(programBuilder, this.basicCommunities());
+        let community: CommunityBuilder;
+        if (program) {
+            community = Bucket.communityToBuilder(program.community);
+        } else {
+            const prefix = this.takeAnonymousPrefix(programBuilder);
+            community = new CommunityBuilder().id(prefix);
+        }
+        return community;
+    }
+
     private takeAnonymousPrefix(programBuilder: ProgramBuilder) {
         const program = this.findProgram(programBuilder, this.anonymousCommunities());
         if (program != null) {
@@ -103,7 +101,7 @@ export class Bucket {
         return Bucket.ANONYMOUS_PREFIX + "@" + this.anonymousCount++;
     }
 
-    private touchCommunity(communityBuilder: CommunityBuilder): Community {
+    private performTouchCommunity(communityBuilder: CommunityBuilder): Community {
         const community = this.createCommunity(communityBuilder);
         // Replace.
         this.communities = this.communities.filter(c => c.id != community.id);
@@ -111,14 +109,14 @@ export class Bucket {
         return community;
     }
 
-    private touchBoth(communityBuilder: CommunityBuilder, programBuilder: ProgramBuilder, isAppoint: boolean) {
+    private performTouchBoth(communityBuilder: CommunityBuilder, programBuilder: ProgramBuilder, isAppoint: boolean) {
         const gracefulProgram = this.findProgram(programBuilder, this.anonymousCommunities());
         if (gracefulProgram != null) {
             gracefulProgram.community.detachProgram(gracefulProgram);
-            const builder = this.programToBuilder(gracefulProgram);
-            this.touchBoth(communityBuilder, builder, isAppoint);
+            const builder = Bucket.programToBuilder(gracefulProgram);
+            this.performTouchBoth(communityBuilder, builder, isAppoint);
         }
-        const community = this.touchCommunity(communityBuilder);
+        const community = this.performTouchCommunity(communityBuilder);
         const program = this.createProgram(programBuilder, community, isAppoint);
         // Attach.
         community.attachProgram(program);
@@ -292,7 +290,7 @@ export class Bucket {
           .filter(p => p.id == program.id)[0];
     }
 
-    private communityToBuilder(community: Community) {
+    private static communityToBuilder(community: Community) {
         return new CommunityBuilder()
           .id(community.id)
           .title(community.title)
@@ -301,7 +299,7 @@ export class Bucket {
           .isFollowing(community.isFollowing)
     }
 
-    private programToBuilder(program: Program) {
+    private static programToBuilder(program: Program) {
         return new ProgramBuilder()
           .id(program.id)
           .title(program.title)

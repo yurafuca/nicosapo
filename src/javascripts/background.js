@@ -1,5 +1,4 @@
-import { Subject, pipe } from "rxjs";
-import { map, filter } from "rxjs/operators";
+import { Subject, pipe, interval } from 'rxjs';
 import store from "store";
 import "./modules/Pipe";
 import "./modules/Deamon";
@@ -7,10 +6,7 @@ import Db from "./modules/db";
 import Badge from "./modules/Badge";
 import NiconamaTabs from "./modules/NiconamaTabs";
 import BackgroundReloader from "./modules/BackgroundReloader";
-import Common from "./common/Common";
-import AutoEnterRunner from "./autoEnter/AutoEnterRunner";
 import "./chrome/runtime.onMessage";
-import $ from "jquery";
 import { CommunityBuilder, ProgramBuilder } from "./modules/ManageableBuilder";
 import bucket from "./modules/Bucket";
 
@@ -31,7 +27,7 @@ Object.entries(store.get("autoEnterProgramList")).forEach(([id, program]) => {
     .id(id)
     .title(program.title)
     .shouldOpenAutomatically(true);
-  bucket.appointOrphan(builder, program.thumbnail);
+  bucket.appointProgram(builder, program.thumbnail);
 });
 
 Object.entries(store.get("autoEnterCommunityList")).forEach(([id, community]) => {
@@ -40,7 +36,7 @@ Object.entries(store.get("autoEnterCommunityList")).forEach(([id, community]) =>
     .thumbnailUrl(community.thumbnail)
     .title(community.title)
     .shouldOpenAutomatically(true);
-  bucket.touch(builder);
+  bucket.touchCommunity(builder);
 });
 
 const idleMinute = store.get("options.idle.minute") || 10;
@@ -80,4 +76,9 @@ chrome.contextMenus.removeAll(() => {
 
 Badge.setBackgroundColor("#ff6200");
 Db.setAll("autoEnterCommunityList", "state", "init");
-BackgroundReloader.run();
+
+interval(1000 * 60).subscribe(
+  _ => { BackgroundReloader.run() }
+);
+
+

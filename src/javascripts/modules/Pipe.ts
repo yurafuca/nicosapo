@@ -1,8 +1,9 @@
-import {Subject, interval} from 'rxjs';
+import {Subject, interval} from "rxjs";
 import store from "store";
 import bucket from "./Bucket";
-import { Bell, Poster } from "./Poster";
+import { Poster } from "./Poster";
 import { Program } from "./Manageable";
+import { Bell } from "./Bell";
 
 const AUTOMATIC_VISITING_KEY = "autoEnterProgramList";
 let isInitialCheck = true;
@@ -43,7 +44,7 @@ const notify = (program: Program) => {
         if (index == array.length - 1) {
           isInitialCheck = false;
         }
-      })
+      });
     }
   );
 })();

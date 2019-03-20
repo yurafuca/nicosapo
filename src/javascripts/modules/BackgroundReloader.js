@@ -35,7 +35,7 @@ export default class BackgroundReloader {
             .id(videoId)
             .title(title);
 
-          bucket.assign(community, program);
+          bucket.touchBoth(community, program);
 
           const temp = {
             co: community,
