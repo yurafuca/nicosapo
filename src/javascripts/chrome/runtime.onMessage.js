@@ -70,7 +70,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         .title(request.innerValue.thumbnail)
         .thumbnailUrl(request.innerKey.thumbnail)
         .shouldOpenAutomatically(true);
-      bucket.touch(builder);
+      bucket.touchCommunity(builder);
     }
 
     if (request.key == "autoEnterProgramList") {
@@ -82,8 +82,8 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         .id(request.innerKey)
         .title(request.innerValue.title)
         .shouldOpenAutomatically(true);
-      // Do not use "assign" instead of "appoint" !
-      bucket.appoint(community, program);
+      // Do not use "touchBoth" instead of "appointBoth" !
+      bucket.appointBoth(community, program);
     }
 
     return;
@@ -119,7 +119,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       const builder = new CommunityBuilder()
         .id(request.innerKey)
         .shouldOpenAutomatically(false);
-      bucket.touch(builder);
+      bucket.touchCommunity(builder);
     }
 
     if (request.key == "autoEnterProgramList") {
@@ -128,8 +128,8 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       const program = new ProgramBuilder()
         .id(request.innerKey)
         .shouldOpenAutomatically(false);
-      // Do not use "assign" instead of "appoint" !
-      bucket.appoint(community, program);
+      // Do not use "touchBoth" instead of "appointBoth" !
+      bucket.appointBoth(community, program);
     }
   }
 
@@ -140,41 +140,38 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       .isVisiting(true)
       .isVisited(true)
       .shouldMoveAutomatically(false);
-    bucket.assign(community, program);
+    bucket.touchBoth(community, program);
   }
 
   if (request.purpose === ON_LEAVE) {
     const metaData = request.metaData;
-    const community = createSimpleCommunityBuilder(metaData, metaData.communityId);
     const program = createSimpleProgramBuilder(metaData, metaData.programId).isVisiting(false);
-    bucket.assign(community, program);
+    bucket.touchProgram(program);
   }
 
   if (request.purpose === SHOULD_MOVE_AUTOMATICALLY) {
     const metaData = request.metaData;
-    const community = createSimpleCommunityBuilder(metaData, metaData.communityId);
     const program = createSimpleProgramBuilder(metaData, metaData.programId).shouldMoveAutomatically(true);
-    bucket.assign(community, program);
+    bucket.touchProgram(program);
   }
 
   if (request.purpose === SHOULD_NOT_MOVE_AUTOMATICALLY) {
     const metaData = request.metaData;
-    const community = createSimpleCommunityBuilder(metaData, metaData.communityId);
     const program = createSimpleProgramBuilder(metaData, metaData.programId).shouldMoveAutomatically(false);
-    bucket.assign(community, program);
+    bucket.touchProgram(program);
   }
 
   if (request.purpose === SHOULD_OPEN_COMMUNITY_AUTOMATICALLY) {
     const metaData = request.metaData;
     const community = createSimpleCommunityBuilder(metaData, metaData.communityId).shouldOpenAutomatically(true);
-    bucket.touch(community);
+    bucket.touchCommunity(community);
   }
 
 
   if (request.purpose === SHOULD_NOT_OPEN_COMMUNITY_AUTOMATICALLY) {
     const metaData = request.metaData;
     const community = createSimpleCommunityBuilder(metaData, metaData.communityId).shouldOpenAutomatically(false);
-    bucket.touch(community);
+    bucket.touchCommunity(community);
   }
 });
 
