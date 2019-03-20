@@ -5,10 +5,6 @@ export class ManageableBuilder {
   private _title: string;
   private _shouldOpenAutomatically: boolean | null;
 
-  constructor() {
-    this._shouldOpenAutomatically = null;
-  }
-
   id(id: string) {
     this._id = id;
     return this;
@@ -42,12 +38,6 @@ export class CommunityBuilder extends ManageableBuilder {
   private _thumbnailUrl: string | null;
   private _isFollowing: boolean | null;
 
-  constructor() {
-    super();
-    this._thumbnailUrl = null;
-    this._isFollowing = null;
-  }
-
   build(): Community {
     return new Community(this);
   }
@@ -76,13 +66,6 @@ export class ProgramBuilder extends ManageableBuilder {
   private _shouldMoveAutomatically: boolean | null;
   private _isVisiting: boolean | null;
   private _isVisited: boolean | null;
-
-  constructor() {
-    super();
-    this._shouldMoveAutomatically = null;
-    this._isVisiting = null;
-    this._isVisited = null;
-  }
 
   build(revision: number): Program {
     return new Program(this, revision);

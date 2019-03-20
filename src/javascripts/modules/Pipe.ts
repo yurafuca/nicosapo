@@ -1,4 +1,4 @@
-import {Subject, interval} from "rxjs";
+import { interval } from "rxjs";
 import store from "store";
 import bucket from "./Bucket";
 import { Poster } from "./Poster";

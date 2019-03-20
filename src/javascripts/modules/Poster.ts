@@ -3,7 +3,7 @@ import { ProgramBuilder } from "./ManageableBuilder";
 import { Bell } from "./Bell";
 
 export class Poster {
-    private _hasLaunched: boolean;
+    private _hasLaunched = false;
     private readonly _title: string;
     private readonly _thumbnailUrl: string;
     private readonly _id: string;

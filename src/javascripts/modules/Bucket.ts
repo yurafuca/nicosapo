@@ -23,18 +23,11 @@ class BucketClient {
 }
 
 export class Bucket {
-    private communities: Community[];
-    private nextRevision: number;
-    private readonly token: string;
+    private communities = new Array<Community>();
+    private nextRevision = 1;
+    private readonly token = "@@NICOSAPO";
     static ANONYMOUS_PREFIX = "@@ANONYMOUS";
-    private anonymousCount: number;
-
-    constructor() {
-        this.communities = new Array<Community>();
-        this.nextRevision = 1;
-        this.token = "@@NICOSAPO";
-        this.anonymousCount = 0;
-    }
+    private anonymousCount = 0;
 
     touchCommunity(communityBuilder: CommunityBuilder) {
         this.performTouchCommunity(communityBuilder);
