@@ -4,9 +4,9 @@ import { Bell } from "./Bell";
 
 export class Poster {
     private _hasLaunched: boolean;
-    private _title: string;
-    private _thumbnailUrl: string;
-    private _id: string;
+    private readonly _title: string;
+    private readonly _thumbnailUrl: string;
+    private readonly _id: string;
     private _duration: number;
     private _notification: Notification | null;
     private _bell: Bell | null;
@@ -31,12 +31,18 @@ export class Poster {
     launch() {
         const title = this._title;
         const thumbnailUrl = this._thumbnailUrl;
+        const id = this._id;
         const options = new class implements NotificationOptions {
             body = title;
             icon = thumbnailUrl;
         };
         this._notification = new Notification("放送開始のおしらせ", options);
-        this._notification.onclick = this.createTab;
+        this._notification.onclick = () => {
+            chrome.tabs.create({
+                url: `https://live.nicovideo.jp/watch/${id}`,
+                active: true
+            });
+        };
         this._hasLaunched = true;
         if (this._bell) {
             this._bell.ring();
@@ -50,12 +56,5 @@ export class Poster {
         if (this._notification) {
             this._notification.close();
         }
-    }
-
-    private createTab() {
-        chrome.tabs.create({
-            url: `https://live.nicovideo.jp/watch/${this._id}`,
-            active: true
-        });
     }
 }

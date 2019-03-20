@@ -74,7 +74,10 @@ export default class AutoEnterList extends React.Component {
     chrome.runtime.sendMessage({
       purpose: "removeFromNestedLocalStorage",
       key: keys[this.props.type],
-      innerKey: id
+      innerKey: id,
+      innerValue: {
+        communityId: id // FiXME: communityId will be programId if this type is 'autoEnterProgramList'.
+      }
     });
     const itemParams = this.state.itemParams.filter(param => param.id != id);
     this.setState({ itemParams: itemParams });
