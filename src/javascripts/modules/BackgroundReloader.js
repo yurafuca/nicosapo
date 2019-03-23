@@ -9,11 +9,6 @@ import VideoInfoUtil from './VideoInfoUtil';
 export default class BackgroundReloader {
   static run() {
     Promise.resolve()
-      .then(() => Api.isLogined())
-      .catch(() => {
-        Badge.setText("error");
-      })
-      .then(Common.sleep(2000))
       .then(() => Api.loadCasts("user"))
       .then($videoInfoList => {
         $videoInfoList = VideoInfoUtil.removeReservation($videoInfoList);
