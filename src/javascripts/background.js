@@ -22,7 +22,7 @@ chrome.tabs.onRemoved.addListener((tabId, info) => {
   NiconamaTabs.remove(tabId);
 });
 
-Object.entries(store.get("autoEnterProgramList")).forEach(([id, program]) => {
+Object.entries(store.get("autoEnterProgramList", {})).forEach(([id, program]) => {
   const builder = new ProgramBuilder()
     .id(id)
     .title(program.title)
@@ -30,7 +30,7 @@ Object.entries(store.get("autoEnterProgramList")).forEach(([id, program]) => {
   bucket.appointProgram(builder, program.thumbnail);
 });
 
-Object.entries(store.get("autoEnterCommunityList")).forEach(([id, community]) => {
+Object.entries(store.get("autoEnterCommunityList", {})).forEach(([id, community]) => {
   const builder = new CommunityBuilder()
     .id(id)
     .thumbnailUrl(community.thumbnail)
