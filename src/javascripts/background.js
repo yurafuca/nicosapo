@@ -77,7 +77,7 @@ chrome.contextMenus.removeAll(() => {
 Badge.setBackgroundColor("#ff6200");
 Db.setAll("autoEnterCommunityList", "state", "init");
 
-interval(1000 * 60).subscribe(
+interval(1000 * 40).subscribe(
   _ => { BackgroundReloader.run() }
 );
 
