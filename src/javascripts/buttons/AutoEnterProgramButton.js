@@ -5,6 +5,7 @@ import Buttons from "../buttons/Buttons";
 import IdHolder from "../modules/IdHolder";
 import Storage from "../modules/Storage";
 import { OverlayTrigger, Popover } from "react-bootstrap";
+import MetaData from '../modules/MetaData';
 
 export default class AutoEnterProgramButton extends React.Component {
   constructor() {
@@ -69,25 +70,22 @@ export default class AutoEnterProgramButton extends React.Component {
   }
 
   saveAsAutoEnter() {
-    const idHolder = new IdHolder();
-    const id = idHolder.liveId;
-    const thumbnail = $('meta[property="og:image"]').attr("content");
-    const title = $('meta[property="og:title"]').attr("content");
-    const openDate = $('.kaijo meta[itemprop="datePublished"]').attr("content");
-    const owner = null;
-    Storage.saveToNestedLocalStorage("autoEnterProgramList", id, {
+    const metaData = MetaData.get();
+    Storage.saveToNestedLocalStorage("autoEnterProgramList", metaData.programId, {
       state: "init",
-      thumbnail: thumbnail,
-      title: title,
-      openDate: openDate,
-      owner: owner
+      thumbnail: metaData.thumbnail,
+      title: metaData.title,
+      openDate: metaData.openDate,
+      owner: metaData.owner,
+      communityId: metaData.communityId
     });
   }
 
   removeAsAutoEnter() {
-    const idHolder = new IdHolder();
-    const id = idHolder.liveId;
-    Storage.removeFromNestedLocalStorage("autoEnterProgramList", id);
+    const metaData = MetaData.get();
+    Storage.removeFromNestedLocalStorage("autoEnterProgramList", metaData.programId, {
+      communityId: metaData.communityId
+    });
   }
 
   render() {

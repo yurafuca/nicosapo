@@ -1,5 +1,14 @@
 import store from "store";
 import NiconamaTabs from "../modules/NiconamaTabs";
+import { CommunityBuilder, ProgramBuilder } from '../modules/ManageableBuilder';
+import bucket from "../modules/Bucket"
+
+export const ON_VISIT = "ON_VISIT";
+export const ON_LEAVE = "ON_LEAVE";
+export const SHOULD_MOVE_AUTOMATICALLY = "SHOULD_MOVE_AUTOMATICALLY";
+export const SHOULD_NOT_MOVE_AUTOMATICALLY = "SHOULD_NOT_MOVE_AUTOMATICALLY";
+export const SHOULD_OPEN_COMMUNITY_AUTOMATICALLY = "SHOULD_OPEN_COMMUNITY_AUTOMATICALLY";
+export const SHOULD_NOT_OPEN_COMMUNITY_AUTOMATICALLY = "SHOULD_NOT_OPEN_COMMUNITY_AUTOMATICALLY";
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.purpose == "NiconamaTabs.add") {
@@ -54,6 +63,29 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       storagedData[request.innerKey].owner = request.innerValue.owner;
     }
     store.set(request.key, storagedData);
+
+    if (request.key == "autoEnterCommunityList") {
+      const builder = new CommunityBuilder()
+        .id(request.innerKey)
+        .title(request.innerValue.thumbnail)
+        .thumbnailUrl(request.innerKey.thumbnail)
+        .shouldOpenAutomatically(true);
+      bucket.touchCommunity(builder);
+    }
+
+    if (request.key == "autoEnterProgramList") {
+      const community = new CommunityBuilder()
+        .id(request.innerValue.communityId)
+        // .title(metaData.title)
+        .thumbnailUrl(request.innerValue.thumbnail);
+      const program = new ProgramBuilder()
+        .id(request.innerKey)
+        .title(request.innerValue.title)
+        .shouldOpenAutomatically(true);
+      // Do not use "touchBoth" instead of "appointBoth" !
+      bucket.appointBoth(community, program);
+    }
+
     return;
   }
 
@@ -82,6 +114,82 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     );
     delete storagedData[request.innerKey];
     store.set(request.key, storagedData);
-    return;
+
+    if (request.key == "autoEnterCommunityList") {
+      const builder = new CommunityBuilder()
+        .id(request.innerKey)
+        .shouldOpenAutomatically(false);
+      bucket.touchCommunity(builder);
+    }
+
+    if (request.key == "autoEnterProgramList") {
+      const community = new CommunityBuilder()
+        .id(request.innerValue.communityId);
+      const program = new ProgramBuilder()
+        .id(request.innerKey)
+        .shouldOpenAutomatically(false);
+      // Do not use "touchBoth" instead of "appointBoth" !
+      bucket.appointBoth(community, program);
+    }
+  }
+
+  if (request.purpose === ON_VISIT) {
+    const metaData = request.metaData;
+    const community = createSimpleCommunityBuilder(metaData, metaData.communityId);
+    const program = createSimpleProgramBuilder(metaData, metaData.programId)
+      .isVisiting(true)
+      .isVisited(true)
+      .shouldMoveAutomatically(false);
+    bucket.touchBoth(community, program);
+  }
+
+  if (request.purpose === ON_LEAVE) {
+    const metaData = request.metaData;
+    const program = createSimpleProgramBuilder(metaData, metaData.programId).isVisiting(false);
+    bucket.touchProgram(program);
+  }
+
+  if (request.purpose === SHOULD_MOVE_AUTOMATICALLY) {
+    const metaData = request.metaData;
+    const program = createSimpleProgramBuilder(metaData, metaData.programId).shouldMoveAutomatically(true);
+    bucket.touchProgram(program);
+  }
+
+  if (request.purpose === SHOULD_NOT_MOVE_AUTOMATICALLY) {
+    const metaData = request.metaData;
+    const program = createSimpleProgramBuilder(metaData, metaData.programId).shouldMoveAutomatically(false);
+    bucket.touchProgram(program);
+  }
+
+  if (request.purpose === SHOULD_OPEN_COMMUNITY_AUTOMATICALLY) {
+    const metaData = request.metaData;
+    const community = createSimpleCommunityBuilder(metaData, metaData.communityId).shouldOpenAutomatically(true);
+    bucket.touchCommunity(community);
+  }
+
+
+  if (request.purpose === SHOULD_NOT_OPEN_COMMUNITY_AUTOMATICALLY) {
+    const metaData = request.metaData;
+    const community = createSimpleCommunityBuilder(metaData, metaData.communityId).shouldOpenAutomatically(false);
+    bucket.touchCommunity(community);
   }
 });
+
+const createSimpleCommunityBuilder = (metaData, id) => {
+  const builder = new CommunityBuilder().id(id);
+  if (metaData.title) {
+    builder.title(metaData.title);
+  }
+  if (metaData.thumbnailUrl) {
+    builder.thumbnailUrl(metaData.thumbnailUrl);
+  }
+  return builder;
+};
+
+const createSimpleProgramBuilder = (metaData, id) => {
+  const builder = new ProgramBuilder().id(id);
+  if (metaData.title) {
+    builder.title(metaData.title);
+  }
+  return builder;
+};

@@ -17,15 +17,21 @@ module.exports = [{
       filename: "[name].js"
     },
     module: {
-      rules: [{
-        test: /\.jsx?$/,
-        loader: "babel-loader",
-        exclude: /node_modules/,
-        query: {
-          cacheDirectory: true,
-          retainLines: true
-        }
-      },
+      rules: [
+        {
+          test: /\.jsx?$/,
+          loader: "babel-loader",
+          exclude: /node_modules/,
+          query: {
+            cacheDirectory: true,
+            retainLines: true
+          }
+        },
+        {
+          test: /\.tsx?$/,
+          use: 'ts-loader',
+          exclude: /node_modules/
+        },
         {
           test: /\.css$/,
           loaders: ["style-loader", "css-loader?modules"]
@@ -77,7 +83,7 @@ module.exports = [{
       })
     ],
     resolve: {
-      extensions: [".js", ".jsx", ".scss"]
+      extensions: [".ts", "tsx", ".js", ".jsx", ".scss"]
     }
   },
   {

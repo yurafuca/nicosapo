@@ -1,11 +1,14 @@
+import { interval } from 'rxjs';
 import store from "store";
+import "./modules/Pipe";
+import "./modules/Deamon";
 import Db from "./modules/db";
 import Badge from "./modules/Badge";
 import NiconamaTabs from "./modules/NiconamaTabs";
 import BackgroundReloader from "./modules/BackgroundReloader";
-import Common from "./common/Common";
-import AutoEnterRunner from "./autoEnter/AutoEnterRunner";
 import "./chrome/runtime.onMessage";
+import { CommunityBuilder, ProgramBuilder } from "./modules/ManageableBuilder";
+import bucket from "./modules/Bucket";
 
 chrome.runtime.onInstalled.addListener(() => {
   NiconamaTabs.clear();
@@ -15,8 +18,25 @@ chrome.runtime.onStartup.addListener(() => {
   NiconamaTabs.clear();
 });
 
-chrome.tabs.onRemoved.addListener(tabId => {
+chrome.tabs.onRemoved.addListener((tabId, info) => {
   NiconamaTabs.remove(tabId);
+});
+
+Object.entries(store.get("autoEnterProgramList", {})).forEach(([id, program]) => {
+  const builder = new ProgramBuilder()
+    .id(id)
+    .title(program.title)
+    .shouldOpenAutomatically(true);
+  bucket.appointProgram(builder, program.thumbnail);
+});
+
+Object.entries(store.get("autoEnterCommunityList", {})).forEach(([id, community]) => {
+  const builder = new CommunityBuilder()
+    .id(id)
+    .thumbnailUrl(community.thumbnail)
+    .title(community.title)
+    .shouldOpenAutomatically(true);
+  bucket.touchCommunity(builder);
 });
 
 const idleMinute = store.get("options.idle.minute") || 10;
@@ -56,18 +76,10 @@ chrome.contextMenus.removeAll(() => {
 
 Badge.setBackgroundColor("#ff6200");
 Db.setAll("autoEnterCommunityList", "state", "init");
+
+interval(1000 * 40).subscribe(
+  _ => { BackgroundReloader.run() }
+);
+
+// Make Observable Interval start immediately without a delay.
 BackgroundReloader.run();
-setInterval(BackgroundReloader.run, 60 * 1000);
-Common.sleep(7 * 1000).then(() => {
-  setInterval(() => {
-    const isForceCancel = store.get("options.autoEnter.forceCancel") || false;
-    const isAutoCancel = store.get("state.autoEnter.cancel") || false;
-    if (!isForceCancel && !isAutoCancel) {
-      Promise.resolve()
-        .then(new AutoEnterRunner().run("live"))
-        .then(new AutoEnterRunner().run("community"));
-    } else {
-      console.log("Canceled auto enter.");
-    }
-  }, 60 * 1000);
-});

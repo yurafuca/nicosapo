@@ -1,5 +1,7 @@
 import React from "react";
 import { OverlayTrigger, Popover } from "react-bootstrap";
+import { SHOULD_MOVE_AUTOMATICALLY, SHOULD_NOT_MOVE_AUTOMATICALLY } from '../chrome/runtime.onMessage';
+import MetaData from '../modules/MetaData';
 
 export default class AutoRedirectButton extends React.Component {
   constructor() {
@@ -42,11 +44,22 @@ export default class AutoRedirectButton extends React.Component {
   }
 
   toggle() {
+    const metaData = MetaData.get();
     this.props.notify(!this.state.isToggledOn);
     if (this.state.isToggledOn) {
       this.setState({ isToggledOn: false });
+      const option = {
+        purpose: SHOULD_NOT_MOVE_AUTOMATICALLY,
+        metaData: metaData
+      };
+      chrome.runtime.sendMessage(option);
     } else {
       this.setState({ isToggledOn: true });
+      const option = {
+        purpose: SHOULD_MOVE_AUTOMATICALLY,
+        metaData: metaData
+      };
+      chrome.runtime.sendMessage(option);
     }
   }
 

@@ -75,23 +75,6 @@ export default class Api {
     });
   }
 
-  static getCheckList() {
-    return new Promise((resolve, reject) => {
-      const url = "https://flapi.nicovideo.jp/api/getchecklist";
-      axios.get(url).then(response => {
-        const status = response.data.status;
-        switch (status) {
-          case "OK":
-            resolve(response.data.community_id);
-            break;
-          default:
-            reject(new Error('Request failed: status is "fail".'));
-            break;
-        }
-      });
-    });
-  }
-
   static getFutureOnair() {
     return new Promise(resolve => {
       const url = "https://live.nicovideo.jp/ranking?type=comingsoon&main_provider_type=official";
@@ -161,7 +144,9 @@ export default class Api {
           if (Date.now() < `${endTime.textContent}000`) {
             console.log(`${theRequestId}: onair.`);
             const liveId = response.querySelector("stream id").textContent;
+            const title = response.querySelector("stream title").textContent;
             response.nextLiveId = liveId;
+            response.title = title;
             response.isOpen = true;
           }
         }
