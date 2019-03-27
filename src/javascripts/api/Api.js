@@ -104,7 +104,7 @@ export default class Api {
   static getStatus(param) {
     parameter_nicovideojs.push(param);
     return new Promise(resolve => {
-      const url = "https://watch.live.nicovideo.jp/api/getplayerstatus?v=";
+      const url = "https://live.nicovideo.jp/api/getplayerstatus/";
       const parameter = parameter_nicovideojs.shift();
 
       axios

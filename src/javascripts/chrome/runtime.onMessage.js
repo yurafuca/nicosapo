@@ -2,15 +2,49 @@ import store from "store";
 import NiconamaTabs from "../modules/NiconamaTabs";
 import { CommunityBuilder, ProgramBuilder } from '../modules/ManageableBuilder';
 import bucket from "../modules/Bucket"
+import Api from '../api/Api';
 
 export const ON_VISIT = "ON_VISIT";
 export const ON_LEAVE = "ON_LEAVE";
+
 export const SHOULD_MOVE_AUTOMATICALLY = "SHOULD_MOVE_AUTOMATICALLY";
 export const SHOULD_NOT_MOVE_AUTOMATICALLY = "SHOULD_NOT_MOVE_AUTOMATICALLY";
 export const SHOULD_OPEN_COMMUNITY_AUTOMATICALLY = "SHOULD_OPEN_COMMUNITY_AUTOMATICALLY";
 export const SHOULD_NOT_OPEN_COMMUNITY_AUTOMATICALLY = "SHOULD_NOT_OPEN_COMMUNITY_AUTOMATICALLY";
 
+export const API_GET_STATUS = "API_GET_STATUS";
+export const API_IS_ONAIR = "API_IS_ONAIR";
+
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.purpose  === API_GET_STATUS) {
+    const programId = request.programId;
+    if (programId == null) {
+      console.error(`${API_GET_STATUS} requires 'programId' field.`);
+      return;
+    }
+    Api.getStatus(programId).then(response => {
+      sendResponse(createSimpleResponse(response));
+    });
+    return true;
+  }
+
+  if (request.purpose  === API_IS_ONAIR) {
+    const id = request.id;
+    if (id == null) {
+      console.error(`${API_IS_ONAIR} requires 'id' field.`);
+      return;
+    }
+    Api.isOpen(id).then(response => {
+      const resultResponse = createSimpleResponse(response);
+      resultResponse.nextProgramId = response.nextLiveId;
+      resultResponse.nextProgramTitle = response.title;
+      resultResponse.checkedId = response.requestId;
+      resultResponse.isOnair = response.isOpen;
+      sendResponse(resultResponse);
+    });
+    return true;
+  }
+
   if (request.purpose == "NiconamaTabs.add") {
     NiconamaTabs.add(sender.tab.id, request.id, request.scrollTop);
   }
@@ -174,6 +208,17 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     bucket.touchCommunity(community);
   }
 });
+
+const createSimpleResponse = statusResponse => {
+  const endTime = statusResponse.querySelector("stream end_time");
+  const endTimeText = endTime != null ? endTime.textContent : null;
+  const endTimeSecond = endTimeText != null ? Number(endTimeText) : null;
+  const endTimeMilliSecond = endTimeSecond != null ? endTimeSecond * 1000 : null;
+  return {
+    endTimeSecond: endTimeSecond,
+    endTimeMilliSecond: endTimeMilliSecond,
+  };
+};
 
 const createSimpleCommunityBuilder = (metaData, id) => {
   const builder = new CommunityBuilder().id(id);

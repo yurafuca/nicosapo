@@ -7,24 +7,10 @@ import Common from "../common/Common";
 import Time from "../common/Time";
 import Clock from "../common/Clock";
 import IdHolder from "../modules/IdHolder";
+import { API_GET_STATUS } from '../chrome/runtime.onMessage';
 
 const _clock = new Clock(new Date());
 const _defaultUpdateText = "延長されていません";
-
-const _getEndDate = statusResponse => {
-  const end = _getEndTime(statusResponse);
-  const endDate = new Date(end.millisec);
-  return endDate;
-};
-
-const _getEndTime = statusResponse => {
-  const $endTime = $(statusResponse).find("stream end_time");
-  const end = {
-    second: Number($endTime.text()),
-    millisec: Number($endTime.text()) * 1000
-  };
-  return end;
-};
 
 export default class ExBar extends React.Component {
   constructor(props) {
@@ -45,7 +31,7 @@ export default class ExBar extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const endDate = _getEndDate(nextProps.response);
+    const endDate = new Date(nextProps.response.endTimeMilliSecond);
     const endText = Time.toJpnString(endDate);
     if (endText !== this.state.endText) {
       this.reset(nextProps.response);
@@ -69,23 +55,25 @@ export default class ExBar extends React.Component {
   setParams(isReset = false, statusResponse) {
     (isReset
       ? Promise.resolve(statusResponse)
-      : Api.getStatus(new IdHolder().liveId)
-    ).then(response => {
-      this.setEndText(response);
-      this.setRemainTime(response);
-    });
+      : chrome.runtime.sendMessage({
+          purpose: API_GET_STATUS,
+          programId: new IdHolder().liveId
+        }, response => {
+          this.setEndText(response);
+          this.setRemainTime(response);
+      })
+    );
   }
 
   setEndText(statusResponse) {
-    const end = _getEndTime(statusResponse);
-    const endDate = new Date(end.millisec);
+    const endDate = new Date(statusResponse.endTimeMilliSecond);
     const endText = Time.toJpnString(endDate);
     this.setState({ endText: endText });
   }
 
   setRemainTime(statusResponse) {
     console.info("remain");
-    const endDate = _getEndDate(statusResponse);
+    const endDate = new Date(statusResponse.endTimeMilliSecond);
     const nowDate = new Date(Date.now());
     const remainHour = Time.hourDistance(nowDate, endDate);
     const remainMin = Time.minuteSurplusDistance(nowDate, endDate);
