@@ -76,7 +76,10 @@ export default class NewCastChecker {
         }
       } else {
         if (_isEnableChecking) {
-          Api.isOpen(idHolder.communityId).then(response => {
+          chrome.runtime.sendMessage({
+            purpose: API_IS_ONAIR,
+            id: idHolder.communityId
+          }, response => {
             if (response.isOnair) {
               goToCast(response.nextProgramId);
             }
