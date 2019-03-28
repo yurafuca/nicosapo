@@ -41,8 +41,8 @@ export default class PageType {
   }
 
   static _isModernCastPage() {
-    const $targetDom = $("#root");
-    if ($targetDom.length > 0) {
+    const $root = $("#root");
+    if ($root.length > 0) {
       return true;
     } else {
       return false;
@@ -74,6 +74,9 @@ export default class PageType {
   }
 
   static _isOfficialCastPage() {
+    if ($("#gates").length > 0) {
+      return false;
+    }
     // お便り投稿ヘッダ
     if ($(".mail_title").length > 0) {
       return true;
