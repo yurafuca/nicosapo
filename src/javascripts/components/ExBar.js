@@ -44,25 +44,23 @@ export default class ExBar extends React.Component {
   }
 
   build() {
-    this.setParams(false, null);
+    chrome.runtime.sendMessage({
+      purpose: API_GET_STATUS,
+      programId: new IdHolder().liveId
+    }, response => {
+      this.setParams(response)
+    });
   }
 
   reset(statusResponse) {
     console.info("reset");
-    this.setParams(true, statusResponse);
+    this.setParams(statusResponse);
   }
 
-  setParams(isReset = false, statusResponse) {
-    (isReset
-      ? Promise.resolve(statusResponse)
-      : chrome.runtime.sendMessage({
-          purpose: API_GET_STATUS,
-          programId: new IdHolder().liveId
-        }, response => {
-          this.setEndText(response);
-          this.setRemainTime(response);
-      })
-    );
+  setParams(statusResponse) {
+    console.info("update clock");
+    this.setEndText(statusResponse);
+    this.setRemainTime(statusResponse);
   }
 
   setEndText(statusResponse) {
