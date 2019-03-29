@@ -34,8 +34,9 @@ export default class ExBar extends React.Component {
     const endDate = new Date(nextProps.response.endTimeMilliSecond);
     const endText = Time.toJpnString(endDate);
     if (endText !== this.state.endText) {
+      const time = new Date().getTime();
+      this.setState({ updateText: `番組の延長を ${Time.toJpnString(time)} に検知しました` });
       this.reset(nextProps.response);
-      this.setState({ updateText: `放送が ${endText} へ更新されました` });
       this.startBlink();
       Common.sleep(6400).then(() => {
         this.stopBlink();
