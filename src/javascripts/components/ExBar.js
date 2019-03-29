@@ -123,12 +123,12 @@ export default class ExBar extends React.Component {
     return (
       <div>
         <div id="extended-bar" style={{ width: width }}>
-          <div className="icon-end-time" />
-          <div className="time end-time">
+          <span className="time end-time">
+            <i className="material-icons icon-end-time">event</i>
             {this.state.isOpen ? this.state.endText : "放送が終了しました"}
-          </div>
-          <div className="icon-message" />
-          <div className="message">
+          </span>
+          <span className="message">
+            <i className="material-icons icon-message">notifications</i>
             {this.state.doBlink ? (
               <Blink>
                 <span style={{ color: "#FFEE66" }}>
@@ -138,13 +138,13 @@ export default class ExBar extends React.Component {
             ) : (
               this.state.updateText
             )}
-          </div>
-          <div className="icon-rest-time" />
-          <div className="time rest-time">
+          </span>
+          <span className="time rest-time">
+            <i className="material-icons icon-rest-time">watch_later</i>
             {this.state.hour > 0
               ? `${this.state.hour}：${this.state.minute}：${this.state.second}`
               : `${this.state.minute}：${this.state.second}`}
-          </div>
+          </span>
         </div>
       </div>
     );
