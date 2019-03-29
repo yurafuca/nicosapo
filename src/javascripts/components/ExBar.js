@@ -123,9 +123,11 @@ export default class ExBar extends React.Component {
     return (
       <div>
         <div id="extended-bar" style={{ width: width }}>
+          <div className="icon-end-time" />
           <div className="time end-time">
             {this.state.isOpen ? this.state.endText : "放送が終了しました"}
           </div>
+          <div className="icon-message" />
           <div className="message">
             {this.state.doBlink ? (
               <Blink>
@@ -137,6 +139,7 @@ export default class ExBar extends React.Component {
               this.state.updateText
             )}
           </div>
+          <div className="icon-rest-time" />
           <div className="time rest-time">
             {this.state.hour > 0
               ? `${this.state.hour}：${this.state.minute}：${this.state.second}`
