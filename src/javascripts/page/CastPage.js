@@ -11,6 +11,11 @@ export default class CastPage extends Page {
 
     //
     const metaData = MetaData.get();
+
+    if (metaData.pageType === "ERROR_PAGE") {
+      return;
+    }
+
     const option = {
       purpose: ON_VISIT,
       metaData: metaData

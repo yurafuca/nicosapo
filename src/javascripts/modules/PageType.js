@@ -4,6 +4,10 @@ export default class PageType {
   static get() {
     let pageType = null;
 
+    if ($("#Error_Box").length > 0) {
+      return "ERROR_PAGE";
+    }
+
     if (this._isModernTimeShiftPage()) {
       pageType = "MODERN_TIME_SHIFT_PAGE";
       /**
