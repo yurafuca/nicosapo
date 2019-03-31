@@ -448,3 +448,15 @@ it("親のない番組として登録された番組に親を touchBoth でき�
     expect(bucket.communityList().filter(c => c.id.startsWith(Bucket.ANONYMOUS_PREFIX)).length).toBe(0);
     expect(bucket.communityList().filter(c => !c.id.startsWith(Bucket.ANONYMOUS_PREFIX)).length).toBe(1);
 });
+
+it("同じコミュニティが新しく放送を開始したら番組に自動入場する", () => {
+    const client = bucket.createClient();
+    c1.shouldOpenAutomatically(true);
+    bucket.touchBoth(c1, p1);
+    expect(bucket.takeProgramsShouldOpen(client).length).toBe(1);
+    expect(bucket.takeProgramsShouldOpen(client).length).toBe(0);
+    bucket.takeProgramsShouldOpen(bucket.createClient()).forEach(p => p.onAutomaticVisit());
+    bucket.touchBoth(c1, p2);
+    expect(bucket.takeProgramsShouldOpen(client).length).toBe(1);
+    expect(bucket.takeProgramsShouldOpen(client).length).toBe(0);
+});
