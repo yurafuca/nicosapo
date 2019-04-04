@@ -8,6 +8,9 @@ export default class PageType {
       return "ERROR_PAGE";
     }
 
+    /**
+     * TimeShiftPage
+     */
     if (this._isModernTimeShiftPage()) {
       pageType = "MODERN_TIME_SHIFT_PAGE";
       /**
@@ -33,10 +36,10 @@ export default class PageType {
     } else if (this._isChannelPage()) {
       pageType = "CHANNEL_PAGE";
       /**
-       * TimeShiftPage
+       * ErrorPage
        */
     } else {
-      pageType = "TIME_SHIFT_PAGE";
+      pageType = "ERROR_PAGE";
     }
 
     console.log(pageType);
