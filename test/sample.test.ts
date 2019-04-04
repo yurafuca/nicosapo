@@ -460,3 +460,56 @@ it("同じコミュニティが新しく放送を開始したら番組に自動�
     expect(bucket.takeProgramsShouldOpen(client).length).toBe(1);
     expect(bucket.takeProgramsShouldOpen(client).length).toBe(0);
 });
+
+it("id が null の Community は touchCommunity できない", () => {
+    const c = new CommunityBuilder();
+    expect(() => {
+        bucket.touchCommunity(c);
+    }).toThrow();
+});
+
+it("id が null の Program は touchProgram できない", () => {
+    const p = new ProgramBuilder();
+    expect(() => {
+        bucket.touchProgram(p);
+    }).toThrow();
+});
+
+it("id が null の Program は appointProgram できない", () => {
+    const p = new ProgramBuilder();
+    expect(() => {
+        bucket.appointProgram(p);
+    }).toThrow();
+});
+
+it("id が null の Community は touchBoth できない", () => {
+    const c = new CommunityBuilder();
+    const p = new ProgramBuilder().id("lv");
+    expect(() => {
+        bucket.touchBoth(c, p);
+    }).toThrow();
+});
+
+it("id が null の Program は touchBoth できない", () => {
+    const c = new CommunityBuilder().id("co");
+    const p = new ProgramBuilder();
+    expect(() => {
+        bucket.touchBoth(c, p);
+    }).toThrow();
+});
+
+it("id が null の Community は appointBoth できない", () => {
+    const c = new CommunityBuilder();
+    const p = new ProgramBuilder().id("lv");
+    expect(() => {
+        bucket.appointBoth(c, p);
+    }).toThrow();
+});
+
+it("id が null の Program は appointBoth できない", () => {
+    const c = new CommunityBuilder().id("co");
+    const p = new ProgramBuilder();
+    expect(() => {
+        bucket.appointBoth(c, p);
+    }).toThrow();
+});
