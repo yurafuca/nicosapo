@@ -34,8 +34,7 @@ export default class Widgets extends React.Component {
       child.style.fontSize = "12px";
       child.style.color = "#777";
       child.id = "nicosapo-message";
-      // this.props.element4Buttons.appendChild(child);
-      insertAfter(child, this.props.element4Buttons);
+      this.props.element4Buttons.appendChild(child);
       return;
     }
     /**

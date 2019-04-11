@@ -20,9 +20,9 @@ export default class PageType {
       pageType = "OFFICIAL_CAST_PAGE";
     } else if (this._isModernCastPage()) {
       pageType = "MODERN_CAST_PAGE";
-    } else if (this._isChimeraCastPage()) {
+    } else if (this._isChimeraCastPage()) { // TODO: Deprecate.
       pageType = "CHIMERA_CAST_PAGE";
-    } else if (this._isNormalCastPage()) {
+    } else if (this._isNormalCastPage()) { // TODO: Deprecate.
       pageType = "NORMAL_CAST_PAGE";
       /**
        * NonCastPages
@@ -73,28 +73,13 @@ export default class PageType {
 
   static _isModernTimeShiftPage() {
     // コメントが無効
-    if (document.querySelector("span[class^='___disabled-message___']")) {
-      return true;
-    } else {
-      return false;
-    }
+    return document.querySelector('[class^=___video-layer__]') != null &&
+      document.querySelector("span[class^='___disabled-message___']")  != null
   }
 
   static _isOfficialCastPage() {
-    if ($("#gates").length > 0) {
-      return false;
-    }
-    // お便り投稿ヘッダ
-    if ($(".mail_title").length > 0) {
-      return true;
-    }
-    if ($("div[class^='___program-information___']").length == 0) {
-      return false;
-    }
-    if ($("h2[class^='___section-title___']").length > 0) {
-      return false;
-    }
-    return true;
+    return document.querySelector('[class^=___group-name-anchor___]') == null &&
+      document.querySelector('[class^=___video-layer__]') != null
   }
 
   // TODO: 自身の生放送中に判定が正しくなくなる

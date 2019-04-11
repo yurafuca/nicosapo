@@ -51,6 +51,9 @@ export default class CastPage extends Page {
     window.addEventListener("scroll", e => {
       this._setTabStatus(this.communityId, document.scrollingElement.scrollTop);
     });
+
+    document.querySelector("[class^='___program-information-main-area___']").insertAdjacentHTML("afterbegin", "<div id='nicosapo-buttons'></div>")
+
   }
 
   _getScrollOption(callback) {

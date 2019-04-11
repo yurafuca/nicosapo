@@ -24,10 +24,6 @@ export default class FormatNicoPage {
       case "MODERN_TIME_SHIFT_PAGE":
         $(".program-detail").css("width", "930px");
         $("div[class^='___provider-detail___']").css("display", "-webkit-box");
-        $("div[class^='___player-head-area___']").css("margin-top", "0");
-        $("div[class^='___player-head-area___']").css("margin-bottom", "8px");
-        $("ul[class^='___sns-share-menu-custom___']").css("position", "relative");
-        $("ul[class^='___sns-share-menu-custom___']").css("bottom", "20px");
         break;
       case "CHIMERA_CAST_PAGE":
         $(".program-title")

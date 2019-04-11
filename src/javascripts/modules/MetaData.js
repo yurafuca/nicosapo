@@ -39,16 +39,8 @@ export default class MetaData {
         break;
       case "NORMAL_CAST_PAGE": // PAIR A
       case "OFFICIAL_CAST_PAGE": // PAIR A
-        title =
-          $(
-            $(".commu_info")
-              .find("a")
-              .get(0)
-          ).html() || $(".ch_name").html();
-        owner =
-          $(".nicopedia_nushi")
-            .find("a")
-            .text() || $(".company").text();
+        title = $("[class^='___title___']").text();
+        owner = $("[class^='___channel-name-anchor___']").text();
         break;
       case "CHIMERA_CAST_PAGE":
         title = $(".program-community-name").text();
@@ -59,10 +51,8 @@ export default class MetaData {
         ).text();
         break;
       case "MODERN_CAST_PAGE":
-        title = $("a[class^='___social-group-anchor___']").text();
-        owner = $("span[class^='___broadcaster___'] a")
-          .first()
-          .text();
+        title = $("[class^='___title___']").text();
+        owner = $("[class^='___group-name-anchor___']").text();
         break;
       case "GATE_PAGE":
         title = $('meta[property="og:title"]').attr("content");
