@@ -7,7 +7,7 @@ export default class ModernTimeShiftPage extends CastPage {
       message: `/* にこさぽ: タイムシフトでは各種ボタンと情報バーが無効になります */`,
       position: `APPEND`,
       enableExBar: false,
-      element4Buttons: document.querySelector('[class^="___follow-toggle-form__"]'),
+      element4Buttons: document.querySelector("#nicosapo-buttons"),
       idName4ExBar: 'class^="___operator-area___"'
     };
     super.putWidgets(props);
