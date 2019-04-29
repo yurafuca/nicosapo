@@ -178,12 +178,12 @@ export default class Api {
       const result = [];
       const parser = new DOMParser();
       const html = parser.parseFromString(httpResponse, "text/html");
-      const frames = html.querySelectorAll(".com_frm");
+      const frames = html.querySelectorAll(".md-cmn_communities_frm .item");
 
       Array.prototype.forEach.call(frames, el => {
-        const title = el.querySelector(".title").textContent;
-        const thumbnail = el.querySelector(".thmb img").src;
-        const id = el.querySelector(".thmb a").href.replace("https://com.nicovideo.jp/community/", ``);
+        const title = el.querySelector(".profile .name").textContent;
+        const thumbnail = el.querySelector(".thumbnail img").src;
+        const id = el.querySelector(".profile .name a").href.replace("https://com.nicovideo.jp/community/", ``);
         const url = `https://com.nicovideo.jp/community/${id}`;
         const community = {
           title: title,
