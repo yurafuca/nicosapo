@@ -1,5 +1,40 @@
-import { interval } from 'rxjs';
 import store from "store";
+
+// window.onerror = function(message, source, lineno, colno, error) {
+//   const errors = store.get('errors', []);
+//   errors.push({
+//     message: message,
+//     source: source,
+//     lineno: lineno,
+//     colno: colno,
+//     error: error
+//   });
+//   store.set('errors', errors);
+//   return true;
+// };
+//
+// function extractStatus(line) {
+//   const match = line.match(/[^ ]* (\d{3}) (.*)/);
+//   if(match) {
+//     return {code: match[1], message: match[2]};
+//   } else {
+//     return undefined;
+//   }
+// }
+//
+// chrome.webRequest.onHeadersReceived.addListener(
+//   details => {
+//     const status = extractStatus(details.statusLine);
+//     if(status) {
+//       const errors = store.get('errors', []);
+//       errors.push(details);
+//       store.set('errors', errors);
+//     }
+//   },
+//   {urls: ["<all_urls>"]}
+// );
+
+import { interval } from 'rxjs';
 import "./modules/Pipe";
 import "./modules/Deamon";
 import Db from "./modules/db";

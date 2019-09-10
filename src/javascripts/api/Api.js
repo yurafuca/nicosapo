@@ -77,11 +77,11 @@ export default class Api {
 
   static getFutureOnair() {
     return new Promise(resolve => {
-      const url = "https://live.nicovideo.jp/ranking?type=comingsoon&main_provider_type=official";
+      const url = "https://live.nicovideo.jp/ranking?type=comingsoon";
       axios.get(url).then(response => {
         const parser = new DOMParser();
         const html = parser.parseFromString(response.data, "text/html");
-        const futureStreams = html.querySelectorAll(".ranking_video");
+        const futureStreams = html.querySelectorAll("#official_and_channel_ranking_main .rk-ProgramCard");
         if (futureStreams) {
           resolve(futureStreams);
         }
@@ -91,11 +91,11 @@ export default class Api {
 
   static getOfficialOnair() {
     return new Promise(resolve => {
-      const url = "https://live.nicovideo.jp/ranking?type=onair&main_provider_type=official";
+      const url = "https://live.nicovideo.jp/ranking?type=onair";
       axios.get(url).then(response => {
         const parser = new DOMParser();
         const html = parser.parseFromString(response.data, "text/html");
-        const officialStreams = html.querySelectorAll(".ranking_video");
+        const officialStreams = html.querySelectorAll("#official_and_channel_ranking_main .rk-ProgramCard");
         resolve(officialStreams);
       });
     });
