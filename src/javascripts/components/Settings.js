@@ -36,7 +36,8 @@ export default class Settings extends React.Component {
       selectableList: {
         minuteList: [15, 20, 25, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120],
         idleMinuteList: [3, 5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120],
-        soundFiles: [{ path: "ta-da.mp3", text: "Ta-da!" }, { path: "ding.mp3", text: "Ding" }, { path: "shupopo.mp3", text: "シュポポ" }, { path: "piroron.mp3", text: "ピロロン" }, { path: "pinpon.mp3", text: "ピンポン" }, { path: "famima.mp3", text: "ファミマ" }]
+        soundFiles: [{ path: "ta-da.mp3", text: "Ta-da!" }, { path: "ding.mp3", text: "Ding" }, { path: "shupopo.mp3", text: "シュポポ" }, { path: "piroron.mp3", text: "ピロロン" }, { path: "pinpon.mp3", text: "ピンポン" }, { path: "famima.mp3", text: "ファミマ" }],
+        defaultTabs: [{ tab: "following", text: "フォロー中" }, { tab: "following_future", text: "予約" }, { tab: "official", text: "公式" }, { tab: "official_future", text: "未来の公式" }, { tab: "search", text: "検索" }]
       },
       "options.redirect.time": 30,
       "options.soundfile": "ta-da.mp3",
@@ -301,6 +302,12 @@ export default class Settings extends React.Component {
                 <div className="wrapper">
                   <h1 className="appicon">ポップアップ・バッジ</h1>
                   <div className="items">
+                    <div className="item">
+                      <h3>ポップアップを開いたときに選択するタブ</h3>
+                      <select name="options.defaultTab" onChange={this.onChange} value={this.state["options.defaultTab"]}>
+                        {this.state.selectableList.defaultTabs.map(d => <option value={d.tab}>{d.text}</option>)}
+                    </select>
+                    </div>
                     <div className="item">
                       <h3>予約番組をポップアップに表示する</h3>
                       <label>
