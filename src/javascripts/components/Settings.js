@@ -177,7 +177,7 @@ export default class Settings extends React.Component {
                 自動入場リスト（CH・コミュ）
               </div>
               <div className={this.state.selectedMenu === "exclude-from-search" ? "item selected" : "item"} data-menu="exclude-from-search" onClick={this.clickMenu}>
-                検索結果の除外リスト
+                検索結果のミュートリスト
               </div>
             </div>
             <div className="wrapper menu float-left">
@@ -338,7 +338,7 @@ export default class Settings extends React.Component {
                   <h1 className="appicon">検索</h1>
                   <div className="items">
                     <div className="item">
-                      <h3>コミュニティ限定番組を検索結果から除外する</h3>
+                      <h3>コミュニティ限定番組を検索結果からミュートする</h3>
                       <label>
                         <input type="radio" name="options.excludeMemberOnly.enable" value={"enable"} checked={this.state["options.excludeMemberOnly.enable"] == "enable"} onChange={this.onChange} /> 有効
                       </label>
@@ -391,7 +391,7 @@ export default class Settings extends React.Component {
             if (this.state.selectedMenu == "exclude-from-search") {
               return (
                 <div className="wrapper">
-                  <h1 className="appicon">検索結果の除外リスト</h1>
+                  <h1 className="appicon">検索結果のミュートリスト</h1>
                   <div id="listgroup-community">
                     <ExcludeList />
                   </div>

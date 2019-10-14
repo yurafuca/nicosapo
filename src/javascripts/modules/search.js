@@ -162,7 +162,7 @@ export default class Search {
 
     const excludeButton = document.createElement("div");
     excludeButton.className = "exclude-button";
-    excludeButton.textContent = "除外";
+    excludeButton.textContent = "ミュート";
     excludeButton.dataset.memberOnly = memberOnly;
     excludeButton.dataset.distributorId = distributorId;
     excludeButton.dataset.thumbnail = thumbnail;
@@ -173,7 +173,7 @@ export default class Search {
 
     new Tooltip(excludeButton, {
       placement: 'left', // or bottom, left, right, and variations
-      title: "この配信者を検索結果から除外する",
+      title: "この配信者を検索結果からミュートする",
       template: '<div class="tooltip tooltip-small" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>'
     });
 
@@ -319,7 +319,7 @@ export default class Search {
     const resultArea = document.getElementById("search-result");
     const isEnableExcludeMemberOnly = store.get("options.excludeMemberOnly.enable") == "enable";
 
-    // 除外リスト
+    // ミュートリスト
     const excludedDistributors = store.get("search.item.exclude") || [];
     const distributorIds = excludedDistributors.map(distributor => distributor.id);
 
@@ -331,14 +331,14 @@ export default class Search {
         return false;
       }
 
-      // コミュ限除外が有効になっていればコミュ限を削除
+      // コミュ限ミュートが有効になっていればコミュ限を削除
       const isMemberOnly = excludeButton.dataset.memberOnly == "true";
       if (isMemberOnly && isEnableExcludeMemberOnly) {
         community.remove();
         return;
       }
 
-      // 除外リストに登録されていれば削除
+      // ミュートリストに登録されていれば削除
       const distributorId = excludeButton.dataset.distributorId;
       if (distributorIds.includes(distributorId)) {
         community.remove();
