@@ -133,7 +133,12 @@ class Tabs {
   }
 
   static _selected() {
-    return document.querySelector(".tab.selected").id;
+    const tab = document.querySelector(".tab.selected");
+    if (tab) {
+      return tab.id;
+    } else {
+      null;
+    }
   }
 
   static _select(genre) {
