@@ -619,7 +619,7 @@ a {
   }
 }
 
-.query-remove {
+.query-remove, .query-rename, .query-update, .query-update-cancel {
   background: #0366d6;
   color: #f1f8ff;
   font-size: 10px !important;
@@ -635,6 +635,30 @@ a {
     color: white;
     background: #d02d3a;
   }
+}
+
+.query-rename, .query-update, .query-update-cancel {
+  &:hover {
+    color: white;
+    background: #222;
+  }
+}
+
+.query-remove {
+  padding-left: 6px;
+}
+
+.query-update-cancel {
+  padding-left: 7px;
+}
+
+.query-input {
+  height: 17px;
+  border-radius: 3px;
+  padding-left: 3px;
+  font-size: 11px;
+  color: #0366d6;
+  border: 1px solid #0366d6;
 }
 
 #regist-favorite {

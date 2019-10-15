@@ -1,39 +1,4 @@
 import store from "store";
-
-// window.onerror = function(message, source, lineno, colno, error) {
-//   const errors = store.get('errors', []);
-//   errors.push({
-//     message: message,
-//     source: source,
-//     lineno: lineno,
-//     colno: colno,
-//     error: error
-//   });
-//   store.set('errors', errors);
-//   return true;
-// };
-//
-// function extractStatus(line) {
-//   const match = line.match(/[^ ]* (\d{3}) (.*)/);
-//   if(match) {
-//     return {code: match[1], message: match[2]};
-//   } else {
-//     return undefined;
-//   }
-// }
-//
-// chrome.webRequest.onHeadersReceived.addListener(
-//   details => {
-//     const status = extractStatus(details.statusLine);
-//     if(status) {
-//       const errors = store.get('errors', []);
-//       errors.push(details);
-//       store.set('errors', errors);
-//     }
-//   },
-//   {urls: ["<all_urls>"]}
-// );
-
 import { interval } from 'rxjs';
 import "./modules/Pipe";
 import "./modules/Deamon";
@@ -44,6 +9,22 @@ import BackgroundReloader from "./modules/BackgroundReloader";
 import "./chrome/runtime.onMessage";
 import { CommunityBuilder, ProgramBuilder } from "./modules/ManageableBuilder";
 import bucket from "./modules/Bucket";
+
+// v4.6.2 -> v4.7.0
+const isMigrated = store.get("search.query.isMigrated", false);
+if (!isMigrated) {
+  const favorites = store.get("search.query.favorite", []);
+  const list = [];
+  for (const favorite of favorites) {
+    const item = {
+      query: favorite,
+      query_label: favorite
+    };
+    list.push(item);
+  }
+  store.set("search.query.favorites", list);
+  store.set("search.query.isMigrated", true);
+}
 
 chrome.runtime.onInstalled.addListener(() => {
   NiconamaTabs.clear();

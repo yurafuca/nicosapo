@@ -7,34 +7,93 @@ import { showSpinner, hideSpinner } from "./spinner";
 const removeElements = elms => [...elms].forEach(el => el.remove());
 
 export default class Search {
-  initFavorites(queries = this.getCurrentFavorites()) {
+  initFavorites(favs = this.getCurrentFavorites()) {
     // 削除
     const favorites = document.querySelectorAll(".favorite-query");
     removeElements(favorites);
 
     // 追加
-    queries.forEach(query => {
-      const q = document.createElement("span");
-      q.className = "favorite-query";
-      q.dataset.query = query;
-      q.textContent = query;
+    favs.forEach(fav => {
+      // use
+      const use = document.createElement("span");
+      use.className = "use";
+      use.dataset.query = fav.query;
 
-      q.addEventListener("click", el => {
-        this.onClickFavorite(el);
-      });
+      // query
+      // const q = document.createElement("span");
+      // q.dataset.query = fav.query;
 
+      // label
+      const label = document.createElement("span");
+      label.className = "query-label";
+      label.innerText = fav.query_label;
+      use.appendChild(label);
+
+      // delete
       const del = document.createElement("span");
-      del.className = this.getCurrentQuery() == query ? "query-remove" : "query-remove none";
-      del.textContent = "削除";
-
+      del.className = this.getCurrentQuery() === fav.query ? "query-remove" : "query-remove none";
+      del.innerText = "✕ 削除";
       del.addEventListener("click", el => {
-        this.removeQuery(el.textContent);
+        this.removeQuery(el.innerText);
         el.stopPropagation();
       });
 
-      q.appendChild(del);
+      // rename
+      const rename = document.createElement("span");
+      rename.className = this.getCurrentQuery() === fav.query ? "query-rename" : "query-rename none";
+      rename.innerText = "表示名を変更";
+      rename.addEventListener("click", el => {
+        this.beginQueryEditing(el);
+        el.stopPropagation();
+      });
 
-      document.getElementById("favorite-query-list").appendChild(q);
+      use.appendChild(rename);
+      use.appendChild(del);
+
+      // save
+      const update = document.createElement("span");
+      update.className = this.getCurrentQuery() === fav.query ? "query-update" : "query-update none";
+      update.innerText = "✓ 完了";
+      update.addEventListener("click", el => {
+        this.finishQueryEditing(el, true);
+        el.stopPropagation();
+      });
+
+      // cancel
+      const cancel = document.createElement("span");
+      cancel.className = this.getCurrentQuery() === fav.query ? "query-update-cancel" : "query-update-cancel none";
+      cancel.innerText = "✗ キャンセル";
+      cancel.addEventListener("click", el => {
+        this.finishQueryEditing(el, false);
+        el.stopPropagation();
+      });
+
+      // edit
+      const edit = document.createElement("span");
+      edit.className = "edit none";
+      edit.addEventListener("click", el => {
+        el.stopPropagation();
+      });
+      const input = document.createElement("input");
+      input.className = "query-input";
+      input.addEventListener("click", el => {
+        el.stopPropagation();
+      });
+      edit.appendChild(input);
+      edit.appendChild(update);
+      edit.appendChild(cancel);
+
+      // parent
+      const parent = document.createElement("span");
+      parent.className = "favorite-query";
+      parent.appendChild(use);
+      parent.appendChild(edit);
+
+      parent.addEventListener("click", el => {
+        this.onClickFavorite(use);
+      });
+
+      document.getElementById("favorite-query-list").appendChild(parent);
     });
   }
 
@@ -47,14 +106,9 @@ export default class Search {
   }
 
   onClickFavorite(el) {
-    let query = "";
-    for (const elem of el.currentTarget.childNodes) {
-      if (elem.nodeName == "#text") {
-        query += elem.nodeValue;
-      }
-    }
+    const query = el.dataset.query;
     document.getElementById("search-input").value = query;
-    this.setQuery(query);
+    this.search(query);
   }
 
   onClickExclude(el) {
@@ -108,7 +162,7 @@ export default class Search {
       this.search();
     });
     document.querySelector("#regist-favorite").addEventListener("click", () => {
-      this.registFavorite();
+      this.registerFavorite();
     });
   }
 
@@ -245,11 +299,14 @@ export default class Search {
     }
   }
 
-  registFavorite() {
+  registerFavorite() {
     const q = this.getCurrentQuery();
-    const queries = this.getCurrentFavorites().filter(query => q !== query);
-    queries.push(q);
-    store.set("search.query.favorite", queries);
+    const queries = this.getCurrentFavorites().filter(favorite => q !== favorite.query);
+    queries.push({
+      query: q,
+      query_label: q
+    });
+    store.set("search.query.favorites", queries);
     this.initFavorites(queries);
   }
 
@@ -258,15 +315,52 @@ export default class Search {
     store.set("search.sortMode", this.getCurrentSortMode());
   }
 
-  setQuery(query) {
-    this.search(query);
+  beginQueryEditing(el) {
+    for (const e of document.querySelectorAll(".edit")) {
+      e.classList.add("none");
+    }
+
+    el.currentTarget.parentNode.parentNode.querySelector(".edit").classList.remove("none");
+    el.currentTarget.parentNode.parentNode.querySelector(".use").classList.add("none");
+
+    const label = el.currentTarget.parentNode.parentNode.querySelector(".query-label").innerText;
+    const input = el.currentTarget.parentNode.parentNode.querySelector(".query-input");
+    input.value = label;
+  }
+
+  finishQueryEditing(el, shouldSave) {
+    el.currentTarget.parentNode.parentNode.querySelector(".edit").classList.add("none");
+    el.currentTarget.parentNode.parentNode.querySelector(".use").classList.remove("none");
+
+    if (!shouldSave) {
+      return;
+    }
+
+    // get label.
+    const input = el.currentTarget.parentNode.parentNode.querySelector(".query-input");
+    const label = el.currentTarget.parentNode.parentNode.querySelector(".query-label");
+    const nextLabel = input.value;
+    const currentLabel = label.innerText;
+
+    // set nextLabel
+    label.innerText = nextLabel;
+
+    // set nextLabel to store.
+    const favorites = store.get("search.query.favorites", {});
+    const new_favorites = favorites.filter(f => {
+      if (f.query_label === currentLabel) {
+        f.query_label = nextLabel;
+      }
+      return f;
+    });
+    store.set("search.query.favorites", new_favorites);
   }
 
   removeQuery() {
     const q = this.getCurrentQuery();
-    const queries = this.getCurrentFavorites().filter(query => q !== query);
+    const queries = this.getCurrentFavorites().filter(favorite => q !== favorite.query);
     this.initFavorites(queries);
-    store.set("search.query.favorite", queries);
+    store.set("search.query.favorites", queries);
   }
 
   getCurrentSortMode() {
@@ -298,16 +392,19 @@ export default class Search {
   }
 
   getCurrentFavorites() {
-    const els = document.querySelectorAll(".favorite-query");
+    const els = document.querySelectorAll(".favorite-query.use");
     if (els.length > 0) {
       const favorites = [];
       Array.prototype.forEach.call(els, el => {
-        favorites.push(el.dataset.query);
+        favorites.push({
+          query: el.dataset.query,
+          query_label: el.querySelector(".query-label").innerText
+        });
       });
       return favorites;
     }
 
-    const lastFavorites = store.get("search.query.favorite");
+    const lastFavorites = store.get("search.query.favorites");
     if (lastFavorites) {
       return lastFavorites;
     }
