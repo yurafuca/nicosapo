@@ -31,6 +31,15 @@ export default class CastPage extends Page {
       chrome.runtime.sendMessage(option);
     });
 
+    // コメントビューアと連携するために URL をクリップボードにコピーする
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(location.href).then(() => {
+        this._showSnackbar("にこさぽ: URL をクリップボードにコピーしました");
+      }, () => {
+        this._showSnackbar("にこさぽ: URL をクリップボードにコピーするのに失敗しました");
+      });
+    }
+
     this.communityId = new IdHolder().communityId;
 
     this._getScrollOption(response => {
@@ -84,5 +93,16 @@ export default class CastPage extends Page {
 
   _scroll(scrollTop) {
     $("html,body").animate({ scrollTop: scrollTop }, 200, "swing");
+  }
+
+  _showSnackbar(message) {
+    const snackbar = document.createElement("div");
+    snackbar.className = "clipboard-snackbar show";
+    snackbar.innerText = message;
+    document.querySelector("body").appendChild(snackbar);
+    setTimeout(() => {
+      snackbar.classList.add("hide");
+      snackbar.classList.remove("show");
+    }, 2900); // animation の時間は 3000ms だが少し早めに hide しないと最後に一瞬表示されてしまう
   }
 }

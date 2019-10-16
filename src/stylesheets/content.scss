@@ -308,3 +308,47 @@ $url_0: url(chrome-extension://__MSG_@@extension_id__/images/icon.png);
   margin-bottom: 24px;
   border-bottom: 1px solid #e5e5e5;
 }
+
+.clipboard-snackbar {
+  position: fixed;
+  z-index: 9999;
+  bottom: 30px;
+  box-shadow: 0 1px 7px rgba(0,0,0,0.2);
+  left: 30px;
+  color: white;
+  font-size: 0.7rem;
+  font-family: sans-serif;
+  background-color: rgb(0, 0, 0);
+  padding: 0.5rem 1.7rem;
+  border-radius: 999px;
+}
+
+.clipboard-snackbar.show {
+  visibility: visible;
+  -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+  animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+
+.clipboard-snackbar.hide {
+  visibility: collapse;
+}
+
+@-webkit-keyframes fadein {
+  from {bottom: 0; opacity: 0;}
+  to {bottom: 30px; opacity: 1;}
+}
+
+@keyframes fadein {
+  from {bottom: 0; opacity: 0;}
+  to {bottom: 30px; opacity: 1;}
+}
+
+@-webkit-keyframes fadeout {
+  from {bottom: 30px; opacity: 1;}
+  to {bottom: 0; opacity: 0;}
+}
+
+@keyframes fadeout {
+  from {bottom: 30px; opacity: 1;}
+  to {bottom: 0; opacity: 0;}
+}
