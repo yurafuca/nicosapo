@@ -52,7 +52,8 @@ export default class Settings extends React.Component {
       "options.autoEnter.cancel.onIdle": false,
       "options.idle.minute": 20,
       "options.hideBadge.enable": "disable",
-      "options.excludeMemberOnly.enable": false
+      "options.excludeMemberOnly.enable": false,
+      "options.copyUrl": false
     };
     return state;
   }
@@ -163,6 +164,9 @@ export default class Settings extends React.Component {
               </div>
               <div className={this.state.selectedMenu === "search" ? "item selected" : "item"} data-menu="search" onClick={this.clickMenu}>
                 検索
+              </div>
+              <div className={this.state.selectedMenu === "integrations" ? "item selected" : "item"} data-menu="integrations" onClick={this.clickMenu}>
+                他のツールとの連携
               </div>
             </div>
             <div className="wrapper menu float-left">
@@ -340,10 +344,33 @@ export default class Settings extends React.Component {
                     <div className="item">
                       <h3>コミュニティ限定番組を検索結果からミュートする</h3>
                       <label>
-                        <input type="radio" name="options.excludeMemberOnly.enable" value={"enable"} checked={this.state["options.excludeMemberOnly.enable"] == "enable"} onChange={this.onChange} /> 有効
+                        <input type="radio" name="options.excludeMemberOnly.enable" value={true} checked={this.state["options.excludeMemberOnly.enable"] == true} onChange={this.onChange} /> 有効
                       </label>
                       <label>
-                        <input type="radio" name="options.excludeMemberOnly.enable" value={"disable"} checked={this.state["options.excludeMemberOnly.enable"] == "disable"} onChange={this.onChange} /> 無効
+                        <input type="radio" name="options.excludeMemberOnly.enable" value={false} checked={this.state["options.excludeMemberOnly.enable"] == false} onChange={this.onChange} /> 無効
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              );
+            }
+          })()}
+          {(() => {
+            if (this.state.selectedMenu == "integrations") {
+              return (
+                <div className="wrapper">
+                  <h1 className="appicon">他のツールとの連携</h1>
+                  <div className="items">
+                    <div className="item">
+                      <h3>番組を開いたときに番組の URL をクリップボードにコピーする</h3>
+                      <p className="note green" style={{ marginBottom: "0.6em" }}>
+                        コメントビューアのアドレスバーに URL をペーストするときに便利です
+                      </p>
+                      <label>
+                        <input type="radio" name="options.copyUrl" value={true} checked={this.state["options.copyUrl"] == true} onChange={this.onChange} /> 有効
+                      </label>
+                      <label>
+                        <input type="radio" name="options.copyUrl" value={false} checked={this.state["options.copyUrl"] == false} onChange={this.onChange} /> 無効
                       </label>
                     </div>
                   </div>

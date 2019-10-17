@@ -1,9 +1,9 @@
 import $ from "jquery";
 import IdHolder from "../modules/IdHolder";
 import Page from "../page/Page";
-import MetaData from '../modules/MetaData';
-import { ON_LEAVE, ON_VISIT } from '../chrome/runtime.onMessage';
-import { CommunityBuilder, ProgramBuilder } from '../modules/ManageableBuilder';
+import MetaData from "../modules/MetaData";
+import { ON_LEAVE, ON_VISIT } from "../chrome/runtime.onMessage";
+import { CommunityBuilder, ProgramBuilder } from "../modules/ManageableBuilder";
 
 export default class CastPage extends Page {
   constructor() {
@@ -23,7 +23,7 @@ export default class CastPage extends Page {
     chrome.runtime.sendMessage(option);
 
     //
-    window.addEventListener('beforeunload', (event) => {
+    window.addEventListener("beforeunload", event => {
       const option = {
         purpose: ON_LEAVE,
         metaData: metaData
@@ -33,10 +33,21 @@ export default class CastPage extends Page {
 
     // コメントビューアと連携するために URL をクリップボードにコピーする
     if (navigator.clipboard) {
-      navigator.clipboard.writeText(location.href).then(() => {
-        this._showSnackbar("にこさぽ: URL をクリップボードにコピーしました");
-      }, () => {
-        this._showSnackbar("にこさぽ: URL をクリップボードにコピーするのに失敗しました");
+      const option = {
+        purpose: "getFromLocalStorage",
+        key: "options.copyUrl"
+      };
+      chrome.runtime.sendMessage(option, response => {
+        if (response == true) {
+          navigator.clipboard.writeText(location.href).then(
+            () => {
+              this._showSnackbar("にこさぽ: URL をクリップボードにコピーしました");
+            },
+            () => {
+              this._showSnackbar("にこさぽ: URL をクリップボードにコピーするのに失敗しました");
+            }
+          );
+        }
       });
     }
 
@@ -46,10 +57,7 @@ export default class CastPage extends Page {
       if (response == "enable" || response == null) {
         this._getTabStatus(response => {
           if (response == null || response.castId != this.communityId) {
-            this._setTabStatus(
-              this.communityId,
-              response ? response.scrollTop : 0
-            );
+            this._setTabStatus(this.communityId, response ? response.scrollTop : 0);
           } else {
             setTimeout(this._scroll.bind(this, response.scrollTop), 5 * 1000);
           }
@@ -61,8 +69,7 @@ export default class CastPage extends Page {
       this._setTabStatus(this.communityId, document.scrollingElement.scrollTop);
     });
 
-    document.querySelector("[class^='___program-information-main-area___']").insertAdjacentHTML("afterbegin", "<div id='nicosapo-buttons'></div>")
-
+    document.querySelector("[class^='___program-information-main-area___']").insertAdjacentHTML("afterbegin", "<div id='nicosapo-buttons'></div>");
   }
 
   _getScrollOption(callback) {
