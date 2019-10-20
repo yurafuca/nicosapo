@@ -53,7 +53,8 @@ export default class Settings extends React.Component {
       "options.idle.minute": 20,
       "options.hideBadge.enable": "disable",
       "options.excludeMemberOnly.enable": false,
-      "options.copyUrl": false
+      "options.copyUrl": false,
+      "options.notification.selfIgnoreList": []
     };
     return state;
   }
@@ -294,6 +295,22 @@ export default class Settings extends React.Component {
                       <button className="soundtest" onClick={this.playSound}>
                         音量テスト
                       </button>
+                    </div>
+                    <div className="item">
+                      <h3>配信者向けの設定: 自分が配信したときの通知を表示しない</h3>
+                      <p className="note green" style={{ marginBottom: "0.6em" }}>
+                        あなたが配信に使用するコミュニティのリストを「,」区切りで入力してください．<br/>
+                        例: co123456, co234567, co345678
+                      </p>
+                      <input placeholder="コミュニティのリストを入力" style={{ width: "280px", border: "1px solid #bbb", borderRadius: "3px", padding: "3px 6px" }} value={this.state["options.notification.selfIgnoreList"]} onChange={e => {
+                        const value = e.target.value;
+                        const parsedValue = value
+                          .replace(/[，、]/g, ',')
+                          .replace(/[ 　]/g, '');
+                        const ignoreList = parsedValue.split(',');
+                        store.set("options.notification.selfIgnoreList", ignoreList);
+                        this.setState({ "options.notification.selfIgnoreList": ignoreList });
+                      }} />
                     </div>
                   </div>
                 </div>

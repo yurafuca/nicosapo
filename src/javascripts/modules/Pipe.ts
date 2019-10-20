@@ -34,9 +34,11 @@ const notify = (program: Program) => {
     _ => {
       bucket.takeProgramsShouldNotify(client).forEach((p, index, array) => {
         const distributors = store.get(`excludedDistributors`) || {};
+        const selfDistributors = store.get(`options.notification.selfIgnoreList`, []);
         const shouldPopup = store.get("options.popup.enable") || "enable";
         if (!isInitialCheck &&
           !distributors.hasOwnProperty(p.community.id) &&
+          !selfDistributors.includes(p.community.id) &&
           shouldPopup == "enable"
         ) {
           notify(p);
