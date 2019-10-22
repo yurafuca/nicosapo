@@ -1,5 +1,5 @@
-import { interval } from 'rxjs';
 import store from "store";
+import { interval } from 'rxjs';
 import "./modules/Pipe";
 import "./modules/Deamon";
 import Db from "./modules/db";
@@ -9,6 +9,22 @@ import BackgroundReloader from "./modules/BackgroundReloader";
 import "./chrome/runtime.onMessage";
 import { CommunityBuilder, ProgramBuilder } from "./modules/ManageableBuilder";
 import bucket from "./modules/Bucket";
+
+// v4.6.2 -> v4.7.0
+const isMigrated = store.get("search.query.isMigrated", false);
+if (!isMigrated) {
+  const favorites = store.get("search.query.favorite", []);
+  const list = [];
+  for (const favorite of favorites) {
+    const item = {
+      query: favorite,
+      query_label: favorite
+    };
+    list.push(item);
+  }
+  store.set("search.query.favorites", list);
+  store.set("search.query.isMigrated", true);
+}
 
 chrome.runtime.onInstalled.addListener(() => {
   NiconamaTabs.clear();
@@ -77,7 +93,7 @@ chrome.contextMenus.removeAll(() => {
 Badge.setBackgroundColor("#ff6200");
 Db.setAll("autoEnterCommunityList", "state", "init");
 
-interval(1000 * 40).subscribe(
+interval(1000 * 60).subscribe(
   _ => { BackgroundReloader.run() }
 );
 

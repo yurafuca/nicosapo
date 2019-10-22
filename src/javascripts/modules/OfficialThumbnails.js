@@ -9,34 +9,36 @@ export default class OfficialThumbnails {
     const thumbParams = [];
     programs.forEach((program, index) => {
       const thumbParam = {};
-      const a = program.querySelector(".video_text a");
+      const a = program.querySelector("a.rk-ProgramCard_DetailChName");
       let thumbnailUrl;
       if (a != null) {
         const communityId = a.href;
-        const regexp = /https\:\/\/ch.nicovideo.jp\/channel\/(.+)/;
+        const regexp = /https\:\/\/ch.nicovideo.jp\/(.+)/;
         const resultarr = regexp.exec(communityId);
         thumbnailUrl = `https://icon.nimg.jp/channel/${resultarr[1]}.jpg`;
       } else {
         thumbnailUrl = program.querySelector(".info a img").src;
       }
+
       thumbParam.background = `url('${thumbnailUrl}')`;
-      thumbParam.title = program.querySelector(".video_title").textContent;
+      thumbParam.title = program.querySelector(".rk-ProgramCard_DetailTitle").textContent;
       thumbParam.id = `lv${program.querySelector(".video_id").textContent}`;
       thumbParam.url = `https://live.nicovideo.jp/watch/${thumbParam.id}`;
       thumbParam.text = thumbParam.title;
       thumbParam.index = index;
-      thumbParam.openTime = program.querySelector(".reserve") ? `20${program.querySelector(".time").textContent} 開場` : undefined;
-      thumbParam.isReserved = program.querySelector(".reserve") != null;
+      const isReserved = program.querySelector(".rk-ProgramCard_ReservationButton") != null;
+      thumbParam.openTime = isReserved ? `${program.querySelector(".rk-ProgramCard_DetailTime").textContent} 開場` : undefined;
+      thumbParam.isReserved = isReserved;
       thumbParam.isOfficial = true;
 
-      const dateJpnOrig = program.querySelector(".time").textContent;
-      // => 未来の番組の場合 : 18年11月10日 
-      // => 現在の番組の場合1: 37分
-      // => 現在の番組の場合2: 1時間13分
+      const dateJpnOrig = program.querySelector(".rk-ProgramCard_DetailTime").textContent;
+      // => 未来の番組の場合 : 2019/9/14 20:00
+      // => 現在の番組の場合1: 37分経過
+      // => 現在の番組の場合2: 1時間13分経過
 
-      // 未来
+      // 現在
       if (dateJpnOrig.includes('分')) {
-        const splitted = dateJpnOrig.replace('時間', '分').split("分");
+        const splitted = dateJpnOrig.replace("経過", "").replace('時間', '分').split("分");
         // => ["1", "37"]
 
         // 1 時間未満
@@ -50,9 +52,9 @@ export default class OfficialThumbnails {
           const today = new Date();
           thumbParam.openDate = new Date(today.getTime() - millisec);
         }
-        // 現在
+        // 未来
       } else {
-        const splitted = dateJpnOrig.split("年月日");
+        const splitted = dateJpnOrig.split(" /");
         // => ["18", "11", "10"]
 
         const year = `20${splitted[0]}`;
@@ -71,7 +73,7 @@ export default class OfficialThumbnails {
       }
 
 
-      thumbParam.startTime = program.querySelector(".time").textContent;
+      thumbParam.startTime = program.querySelector(".rk-ProgramCard_DetailTime").textContent;
       thumbParams.push(thumbParam);
     });
     return thumbParams;

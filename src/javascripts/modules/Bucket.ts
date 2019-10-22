@@ -30,10 +30,16 @@ export class Bucket {
     private anonymousCount = 0;
 
     touchCommunity(communityBuilder: CommunityBuilder) {
+        if (communityBuilder.getId() == null) {
+            throw new Error("id must be non-null.")
+        }
         this.performTouchCommunity(communityBuilder);
     }
 
     touchProgram(programBuilder: ProgramBuilder, thumbnail: string | null = null) {
+        if (programBuilder.getId() == null) {
+            throw new Error("id must be non-null.")
+        }
         const parent = this.findParent(programBuilder);
         if (thumbnail) {
             parent.thumbnailUrl(thumbnail);
@@ -42,6 +48,9 @@ export class Bucket {
     }
 
     appointProgram(programBuilder: ProgramBuilder, thumbnail: string | null = null) {
+        if (programBuilder.getId() == null) {
+            throw new Error("id must be non-null.")
+        }
         const parent = this.findParent(programBuilder);
         if (thumbnail) {
             parent.thumbnailUrl(thumbnail);
@@ -50,14 +59,25 @@ export class Bucket {
     }
 
     touchBoth(communityBuilder: CommunityBuilder, programBuilder: ProgramBuilder) {
+        if (communityBuilder.getId() == null || programBuilder.getId() == null) {
+            throw new Error("id must be non-null.")
+        }
         this.performTouchBoth(communityBuilder, programBuilder, false);
     }
 
     appointBoth(communityBuilder: CommunityBuilder, programBuilder: ProgramBuilder) {
+        if (communityBuilder.getId() == null || programBuilder.getId() == null) {
+            throw new Error("id must be non-null.")
+        }
         this.performTouchBoth(communityBuilder, programBuilder, true);
     }
 
     mask(communityBuilders: CommunityBuilder[]) {
+        communityBuilders.forEach(c => {
+            if (c.getId() == null) {
+                throw new Error("id must be non-null.")
+            }
+        });
         const communities = communityBuilders.map(builder => this.performTouchCommunity(builder));
         const survivors = communities.map(c => c.id);
         this.communities = this.communities.filter(c => {

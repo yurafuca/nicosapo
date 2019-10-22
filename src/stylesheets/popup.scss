@@ -349,7 +349,7 @@ a {
   background: #b2bac2;
   color: white;
   font-size: 10px !important;
-  width: 30px;
+  width: 50px;
   line-height: 15px;
   padding: 0 5px;
   border-radius: 4px;
@@ -465,7 +465,7 @@ a {
   padding-left: 65px;
   line-height: 20px;
   overflow: hidden;
-  width: 415px;
+  width: 395px;
   img {
     position: absolute;
     top: 0;
@@ -532,7 +532,7 @@ a {
 }
 
 .username {
-  margin-left: 3px;
+  margin-left: 4px;
   color: #333;
   font-size: 14px;
   line-height: 36px;
@@ -540,6 +540,31 @@ a {
   cursor: default;
   position: relative;
   top: 1px;
+}
+
+.version {
+  //float: right;
+  //top: 10px;
+  //cursor: default;
+  //margin-right: 10px;
+  //color: #555;
+  //font-size: 11px;
+  //position: relative;
+  float: right;
+  top: 10.7px;
+  cursor: default;
+  margin-right: 115px;
+  color: white;
+  font-size: 10px;
+  background: #646464;
+  font-weight: normal;
+  line-height: 11px;
+  padding: 2px 6px 2px 6.5px; // 'v' が数字に比べて大きいので左だけ少し大きく余白をとる
+  border-radius: 999px;
+  position: relative;
+  &:before {
+    content: 'v'
+  }
 }
 
 #search-container {
@@ -619,7 +644,7 @@ a {
   }
 }
 
-.query-remove {
+.query-remove, .query-rename, .query-update, .query-update-cancel {
   background: #0366d6;
   color: #f1f8ff;
   font-size: 10px !important;
@@ -635,6 +660,30 @@ a {
     color: white;
     background: #d02d3a;
   }
+}
+
+.query-rename, .query-update, .query-update-cancel {
+  &:hover {
+    color: white;
+    background: #222;
+  }
+}
+
+.query-remove {
+  padding-left: 6px;
+}
+
+.query-update-cancel {
+  padding-left: 7px;
+}
+
+.query-input {
+  height: 17px;
+  border-radius: 3px;
+  padding-left: 3px;
+  font-size: 11px;
+  color: #0366d6;
+  border: 1px solid #0366d6;
 }
 
 #regist-favorite {

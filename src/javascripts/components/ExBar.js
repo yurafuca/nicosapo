@@ -7,24 +7,10 @@ import Common from "../common/Common";
 import Time from "../common/Time";
 import Clock from "../common/Clock";
 import IdHolder from "../modules/IdHolder";
+import { API_GET_STATUS } from '../chrome/runtime.onMessage';
 
 const _clock = new Clock(new Date());
 const _defaultUpdateText = "延長されていません";
-
-const _getEndDate = statusResponse => {
-  const end = _getEndTime(statusResponse);
-  const endDate = new Date(end.millisec);
-  return endDate;
-};
-
-const _getEndTime = statusResponse => {
-  const $endTime = $(statusResponse).find("stream end_time");
-  const end = {
-    second: Number($endTime.text()),
-    millisec: Number($endTime.text()) * 1000
-  };
-  return end;
-};
 
 export default class ExBar extends React.Component {
   constructor(props) {
@@ -45,11 +31,12 @@ export default class ExBar extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const endDate = _getEndDate(nextProps.response);
+    const endDate = new Date(nextProps.response.endTimeMilliSecond);
     const endText = Time.toJpnString(endDate);
     if (endText !== this.state.endText) {
+      const time = new Date().getTime();
+      this.setState({ updateText: `番組の延長を ${Time.toJpnString(time)} に検知しました` });
       this.reset(nextProps.response);
-      this.setState({ updateText: `放送が ${endText} へ更新されました` });
       this.startBlink();
       Common.sleep(6400).then(() => {
         this.stopBlink();
@@ -58,34 +45,34 @@ export default class ExBar extends React.Component {
   }
 
   build() {
-    this.setParams(false, null);
+    chrome.runtime.sendMessage({
+      purpose: API_GET_STATUS,
+      programId: new IdHolder().liveId
+    }, response => {
+      this.setParams(response)
+    });
   }
 
   reset(statusResponse) {
     console.info("reset");
-    this.setParams(true, statusResponse);
+    this.setParams(statusResponse);
   }
 
-  setParams(isReset = false, statusResponse) {
-    (isReset
-      ? Promise.resolve(statusResponse)
-      : Api.getStatus(new IdHolder().liveId)
-    ).then(response => {
-      this.setEndText(response);
-      this.setRemainTime(response);
-    });
+  setParams(statusResponse) {
+    console.info("update clock");
+    this.setEndText(statusResponse);
+    this.setRemainTime(statusResponse);
   }
 
   setEndText(statusResponse) {
-    const end = _getEndTime(statusResponse);
-    const endDate = new Date(end.millisec);
+    const endDate = new Date(statusResponse.endTimeMilliSecond);
     const endText = Time.toJpnString(endDate);
     this.setState({ endText: endText });
   }
 
   setRemainTime(statusResponse) {
     console.info("remain");
-    const endDate = _getEndDate(statusResponse);
+    const endDate = new Date(statusResponse.endTimeMilliSecond);
     const nowDate = new Date(Date.now());
     const remainHour = Time.hourDistance(nowDate, endDate);
     const remainMin = Time.minuteSurplusDistance(nowDate, endDate);
@@ -136,10 +123,12 @@ export default class ExBar extends React.Component {
     return (
       <div>
         <div id="extended-bar" style={{ width: width }}>
-          <div className="time end-time">
+          <span className="time end-time">
+            <i className="material-icons icon-end-time">event</i>
             {this.state.isOpen ? this.state.endText : "放送が終了しました"}
-          </div>
-          <div className="message">
+          </span>
+          <span className="message">
+            <i className="material-icons icon-message">notifications</i>
             {this.state.doBlink ? (
               <Blink>
                 <span style={{ color: "#FFEE66" }}>
@@ -149,12 +138,13 @@ export default class ExBar extends React.Component {
             ) : (
               this.state.updateText
             )}
-          </div>
-          <div className="time rest-time">
+          </span>
+          <span className="time rest-time">
+            <i className="material-icons icon-rest-time">watch_later</i>
             {this.state.hour > 0
               ? `${this.state.hour}：${this.state.minute}：${this.state.second}`
               : `${this.state.minute}：${this.state.second}`}
-          </div>
+          </span>
         </div>
       </div>
     );

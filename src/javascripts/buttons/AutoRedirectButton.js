@@ -95,6 +95,9 @@ export default class AutoRedirectButton extends React.Component {
             data-balloon-pos={this._balloonPos}
             data-balloon-length={this._balloonLength}
           >
+            <i className="material-icons">
+              redo
+            </i>
             {this.state.isToggledOn
               ? `${this._label}オン`
               : `${this._label}オフ`}

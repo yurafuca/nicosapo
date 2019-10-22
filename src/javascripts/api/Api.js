@@ -77,11 +77,11 @@ export default class Api {
 
   static getFutureOnair() {
     return new Promise(resolve => {
-      const url = "https://live.nicovideo.jp/ranking?type=comingsoon&main_provider_type=official";
+      const url = "https://live.nicovideo.jp/ranking?type=comingsoon";
       axios.get(url).then(response => {
         const parser = new DOMParser();
         const html = parser.parseFromString(response.data, "text/html");
-        const futureStreams = html.querySelectorAll(".ranking_video");
+        const futureStreams = html.querySelectorAll("#official_and_channel_ranking_main .rk-ProgramCard");
         if (futureStreams) {
           resolve(futureStreams);
         }
@@ -91,11 +91,11 @@ export default class Api {
 
   static getOfficialOnair() {
     return new Promise(resolve => {
-      const url = "https://live.nicovideo.jp/ranking?type=onair&main_provider_type=official";
+      const url = "https://live.nicovideo.jp/ranking?type=onair";
       axios.get(url).then(response => {
         const parser = new DOMParser();
         const html = parser.parseFromString(response.data, "text/html");
-        const officialStreams = html.querySelectorAll(".ranking_video");
+        const officialStreams = html.querySelectorAll("#official_and_channel_ranking_main .rk-ProgramCard");
         resolve(officialStreams);
       });
     });
@@ -104,7 +104,7 @@ export default class Api {
   static getStatus(param) {
     parameter_nicovideojs.push(param);
     return new Promise(resolve => {
-      const url = "https://watch.live.nicovideo.jp/api/getplayerstatus?v=";
+      const url = "https://live.nicovideo.jp/api/getplayerstatus/";
       const parameter = parameter_nicovideojs.shift();
 
       axios
@@ -178,12 +178,12 @@ export default class Api {
       const result = [];
       const parser = new DOMParser();
       const html = parser.parseFromString(httpResponse, "text/html");
-      const frames = html.querySelectorAll(".com_frm");
+      const frames = html.querySelectorAll(".md-cmn_communities_frm .item");
 
       Array.prototype.forEach.call(frames, el => {
-        const title = el.querySelector(".title").textContent;
-        const thumbnail = el.querySelector(".thmb img").src;
-        const id = el.querySelector(".thmb a").href.replace("https://com.nicovideo.jp/community/", ``);
+        const title = el.querySelector(".profile .name").textContent;
+        const thumbnail = el.querySelector(".thumbnail img").src;
+        const id = el.querySelector(".profile .name a").href.replace("https://com.nicovideo.jp/community/", ``);
         const url = `https://com.nicovideo.jp/community/${id}`;
         const community = {
           title: title,

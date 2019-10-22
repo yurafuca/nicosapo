@@ -4,6 +4,13 @@ export default class PageType {
   static get() {
     let pageType = null;
 
+    if ($("#Error_Box").length > 0) {
+      return "ERROR_PAGE";
+    }
+
+    /**
+     * TimeShiftPage
+     */
     if (this._isModernTimeShiftPage()) {
       pageType = "MODERN_TIME_SHIFT_PAGE";
       /**
@@ -13,9 +20,9 @@ export default class PageType {
       pageType = "OFFICIAL_CAST_PAGE";
     } else if (this._isModernCastPage()) {
       pageType = "MODERN_CAST_PAGE";
-    } else if (this._isChimeraCastPage()) {
+    } else if (this._isChimeraCastPage()) { // TODO: Deprecate.
       pageType = "CHIMERA_CAST_PAGE";
-    } else if (this._isNormalCastPage()) {
+    } else if (this._isNormalCastPage()) { // TODO: Deprecate.
       pageType = "NORMAL_CAST_PAGE";
       /**
        * NonCastPages
@@ -29,10 +36,10 @@ export default class PageType {
     } else if (this._isChannelPage()) {
       pageType = "CHANNEL_PAGE";
       /**
-       * TimeShiftPage
+       * ErrorPage
        */
     } else {
-      pageType = "TIME_SHIFT_PAGE";
+      pageType = "ERROR_PAGE";
     }
 
     console.log(pageType);
@@ -41,8 +48,8 @@ export default class PageType {
   }
 
   static _isModernCastPage() {
-    const $targetDom = $("#root");
-    if ($targetDom.length > 0) {
+    const $root = $("#root");
+    if ($root.length > 0) {
       return true;
     } else {
       return false;
@@ -66,25 +73,13 @@ export default class PageType {
 
   static _isModernTimeShiftPage() {
     // コメントが無効
-    if (document.querySelector("span[class^='___disabled-message___']")) {
-      return true;
-    } else {
-      return false;
-    }
+    return document.querySelector('[class^=___video-layer__]') != null &&
+      document.querySelector("span[class^='___disabled-message___']")  != null
   }
 
   static _isOfficialCastPage() {
-    // お便り投稿ヘッダ
-    if ($(".mail_title").length > 0) {
-      return true;
-    }
-    if ($("div[class^='___program-information___']").length == 0) {
-      return false;
-    }
-    if ($("h2[class^='___section-title___']").length > 0) {
-      return false;
-    }
-    return true;
+    return document.querySelector('[class^=___group-name-anchor___]') == null &&
+      document.querySelector('[class^=___video-layer__]') != null
   }
 
   // TODO: 自身の生放送中に判定が正しくなくなる

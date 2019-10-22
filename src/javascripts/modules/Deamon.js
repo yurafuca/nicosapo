@@ -8,11 +8,11 @@ import { CommunityBuilder, ProgramBuilder } from './ManageableBuilder';
 
 const AUTOMATIC_VISITING_KEY = "autoEnterProgramList";
 
-interval(1000 * 30).subscribe(
+interval(1000 * 60).subscribe(
   _ => {
     const communities = bucket.communitiesShouldPoll();
     communities.forEach((community, i) => {
-      const delay = i * 3000;
+      const delay = i * 6000;
       setTimeout(() => {
         Api.isOpen(community.id).then(result => {
           if (result.isOpen) {

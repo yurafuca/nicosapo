@@ -10,7 +10,7 @@ export default class ModernCastPage extends CastPage {
       enableExBar: true,
       position: `APPEND`,
       requireInline: true,
-      element4Buttons: document.querySelector('[class^="___provider-detail___"]'),
+      element4Buttons: document.querySelector('#nicosapo-buttons'),
       idName4ExBar: 'class^="___operator-area___"'
     };
     super.putWidgets(props);

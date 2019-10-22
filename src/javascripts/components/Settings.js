@@ -36,7 +36,8 @@ export default class Settings extends React.Component {
       selectableList: {
         minuteList: [15, 20, 25, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120],
         idleMinuteList: [3, 5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120],
-        soundFiles: [{ path: "ta-da.mp3", text: "Ta-da!" }, { path: "ding.mp3", text: "Ding" }, { path: "shupopo.mp3", text: "シュポポ" }, { path: "piroron.mp3", text: "ピロロン" }, { path: "pinpon.mp3", text: "ピンポン" }, { path: "famima.mp3", text: "ファミマ" }]
+        soundFiles: [{ path: "ta-da.mp3", text: "Ta-da!" }, { path: "ding.mp3", text: "Ding" }, { path: "shupopo.mp3", text: "シュポポ" }, { path: "piroron.mp3", text: "ピロロン" }, { path: "pinpon.mp3", text: "ピンポン" }, { path: "famima.mp3", text: "ファミマ" }],
+        defaultTabs: [{ tab: "following", text: "フォロー中" }, { tab: "following_future", text: "予約" }, { tab: "official", text: "公式" }, { tab: "official_future", text: "未来の公式" }, { tab: "search", text: "検索" }]
       },
       "options.redirect.time": 30,
       "options.soundfile": "ta-da.mp3",
@@ -51,7 +52,9 @@ export default class Settings extends React.Component {
       "options.autoEnter.cancel.onIdle": false,
       "options.idle.minute": 20,
       "options.hideBadge.enable": "disable",
-      "options.excludeMemberOnly.enable": false
+      "options.excludeMemberOnly.enable": false,
+      "options.copyUrl": false,
+      "options.notification.selfIgnoreList": []
     };
     return state;
   }
@@ -163,6 +166,9 @@ export default class Settings extends React.Component {
               <div className={this.state.selectedMenu === "search" ? "item selected" : "item"} data-menu="search" onClick={this.clickMenu}>
                 検索
               </div>
+              <div className={this.state.selectedMenu === "integrations" ? "item selected" : "item"} data-menu="integrations" onClick={this.clickMenu}>
+                他のツールとの連携
+              </div>
             </div>
             <div className="wrapper menu float-left">
               <h1 className="appicon">リストの管理</h1>
@@ -176,7 +182,7 @@ export default class Settings extends React.Component {
                 自動入場リスト（CH・コミュ）
               </div>
               <div className={this.state.selectedMenu === "exclude-from-search" ? "item selected" : "item"} data-menu="exclude-from-search" onClick={this.clickMenu}>
-                検索結果の除外リスト
+                検索結果のミュートリスト
               </div>
             </div>
             <div className="wrapper menu float-left">
@@ -290,6 +296,22 @@ export default class Settings extends React.Component {
                         音量テスト
                       </button>
                     </div>
+                    <div className="item">
+                      <h3>配信者向けの設定: 自分が配信したときの通知を表示しない</h3>
+                      <p className="note green" style={{ marginBottom: "0.6em" }}>
+                        あなたが配信に使用するコミュニティのリストを「,」区切りで入力してください．<br/>
+                        例: co123456, co234567, co345678
+                      </p>
+                      <input placeholder="コミュニティのリストを入力" style={{ width: "280px", border: "1px solid #bbb", borderRadius: "3px", padding: "3px 6px" }} value={this.state["options.notification.selfIgnoreList"]} onChange={e => {
+                        const value = e.target.value;
+                        const parsedValue = value
+                          .replace(/[，、]/g, ',')
+                          .replace(/[ 　]/g, '');
+                        const ignoreList = parsedValue.split(',');
+                        store.set("options.notification.selfIgnoreList", ignoreList);
+                        this.setState({ "options.notification.selfIgnoreList": ignoreList });
+                      }} />
+                    </div>
                   </div>
                 </div>
               );
@@ -301,6 +323,12 @@ export default class Settings extends React.Component {
                 <div className="wrapper">
                   <h1 className="appicon">ポップアップ・バッジ</h1>
                   <div className="items">
+                    <div className="item">
+                      <h3>ポップアップを開いたときに選択するタブ</h3>
+                      <select name="options.defaultTab" onChange={this.onChange} value={this.state["options.defaultTab"]}>
+                        {this.state.selectableList.defaultTabs.map(d => <option value={d.tab}>{d.text}</option>)}
+                    </select>
+                    </div>
                     <div className="item">
                       <h3>予約番組をポップアップに表示する</h3>
                       <label>
@@ -331,12 +359,35 @@ export default class Settings extends React.Component {
                   <h1 className="appicon">検索</h1>
                   <div className="items">
                     <div className="item">
-                      <h3>コミュニティ限定番組を検索結果から除外する</h3>
+                      <h3>コミュニティ限定番組を検索結果からミュートする</h3>
                       <label>
-                        <input type="radio" name="options.excludeMemberOnly.enable" value={"enable"} checked={this.state["options.excludeMemberOnly.enable"] == "enable"} onChange={this.onChange} /> 有効
+                        <input type="radio" name="options.excludeMemberOnly.enable" value={true} checked={this.state["options.excludeMemberOnly.enable"] == true} onChange={this.onChange} /> 有効
                       </label>
                       <label>
-                        <input type="radio" name="options.excludeMemberOnly.enable" value={"disable"} checked={this.state["options.excludeMemberOnly.enable"] == "disable"} onChange={this.onChange} /> 無効
+                        <input type="radio" name="options.excludeMemberOnly.enable" value={false} checked={this.state["options.excludeMemberOnly.enable"] == false} onChange={this.onChange} /> 無効
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              );
+            }
+          })()}
+          {(() => {
+            if (this.state.selectedMenu == "integrations") {
+              return (
+                <div className="wrapper">
+                  <h1 className="appicon">他のツールとの連携</h1>
+                  <div className="items">
+                    <div className="item">
+                      <h3>番組を開いたときに番組の URL をクリップボードにコピーする</h3>
+                      <p className="note green" style={{ marginBottom: "0.6em" }}>
+                        コメントビューアのアドレスバーに URL をペーストするときに便利です
+                      </p>
+                      <label>
+                        <input type="radio" name="options.copyUrl" value={true} checked={this.state["options.copyUrl"] == true} onChange={this.onChange} /> 有効
+                      </label>
+                      <label>
+                        <input type="radio" name="options.copyUrl" value={false} checked={this.state["options.copyUrl"] == false} onChange={this.onChange} /> 無効
                       </label>
                     </div>
                   </div>
@@ -384,7 +435,7 @@ export default class Settings extends React.Component {
             if (this.state.selectedMenu == "exclude-from-search") {
               return (
                 <div className="wrapper">
-                  <h1 className="appicon">検索結果の除外リスト</h1>
+                  <h1 className="appicon">検索結果のミュートリスト</h1>
                   <div id="listgroup-community">
                     <ExcludeList />
                   </div>
@@ -475,22 +526,28 @@ export default class Settings extends React.Component {
                 <div className="wrapper" style={{ marginTop: "20px" }}>
                   <h1 className="appicon">作者にカンパする</h1>
                   <div className="items">
-                    <span className="campa">にこさぽはユーザーのみなさまの投げ銭によって開発されています．このアプリに課金してもいいよという方はぜひご協力ください 😉</span>
-                    <p>
-                      <a target="_blank" href="https://amzn.asia/3CJmj5o">
-                        Amazon ほしいものリスト - ほしい本
-                      </a>
-                    </p>
-                    <p>
-                      <a target="_blank" href="https://amzn.asia/hqChgj3">
-                        Amazon ほしいものリスト - ほしい雑貨
-                      </a>
-                    </p>
-                    <p>
-                      <a target="_blank" href="https://www.amazon.co.jp/dp/B004N3APGO/">
-                        Amazon ギフト券（15円から金額を自由に指定できます）
-                      </a>
-                    </p>
+                    <span className="campa">休日や業務の終了後に個人でにこさぽを開発しています．もしにこさぽを気に入ったらカンパしていただけるととても励みになります 🙏</span>
+                    <ul>
+                      <li>
+                        <a target="_blank" href="https://amzn.asia/3CJmj5o">
+                          Amazon ほしいものリスト - ほしい本
+                        </a>
+                      </li>
+                      <li>
+                        <a target="_blank" href="https://amzn.asia/hqChgj3">
+                          Amazon ほしいものリスト - ほしい雑貨
+                        </a>
+                      </li>
+                      <li>
+                        <a target="_blank" href="https://www.amazon.co.jp/dp/B004N3APGO/">
+                          Amazon ギフト券
+                        </a>
+                      </li>
+                      <li>
+                        <span className="force-body-color">PayPay 残高を送る</span><a target="_blank" href="https://paypay.ne.jp/guide/send/">（送り方はこちら）</a>
+                        <img className="paypay-qr" src="../images/paypay_qr.jpg" />
+                      </li>
+                    </ul>
                   </div>
                 </div>
               );

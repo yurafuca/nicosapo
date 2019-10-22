@@ -135,6 +135,9 @@ export default class AutoEnterCommunityButton extends React.Component {
             data-balloon-pos={this._balloonPos}
             data-balloon-length={this._balloonLength}
           >
+            <i className="material-icons">
+              event_seat
+            </i>
             {this.state.isToggledOn
               ? `${this._label}オン`
               : `${this._label}オフ`}

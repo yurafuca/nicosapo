@@ -1,5 +1,6 @@
 import IdHolder from "../modules/IdHolder";
 import Api from "../api/Api";
+import { API_IS_ONAIR } from '../chrome/runtime.onMessage';
 
 chrome.extension.onMessage.addListener((request, sender, sendResponse) => {
   console.log(request);
@@ -65,16 +66,22 @@ export default class NewCastChecker {
     if (idHolder.liveId == null || idHolder.communityId == null) {
       return
     }
-    Api.isOpen(idHolder.liveId).then(response => {
-      if (response.isOpen) {
+    chrome.runtime.sendMessage({
+      purpose: API_IS_ONAIR,
+      id: idHolder.liveId
+    }, response => {
+      if (response.isOnair) {
         if (_prolongReceiver) {
           _prolongReceiver(response);
         }
       } else {
         if (_isEnableChecking) {
-          Api.isOpen(idHolder.communityId).then(response => {
-            if (response.isOpen) {
-              goToCast(response.nextLiveId);
+          chrome.runtime.sendMessage({
+            purpose: API_IS_ONAIR,
+            id: idHolder.communityId
+          }, response => {
+            if (response.isOnair) {
+              goToCast(response.nextProgramId);
             }
           });
         }

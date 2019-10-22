@@ -16,7 +16,7 @@ export default class VIParser {
     const providerElement = element.querySelector("img");
 
     const provider = {
-      id: providerElement.src.match(/(co|ch)\d+\.jpg/)[0].replace(".jpg", ""),
+      id: providerElement.src.split('/').pop().replace(/\.jpg.*/, ""),
       thumbnail: providerElement.src.replace("64x64", "128x128")
     };
 

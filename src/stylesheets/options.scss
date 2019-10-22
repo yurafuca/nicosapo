@@ -56,6 +56,9 @@ p {
   -webkit-margin-before: 0.5em;
   -webkit-margin-after: 0.5em;
 }
+.force-body-color {
+  color: #24292e !important;
+}
 .header {
   padding-top: 10px;
   padding-bottom: 10px;
@@ -425,6 +428,18 @@ img {
   font-size: 13px;
   color: $color_tapa_approx;
   line-height: 20px;
+}
+.paypay-qr {
+  width: 300px;
+  display: block;
+  margin-left: -75px;;
+}
+ul {
+  font-size: 14px;
+  line-height: 1.9em;
+  margin-block-start: 0.5em;
+  padding-inline-start: 20px;
+  color: #0366d6;
 }
 .clearfix {
   display: block;

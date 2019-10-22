@@ -133,7 +133,12 @@ class Tabs {
   }
 
   static _selected() {
-    return document.querySelector(".tab.selected").id;
+    const tab = document.querySelector(".tab.selected");
+    if (tab) {
+      return tab.id;
+    } else {
+      null;
+    }
   }
 
   static _select(genre) {
@@ -147,14 +152,6 @@ class Tabs {
       tab.className = "tab non-selected";
     }
   }
-}
-
-// 初回表示
-{
-  Api.loadCasts("user").then(streams => {
-    hideSpinner();
-    Streams.show(streams, "user");
-  });
 }
 
 // ツールチップが表示されたら，ツールチップにマウスオーバーしたときツールチップを非表示にする
@@ -193,12 +190,38 @@ class Tabs {
   }
 }
 
+// 初回表示
+{
+  // バージョンを表示
+  const version = document.querySelector(".version");
+  version.textContent = chrome.runtime.getManifest().version;
+
+  const tab = store.get("options.defaultTab", "following");
+  switch (tab) {
+    case "following":
+      Tabs.change("user");
+      break;
+    case "following_future":
+      Tabs.change("reserve");
+      break;
+    case "official":
+      Tabs.change("official");
+      break;
+    case "official_future":
+      Tabs.change("future");
+      break;
+    case "search":
+      Tabs.change("search");
+      break;
+  }
+}
+
 // イベントリスナ
 {
   const userTab = document.getElementById("user");
   userTab.addEventListener("click", () => {
     Tabs.change("user");
-  });
+});
 
   const officialTab = document.getElementById("official");
   officialTab.addEventListener("click", () => {
