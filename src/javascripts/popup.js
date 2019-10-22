@@ -154,32 +154,6 @@ class Tabs {
   }
 }
 
-// 初回表示
-{
-  // バージョンを表示
-  const version = document.querySelector(".version");
-  version.textContent = chrome.runtime.getManifest().version;
-
-  const tab = store.get("options.defaultTab", "following");
-  switch (tab) {
-    case "following":
-      Tabs.change("user");
-      break;
-    case "following_future":
-      Tabs.change("reserve");
-      break;
-    case "official":
-      Tabs.change("official");
-      break;
-    case "official_future":
-      Tabs.change("future");
-      break;
-    case "search":
-      Tabs.change("search");
-      break;
-  }
-}
-
 // ツールチップが表示されたら，ツールチップにマウスオーバーしたときツールチップを非表示にする
 {
   const observer = new MutationObserver(() => {
@@ -213,6 +187,32 @@ class Tabs {
     Array.prototype.forEach.call(tabs, tab => {
       tab.style.width = "20%";
     });
+  }
+}
+
+// 初回表示
+{
+  // バージョンを表示
+  const version = document.querySelector(".version");
+  version.textContent = chrome.runtime.getManifest().version;
+
+  const tab = store.get("options.defaultTab", "following");
+  switch (tab) {
+    case "following":
+      Tabs.change("user");
+      break;
+    case "following_future":
+      Tabs.change("reserve");
+      break;
+    case "official":
+      Tabs.change("official");
+      break;
+    case "official_future":
+      Tabs.change("future");
+      break;
+    case "search":
+      Tabs.change("search");
+      break;
   }
 }
 
