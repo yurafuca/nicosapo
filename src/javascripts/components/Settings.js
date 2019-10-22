@@ -526,22 +526,28 @@ export default class Settings extends React.Component {
                 <div className="wrapper" style={{ marginTop: "20px" }}>
                   <h1 className="appicon">作者にカンパする</h1>
                   <div className="items">
-                    <span className="campa">にこさぽはユーザーのみなさまの投げ銭によって開発されています．このアプリに課金してもいいよという方はぜひご協力ください 😉</span>
-                    <p>
-                      <a target="_blank" href="https://amzn.asia/3CJmj5o">
-                        Amazon ほしいものリスト - ほしい本
-                      </a>
-                    </p>
-                    <p>
-                      <a target="_blank" href="https://amzn.asia/hqChgj3">
-                        Amazon ほしいものリスト - ほしい雑貨
-                      </a>
-                    </p>
-                    <p>
-                      <a target="_blank" href="https://www.amazon.co.jp/dp/B004N3APGO/">
-                        Amazon ギフト券（15円から金額を自由に指定できます）
-                      </a>
-                    </p>
+                    <span className="campa">休日や業務の終了後に個人でにこさぽを開発しています．もしにこさぽを気に入ったらカンパしていただけるととても励みになります 🙏</span>
+                    <ul>
+                      <li>
+                        <a target="_blank" href="https://amzn.asia/3CJmj5o">
+                          Amazon ほしいものリスト - ほしい本
+                        </a>
+                      </li>
+                      <li>
+                        <a target="_blank" href="https://amzn.asia/hqChgj3">
+                          Amazon ほしいものリスト - ほしい雑貨
+                        </a>
+                      </li>
+                      <li>
+                        <a target="_blank" href="https://www.amazon.co.jp/dp/B004N3APGO/">
+                          Amazon ギフト券
+                        </a>
+                      </li>
+                      <li>
+                        <span className="force-body-color">PayPay 残高を送る</span><a target="_blank" href="https://paypay.ne.jp/guide/send/">（送り方はこちら）</a>
+                        <img className="paypay-qr" src="../images/paypay_qr.jpg" />
+                      </li>
+                    </ul>
                   </div>
                 </div>
               );
