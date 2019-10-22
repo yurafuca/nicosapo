@@ -532,7 +532,7 @@ a {
 }
 
 .username {
-  margin-left: 3px;
+  margin-left: 4px;
   color: #333;
   font-size: 14px;
   line-height: 36px;
@@ -540,6 +540,31 @@ a {
   cursor: default;
   position: relative;
   top: 1px;
+}
+
+.version {
+  //float: right;
+  //top: 10px;
+  //cursor: default;
+  //margin-right: 10px;
+  //color: #555;
+  //font-size: 11px;
+  //position: relative;
+  float: right;
+  top: 10.7px;
+  cursor: default;
+  margin-right: 115px;
+  color: white;
+  font-size: 10px;
+  background: #646464;
+  font-weight: normal;
+  line-height: 11px;
+  padding: 2px 6px 2px 6.5px; // 'v' が数字に比べて大きいので左だけ少し大きく余白をとる
+  border-radius: 999px;
+  position: relative;
+  &:before {
+    content: 'v'
+  }
 }
 
 #search-container {

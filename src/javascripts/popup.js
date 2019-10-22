@@ -156,6 +156,10 @@ class Tabs {
 
 // 初回表示
 {
+  // バージョンを表示
+  const version = document.querySelector(".version");
+  version.textContent = chrome.runtime.getManifest().version;
+
   const tab = store.get("options.defaultTab", "following");
   switch (tab) {
     case "following":
