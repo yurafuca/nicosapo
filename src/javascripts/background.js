@@ -26,8 +26,13 @@ if (!isMigrated) {
   store.set("search.query.isMigrated", true);
 }
 
-chrome.runtime.onInstalled.addListener(() => {
+chrome.runtime.onInstalled.addListener(details => {
   NiconamaTabs.clear();
+
+  // nicotap のご紹介
+  if (details.reason == `install` || details.reason == `update`) {
+    chrome.tabs.create({ url: `http://yurafuca.com/pages/nicotap-for-nicosapo-users.html` })
+  }
 });
 
 chrome.runtime.onStartup.addListener(() => {
