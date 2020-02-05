@@ -544,8 +544,8 @@ export default class Settings extends React.Component {
                         </a>
                       </li>
                       <li>
-                        <span className="force-body-color">PayPay 残高を送る</span><a target="_blank" href="https://paypay.ne.jp/guide/send/">（送り方はこちら）</a>
-                        <img className="paypay-qr" src="../images/paypay_qr.jpg" />
+                        <span className="force-body-color">Kyash 残高を送る</span>
+                        <img className="kyash-qr" src="../images/kyash_qr.jpg" />
                       </li>
                     </ul>
                   </div>
