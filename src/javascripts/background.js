@@ -28,16 +28,6 @@ if (!isMigrated) {
 
 chrome.runtime.onInstalled.addListener(details => {
   NiconamaTabs.clear();
-
-  // nicotap のご紹介
-  if (details.reason === `install`) {
-    chrome.tabs.create({ url: `http://yurafuca.com/pages/nicotap-for-nicosapo-users.html` });
-  }
-  if (details.reason === `update`) {
-    if (chrome.runtime.getManifest().version === `5.0.1` || chrome.runtime.getManifest().version === `5.0.2`) {
-      chrome.tabs.create({ url: `http://yurafuca.com/pages/nicotap-for-nicosapo-users.html` });
-    }
-  }
 });
 
 chrome.runtime.onStartup.addListener(() => {
