@@ -175,7 +175,7 @@ export default class NotificationList extends React.Component {
       items = <AutoEnterEmpty />;
     } else {
       const message = this.state.loadComplete
-        ? "すべてのコミュニティを読み込みました．"
+        ? "すべてのユーザを読み込みました．"
         : "";
       const classes = `spinner ` + (this.state.loading ? `loading` : `standby`);
       const spinner = (
@@ -202,7 +202,7 @@ export default class NotificationList extends React.Component {
     const status = this.state.loading ? (
       <div>
         <span>
-          コミュニティを読み込んでいます．しばらくお待ちください...（{
+          ユーザを読み込んでいます．しばらくお待ちください...（{
             this.state.currentCursor
           }
         </span>
@@ -221,7 +221,7 @@ export default class NotificationList extends React.Component {
               color: `#767676`
             }}
           >
-            通知を表示するコミュニティを個別に設定します．「基本設定 >
+            通知を表示するユーザを個別に設定します．「基本設定 >
             自動枠移動・自動入場 > 通知を放送開始時に表示する」
             の設定が優先されます．チャンネルの個別設定には対応していません．
           </p>

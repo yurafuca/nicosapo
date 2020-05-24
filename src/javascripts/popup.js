@@ -42,7 +42,7 @@ class Streams {
     if (params.length === 0) {
       const message = document.createElement("div");
       message.className = "message";
-      message.textContent = "フォロー中のコミュニティ・チャンネルが放送している番組はありません 😴";
+      message.textContent = "フォロー中のユーザが放送している番組はありません 😴";
       container.appendChild(message);
     }
 

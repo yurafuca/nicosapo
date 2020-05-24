@@ -179,7 +179,7 @@ export default class Settings extends React.Component {
                 自動入場リスト（番組）
               </div>
               <div className={this.state.selectedMenu === "auto-community" ? "item selected" : "item"} data-menu="auto-community" onClick={this.clickMenu}>
-                自動入場リスト（CH・コミュ）
+                自動入場リスト（ユーザ）
               </div>
               <div className={this.state.selectedMenu === "exclude-from-search" ? "item selected" : "item"} data-menu="exclude-from-search" onClick={this.clickMenu}>
                 検索結果のミュートリスト
@@ -299,10 +299,10 @@ export default class Settings extends React.Component {
                     <div className="item">
                       <h3>配信者向けの設定: 自分が配信したときの通知を表示しない</h3>
                       <p className="note green" style={{ marginBottom: "0.6em" }}>
-                        あなたが配信に使用するコミュニティのリストを「,」区切りで入力してください．<br/>
+                        あなたが配信に使用するアカウントの id を「,」区切りで入力してください．<br/>
                         例: co123456, co234567, co345678
                       </p>
-                      <input placeholder="コミュニティのリストを入力" style={{ width: "280px", border: "1px solid #bbb", borderRadius: "3px", padding: "3px 6px" }} value={this.state["options.notification.selfIgnoreList"]} onChange={e => {
+                      <input placeholder="ユーザのリストを入力" style={{ width: "280px", border: "1px solid #bbb", borderRadius: "3px", padding: "3px 6px" }} value={this.state["options.notification.selfIgnoreList"]} onChange={e => {
                         const value = e.target.value;
                         const parsedValue = value
                           .replace(/[，、]/g, ',')
@@ -423,7 +423,7 @@ export default class Settings extends React.Component {
             if (this.state.selectedMenu == "auto-community") {
               return (
                 <div className="wrapper">
-                  <h1 className="appicon">自動入場が有効になっているCH・コミュ</h1>
+                  <h1 className="appicon">自動入場が有効になっているユーザ</h1>
                   <div id="listgroup-community">
                     <AutoEnterList type="community" />
                   </div>

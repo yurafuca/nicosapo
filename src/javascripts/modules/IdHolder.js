@@ -14,6 +14,10 @@ function getLiveId() {
 }
 
 function getCommunityId() {
+  if (window.location.href.startsWith("https://www.nicovideo.jp/user/")) {
+    return window.location.href.split('/').pop()
+  }
+
   const communityUrl1 = document.querySelector('[class^=___user-name-anchor___]');
   const re1 = /.+user\/([0-9]+)/;
 
@@ -37,8 +41,7 @@ function getCommunityId() {
 
   // コミュニティページ
   if (re3.exec(communityUrl3)) {
-    const communityId = re3.exec(communityUrl3)[1];
-    return communityId;
+    return document.querySelector('.communityDetail .content a').href.split('/').pop();
   }
 
   const communityHref = $(".thumb_wrapper_ch > a").attr("href");
