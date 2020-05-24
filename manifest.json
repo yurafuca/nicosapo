@@ -45,7 +45,8 @@
     "http://secure-dcdn.cdn.nimg.jp/",
     "https://secure-dcdn.cdn.nimg.jp/",
     "http://ssth.dmc.nico/",
-    "https://ssth.dmc.nico/"
+    "https://ssth.dmc.nico/",
+    "https://nvapi.nicovideo.jp/"
   ],
   "background": {
     "scripts": ["javascripts/background.js"]

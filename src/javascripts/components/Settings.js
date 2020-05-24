@@ -524,9 +524,9 @@ export default class Settings extends React.Component {
             if (this.state.selectedMenu == "auto") {
               return (
                 <div className="wrapper" style={{ marginTop: "20px" }}>
-                  <h1 className="appicon">作者にカンパする</h1>
+                  <h1 className="appicon">作者に寄付する</h1>
                   <div className="items">
-                    <span className="campa">休日や業務の終了後に個人でにこさぽを開発しています．もしにこさぽを気に入ったらカンパしていただけるととても励みになります 🙏</span>
+                    <span className="campa">休日や業務の終了後に個人でにこさぽを開発しています．もしにこさぽを気に入ったらカンパしていただけるととても励みになります．</span>
                     <ul>
                       <li>
                         <a target="_blank" href="https://amzn.asia/3CJmj5o">

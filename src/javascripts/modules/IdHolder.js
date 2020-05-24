@@ -14,8 +14,8 @@ function getLiveId() {
 }
 
 function getCommunityId() {
-  const communityUrl1 = document.querySelector('[class^=___group-name-anchor___]');
-  const re1 = /.+((ch|co)[0-9]+)/;
+  const communityUrl1 = document.querySelector('[class^=___user-name-anchor___]');
+  const re1 = /.+user\/([0-9]+)/;
 
   // ユーザ放送
   if (re1.exec(communityUrl1)) {
@@ -24,11 +24,11 @@ function getCommunityId() {
   }
 
   const communityUrl2 = document.querySelector('[class^=___channel-name-anchor___]');
-  const re2 = /https?:\/\/(com|ch)\.nicovideo\.jp\/(community|channel)\/([\x21-\x7e]+)/;
+  const re2 = /.+channel\/(ch[0-9]+)/;
 
   // チャンネル放送/公式放送
   if (communityUrl2 != null && re2.exec(communityUrl2)) {
-    const communityId = re2.exec(communityUrl2)[3];
+    const communityId = re2.exec(communityUrl2)[1];
     return communityId;
   }
 
