@@ -498,15 +498,6 @@ export default class Settings extends React.Component {
                     <p>バージョン: {chrome.runtime.getManifest().version}</p>
 
                   </div>
-                  <h1 className="appicon">サポート</h1>
-                  <p className="note gray margin-top-10">Twitter でにこさぽのサポートをしています</p>
-                  <p>
-                    <a href="https://twitter.com/nicosapo_dev" target="_blank">@nicosapo_dev</a>
-                  </p>
-                  <p className="note gray margin-top-15" target="_blank">にこさぽの使いかたを確認できます</p>
-                  <p>
-                    <a href="https://github.com/yurafuca/nicosapo/wiki" target="_blank">nicosapo wiki</a>
-                  </p>
                   <h1 className="appicon">作者</h1>
                   <p className="note gray margin-top-10">Twitter</p>
                   <p>
