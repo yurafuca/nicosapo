@@ -517,25 +517,20 @@ export default class Settings extends React.Component {
                 <div className="wrapper" style={{ marginTop: "20px" }}>
                   <h1 className="appicon">作者に寄付する</h1>
                   <div className="items">
-                    <span className="campa">休日や業務の終了後に個人でにこさぽを開発しています．もしにこさぽを気に入ったらカンパしていただけるととても励みになります．</span>
+                    <span className="campa">日中はプログラマとして仕事をしているので平日の夜中と土日ににこさぽのメンテナンスをしています．寄付をしていただけると嬉しいです．<div style={{ height: '5çpx' }} />Amazon ギフト券 または Kyash で送っていただけるととくに助かりますが，ほしいものリストでももちろん大丈夫です． Amazon ギフト券の場合は @yurafuca に DM でギフト券の番号を送ってくださればお返事させていただきます．</span>
                     <ul>
-                      <li>
-                        <a target="_blank" href="https://amzn.asia/3CJmj5o">
-                          Amazon ほしいものリスト - ほしい本
-                        </a>
-                      </li>
-                      <li>
-                        <a target="_blank" href="https://amzn.asia/hqChgj3">
-                          Amazon ほしいものリスト - ほしい雑貨
-                        </a>
-                      </li>
                       <li>
                         <a target="_blank" href="https://www.amazon.co.jp/dp/B004N3APGO/">
                           Amazon ギフト券
                         </a>
                       </li>
                       <li>
-                        <span className="force-body-color">Kyash 残高を送る</span>
+                        <a target="_blank" href="https://www.amazon.co.jp/hz/wishlist/ls/1V0ZQX1SCBDZV?&sort=default">
+                          Amazon ほしいものリスト
+                        </a>
+                      </li>
+                      <li>
+                        <span className="force-body-color">Kyash</span>
                         <img className="kyash-qr" src="../images/kyash_qr.jpg" />
                       </li>
                     </ul>
