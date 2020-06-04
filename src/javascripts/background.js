@@ -26,7 +26,7 @@ if (!isMigrated) {
   store.set("search.query.isMigrated", true);
 }
 
-chrome.runtime.onInstalled.addListener(() => {
+chrome.runtime.onInstalled.addListener(details => {
   NiconamaTabs.clear();
 });
 

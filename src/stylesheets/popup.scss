@@ -567,6 +567,27 @@ a {
   }
 }
 
+.nicotap {
+  float: right;
+  top: 14.7px;
+  left: 198px;
+  cursor: default;
+  margin-right: 115px;
+  color: white;
+  font-size: 10px;
+  background: #ff9143;
+  font-weight: normal;
+  line-height: 11px;
+  padding: 2px 6px 2px 6.5px;
+  border-radius: 999px;
+  position: absolute;
+  &:hover {
+    background: #f35472;
+    cursor: pointer;
+    text-decoration: none;
+  }
+}
+
 #search-container {
   font-family: "Noto Sans Japanese";
   background: #f5f5f5;
