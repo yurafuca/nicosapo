@@ -17,11 +17,11 @@ export default class AutoEnterCommunityButton extends React.Component {
     super();
     this.state = { isToggledOn: null };
     this._className = "auto_enter_community_button";
-    this._label = `(このコミュニティに) 自動入場: `;
-    this._popoverTitle = "コミュニティへの自動入場";
+    this._label = `(このユーザに) 自動入場: `;
+    this._popoverTitle = "ユーザへの自動入場";
     this._popoverMessage = (
       <span>
-        このコミュニティ・チャンネルが放送を始めたとき自動で枠を新しいタブで開きます．<br />
+        このユーザが放送を始めたとき自動で枠を新しいタブで開きます．<br />
         <strong>📍 NOTE： </strong>
         <font color="#24963e">
           負荷軽減のため最大登録数は 5 を目安にしてください
@@ -91,7 +91,7 @@ export default class AutoEnterCommunityButton extends React.Component {
     Storage.saveToNestedLocalStorage("autoEnterCommunityList", metaData.communityId, {
       state: "init",
       thumbnail: metaData.thumbnail,
-      title: metaData.title,
+      title: metaData.owner,
       openDate: metaData.openDate,
       owner: metaData.owner
     });

@@ -25,10 +25,8 @@ class Streams {
     let params;
     switch (genre) {
       case "user":
-        params = UserThumbnails.getParams(streams, false);
-        break;
       case "reserve":
-        params = UserThumbnails.getParams(streams, true);
+        params = UserThumbnails.getParams(streams);
         break;
       case "official":
         params = OfficialThumbnails.getParams(streams);
@@ -44,7 +42,7 @@ class Streams {
     if (params.length === 0) {
       const message = document.createElement("div");
       message.className = "message";
-      message.textContent = "フォロー中のコミュニティ・チャンネルが放送している番組はありません 😴";
+      message.textContent = "フォロー中のユーザが放送している番組はありません 😴";
       container.appendChild(message);
     }
 
@@ -107,18 +105,11 @@ class Tabs {
     // 検索タブ以外は API を叩いて番組をロードする
     switch (genre) {
       case "user":
+      case "reserve":
       case "official":
       case "future":
         {
           Api.loadCasts(genre).then(streams => {
-            hideSpinner();
-            Streams.show(streams, genre);
-          });
-          break;
-        }
-      case "reserve":
-        {
-          Api.loadCasts("user").then(streams => {
             hideSpinner();
             Streams.show(streams, genre);
           });
