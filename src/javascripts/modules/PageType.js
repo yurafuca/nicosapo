@@ -20,24 +20,12 @@ export default class PageType {
       pageType = "OFFICIAL_CAST_PAGE";
     } else if (this._isModernCastPage()) {
       pageType = "MODERN_CAST_PAGE";
-    } else if (this._isChimeraCastPage()) { // TODO: Deprecate.
-      pageType = "CHIMERA_CAST_PAGE";
-    } else if (this._isNormalCastPage()) { // TODO: Deprecate.
-      pageType = "NORMAL_CAST_PAGE";
-      /**
-       * NonCastPages
-       */
-    } else if (this._isStandByPage()) {
-      pageType = "STAND_BY_PAGE";
-    } else if (this._isGatePage()) {
-      pageType = "GATE_PAGE";
     } else if (this._isCommunityPage()) {
       pageType = "COMMUNITY_PAGE";
     } else if (this._isChannelPage()) {
       pageType = "CHANNEL_PAGE";
-      /**
-       * ErrorPage
-       */
+    } else if (this._isUserPage()) {
+      pageType = "USER_PAGE";
     } else {
       pageType = "ERROR_PAGE";
     }
@@ -73,24 +61,18 @@ export default class PageType {
 
   static _isModernTimeShiftPage() {
     // コメントが無効
-    return document.querySelector('[class^=___video-layer__]') != null &&
-      document.querySelector("span[class^='___disabled-message___']")  != null
+    return document.querySelector("[class^=___video-layer__]") != null && document.querySelector("span[class^='___disabled-message___']") != null;
   }
 
   static _isOfficialCastPage() {
-    return document.querySelector('[class^=___group-name-anchor___]') == null &&
-      document.querySelector('[class^=___video-layer__]') != null
+    return document.querySelector("[class^=___group-name-anchor___]") == null && document.querySelector("[class^=___video-layer__]") != null;
   }
 
   // TODO: 自身の生放送中に判定が正しくなくなる
   static _isNormalCastPage() {
     const zappingBox = document.getElementById("watch_zapping_box");
-    const normalBroadCastArea = document.getElementById(
-      "nicolivebroadcaster_container"
-    );
-    const modernBroadCastArea = document.getElementById(
-      "program-provider-block"
-    );
+    const normalBroadCastArea = document.getElementById("nicolivebroadcaster_container");
+    const modernBroadCastArea = document.getElementById("program-provider-block");
     if (zappingBox != null) return true;
     if (normalBroadCastArea != null) return true;
     if (modernBroadCastArea != null) return true;
@@ -123,5 +105,9 @@ export default class PageType {
     } else {
       return false;
     }
+  }
+
+  static _isUserPage() {
+    return window.location.href.startsWith('https://www.nicovideo.jp/user/')
   }
 }

@@ -13,7 +13,7 @@ export default class NotificationList extends React.Component {
       communities: [],
       excluded: {},
       loading: false,
-      currentPage: 1,
+      currentCursor: null,
       loadComplete: false
     };
     this.toggle = this.toggle.bind(this);
@@ -51,9 +51,12 @@ export default class NotificationList extends React.Component {
     });
   }
 
-  setParams(page = 1) {
+  setParams(cursor = null) {
     return new Promise(resolve => {
-      Api.getFollowingCommunities(page).then(communities => {
+      Api.getFollowingCommunities(cursor).then(result => {
+        const cursor = result.cursor;
+        const communities = result.items;
+
         if (communities.length == 0) {
           this.setState({ loadComplete: true });
           resolve();
@@ -67,7 +70,7 @@ export default class NotificationList extends React.Component {
         });
         this.setState({ communities: this.state.communities }, () => {
           this.resetWatcher();
-          this.setState({ currentPage: page }, resolve);
+          this.setState({ currentCursor: cursor }, resolve);
         });
       });
     });
@@ -128,7 +131,7 @@ export default class NotificationList extends React.Component {
     return new Promise(resolve => {
       // 負荷対策
       Common.sleep(500).then(() => {
-        this.setParams(this.state.currentPage + 1).then(resolve);
+        this.setParams(this.state.currentCursor).then(resolve);
       });
     });
   }
@@ -172,7 +175,7 @@ export default class NotificationList extends React.Component {
       items = <AutoEnterEmpty />;
     } else {
       const message = this.state.loadComplete
-        ? "すべてのコミュニティを読み込みました．"
+        ? "すべてのユーザを読み込みました．"
         : "";
       const classes = `spinner ` + (this.state.loading ? `loading` : `standby`);
       const spinner = (
@@ -199,10 +202,9 @@ export default class NotificationList extends React.Component {
     const status = this.state.loading ? (
       <div>
         <span>
-          コミュニティを読み込んでいます．しばらくお待ちください...（{
-            this.state.currentPage
-          }{" "}
-          ページ目）
+          ユーザを読み込んでいます．しばらくお待ちください...（{
+            this.state.currentCursor
+          }
         </span>
       </div>
     ) : (
@@ -219,7 +221,7 @@ export default class NotificationList extends React.Component {
               color: `#767676`
             }}
           >
-            通知を表示するコミュニティを個別に設定します．「基本設定 >
+            通知を表示するユーザを個別に設定します．「基本設定 >
             自動枠移動・自動入場 > 通知を放送開始時に表示する」
             の設定が優先されます．チャンネルの個別設定には対応していません．
           </p>

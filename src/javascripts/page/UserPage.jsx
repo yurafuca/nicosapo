@@ -1,16 +1,16 @@
-import NonCastPage from '../page/NonCastPage';
+import NonCastPagee from '../page/NonCastPage';
 
-export default class StandByPage extends NonCastPage {
+export default class UserPage extends NonCastPagee {
   putWidgets() {
     const props = {
       buttonOrder    : `DEFAULT`,
-      enableARButton : true,
-      enableACButton : false,
+      enableARButton : false,
+      enableACButton : true,
       enableAPButton : false,
       enableExBar    : false,
       position       : `APPEND`,
       requireInline  : true,
-      element4Buttons: document.getElementById('watch_like_buttons'),
+      element4Buttons: document.querySelector('.profile'),
       idName4ExBar   : `id=siteHeader` // TODO: temp
     };
     super.putWidgets(props);

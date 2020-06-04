@@ -179,7 +179,7 @@ export default class Settings extends React.Component {
                 自動入場リスト（番組）
               </div>
               <div className={this.state.selectedMenu === "auto-community" ? "item selected" : "item"} data-menu="auto-community" onClick={this.clickMenu}>
-                自動入場リスト（CH・コミュ）
+                自動入場リスト（ユーザ）
               </div>
               <div className={this.state.selectedMenu === "exclude-from-search" ? "item selected" : "item"} data-menu="exclude-from-search" onClick={this.clickMenu}>
                 検索結果のミュートリスト
@@ -299,10 +299,10 @@ export default class Settings extends React.Component {
                     <div className="item">
                       <h3>配信者向けの設定: 自分が配信したときの通知を表示しない</h3>
                       <p className="note green" style={{ marginBottom: "0.6em" }}>
-                        あなたが配信に使用するコミュニティのリストを「,」区切りで入力してください．<br/>
+                        あなたが配信に使用するアカウントの id を「,」区切りで入力してください．<br/>
                         例: co123456, co234567, co345678
                       </p>
-                      <input placeholder="コミュニティのリストを入力" style={{ width: "280px", border: "1px solid #bbb", borderRadius: "3px", padding: "3px 6px" }} value={this.state["options.notification.selfIgnoreList"]} onChange={e => {
+                      <input placeholder="ユーザのリストを入力" style={{ width: "280px", border: "1px solid #bbb", borderRadius: "3px", padding: "3px 6px" }} value={this.state["options.notification.selfIgnoreList"]} onChange={e => {
                         const value = e.target.value;
                         const parsedValue = value
                           .replace(/[，、]/g, ',')
@@ -423,7 +423,7 @@ export default class Settings extends React.Component {
             if (this.state.selectedMenu == "auto-community") {
               return (
                 <div className="wrapper">
-                  <h1 className="appicon">自動入場が有効になっているCH・コミュ</h1>
+                  <h1 className="appicon">自動入場が有効になっているユーザ</h1>
                   <div id="listgroup-community">
                     <AutoEnterList type="community" />
                   </div>
@@ -498,15 +498,6 @@ export default class Settings extends React.Component {
                     <p>バージョン: {chrome.runtime.getManifest().version}</p>
 
                   </div>
-                  <h1 className="appicon">サポート</h1>
-                  <p className="note gray margin-top-10">Twitter でにこさぽのサポートをしています</p>
-                  <p>
-                    <a href="https://twitter.com/nicosapo_dev" target="_blank">@nicosapo_dev</a>
-                  </p>
-                  <p className="note gray margin-top-15" target="_blank">にこさぽの使いかたを確認できます</p>
-                  <p>
-                    <a href="https://github.com/yurafuca/nicosapo/wiki" target="_blank">nicosapo wiki</a>
-                  </p>
                   <h1 className="appicon">作者</h1>
                   <p className="note gray margin-top-10">Twitter</p>
                   <p>
@@ -524,27 +515,22 @@ export default class Settings extends React.Component {
             if (this.state.selectedMenu == "auto") {
               return (
                 <div className="wrapper" style={{ marginTop: "20px" }}>
-                  <h1 className="appicon">作者にカンパする</h1>
+                  <h1 className="appicon">作者に寄付する</h1>
                   <div className="items">
-                    <span className="campa">休日や業務の終了後に個人でにこさぽを開発しています．もしにこさぽを気に入ったらカンパしていただけるととても励みになります 🙏</span>
+                    <span className="campa">日中はプログラマとして仕事をしているので平日の夜中と土日ににこさぽのメンテナンスをしています．寄付をしていただけると嬉しいです．<div style={{ height: '5çpx' }} />Amazon ギフト券 または Kyash で送っていただけるととくに助かりますが，ほしいものリストでももちろん大丈夫です． Amazon ギフト券の場合は @yurafuca に DM でギフト券の番号を送ってくださればお返事させていただきます．</span>
                     <ul>
-                      <li>
-                        <a target="_blank" href="https://amzn.asia/3CJmj5o">
-                          Amazon ほしいものリスト - ほしい本
-                        </a>
-                      </li>
-                      <li>
-                        <a target="_blank" href="https://amzn.asia/hqChgj3">
-                          Amazon ほしいものリスト - ほしい雑貨
-                        </a>
-                      </li>
                       <li>
                         <a target="_blank" href="https://www.amazon.co.jp/dp/B004N3APGO/">
                           Amazon ギフト券
                         </a>
                       </li>
                       <li>
-                        <span className="force-body-color">Kyash 残高を送る</span>
+                        <a target="_blank" href="https://www.amazon.co.jp/hz/wishlist/ls/1V0ZQX1SCBDZV?&sort=default">
+                          Amazon ほしいものリスト
+                        </a>
+                      </li>
+                      <li>
+                        <span className="force-body-color">Kyash</span>
                         <img className="kyash-qr" src="../images/kyash_qr.jpg" />
                       </li>
                     </ul>

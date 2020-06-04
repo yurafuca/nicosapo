@@ -27,6 +27,13 @@ export default class Api {
             })
             .catch(reject);
           break;
+        case "reserve":
+          Api.getUserFuture()
+            .then($videoInfos => {
+              resolve($videoInfos);
+            })
+            .catch(reject);
+          break;
         case "official":
           Api.getOfficialOnair().then(official_lives => {
             resolve(official_lives);
@@ -44,7 +51,7 @@ export default class Api {
   // jQuery オブジェクトでなく JSON を返したい
   static getUserOnair() {
     return new Promise((resolve, reject) => {
-      const url = " https://live.nicovideo.jp/my";
+      const url = "https://live.nicovideo.jp/follow/";
 
       axios
         .get(url)
@@ -52,20 +59,8 @@ export default class Api {
           const parser = new DOMParser();
           const html = parser.parseFromString(response.data, "text/html");
 
-          const onairSelector = "[id$=subscribeItemsWrap] > .liveItems > [class^='liveItem']";
-          const onairStreams = html.querySelectorAll(onairSelector);
-
-          const reservedSelector = "[id$=subscribeReservedItemsWrap] > .liveItems > [class^='liveItem']";
-          const reservedStreams = html.querySelectorAll(reservedSelector);
-
-          const onairStreamList = onairStreams;
-          const reservedStreamList = [...reservedStreams].map(stream => {
-            stream.is_reserved = true;
-            return stream;
-          });
-
-          const allStreamList = [...onairStreamList].concat([...reservedStreamList]);
-          const videoInfoList = allStreamList.map(stream => VIParser.parse(stream));
+          const allStreamList = html.querySelectorAll("[class^='___program-card___']");
+          const videoInfoList = [...allStreamList].map(stream => VIParser.parse(stream));
 
           resolve(videoInfoList);
         })
@@ -74,6 +69,30 @@ export default class Api {
         });
     });
   }
+
+
+  // jQuery オブジェクトでなく JSON を返したい
+  static getUserFuture() {
+    return new Promise((resolve, reject) => {
+      const url = "https://live.nicovideo.jp/follow?status=comingsoon";
+
+      axios
+        .get(url)
+        .then(response => {
+          const parser = new DOMParser();
+          const html = parser.parseFromString(response.data, "text/html");
+
+          const allStreamList = html.querySelectorAll("[class^='___program-card___']");
+          const videoInfoList = [...allStreamList].map(stream => VIParser.parse(stream));
+
+          resolve(videoInfoList);
+        })
+        .catch(error => {
+          throw error;
+        });
+    });
+  }
+
 
   static getFutureOnair() {
     return new Promise(resolve => {
@@ -173,32 +192,34 @@ export default class Api {
     });
   }
 
-  static getFollowingCommunities(pageNum) {
-    const parser = httpResponse => {
-      const result = [];
-      const parser = new DOMParser();
-      const html = parser.parseFromString(httpResponse, "text/html");
-      const frames = html.querySelectorAll(".md-cmn_communities_frm .item");
-
-      Array.prototype.forEach.call(frames, el => {
-        const title = el.querySelector(".profile .name").textContent;
-        const thumbnail = el.querySelector(".thumbnail img").src;
-        const id = el.querySelector(".profile .name a").href.replace("https://com.nicovideo.jp/community/", ``);
-        const url = `https://com.nicovideo.jp/community/${id}`;
-        const community = {
-          title: title,
-          thumbnail: thumbnail,
-          id: id,
-          url: url
-        };
-        result.push(community);
+  static getFollowingCommunities(cursor) {
+    if (cursor === `cursorEnd`) {
+      return Promise.resolve({
+        cursor: cursor,
+        items: []
       });
-      return result;
+    }
+
+    const parser = httpResponse => {
+      const cursor = httpResponse.data.summary.cursor;
+      const items = httpResponse.data.items.map(item => ({
+          title: item.nickname,
+          thumbnail: item.icons.large,
+          id: item.id,
+          url: `https://nicovideo.jp/user/${item.id}`
+        }));
+      return { 
+        cursor: cursor,
+        items: items
+      }
     };
     return new Promise(resolve => {
-      const endpoint = `https://com.nicovideo.jp/community`;
-      const query = `?page=${pageNum}`;
-      axios.get(endpoint + query).then(response => {
+      const endpoint = `https://nvapi.nicovideo.jp/v1/users/me/following/users?pageSize=100`;
+      let query = ``;
+      if (cursor != null) {
+        query = `&cursor=${cursor}`
+      }
+      axios.get(endpoint + query, { headers: { "x-frontend-id": 3 } } ).then(response => {
         const parsedResponse = parser(response.data);
         resolve(parsedResponse);
       });

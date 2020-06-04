@@ -3,7 +3,7 @@ export default class OfficialThumbnails {
     if (programs.length === 0) {
       const message = document.createElement("div");
       message.className = "message";
-      message.textContent = "フォロー中の コミュニティ・チャンネル が放送している番組がありません．";
+      message.textContent = "フォロー中のユーザが放送している番組がありません．";
     }
 
     const thumbParams = [];

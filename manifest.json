@@ -2,7 +2,7 @@
   "name": "にこさぽ （ニコ生サポート）",
   "short_name": "にこさぽ",
   "manifest_version": 2,
-  "version": "5.0.3",
+  "version": "6.0.0",
   "browser_action": {
     "default_icon": "images/icon.png",
     "default_title": "放送中の番組を確認する",
@@ -15,7 +15,6 @@
     "64": "images/icon.png"
   },
   "permissions": [
-    "alarms",
     "notifications",
     "tabs",
     "idle",
@@ -45,7 +44,8 @@
     "http://secure-dcdn.cdn.nimg.jp/",
     "https://secure-dcdn.cdn.nimg.jp/",
     "http://ssth.dmc.nico/",
-    "https://ssth.dmc.nico/"
+    "https://ssth.dmc.nico/",
+    "https://nvapi.nicovideo.jp/"
   ],
   "background": {
     "scripts": ["javascripts/background.js"]
@@ -63,7 +63,8 @@
       "http://ch.nicovideo.jp/*",
       "https://ch.nicovideo.jp/*",
       "http://com.nicovideo.jp/*",
-      "https://com.nicovideo.jp/*"
+      "https://com.nicovideo.jp/*",
+      "https://www.nicovideo.jp/user/*"
     ],
     "js": ["javascripts/content.js"],
     "css": [
