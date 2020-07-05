@@ -6,11 +6,11 @@ export default class FollowApiResponseParser {
 
     videoInfo.video().set("title", program.title);
     videoInfo.video().set("id", program.id);
-    videoInfo.video().set("openTimeJp", program.beginAt);
+    videoInfo.video().set("openTimeJp", program.beginAt / 1000);
     // フォロー中 API から取得できるかつ放送前であれば予約中である.
     videoInfo.video().set("isReserved", program.liveCycle === "RELEASED");
 
-    videoInfo.community().set("id", program.socialGroup.id); // TODO ch|co は含まれてよいか.
+    videoInfo.community().set("id", program.socialGroup.id);
     videoInfo.community().set("thumbnail", program.socialGroup.thumbnailUrl);
 
     return videoInfo.xml();
