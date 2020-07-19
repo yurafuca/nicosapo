@@ -144,32 +144,25 @@ $url_0: url(chrome-extension://__MSG_@@extension_id__/images/icon.png);
     display: inline-flex;
     border-radius: 9999px;
     cursor: pointer;
-    background: white;
     font-size: 13px;
     margin-right: 20px;
     font-weight: 700 !important;
     height: 30px;
     padding: 0 15px;
     line-height: 30px !important;
-    color: #0080ff;
     &.switch_is_on {
-      border: solid 2px #0080ff;
+      background: #f1f8ff;
+      color: #0080ff;
     }
     &.switch_is_off {
-      color: #b2bac2;
-      border: solid 2px #b2bac2;
+      background: #f4f4f4;
+      color: #666666;
     }
     > .material-icons {
       font-size: 18px;
       margin-right: 5px;
       align-self: center;
     }
-  }
-}
-.auto_enter_community_button > .link {
-  &.switch_is_on {
-    color: #258d8d;;
-    border-color: #258d8d;;
   }
 }
 .auto_enter_program_button > .link {
