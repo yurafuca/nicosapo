@@ -10,6 +10,11 @@ import "./chrome/runtime.onMessage";
 import { CommunityBuilder, ProgramBuilder } from "./modules/ManageableBuilder";
 import bucket from "./modules/Bucket";
 
+Object.filter = (obj, predicate) =>
+  Object.keys(obj)
+    .filter( key => predicate(key, obj[key]) )
+    .reduce( (res, key) => (res[key] = obj[key], res), {} );
+
 // v4.6.2 -> v4.7.0
 const isMigrated = store.get("search.query.isMigrated", false);
 if (!isMigrated) {
@@ -25,6 +30,15 @@ if (!isMigrated) {
   store.set("search.query.favorites", list);
   store.set("search.query.isMigrated", true);
 }
+
+// v6.0.1 ->
+// 自動入場リストからコミュニティ・チャンネル以外を削除する
+const autoEnterList = store.get("autoEnterCommunityList", {});
+const filtered = Object.filter(autoEnterList, (id, item) => {
+  const isUser = !(id.startsWith('co') || id.startsWith('ch'));
+  return !isUser;
+});
+store.set("autoEnterCommunityList", filtered);
 
 chrome.runtime.onInstalled.addListener(details => {
   NiconamaTabs.clear();
