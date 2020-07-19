@@ -12,7 +12,7 @@ $color_wild_sand_approx: #f5f5f5;
 $white: #fff; //
 $color_alto_approx: #dcdcdc;
 // $color_hot_cinnamon_approx: #d26911;
-$color_hot_cinnamon_approx: #e36209;
+$color_hot_cinnamon_approx: #f9826c;
 $black_20: rgba(0,
 0,
 0,
@@ -157,8 +157,8 @@ a {
   padding-top: 3px;
   padding-bottom: 3px;
   font-weight: 500;
-  background: $color_wild_sand_approx;
-  border-bottom: 1px solid $color_iron_approx;
+  background: #fafbfc;
+  border-bottom: 1px solid #e1e4e8;
 }
 
 #tab-container {
@@ -174,9 +174,9 @@ a {
   font-weight: 500; //Instead of the line below you could use @include text-shadow($shadow-1, $shadow-2, $shadow-3, $shadow-4, $shadow-5, $shadow-6, $shadow-7, $shadow-8, $shadow-9, $shadow-10)
   // text-shadow: 0 1px 0 $white;
   background: #fcfcfc;
-  border-left: solid 1px $color_iron_approx;
+  border-left: solid 1px #e1e4e8;
   display: inline-block;
-  border-bottom: 1px solid $color_alto_approx;
+  border-bottom: 1px solid #e1e4e8;
   text-align: center; //Instead of the line below you could use @include box-sizing($bs)
   box-sizing: border-box;
   vertical-align: middle;
@@ -260,26 +260,57 @@ a {
 
 .menu-button {
   position: relative;
+  height: 26px;
+  align-items: center;
+  display: flex;
   top: 5px;
   float: right;
   vertical-align: middle;
-  color: #333;
   margin-right: 6px;
-  padding: 3px 10px;
-  border: solid 1px #d5d5d5;
+  padding: 0 10px;
   border-radius: 3px;
-  background-image: linear-gradient(#fcfcfc, #eee);
+
+  color: #24292e;
+  background-color: #fafbfc;
+  border: 1px solid rgba(27,31,35,.15);
+  transition: background-color .2s cubic-bezier(.3,0,.5,1);
+
   &:hover {
-    background-image: linear-gradient(#eee, $color_alto_approx);
     text-decoration: none;
     >span {
       color: $black !important;
       text-decoration: none;
     }
+
+    background-color: #f3f4f6;
+    transition-duration: .1s;
+
+    // tooltop
+    &:after {
+      content: attr(data-tooltip);
+
+      // position
+      position: absolute;
+      left: 0;
+      top: 32px;
+      z-index: 1;
+
+      // font
+      font-weight: normal;
+      color: black;
+      white-space: nowrap;
+
+      // background
+      background-color: white;
+      padding: 3px;
+      border: 1px silver solid;
+      border-radius: 3px;
+      box-shadow: 1px 1px 3px silver;
+    }
   }
   &:active {
-    background-color: $color_alto_approx; //Instead of the line below you could use @include box-shadow($shadow-1, $shadow-2, $shadow-3, $shadow-4, $shadow-5, $shadow-6, $shadow-7, $shadow-8, $shadow-9, $shadow-10)
-    box-shadow: inset 0 1px 6px $black_20;
+    background-color: #edeff2;
+    box-shadow: inset 0 1px 0 rgba(225,228,232,.2);
     >span {
       color: $black !important;
       text-decoration: none;
@@ -295,6 +326,7 @@ a {
     &.title {
       font-size: 12px;
       font-weight: 500;
+      margin-left: 3px;
     }
   }
 }
@@ -553,7 +585,7 @@ a {
   float: right;
   top: 10.7px;
   cursor: default;
-  margin-right: 148px;
+  margin-right: 188px;
   color: white;
   font-size: 10px;
   background: #646464;
@@ -570,7 +602,7 @@ a {
 .nicotap {
   float: right;
   top: 14.7px;
-  left: 240px;
+  left: 250px;
   cursor: default;
   margin-right: 115px;
   color: white;
@@ -591,7 +623,7 @@ a {
 .donation {
   float: right;
   top: 14.7px;
-  left: 160px;
+  left: 166px;
   cursor: default;
   margin-right: 115px;
   color: white;
@@ -638,6 +670,7 @@ a {
   height: 25px;
   padding: 0 3px;
   font-size: 12px;
+  border: 1px solid gray;
 }
 
 #search-button {
