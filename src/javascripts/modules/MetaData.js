@@ -15,20 +15,23 @@ export default class MetaData {
           id +
           ".jpg";
       } else {
-        thumbnail = `https://secure-dcdn.cdn.nimg.jp/nicoaccount/usericon/${Math.floor(id/10000)}/${id}.jpg`;
+        thumbnail =
+          "https://secure-dcdn.cdn.nimg.jp/comch/channel-icon/128x128/" +
+          id +
+          ".jpg";
       }
     }
     const pageType = PageType.get();
     let openDate = null;
     let title, owner;
     switch (pageType) {
-      case "USER_PAGE":
-        title = document.querySelector('.profile h2').textContent.replace('さん', '');
-        owner = document.querySelector('.profile h2').textContent.replace('さん', '');
-        break;
       case "COMMUNITY_PAGE":
-        title = document.querySelector('.communityDetail .content').innerText;
-        owner = document.querySelector('.communityDetail .content').innerText;
+        title = $("div.communityData > h2.title > a")
+          .text()
+          .replace(/[\n\t]/g, "");
+        owner = $("div.communityData tr.row:first-child > td.content > a")
+          .text()
+          .replace(/[\n\t]/g, "");
         break;
       case "CHANNEL_PAGE":
         title = $("h3.cp_chname").text();
@@ -39,13 +42,26 @@ export default class MetaData {
         title = $("[class^='___title___']").text();
         owner = $("[class^='___channel-name-anchor___']").text();
         break;
+      case "CHIMERA_CAST_PAGE":
+        title = $(".program-community-name").text();
+        owner = $(
+          $(".program-broadcaster-name")
+            .find("a")
+            .get(0)
+        ).text();
+        break;
       case "MODERN_CAST_PAGE":
-        title = document.querySelector(".name").textContent;
-        owner = document.querySelector(".name").textContent;
+        title = $("[class^='___title___']").text();
+        owner = $("[class^='___group-name-anchor___']").text();
+        break;
+      case "GATE_PAGE":
+        title = $('meta[property="og:title"]').attr("content");
+        openDate = $('.kaijo meta[itemprop="datePublished"]').attr("content");
+        owner = null;
         break;
       default:
     }
-    const a = {
+    return {
       communityId: id,
       programId: idHolder.liveId,
       pageType: pageType,
@@ -53,8 +69,6 @@ export default class MetaData {
       title: title,
       openDate: openDate,
       owner: owner
-    };
-    console.log(a);
-    return a;
+    }
   }
 }
