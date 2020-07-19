@@ -1,6 +1,6 @@
 import axios from "axios";
 import { parseString } from "xml2js";
-import VIParser from "../modules/VIParser";
+import FollowApiResponseParser from "../modules/FollowApiResponseParser";
 
 const parameter_nicovideojs = [];
 
@@ -51,18 +51,12 @@ export default class Api {
   // jQuery オブジェクトでなく JSON を返したい
   static getUserOnair() {
     return new Promise((resolve, reject) => {
-      const url = "https://live.nicovideo.jp/follow/";
+      const url = "https://live.nicovideo.jp/front/api/pages/follow/v1/programs?status=onair&offset=0";
 
       axios
         .get(url)
         .then(response => {
-          const parser = new DOMParser();
-          const html = parser.parseFromString(response.data, "text/html");
-
-          const allStreamList = html.querySelectorAll("[class^='___program-card___']");
-          const videoInfoList = [...allStreamList].map(stream => VIParser.parse(stream));
-
-          resolve(videoInfoList);
+          resolve(response.data.data.programs.map(FollowApiResponseParser.parse));
         })
         .catch(error => {
           throw error;
@@ -74,18 +68,12 @@ export default class Api {
   // jQuery オブジェクトでなく JSON を返したい
   static getUserFuture() {
     return new Promise((resolve, reject) => {
-      const url = "https://live.nicovideo.jp/follow?status=comingsoon";
+      const url = "https://live.nicovideo.jp/front/api/pages/follow/v1/programs?status=comingsoon&offset=0";
 
       axios
         .get(url)
         .then(response => {
-          const parser = new DOMParser();
-          const html = parser.parseFromString(response.data, "text/html");
-
-          const allStreamList = html.querySelectorAll("[class^='___program-card___']");
-          const videoInfoList = [...allStreamList].map(stream => VIParser.parse(stream));
-
-          resolve(videoInfoList);
+          resolve(response.data.data.programs.map(FollowApiResponseParser.parse));
         })
         .catch(error => {
           throw error;
