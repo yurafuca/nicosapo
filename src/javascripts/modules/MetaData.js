@@ -51,8 +51,8 @@ export default class MetaData {
         ).text();
         break;
       case "MODERN_CAST_PAGE":
-        title = $("[class^='___title___']").text();
-        owner = $("[class^='___group-name-anchor___']").text();
+        title = $("[class^='___name-label__']").text();
+        owner = $("[class^='___user-name__ > name']").text();
         break;
       case "GATE_PAGE":
         title = $('meta[property="og:title"]').attr("content");
