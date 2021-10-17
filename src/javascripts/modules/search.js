@@ -168,18 +168,19 @@ export default class Search {
 
   setParams(query, sortMode) {
     Api.search(query, sortMode).then(response => {
-      const datas = response.data;
+      const datas = response.values;
       const thumbParams = [];
       for (const data of datas) {
+
         const thumbParam = {};
-        thumbParam.url = `https://live.nicovideo.jp/watch/${data.contentId}`;
-        thumbParam.thumbnail = data.communityIcon;
-        thumbParam.description = data.description.replace(/\<.+\>/g, " ");
+        thumbParam.url = `https://live.nicovideo.jp/watch/${data.id}`;
+        thumbParam.thumbnail = data.socialGroupThumbnailUrl;
+        thumbParam.description = data.title.replace(/\<.+\>/g, " ");
         thumbParam.title = data.title;
-        thumbParam.viewCounter = data.viewCounter;
-        thumbParam.commentCounter = data.commentCounter;
-        thumbParam.memberOnly = data.memberOnly;
-        const foo = new Date(data.startTime);
+        thumbParam.viewCounter = data.statistics.watchCount;
+        thumbParam.commentCounter = data.statistics.commentCount;
+        thumbParam.memberOnly = data.isMemberOnly;
+        const foo = new Date(data.beginAt);
         const bar = foo.getTime();
         const baz = new Date().getTime();
         const hoge = (baz - bar) / 1000 / 60;
