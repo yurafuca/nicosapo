@@ -14,7 +14,7 @@ function getLiveId() {
 }
 
 function getCommunityId() {
-  const communityUrl1 = document.querySelector('[class^=___group-name-anchor___]');
+  const communityUrl1 = document.querySelector('[class^=___name-label__]');
   const re1 = /.+(community|channel)\/(.+)$/;
 
   // ユーザ放送・チャンネル放送・公式放送
