@@ -175,7 +175,7 @@ export default class Search {
         const thumbParam = {};
         thumbParam.url = `https://live.nicovideo.jp/watch/${data.id}`;
         thumbParam.thumbnail = data.socialGroupThumbnailUrl;
-        thumbParam.description = data.title.replace(/\<.+\>/g, " ");
+        thumbParam.name = data.socialGroupName.replace(/\<.+\>/g, " ");
         thumbParam.title = data.title;
         thumbParam.viewCounter = data.statistics.watchCount;
         thumbParam.commentCounter = data.statistics.commentCount;
@@ -202,7 +202,7 @@ export default class Search {
   }
 
   getResultElement(props) {
-    const { thumbnail, url, title, description, viewCounter, commentCounter, lapsedTime, memberOnly } = props;
+    const { thumbnail, url, title, name, viewCounter, commentCounter, lapsedTime, memberOnly } = props;
 
     const isCannotBeExcluded = thumbnail === null;
 
@@ -271,9 +271,9 @@ export default class Search {
 
     titleParent.appendChild(titleChild);
 
-    const desc = document.createElement("span");
-    desc.className = "meta-description text-small text-gray";
-    desc.textContent = description;
+    const nameElem = document.createElement("span");
+    nameElem.className = "meta-description text-small text-gray";
+    nameElem.textContent = name;
 
     const br = document.createElement("br");
 
@@ -283,7 +283,7 @@ export default class Search {
 
     resultChild.appendChild(imgParent);
     resultChild.appendChild(titleParent);
-    resultChild.appendChild(desc);
+    resultChild.appendChild(nameElem);
     resultChild.appendChild(br);
     resultChild.appendChild(meta);
 
