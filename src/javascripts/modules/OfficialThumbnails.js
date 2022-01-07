@@ -9,7 +9,7 @@ export default class OfficialThumbnails {
     const thumbParams = [];
     programs.forEach((program, index) => {
       const thumbParam = {};
-      const a = program.querySelector("a.rk-ProgramCard_DetailChName");
+      const a = program.querySelector(".rk-ProgramCard_Detail a");
       let thumbnailUrl;
       if (a != null) {
         const communityId = a.href;
@@ -22,7 +22,7 @@ export default class OfficialThumbnails {
 
       thumbParam.background = `url('${thumbnailUrl}')`;
       thumbParam.title = program.querySelector(".rk-ProgramCard_DetailTitle").textContent;
-      thumbParam.id = `lv${program.querySelector(".video_id").textContent}`;
+      thumbParam.id = program.querySelector(".rk-ProgramCard_DetailTitle").href.match(/(watch)\/(lv[0-9]+).*/)[2];
       thumbParam.url = `https://live.nicovideo.jp/watch/${thumbParam.id}`;
       thumbParam.text = thumbParam.title;
       thumbParam.index = index;
