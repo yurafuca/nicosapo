@@ -14,19 +14,25 @@ interval(1000 * 60).subscribe(
     communities.forEach((community, i) => {
       const delay = i * 6000;
       setTimeout(() => {
-        Api.isOpen(community.id).then(result => {
-          if (result.isOpen) {
+        Api.getLatestProgram(community.id).then(result => {
+          if (result.programId == null) {
+            return;
+          }
+          Api.getProgramStatus(result.programId).then(result => {
+            if (result.status !== "onAir") {
+              return;
+            }
             // Build Manageable objects.
             const communityBuilder = new CommunityBuilder()
               .id(community.id);
             const programBuilder = new ProgramBuilder()
-              .id(result.nextLiveId)
+              .id(result.programId)
               .title(result.title)
               .isVisiting(false)
               .shouldOpenAutomatically(true);
             // Assign.
             bucket.touchBoth(communityBuilder, programBuilder);
-          }
+          });
         })
       }, delay);
     });

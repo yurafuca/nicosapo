@@ -1,6 +1,6 @@
 import IdHolder from "../modules/IdHolder";
 import Api from "../api/Api";
-import { API_IS_ONAIR } from '../chrome/runtime.onMessage';
+import { API_GET_PROGRAM_STATUS, API_GET_LATEST_PROGRAM } from '../chrome/runtime.onMessage';
 
 chrome.extension.onMessage.addListener((request, sender, sendResponse) => {
   console.log(request);
@@ -66,27 +66,32 @@ export default class NewCastChecker {
     if (idHolder.liveId == null || idHolder.communityId == null) {
       return
     }
-    chrome.runtime.sendMessage({
-      purpose: API_IS_ONAIR,
-      id: idHolder.liveId
-    }, response => {
-      if (response.isOnair) {
+
+    chrome.runtime.sendMessage({ purpose: API_GET_PROGRAM_STATUS, programId: idHolder.liveId }, response => {
+      // 番組が終了していない。
+      if (response.status === "onAir") {
         if (_prolongReceiver) {
           _prolongReceiver(response);
         }
-      } else {
-        if (_isEnableChecking) {
-          chrome.runtime.sendMessage({
-            purpose: API_IS_ONAIR,
-            id: idHolder.communityId
-          }, response => {
-            if (response.isOnair) {
-              goToCast(response.nextProgramId);
+      }
+
+      // 番組が終了した。
+      if (response.status === "end" && _isEnableChecking) {
+        // 放送中の番組・または予約中の番組を取得する。
+        chrome.runtime.sendMessage({ purpose: API_GET_LATEST_PROGRAM, communityId: idHolder.communityId }, response => {
+          if (response.programId == null) {
+            return;
+          }
+          chrome.runtime.sendMessage({ purpose: API_GET_PROGRAM_STATUS, programId: response.programId }, response => {
+            // 番組が放送中である。
+            if (response.status === "onAir") {
+              goToCast(response.programId);
             }
           });
-        }
+        });
       }
-      this.repeat(this.checkNewCast.bind(this));
     });
+
+    this.repeat(this.checkNewCast.bind(this));
   }
 }
