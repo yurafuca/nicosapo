@@ -7,7 +7,7 @@ import Common from "../common/Common";
 import Time from "../common/Time";
 import Clock from "../common/Clock";
 import IdHolder from "../modules/IdHolder";
-import { API_GET_STATUS } from '../chrome/runtime.onMessage';
+import { API_GET_PROGRAM_STATUS } from '../chrome/runtime.onMessage';
 
 const _clock = new Clock(new Date());
 const _defaultUpdateText = "延長されていません";
@@ -21,7 +21,7 @@ export default class ExBar extends React.Component {
       second: _clock.getSecond(),
       isOpen: true,
       doBlink: false,
-      endText: "yy/mm/dd（date) {h}:{m}:{s}",
+      endText: "Loading...",
       updateText: _defaultUpdateText
     };
     this.build();
@@ -31,9 +31,9 @@ export default class ExBar extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const endDate = new Date(nextProps.response.endTimeMilliSecond);
+    const endDate = new Date(nextProps.response.endAt * 1000);
     const endText = Time.toJpnString(endDate);
-    if (endText !== this.state.endText) {
+    if (this.state.endText !== endText) {
       const time = new Date().getTime();
       this.setState({ updateText: `番組の延長を ${Time.toJpnString(time)} に検知しました` });
       this.reset(nextProps.response);
@@ -46,7 +46,7 @@ export default class ExBar extends React.Component {
 
   build() {
     chrome.runtime.sendMessage({
-      purpose: API_GET_STATUS,
+      purpose: API_GET_PROGRAM_STATUS,
       programId: new IdHolder().liveId
     }, response => {
       this.setParams(response)
@@ -65,14 +65,14 @@ export default class ExBar extends React.Component {
   }
 
   setEndText(statusResponse) {
-    const endDate = new Date(statusResponse.endTimeMilliSecond);
+    const endDate = new Date(statusResponse.endAt * 1000);
     const endText = Time.toJpnString(endDate);
     this.setState({ endText: endText });
   }
 
   setRemainTime(statusResponse) {
     console.info("remain");
-    const endDate = new Date(statusResponse.endTimeMilliSecond);
+    const endDate = new Date(statusResponse.endAt * 1000);
     const nowDate = new Date(Date.now());
     const remainHour = Time.hourDistance(nowDate, endDate);
     const remainMin = Time.minuteSurplusDistance(nowDate, endDate);

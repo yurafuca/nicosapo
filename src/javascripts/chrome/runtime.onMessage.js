@@ -12,35 +12,20 @@ export const SHOULD_NOT_MOVE_AUTOMATICALLY = "SHOULD_NOT_MOVE_AUTOMATICALLY";
 export const SHOULD_OPEN_COMMUNITY_AUTOMATICALLY = "SHOULD_OPEN_COMMUNITY_AUTOMATICALLY";
 export const SHOULD_NOT_OPEN_COMMUNITY_AUTOMATICALLY = "SHOULD_NOT_OPEN_COMMUNITY_AUTOMATICALLY";
 
-export const API_GET_STATUS = "API_GET_STATUS";
-export const API_IS_ONAIR = "API_IS_ONAIR";
+export const API_GET_PROGRAM_STATUS = "API_GET_PROGRAM_STATUS";
+export const API_GET_LATEST_PROGRAM = "API_GET_LATEST_PROGRAM";
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if (request.purpose  === API_GET_STATUS) {
-    const programId = request.programId;
-    if (programId == null) {
-      console.error(`${API_GET_STATUS} requires 'programId' field.`);
-      return;
-    }
-    Api.getStatus(programId).then(response => {
-      sendResponse(createSimpleResponse(response));
+  if (request.purpose === API_GET_PROGRAM_STATUS) {
+    Api.getProgramStatus(request.programId).then(response => {
+      sendResponse(response);
     });
     return true;
   }
 
-  if (request.purpose  === API_IS_ONAIR) {
-    const id = request.id;
-    if (id == null) {
-      console.error(`${API_IS_ONAIR} requires 'id' field.`);
-      return;
-    }
-    Api.isOpen(id).then(response => {
-      const resultResponse = createSimpleResponse(response);
-      resultResponse.nextProgramId = response.nextLiveId;
-      resultResponse.nextProgramTitle = response.title;
-      resultResponse.checkedId = response.requestId;
-      resultResponse.isOnair = response.isOpen;
-      sendResponse(resultResponse);
+  if (request.purpose === API_GET_LATEST_PROGRAM) {
+    Api.getProgramStatus(request.communityId).then(response => {
+      sendResponse(response);
     });
     return true;
   }

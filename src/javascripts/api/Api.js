@@ -108,58 +108,41 @@ export default class Api {
     });
   }
 
-  static getStatus(param) {
-    parameter_nicovideojs.push(param);
+  static getProgramStatus(programId) {
     return new Promise(resolve => {
-      const url = "https://live.nicovideo.jp/api/getplayerstatus/";
-      const parameter = parameter_nicovideojs.shift();
-
       axios
-        .get(url + param)
+        .get(`https://live2.nicovideo.jp/unama/watch/${programId}/programinfo`)
         .then(response => {
-          const parser = new DOMParser();
-          const doc = parser.parseFromString(response.data, "text/xml");
-          doc.param = parameter;
-          resolve(doc);
-          // });
+          if (response.data.meta.status === 200) {
+            resolve({
+              programId: programId,
+              title: response.data.data.title,
+              status: response.data.data.status,
+              beginAt: response.data.data.beginAt,
+              endAt: response.data.data.endAt
+            });
+          }
+          resolve({
+            programId: programId,
+            title: null,
+            status: "error",
+            beginAt: -1, 
+            endAt: -1
+          });
         })
-        .catch(response => {
-          response.data.param = parameter;
-          resolve(response.data);
-        });
     });
   }
 
-  /**
-   * @param <string> requestId apiに渡すパラメータ
-   *   e.g. 'lv9999999', 'co9999999', 'ch9999999'
-   */
-  static isOpen(requestId) {
-    const theRequestId = requestId;
+  static getLatestProgram(communityId) {
     return new Promise(resolve => {
-      Api.getStatus(requestId).then(response => {
-        const errorCode = response.querySelector("error code");
-        if (errorCode) {
-          if (errorCode.textContent !== "require_community_member") {
-            console.log(`${theRequestId}: offair.`);
-            response.isOpen = false;
+      axios
+        .get(`https://live2.nicovideo.jp/unama/tool/v1/broadcasters/social_group/${communityId}/program`)
+        .then(response => {
+          if (response.data.meta.status === 200) {
+            resolve({ programId: response.data.data.nicoliveProgramId });
           }
-        }
-
-        const endTime = response.querySelector("end_time");
-        if (endTime) {
-          if (Date.now() < `${endTime.textContent}000`) {
-            console.log(`${theRequestId}: onair.`);
-            const liveId = response.querySelector("stream id").textContent;
-            const title = response.querySelector("stream title").textContent;
-            response.nextLiveId = liveId;
-            response.title = title;
-            response.isOpen = true;
-          }
-        }
-        response.requestId = theRequestId;
-        resolve(response);
-      });
+          resolve({ programId: null });
+        })
     });
   }
 
