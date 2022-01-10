@@ -13,6 +13,8 @@ export default class PageType {
      */
     if (this._isModernTimeShiftPage()) {
       pageType = "MODERN_TIME_SHIFT_PAGE";
+    } else if (this._isStandByPage()) {
+      pageType = "STANDBY_PAGE";
     } else if (this._isOfficialCastPage()) {
       pageType = "OFFICIAL_CAST_PAGE";
     } else if (this._isModernCastPage()) {
@@ -83,8 +85,7 @@ export default class PageType {
   }
 
   static _isStandByPage() {
-    const flag = $("#gates").length === 0 && $(".gate_title").length > 0;
-    return flag;
+    return document.querySelector("[class^=___broadcast_time___") != null;
   }
 
   static _isGatePage() {

@@ -165,38 +165,6 @@ $url_0: url(chrome-extension://__MSG_@@extension_id__/images/icon.png);
     }
   }
 }
-.auto_enter_program_button > .link {
-  height: 24px !important;
-  line-height: 24px !important;
-  border: 0 !important;
-  margin-right: 10px !important;
-  &.switch_is_off {
-    background-image: linear-gradient($color_alabaster_approx, $color_gallery_approx);
-    color: $color_log_cabin_approx !important;
-    &:hover {
-      background-image: linear-gradient($color_gallery_approx, $color_alto_approx);
-    }
-    &:active {
-      background-color: $color_alto_approx;
-      // Instead of the line below you could use @include box-shadow($shadow-1, $shadow-2, $shadow-3, $shadow-4, $shadow-5, $shadow-6, $shadow-7, $shadow-8, $shadow-9, $shadow-10)
-      box-shadow: inset 0 1px 6px $black_20;
-    }
-  }
-  &.switch_is_on {
-    color: $white;
-    background-image: linear-gradient($color_carnation_approx, $color_monza_approx);
-    &:hover {
-      color: $white;
-      background-image: linear-gradient($color_carnation_approx, $color_monza_approx);
-    }
-    &:active {
-      color: $white;
-      background-color: $color_red_devil_approx;
-      background-image: none;
-      border-color: $color_dark_burgundy_approx;
-    }
-  }
-}
 #extended-bar {
   font-family: $font_0, $font_1, $font_2, $font_3, $font_4, $font_5, $font_6, $font_7, $font_8, $font_9;
   width: calc(100% - 24px * 2);

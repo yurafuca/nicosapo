@@ -21,16 +21,9 @@ export default class AutoEnterCommunityButton extends React.Component {
     this._popoverTitle = "コミュニティへの自動入場";
     this._popoverMessage = (
       <span>
-        このコミュニティ・チャンネルが放送を始めたとき自動で枠を新しいタブで開きます．<br />
+        このコミュニティ・チャンネルが放送を始めたとき自動で枠を新しいタブで開きます。<br />
         <strong>📍 NOTE： </strong>
-        <font color="#24963e">
-          負荷軽減のため最大登録数は 5 を目安にしてください
-        </font>
-        <br />
-        <strong>📍 NOTE： </strong>
-        <font color="#24963e">
-          自動次枠移動を オン にすると自動入場しません
-        </font>
+        <font color="#24963e">登録したコミュニティは設定画面より設定できます。</font>
       </span>
     );
     this._popoverPos = "up";
