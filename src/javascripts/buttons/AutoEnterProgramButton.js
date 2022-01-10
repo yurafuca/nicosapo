@@ -16,14 +16,9 @@ export default class AutoEnterProgramButton extends React.Component {
     this._popoverTitle = "番組への自動入場";
     this._popoverMessage = (
       <span>
-        この番組が始まったとき自動で番組を新しいタブで開きます<br />
+        この番組が始まったとき自動で番組を新しいタブで開きます。<br />
         <strong>📍 NOTE： </strong>
-        <font color="#24963e">
-          負荷軽減のため最大登録数は5を目安にしてください
-        </font>
-        <br />
-        <strong>📍 NOTE： </strong>
-        <font color="#24963e">登録した番組は設定画面より設定できます</font>
+        <font color="#24963e">登録した番組は設定画面より設定できます。</font>
       </span>
     );
     this._popoverPos = "up";
@@ -120,6 +115,9 @@ export default class AutoEnterProgramButton extends React.Component {
             data-balloon-pos={this._balloonPos}
             data-balloon-length={this._balloonLength}
           >
+            <i className="material-icons">
+              schedule
+            </i>
             {this.state.isToggledOn
               ? `${this._label}オン`
               : `${this._label}オフ`}
