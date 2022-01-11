@@ -118,8 +118,7 @@ export default class Search {
     const newItem = {
       id: distributorId,
       thumbnail: el.currentTarget.dataset.thumbnail,
-      title: el.currentTarget.dataset.title,
-      description: el.currentTarget.dataset.description,
+      name: el.currentTarget.dataset.name,
       keyword: el.currentTarget.dataset.keyword
     };
     const removed = excludeList.filter(item => item.id !== newItem.id);
@@ -221,6 +220,7 @@ export default class Search {
     excludeButton.dataset.memberOnly = memberOnly;
     excludeButton.dataset.distributorId = distributorId;
     excludeButton.dataset.thumbnail = thumbnail;
+    excludeButton.dataset.name = name;
     excludeButton.dataset.keyword = this.getCurrentQuery();
     excludeButton.addEventListener("click", el => {
       this.onClickExclude(el);
