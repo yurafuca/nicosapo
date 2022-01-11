@@ -14,12 +14,21 @@ function getLiveId() {
 }
 
 function getCommunityId() {
-  const communityUrl1 = document.querySelector('[class^=___group-name-anchor___]');
+  const communityUrl1 = document.querySelector('[class^=___name-label__]');
   const re1 = /.+(community|channel)\/(.+)$/;
 
-  // ユーザ放送・チャンネル放送・公式放送
+  // ユーザ放送
   if (communityUrl1 != null && re1.exec(communityUrl1.href)) {
     const communityId = re1.exec(communityUrl1.href)[2];
+    return communityId;
+  }
+
+  const communityUrl2 = document.querySelector('[class^=___channel-thumbnail__]');
+  const re2 = /.+channel\/(.+)$/;
+
+  // チャンネル放送
+  if (communityUrl2 != null && re2.exec(communityUrl2.href)) {
+    const communityId = re2.exec(communityUrl2.href)[1];
     return communityId;
   }
 

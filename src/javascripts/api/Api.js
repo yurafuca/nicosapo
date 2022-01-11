@@ -108,72 +108,55 @@ export default class Api {
     });
   }
 
-  static getStatus(param) {
-    parameter_nicovideojs.push(param);
+  static getProgramStatus(programId) {
     return new Promise(resolve => {
-      const url = "https://live.nicovideo.jp/api/getplayerstatus/";
-      const parameter = parameter_nicovideojs.shift();
-
       axios
-        .get(url + param)
+        .get(`https://live2.nicovideo.jp/unama/watch/${programId}/programinfo`)
         .then(response => {
-          const parser = new DOMParser();
-          const doc = parser.parseFromString(response.data, "text/xml");
-          doc.param = parameter;
-          resolve(doc);
-          // });
+          if (response.data.meta.status === 200) {
+            resolve({
+              programId: programId,
+              title: response.data.data.title,
+              status: response.data.data.status,
+              beginAt: response.data.data.beginAt,
+              endAt: response.data.data.endAt
+            });
+          }
+          resolve({
+            programId: programId,
+            title: null,
+            status: "error",
+            beginAt: -1, 
+            endAt: -1
+          });
         })
-        .catch(response => {
-          response.data.param = parameter;
-          resolve(response.data);
-        });
     });
   }
 
-  /**
-   * @param <string> requestId apiに渡すパラメータ
-   *   e.g. 'lv9999999', 'co9999999', 'ch9999999'
-   */
-  static isOpen(requestId) {
-    const theRequestId = requestId;
+  static getLatestProgram(communityId) {
     return new Promise(resolve => {
-      Api.getStatus(requestId).then(response => {
-        const errorCode = response.querySelector("error code");
-        if (errorCode) {
-          if (errorCode.textContent !== "require_community_member") {
-            console.log(`${theRequestId}: offair.`);
-            response.isOpen = false;
+      axios
+        .get(`https://live2.nicovideo.jp/unama/tool/v1/broadcasters/social_group/${communityId}/program`)
+        .then(response => {
+          if (response.data.meta.status === 200) {
+            resolve({ programId: response.data.data.nicoliveProgramId });
           }
-        }
-
-        const endTime = response.querySelector("end_time");
-        if (endTime) {
-          if (Date.now() < `${endTime.textContent}000`) {
-            console.log(`${theRequestId}: onair.`);
-            const liveId = response.querySelector("stream id").textContent;
-            const title = response.querySelector("stream title").textContent;
-            response.nextLiveId = liveId;
-            response.title = title;
-            response.isOpen = true;
-          }
-        }
-        response.requestId = theRequestId;
-        resolve(response);
-      });
+          resolve({ programId: null });
+        })
     });
   }
 
   static search(query, sortMode) {
     return new Promise(resolve => {
       const sortModes = {
-        "startTime-dsc": "startTime",
-        "startTime-asc": "%2bstartTime",
-        "viewCounter-dsc": "viewCounter",
-        "viewCounter-asc": "%2bviewCounter",
-        "commentCounter-dsc": "commentCounter",
-        "commentCounter-asc": "%2bcommentCounter"
+        "startTime-dsc": "recentDesc",
+        "startTime-asc": "recentAsc",
+        "viewCounter-dsc": "viewCountDesc",
+        "viewCounter-asc": "viewCountAsc",
+        "commentCounter-dsc": "commentCountDesc",
+        "commentCounter-asc": "commentCountAsc"
       };
-      const q = `https://api.search.nicovideo.jp/api/v2/live/contents/search?q=${query}` + "&targets=tags,title,description" + "&fields=contentId,title,communityIcon,description,start_time,live_end_time,comment_counter,score_timeshift_reserved,provider_type,tags,member_only,viewCounter,timeshift_enabled" + "&_context=nicosapo" + "&filters%5BliveStatus%5D%5B0%5D=onair" + `&_sort=${sortModes[sortMode]}` + "&_limit=100";
+      const q = `https://sp.live.nicovideo.jp/api/search?q=${query}&sortOrder=${sortModes[sortMode]}&isTagSearch=false&disableGrouping=false&hideMemberOnly=false&timeshiftIsAvailable=false&status=onair&offset=0&limit=100`;
       axios.get(q).then(response => {
         resolve(response.data);
       });

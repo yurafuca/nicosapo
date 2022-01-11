@@ -7,6 +7,7 @@ import OfficialCastPage from "./page/OfficialCastPage";
 import TimeShiftPage from "./page/TimeShiftPage";
 import ModernTimeShiftPage from "./page/ModernTimeShiftPage";
 import ChannelPage from "./page/ChannelPage";
+import StandByPage from "./page/StandByPage";
 
 const formatNicoPage = new FormatNicoPage();
 
@@ -19,7 +20,8 @@ $(() => {
     OFFICIAL_CAST_PAGE: OfficialCastPage,
     TIME_SHIFT_PAGE: TimeShiftPage,
     MODERN_TIME_SHIFT_PAGE: ModernTimeShiftPage,
-    CHANNEL_PAGE: ChannelPage
+    CHANNEL_PAGE: ChannelPage,
+    STANDBY_PAGE: StandByPage
   };
   const page = new pages[pageType]();
   page.putWidgets();

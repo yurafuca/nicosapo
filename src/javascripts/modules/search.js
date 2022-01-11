@@ -118,8 +118,7 @@ export default class Search {
     const newItem = {
       id: distributorId,
       thumbnail: el.currentTarget.dataset.thumbnail,
-      title: el.currentTarget.dataset.title,
-      description: el.currentTarget.dataset.description,
+      name: el.currentTarget.dataset.name,
       keyword: el.currentTarget.dataset.keyword
     };
     const removed = excludeList.filter(item => item.id !== newItem.id);
@@ -168,18 +167,19 @@ export default class Search {
 
   setParams(query, sortMode) {
     Api.search(query, sortMode).then(response => {
-      const datas = response.data;
+      const datas = response.values;
       const thumbParams = [];
       for (const data of datas) {
+
         const thumbParam = {};
-        thumbParam.url = `https://live.nicovideo.jp/watch/${data.contentId}`;
-        thumbParam.thumbnail = data.communityIcon;
-        thumbParam.description = data.description.replace(/\<.+\>/g, " ");
+        thumbParam.url = `https://live.nicovideo.jp/watch/${data.id}`;
+        thumbParam.thumbnail = data.socialGroupThumbnailUrl;
+        thumbParam.name = data.socialGroupName.replace(/\<.+\>/g, " ");
         thumbParam.title = data.title;
-        thumbParam.viewCounter = data.viewCounter;
-        thumbParam.commentCounter = data.commentCounter;
-        thumbParam.memberOnly = data.memberOnly;
-        const foo = new Date(data.startTime);
+        thumbParam.viewCounter = data.statistics.watchCount;
+        thumbParam.commentCounter = data.statistics.commentCount;
+        thumbParam.memberOnly = data.isMemberOnly;
+        const foo = new Date(data.beginAt);
         const bar = foo.getTime();
         const baz = new Date().getTime();
         const hoge = (baz - bar) / 1000 / 60;
@@ -201,7 +201,7 @@ export default class Search {
   }
 
   getResultElement(props) {
-    const { thumbnail, url, title, description, viewCounter, commentCounter, lapsedTime, memberOnly } = props;
+    const { thumbnail, url, title, name, viewCounter, commentCounter, lapsedTime, memberOnly } = props;
 
     const isCannotBeExcluded = thumbnail === null;
 
@@ -220,6 +220,7 @@ export default class Search {
     excludeButton.dataset.memberOnly = memberOnly;
     excludeButton.dataset.distributorId = distributorId;
     excludeButton.dataset.thumbnail = thumbnail;
+    excludeButton.dataset.name = name;
     excludeButton.dataset.keyword = this.getCurrentQuery();
     excludeButton.addEventListener("click", el => {
       this.onClickExclude(el);
@@ -270,9 +271,9 @@ export default class Search {
 
     titleParent.appendChild(titleChild);
 
-    const desc = document.createElement("span");
-    desc.className = "meta-description text-small text-gray";
-    desc.textContent = description;
+    const nameElem = document.createElement("span");
+    nameElem.className = "meta-description text-small text-gray";
+    nameElem.textContent = name;
 
     const br = document.createElement("br");
 
@@ -282,7 +283,7 @@ export default class Search {
 
     resultChild.appendChild(imgParent);
     resultChild.appendChild(titleParent);
-    resultChild.appendChild(desc);
+    resultChild.appendChild(nameElem);
     resultChild.appendChild(br);
     resultChild.appendChild(meta);
 

@@ -20,29 +20,20 @@ export default class ExcludeList extends React.Component {
         purpose: "getFromLocalStorage",
         key: "search.item.exclude"
       },
-      response => {
-        const distributorIdList = response.map(item => item.id);
-        Api.fetchCommunityStatistics(distributorIdList)
-          .then(communities => {
-            const itemParams = [];
-            communities.forEach(community => {
-              const id = community.global_id[0];
-              const thumbnail = community.thumbnail[0];
-              const name = community.name[0];
-              const communityInResponse = response.find(item => item.id === id);
-              const itemParam = [];
-              itemParam.id = id;
-              itemParam.url = `https://com.nicovideo.jp/community/${id}`;
-              itemParam.onClick = this.onClick;
-              itemParam.thumbnail = thumbnail;
-              itemParam.title = name;
-              itemParam.description = id;
-              itemParam.keyword = communityInResponse.keyword;
-              itemParam.type = "exclude";
-              itemParams.push(itemParam);
-            });
-            this.setState({ itemParams: itemParams });
-          });
+      communities => {
+        const itemParams = [];
+        communities.forEach(community => {
+          const itemParam = [];
+          itemParam.id = community.id;
+          itemParam.url = `https://com.nicovideo.jp/community/${community.id}`;
+          itemParam.onClick = this.onClick;
+          itemParam.thumbnail = community.thumbnail;
+          itemParam.title = community.name || community.id;
+          itemParam.keyword = community.keyword;
+          itemParam.type = "exclude";
+          itemParams.push(itemParam);
+        });
+        this.setState({ itemParams: itemParams });
       }
     );
   }
@@ -79,7 +70,7 @@ export default class ExcludeList extends React.Component {
         thumbnail={itemParam.thumbnail}
         url={itemParam.url}
         title={itemParam.title}
-        description={itemParam.description}
+        description={undefined}
         openDate={itemParam.openDate}
         keyword={itemParam.keyword}
         messageForEmpty={"この番組は終了しました"}
