@@ -70,7 +70,7 @@
     "eslint-plugin-react": "^7.12.4",
     "extract-text-webpack-plugin": "^4.0.0-beta.0",
     "jest": "^24.5.0",
-    "jsdom": "^13.2.0",
+    "jsdom": "^16.5.0",
     "jshint": "^2.10.1",
     "mocha": "^6.0.2",
     "mock-local-storage": "^1.1.8",
