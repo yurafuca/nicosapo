@@ -9,29 +9,30 @@ export default class OfficialThumbnails {
     const thumbParams = [];
     programs.forEach((program, index) => {
       const thumbParam = {};
-      const a = program.querySelector(".rk-ProgramCard_Detail a");
+      const a = program.querySelector("[class^='___rk-program-card-detail-provider-name___']");
       let thumbnailUrl;
       if (a != null) {
         const communityId = a.href;
-        const regexp = /https\:\/\/ch.nicovideo.jp\/(.+)/;
+        const regexp = /https\:\/\/www.nicovideo.jp\/user\/(.+)\/(.+)/;
         const resultarr = regexp.exec(communityId);
-        thumbnailUrl = `https://icon.nimg.jp/channel/${resultarr[1]}.jpg`;
+        // const dir = 
+        thumbnailUrl = `https://secure-dcdn.cdn.nimg.jp/nicoaccount/usericon/${(Math.floor(resultarr[1] / 10000))}/${resultarr[1]}.jpg`
       } else {
         thumbnailUrl = program.querySelector(".info a img").src;
       }
 
       thumbParam.background = `url('${thumbnailUrl}')`;
-      thumbParam.title = program.querySelector(".rk-ProgramCard_DetailTitle").textContent;
-      thumbParam.id = program.querySelector(".rk-ProgramCard_DetailTitle").href.match(/(watch)\/(lv[0-9]+).*/)[2];
+      thumbParam.title = program.querySelector("[class^='___rk-program-card-detail-title___']").textContent;
+      thumbParam.id = program.querySelector("[class^='___rk-program-card-detail-title___']").href.match(/(watch)\/(lv[0-9]+).*/)[2];
       thumbParam.url = `https://live.nicovideo.jp/watch/${thumbParam.id}`;
       thumbParam.text = thumbParam.title;
       thumbParam.index = index;
-      const isReserved = program.querySelector(".rk-ProgramCard_ReservationButton") != null;
-      thumbParam.openTime = isReserved ? `${program.querySelector(".rk-ProgramCard_DetailTime").textContent} 開場` : undefined;
+      const isReserved = program.querySelector("[class^='___timeshift-reserved-count___']") != null;
+      thumbParam.openTime = isReserved ? `${program.querySelector("[class^='___rk-program-card-detail-time']").textContent} 開場` : undefined;
       thumbParam.isReserved = isReserved;
       thumbParam.isOfficial = true;
 
-      const dateJpnOrig = program.querySelector(".rk-ProgramCard_DetailTime").textContent;
+      const dateJpnOrig = program.querySelector("[class^='___rk-program-card-detail-time']").textContent;
       // => 未来の番組の場合 : 2019/9/14 20:00
       // => 現在の番組の場合1: 37分経過
       // => 現在の番組の場合2: 1時間13分経過
@@ -73,7 +74,7 @@ export default class OfficialThumbnails {
       }
 
 
-      thumbParam.startTime = program.querySelector(".rk-ProgramCard_DetailTime").textContent;
+      thumbParam.startTime = program.querySelector("[class^='___rk-program-card-detail-time']").textContent;
       thumbParams.push(thumbParam);
     });
     return thumbParams;
