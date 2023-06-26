@@ -54,7 +54,8 @@ export default class Settings extends React.Component {
       "options.hideBadge.enable": "disable",
       "options.excludeMemberOnly.enable": false,
       "options.copyUrl": false,
-      "options.notification.selfIgnoreList": []
+      "options.notification.selfIgnoreList": [],
+      "options.renew.detect": true
     };
     return state;
   }
@@ -165,6 +166,9 @@ export default class Settings extends React.Component {
               </div>
               <div className={this.state.selectedMenu === "search" ? "item selected" : "item"} data-menu="search" onClick={this.clickMenu}>
                 検索
+              </div>
+              <div className={this.state.selectedMenu === "detect" ? "item selected" : "item"} data-menu="detect" onClick={this.clickMenu}>
+                検知
               </div>
               <div className={this.state.selectedMenu === "integrations" ? "item selected" : "item"} data-menu="integrations" onClick={this.clickMenu}>
                 他のツールとの連携
@@ -365,6 +369,26 @@ export default class Settings extends React.Component {
                       </label>
                       <label>
                         <input type="radio" name="options.excludeMemberOnly.enable" value={false} checked={this.state["options.excludeMemberOnly.enable"] == false} onChange={this.onChange} /> 無効
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              );
+            }
+          })()}
+          {(() => {
+            if (this.state.selectedMenu == "detect") {
+              return (
+                <div className="wrapper">
+                  <h1 className="appicon">検知</h1>
+                  <div className="items">
+                    <div className="item">
+                      <h3>番組の延長を検知する</h3>
+                      <label>
+                        <input type="radio" name="options.renew.detect" value={true} checked={this.state["options.renew.detect"] == true} onChange={this.onChange} /> 有効
+                      </label>
+                      <label>
+                        <input type="radio" name="options.renew.detect" value={false} checked={this.state["options.renew.detect"] == false} onChange={this.onChange} /> 無効
                       </label>
                     </div>
                   </div>
