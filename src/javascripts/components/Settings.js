@@ -54,7 +54,8 @@ export default class Settings extends React.Component {
       "options.hideBadge.enable": "disable",
       "options.excludeMemberOnly.enable": false,
       "options.copyUrl": false,
-      "options.notification.selfIgnoreList": []
+      "options.notification.selfIgnoreList": [],
+      "options.renew.detect": true
     };
     return state;
   }
@@ -165,6 +166,9 @@ export default class Settings extends React.Component {
               </div>
               <div className={this.state.selectedMenu === "search" ? "item selected" : "item"} data-menu="search" onClick={this.clickMenu}>
                 検索
+              </div>
+              <div className={this.state.selectedMenu === "detect" ? "item selected" : "item"} data-menu="detect" onClick={this.clickMenu}>
+                検知
               </div>
               <div className={this.state.selectedMenu === "integrations" ? "item selected" : "item"} data-menu="integrations" onClick={this.clickMenu}>
                 他のツールとの連携
@@ -373,6 +377,26 @@ export default class Settings extends React.Component {
             }
           })()}
           {(() => {
+            if (this.state.selectedMenu == "detect") {
+              return (
+                <div className="wrapper">
+                  <h1 className="appicon">検知</h1>
+                  <div className="items">
+                    <div className="item">
+                      <h3>番組の延長を検知する</h3>
+                      <label>
+                        <input type="radio" name="options.renew.detect" value={true} checked={this.state["options.renew.detect"] == true} onChange={this.onChange} /> 有効
+                      </label>
+                      <label>
+                        <input type="radio" name="options.renew.detect" value={false} checked={this.state["options.renew.detect"] == false} onChange={this.onChange} /> 無効
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              );
+            }
+          })()}
+          {(() => {
             if (this.state.selectedMenu == "integrations") {
               return (
                 <div className="wrapper">
@@ -517,21 +541,27 @@ export default class Settings extends React.Component {
                 <div className="wrapper" style={{ marginTop: "20px" }}>
                   <h1 className="appicon">作者に寄付する</h1>
                   <div className="items">
-                    <span className="campa">日中はプログラマとして仕事をしているので平日の夜中と土日ににこさぽのメンテナンスをしています．寄付をしていただけると嬉しいです．<div style={{ height: '5çpx' }} />Amazon ギフト券 または Kyash で送っていただけるととくに助かりますが，ほしいものリストでももちろん大丈夫です． Amazon ギフト券の場合は @yurafuca に DM でギフト券の番号を送ってくださればお返事させていただきます．</span>
+                    <span className="campa">日中は本業のプログラマとして仕事をしているため、休日の合間を縫ってにこさぽをメンテナンスしています。<br/>
+                    にこさぽの開発を応援したいという方は、寄付をしていただけるととても嬉しいです。</span>
+                    <br/>
                     <ul>
                       <li>
                         <a target="_blank" href="https://www.amazon.co.jp/dp/B004N3APGO/">
                           Amazon ギフト券
                         </a>
                       </li>
+                      <ul style={{ fontSize: "13px", color: "#888888", margin: "10px 0", listStyle: "disc" }}>
+                        <li>
+                          受取人に私のメールアドレスである「mail@yurafuca.com」を入力してください。
+                        </li>
+                        <li>
+                          コンビニ等で購入できるプリペイドタイプのギフト券の場合は、「mail@yurafuca.com」または「@yurafuca」へギフト券の番号を送っていただければお返事させていただきます。
+                        </li>
+                      </ul>
                       <li>
                         <a target="_blank" href="https://www.amazon.co.jp/hz/wishlist/ls/1V0ZQX1SCBDZV?&sort=default">
                           Amazon ほしいものリスト
                         </a>
-                      </li>
-                      <li>
-                        <span className="force-body-color">Kyash</span>
-                        <img className="kyash-qr" src="../images/kyash_qr.jpg" />
                       </li>
                     </ul>
                   </div>

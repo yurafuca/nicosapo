@@ -88,7 +88,7 @@ export default class Api {
       axios.get(url).then(response => {
         const parser = new DOMParser();
         const html = parser.parseFromString(response.data, "text/html");
-        const futureStreams = html.querySelectorAll("#official_and_channel_ranking_main .rk-ProgramCard");
+        const futureStreams = html.querySelectorAll('[class^="___rk-ranking-area-ranking___"]:nth-child(1) [class^="___rk-program-card___"]');
         if (futureStreams) {
           resolve(futureStreams);
         }
@@ -102,7 +102,7 @@ export default class Api {
       axios.get(url).then(response => {
         const parser = new DOMParser();
         const html = parser.parseFromString(response.data, "text/html");
-        const officialStreams = html.querySelectorAll("#official_and_channel_ranking_main .rk-ProgramCard");
+        const officialStreams = html.querySelectorAll('[class^="___rk-ranking-area-ranking___"]:nth-child(1) [class^="___rk-program-card___"]');
         resolve(officialStreams);
       });
     });

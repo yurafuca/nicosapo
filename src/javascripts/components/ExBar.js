@@ -31,17 +31,27 @@ export default class ExBar extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const endDate = new Date(nextProps.response.endAt * 1000);
-    const endText = Time.toJpnString(endDate);
-    if (this.state.endText !== endText) {
-      const time = new Date().getTime();
-      this.setState({ updateText: `番組の延長を ${Time.toJpnString(time)} に検知しました` });
-      this.reset(nextProps.response);
-      this.startBlink();
-      Common.sleep(6400).then(() => {
-        this.stopBlink();
-      });
-    }
+    chrome.runtime.sendMessage(
+      {
+        purpose: "getFromLocalStorage",
+        key: "options.renew.detect"
+      },
+      response => {
+        if (response == true || response == null) {
+          const endDate = new Date(nextProps.response.endAt * 1000);
+          const endText = Time.toJpnString(endDate);
+          if (this.state.endText !== endText) {
+            const time = new Date().getTime();
+            this.setState({ updateText: `番組の延長を ${Time.toJpnString(time)} に検知しました` });
+            this.reset(nextProps.response);
+            this.startBlink();
+            Common.sleep(6400).then(() => {
+              this.stopBlink();
+            });
+          }
+        }
+      }
+    );
   }
 
   build() {

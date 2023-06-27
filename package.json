@@ -89,5 +89,8 @@
     "webpack": "^4.29.6",
     "webpack-cli": "^3.2.3",
     "webpack-dev-server": "^3.2.1"
+  },
+  "volta": {
+    "node": "11.15.0"
   }
 }
