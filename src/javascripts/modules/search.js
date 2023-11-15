@@ -173,12 +173,13 @@ export default class Search {
 
         const thumbParam = {};
         thumbParam.url = `https://live.nicovideo.jp/watch/${data.id}`;
-        thumbParam.thumbnail = data.socialGroupThumbnailUrl;
-        thumbParam.name = data.socialGroupName.replace(/\<.+\>/g, " ");
+        thumbParam.thumbnail = data.socialGroup.thumbnailUrl;
+        thumbParam.name = data.socialGroup.name.replace(/\<.+\>/g, " ");
         thumbParam.title = data.title;
         thumbParam.viewCounter = data.statistics.watchCount;
         thumbParam.commentCounter = data.statistics.commentCount;
         thumbParam.memberOnly = data.isMemberOnly;
+        thumbParam.distributorId = data.socialGroup.id;
         const foo = new Date(data.beginAt);
         const bar = foo.getTime();
         const baz = new Date().getTime();
@@ -201,12 +202,9 @@ export default class Search {
   }
 
   getResultElement(props) {
-    const { thumbnail, url, title, name, viewCounter, commentCounter, lapsedTime, memberOnly } = props;
+    const { thumbnail, url, title, name, viewCounter, commentCounter, lapsedTime, memberOnly, distributorId } = props;
 
-    const isCannotBeExcluded = thumbnail === null;
-
-    const re = /((co|ch)\d+)\.(jpg|png)/;
-    const distributorId = isCannotBeExcluded ? "" : thumbnail.match(re)[1];
+    const isCannotBeExcluded = distributorId == null;
 
     const resultParent = document.createElement("div");
     resultParent.className = "listgroup-item clearfix";
