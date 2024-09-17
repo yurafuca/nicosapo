@@ -10,8 +10,8 @@ export default class FollowApiResponseParser {
     // フォロー中 API から取得できるかつ放送前であれば予約中である.
     videoInfo.video().set("isReserved", program.liveCycle === "RELEASED");
 
-    videoInfo.community().set("id", program.socialGroup.id);
-    videoInfo.community().set("thumbnail", program.socialGroup.thumbnailUrl);
+    videoInfo.community().set("id", program.programProvider.id);
+    videoInfo.community().set("thumbnail", program.programProvider.icon);
 
     return videoInfo.xml();
   }
