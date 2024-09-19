@@ -173,8 +173,8 @@ export default class Search {
 
         const thumbParam = {};
         thumbParam.url = `https://live.nicovideo.jp/watch/${data.id}`;
-        thumbParam.thumbnail = data.socialGroup.thumbnailUrl;
-        thumbParam.name = data.socialGroup.name.replace(/\<.+\>/g, " ");
+        thumbParam.thumbnail = data.socialGroup.id === "co0" ? data.ownerIconUrl : data.socialGroup.thumbnailUrl;
+        thumbParam.name = data.socialGroup.id === "co0" ? data.userName : data.socialGroup.name.replace(/\<.+\>/g, " ");
         thumbParam.title = data.title;
         thumbParam.viewCounter = data.statistics.watchCount;
         thumbParam.commentCounter = data.statistics.commentCount;
