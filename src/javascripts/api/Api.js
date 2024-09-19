@@ -88,21 +88,19 @@ export default class Api {
       axios.get(url).then(response => {
         const parser = new DOMParser();
         const html = parser.parseFromString(response.data, "text/html");
-        const futureStreams = html.querySelectorAll('[class^="___rk-ranking-area-ranking___"]:nth-child(1) [class^="___rk-program-card___"]');
-        if (futureStreams) {
-          resolve(futureStreams);
-        }
+        const officialStreams = JSON.parse(html.querySelector('#embedded-data').dataset.props).ranking.officialAndChannelPrograms;
+        resolve(officialStreams);
       });
     });
   }
 
   static getOfficialOnair() {
     return new Promise(resolve => {
-      const url = "https://live.nicovideo.jp/ranking?type=onair";
+      const url = "https://live.nicovideo.jp/ranking";
       axios.get(url).then(response => {
         const parser = new DOMParser();
         const html = parser.parseFromString(response.data, "text/html");
-        const officialStreams = html.querySelectorAll('[class^="___rk-ranking-area-ranking___"]:nth-child(1) [class^="___rk-program-card___"]');
+        const officialStreams = JSON.parse(html.querySelector('#embedded-data').dataset.props).ranking.officialAndChannelPrograms;
         resolve(officialStreams);
       });
     });
@@ -198,13 +196,7 @@ export default class Api {
   }
 
   static fetchVideoStatistics(id, source = "statistics", title = "") {
-    let url = '';
-
-    if (source === "statistics")
-      url = `https://live2.nicovideo.jp/watch/${id}/statistics`;
-    else if (source === "apiv2")
-      url = `https://api.search.nicovideo.jp/api/v2/live/contents/search?q=${title}&targets=title&fields=contentId,title,viewCounter,commentCounter&filters[liveStatus][0]=onair&_sort=-viewCounter`;
-
+    const url = `https://live2.nicovideo.jp/watch/${id}/statistics`;
     const request = axios.get(url);
     return request
       .then(response => {

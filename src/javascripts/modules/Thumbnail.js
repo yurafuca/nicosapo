@@ -23,8 +23,6 @@ export default class Thumbnail {
     this._openDate = ""; // 残り時間用
     this._index = "";
 
-    this._isRequireRSS = true;
-
     this._isCreated = false;
     this._isBeforeRerender = true;
 
@@ -161,8 +159,6 @@ export default class Thumbnail {
 
       if (this._isBeforeRerender) {
         updater1();
-        if (this._isRequireRSS)
-          this.fetchFromRSS();
         if (!this.isCreated())
           updater2();
       } else {
@@ -222,24 +218,6 @@ export default class Thumbnail {
     statistics.querySelector(".elapsed-time-value").innerHTML = elapsedTime;
 
     tooltip.childNodes[1].childNodes[5].outerHTML = statistics.outerHTML;
-  }
-
-  fetchFromRSS() {
-    Api.fetchVideoStatistics(this._id, "apiv2", this._title).then((res) => {
-      if (res.data.data.length === 0)
-        return;
-      if (this.isFetched()) {
-        return;
-      }
-      const {
-        viewCounter,
-        commentCounter
-      } = res.data.data[0];
-      this.setParams({
-        watchCount: viewCounter.toString(),
-        commentCount: commentCounter.toString()
-      });
-    });
   }
 
   recalcTop(tooltip) {
