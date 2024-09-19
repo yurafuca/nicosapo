@@ -52,8 +52,9 @@ class Streams {
       const thumbnailElement = thumbnail.createElement();
       container.appendChild(thumbnailElement);
 
-      if (genre === 'reserve' || genre === "future" || genre === 'search')
+      if (genre === 'reserve' || genre === "future" || genre === 'search') {
         return;
+      }
 
       // コメント数・来場者数読み込み
       Api.fetchVideoStatistics(thumbnail._id).then(res => {
