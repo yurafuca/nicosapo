@@ -23,7 +23,7 @@ function getCommunityId() {
     return communityId;
   }
 
-  const communityUrl2 = document.querySelector('[class^=___channel-thumbnail__]');
+  const communityUrl2 = document.querySelector('.channel-thumbnail');
   const re2 = /.+channel\/(.+)$/;
 
   // チャンネル放送
