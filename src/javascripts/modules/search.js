@@ -179,7 +179,7 @@ export default class Search {
         thumbParam.viewCounter = data.statistics.watchCount;
         thumbParam.commentCounter = data.statistics.commentCount;
         thumbParam.memberOnly = data.isMemberOnly;
-        thumbParam.distributorId = data.socialGroup.id;
+        thumbParam.distributorId = data.socialGroup.id === "co0" ? data.userId : data.socialGroup.id;
         const foo = new Date(data.beginAt);
         const bar = foo.getTime();
         const baz = new Date().getTime();
