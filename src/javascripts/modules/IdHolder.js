@@ -14,12 +14,12 @@ function getLiveId() {
 }
 
 function getCommunityId() {
-  const communityUrl1 = document.querySelector('[class^=___name-label__]');
-  const re1 = /.+(community|channel)\/(.+)$/;
+  const communityUrl1 = document.querySelector('[class^=___user-name___] a');
+  const re1 = /.+\/user\/(.+)\/.+$/;
 
   // ユーザ放送
   if (communityUrl1 != null && re1.exec(communityUrl1.href)) {
-    const communityId = re1.exec(communityUrl1.href)[2];
+    const communityId = re1.exec(communityUrl1.href)[1];
     return communityId;
   }
 

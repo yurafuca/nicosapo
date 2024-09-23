@@ -51,8 +51,9 @@ export default class MetaData {
         ).text();
         break;
       case "MODERN_CAST_PAGE":
-        title = $("[class^='___name-label__']").text();
-        owner = $("[class^='___user-name__ > name']").text();
+        title = $("h1[class^='___program-title___']").text();
+        owner = $("[class^='___user-name___']").text();
+        thumbnail = document.querySelector('[class^="___user-thumbnail___"] img').src;
         break;
       case "STANDBY_PAGE":
         title = $('meta[property="og:title"]').attr("content");
